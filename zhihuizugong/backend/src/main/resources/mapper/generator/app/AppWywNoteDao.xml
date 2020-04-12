@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppWywNoteDao">
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.app.entity.AppWywNoteEntity" id="AppwywNoteMap">
+        <result property="noteId" column="note_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="content" column="content"/>
+        <result property="noteTitle" column="note_title"/>
+        <result property="createUserid" column="create_userid"/>
+        <result property="isFiletype" column="is_filetype"/>
+        <result property="storagePath" column="storage_path"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="userTrueName" column="userTrueName"/>
+    </resultMap>
+    <sql id="selectListAll">
+         SELECT
+			note.note_id,
+			note.create_time,
+			note.storage_path,
+			note.storage_path,
+			note.is_filetype,
+			note.content,
+			note.create_userid,
+			note.note_title AS noteTitle,
+			note.update_time AS updateTime,
+			er.user_true_name AS userTrueName
+		FROM
+			wyw_note note
+		LEFT JOIN sys_user er ON note.create_userid = er.user_id
+    </sql>
+    
+    <select id="selectListUserTruName" resultType="com.orhonit.modules.generator.app.entity.AppWywNoteEntity">
+        <include refid="selectListAll"/>
+        WHERE
+        note.is_del='0'
+        ORDER BY note.create_time DESC
+		LIMIT #{beginLimit},#{limit}
+    </select>
+    
+    <select id="mySelectList" resultType="com.orhonit.modules.generator.app.entity.AppWywNoteEntity">
+         <include refid="selectListAll"/>
+          WHERE
+          note.create_userid=#{createUserid}
+          and note.is_del='0'
+          LIMIT #{beginLimit},#{limit}
+    </select>
+    
+    <select id="getOneWyw" resultType="com.orhonit.modules.generator.app.entity.AppWywNoteEntity">
+    SELECT 
+		a.note_id AS noteId,a.create_time AS createTime,a.content,a.note_title AS noteTitle,a.storage_path AS storagePath,a.create_userid AS createUserid,
+		a.is_filetype AS isFiletype,a.lower_id AS lowerId,a.lower_name AS lowerName,a.is_del AS isDel,a.update_time AS updateTime,ser.user_true_name AS userTrueName
+		FROM wyw_note a
+		LEFT JOIN sys_user ser on a.create_userid=ser.user_id
+		WHERE note_id=#{noteId}
+    </select>
+</mapper>

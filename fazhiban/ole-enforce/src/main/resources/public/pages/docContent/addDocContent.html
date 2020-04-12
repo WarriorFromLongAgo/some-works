@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>创建文书</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<style type="text/css">
+.btx {
+	color: red;
+	font-size: 2em;
+	height: 10px;
+	line-height: 10px;
+	position: relative;
+	top: 9px;
+	margin-left: 3px;
+}
+</style>
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="layui-tab layui-tab-brief" lay-filter="demo">
+			<ul class="layui-tab-title">
+				<button class="site-demo-active layui-btn" data-type="tabAdd"><i class="layui-icon">&#xe654;</i></button>
+			</ul>
+			<div class="layui-tab-content">
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script src="../../js/moment-with-locales.min.js"></script>
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript">
+	layui.use('element', function() {
+			element = layui.element;
+			//触发事件
+			var active = {
+				tabAdd : function() {
+					getDocAll(true);
+				}
+			};
+			$('.site-demo-active').on('click', function() {
+				var othis = $(this), type = othis.data('type');
+				active[type] ? active[type].call(this, othis) : '';
+			});
+		});
+		
+		function getQuery(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+		var templateId = getQuery('templateId');
+		var caseId = getQuery('caseId');
+		if (templateId == null || templateId == '' || caseId == null
+				|| caseId == '') {
+			alert('参数异常.');
+			window.parent.location.reload();
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		}
+
+		getDocAll(false);
+		function getDocAll(flag){
+			$.ajax({
+				type : 'get',
+				url : '/enforce/docContent/content?templateId=' + templateId + '&caseId=' + caseId + '&newOne=' + flag,
+				contentType : "application/json; charset=utf-8",
+				success : function(data) {
+					if(data.code == 0){
+						var liCount = $('ul').children('li').length;
+						$.each(data.data,function(n,value){
+							var htContent = '<form class="form-horizontal" onsubmit="return false" id="form'+(liCount+n+1)+'">'+
+							'<p class="text-center" id="templateName'+(liCount+n+1)+'"></p><fieldset id="htmlData'+(liCount+n+1)+'"><div class="form-actions"><div class="row" align="center"><div class="col-md-12">'+
+											'<button class="btn btn-primary" type="submit" onclick="add(\'form'+(liCount+n+1)+'\',\''+value.contentId+'\')"><i class="fa fa-save"></i> 保存</button></div></div></div></fieldset></form>';
+							element.tabAdd('demo', {
+								title : '文书' + (liCount+n+1),
+								content : htContent,
+								id : liCount+n+1
+							});
+							var btn = $('#htmlData'+(liCount+n+1)).html();
+							$('#htmlData'+(liCount+n+1)).html(value.htmlContent);
+							$('#htmlData'+(liCount+n+1)).append(btn);
+							$('#templateName'+(liCount+n+1)).html(value.templateName);
+							layui.use([ 'layer', 'laydate' ], function() {
+								var layer = layui.layer;
+								var laydate = layui.laydate;
+								var datetimes = value.datetime.split(',');
+								if(!(datetimes.length == 1 && datetimes[0]=="")){
+									for (var i = 0; i < datetimes.length; i++) {
+										$('#form'+(liCount+n+1)+' #' + datetimes[i]).datetimepicker({
+											format : 'YYYY-MM-DD HH:mm:ss',
+											locale : moment.locale('zh-cn')
+										});
+									}
+								}
+							});
+						});
+						if(flag){
+							element.tabChange('demo', liCount+1); //切换到：用户管理
+						}else{
+							element.tabChange('demo', '1'); //切换到：用户管理
+						}
+						
+					}
+				}
+			});
+		}
+
+		function add(formId,contentId) {
+			
+			//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+			// $('#'+formId).bootstrapValidator();
+
+			var tableData = new Array();
+			if (typeof (needToErgodicTable) != "undefined"
+					&& needToErgodicTable) {
+				$("#" + tableId).find("tr:not(:first)").each(function() {
+					var trData = new Object();
+					var tdArr = $(this).children();
+					for (var i = 0; i < columnCount; i++) {
+						var name = tdArr.eq(i).find('input').attr("name");
+						var value = tdArr.eq(i).find('input').val();
+						trData[name] = value;
+					}
+					tableData.push(trData);
+
+				});
+				$('#' + tableId).empty();
+			}
+
+			var formdata = $("#"+formId).serializeObject();
+			
+			for ( var key in formdata ) {
+				
+				if ( key.indexOf('StartTime') > 0 ) {
+					var prefix = key.substring(0, key.indexOf('StartTime'));
+					var endTimeKey = prefix + 'EndTime';
+					var endTime = formdata[endTimeKey];
+					if ( formdata[key] > endTime ) {
+						layer.msg("开始时间不能大于结束时间.", {
+							anim : 6
+						});
+						// console.log($('.btn-primary'));
+						// $('.btn-primary')[0].attr('disabled', 'none');
+						return;
+					}
+				}
+			}
+
+			if (typeof (needToErgodicTable) != "undefined"
+					&& needToErgodicTable) {
+				formdata['tableData'] = tableData;
+			}
+
+			var temp = [];
+			$("[type='checkbox']").each(function() {
+				if ($.inArray($(this).attr("name"), temp) == -1) {
+					temp.push($(this).attr("name"));
+				}
+			});
+			temp.forEach(function(a, b, c) {
+				if (typeof (formdata[a]) == "string") {
+					formdata[a] = [ formdata[a] ];
+				}
+			});
+
+			var json = JSON.stringify(formdata);
+
+			formdata.templateId = templateId;
+			formdata.caseId = caseId;
+			formdata.value = json;
+			formdata.id = contentId;
+			//var bootstrapValidator = $("#"+formId).data('bootstrapValidator');
+			//bootstrapValidator.validate();
+			//if (!bootstrapValidator.isValid()) {
+			//	return;
+			//}
+			//return;
+			
+			$.ajax({
+				type : 'post',
+				url : '/enforce/docContent/save/docContent',
+				data : formdata,
+				success : function(data) {
+					layer.msg("保存成功", {
+						shift : -1,
+						time : 1000
+					}, function() {
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					});
+				}
+			});
+		}
+	</script>
+</body>
+</html>

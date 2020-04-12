@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-us" id="extr-page">
+<head>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset>
+			<input type="hidden" id="id" name="id">
+				
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">角色<span class="btx">*</span></label>
+				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+					<input class="form-control" placeholder="角色" type="text" name="name" id="name"
+						data-bv-notempty="true"
+						data-bv-notempty-message="角色 不能为空">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">描述<span class="btx">*</span></label>
+				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+					<textarea class="form-control" placeholder="描述" name="description"  id="description"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">权限<span class="btx">*</span></label>
+				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+					<input class="easyui-combotree" id="qx" type="text" style="width:100%" name=""/>
+				</div>
+			</div>
+
+			<div class="form-actions style="margin-top:150px;"">
+				<div class="row" align="center">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<button class="btn btn-primary" type="submit" onclick="add()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use('layer', function(){
+		    var layer = layui.layer;
+		});
+		
+		$("#qx").combotree({
+			method:'get',
+			url:'/auth/permissions/all',
+			required: false,
+			multiple:true,
+			cascadeCheck:false,
+			onLoadSuccess:function(){
+				initData();
+			}
+		});
+	
+		function initData(){
+			var id = getUrlParam("id");
+			if(id != ""){
+				$.ajax({
+					type : 'get',
+					url : '/auth/roles/'+id,
+					async : false,
+					success : function(data) {
+						$("#id").val(data.id);
+						$("#name").val(data.name);
+						$("#description").val(data.description);
+						$.ajax({
+							type : 'get',
+							url : '/auth/permissions?roleId='+id,
+							async : false,
+							success : function(data) {
+								$("#qx").combotree("setValues",data);
+							}
+						});
+					}
+				});
+			}
+		}
+		
+		$('#form').bootstrapValidator();
+		
+		function add() {
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = $("#form").serializeObject();
+		    formdata.permissionIds = $("#qx").combotree('getValues');
+			$.ajax({
+				type : 'post',
+				url : '/auth/roles',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("成功", {shift: -1, time: 1000}, function(){
+                         window.parent.location.reload();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+                    });
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

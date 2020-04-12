@@ -1,0 +1,184 @@
+"班主任信息"
+type HeadTeacher {
+    id:ID
+    "班级"
+    eclass:Eclass
+    "班主任教师信息"
+    teacher:Teacher
+    "学校"
+    school:School
+    "开始任职时间"
+    start_at:Date
+    "结束任职时间"
+    end_at:Date
+    "当前状态(1是班主任,0已经不是班主任)"
+    status:Int
+    "原因"
+    reason:Lang
+    "异动状态"
+    transaction:Int
+}
+input HeadTeacherInput{
+    id:ID
+    "班级"
+    eclass_id: Int
+    "用户信息"
+    user_id: Int
+    "班主任教师信息"
+    teacher_id: Int
+    "学校"
+    school_id: Int
+    "开始任职时间"
+    start_at:Date
+    "结束任职时间"
+    end_at:Date
+    "当前状态(1是班主任,0已经不是班主任)"
+    status:Int
+    "原因"
+    reason:LangInput
+    "异动状态"
+    transaction:Int
+}
+input HeadTeacherCondition{
+    id:ID
+    "班级"
+    eclass_id: Int
+    "用户信息"
+    user_id: Int
+    "班主任教师信息"
+    teacher_id: Int
+    "学校"
+    school_id: Int
+    "当前状态(1是班主任,0已经不是班主任)"
+    status:Int
+}
+type HeadTeacherResponse{
+    code:Int
+    error:String
+    data:[HeadTeacher]
+}
+"班级信息"
+type Eclass {
+    id:ID
+    school:School
+    "年级"
+    grade:Grades
+    "届"
+    arrives:Arrives
+    "班级编号"
+    code:String
+    "状态"
+    status:Int
+    "班级类型"
+    kind_dict:Int
+    "班级性质"
+    nature:Int
+    "楼宇"
+    building:Building
+    "单元"
+    unit:Unit
+    "楼层"
+    floor:Floor
+    "教室"
+    classroom:Room
+    "毕业标识"
+    graduated_flag:Int
+    "班级排序"
+    eclass_order:Int
+    "班级号"
+    eclass_number:String
+    "班级图标"
+    ioc_path:String
+    "班级logo"
+    logo:String
+    "班级名称"
+    name:Lang
+    "班级简介"
+    intro:Lang
+    "教师寄语"
+    teacher_comment:Lang
+    "班主任"
+    head_teacher:HeadTeacher
+    "班主任寄语"
+    head_teacher_message:Lang
+}
+input EclassCondition{
+    id:ID
+
+    school_id:Int
+    "年级"
+    grade_id:Int
+    "届"
+    arrive_id:Int
+    "班级编号"
+    code:String
+    "状态"
+    status:Int
+    "班级类型"
+    kind_dict:Int
+    "班级性质"
+    nature:Int
+    "楼宇"
+    building_id:Int
+    "单元"
+    unit_id:Int
+    "楼层"
+    floor_id:Int
+    "教室"
+    classroom_id: Int
+    "毕业标识"
+    graduated_flag:Int
+    "班级号"
+    eclass_number:String
+}
+"班级信息输入类"
+input EclassInput {
+    id:ID
+    school_id:Int
+    "年级"
+    grade_id:Int
+    "届"
+    arrives_id:Int
+    "班级编号"
+    code:String
+    "状态"
+    status:Int
+    "班级类型"
+    kind_dict:Int
+    "班级性质"
+    nature:Int
+    "楼宇"
+    building_id:Int
+    "单元"
+    unit_id:Int
+    "楼层"
+    floor_id:Int
+    "教室"
+    classroom_id:Int
+    "毕业标识"
+    graduated_flag:Int
+    "班级排序"
+    eclass_order:Int
+    "班级号"
+    eclass_number:String
+    "班级图标"
+    ioc_path:String
+    "班级logo"
+    logo:String
+    "班级名称"
+    name:LangInput
+    "班级简介"
+    intro:LangInput
+    "教师寄语"
+    teacher_comment:LangInput
+    "班主任寄语"
+    head_teacher_message:LangInput
+}
+
+"班级返回类"
+type EclassResponse {
+    code:Int
+    error:String
+    data:[Eclass]
+    pagenation:Pagenation
+}

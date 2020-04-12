@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.power.PowerDao">
+
+	<select id="getCount" resultType="com.orhonit.ole.report.dto.power.PowerAndRespDTO">
+		SELECT 
+			COUNT(b.id) count
+			from 
+			ole_base_potence b 
+			where  b.pro_type != ''
+			and  b.is_effect='1' AND b.del_flag='0'
+	</select>
+	
+	
+	<select id="getClassFica" resultType="com.orhonit.ole.report.dto.power.PowerAndRespDTO">
+		 SELECT
+			a.enum_desc enumDesc,COUNT(c.pro_type) count
+		FROM 
+			ole_base_potence c
+		LEFT JOIN 
+			ole_sys_dict a 
+		ON 
+			c.pro_type = a.enum_value			
+		<where>
+			a.type_value = '1712'  AND c.pro_type != ''
+			and  c.is_effect='1' AND c.del_flag='0'
+			<if test="areaId != null and areaId != ''">
+				AND c.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY 
+			c.pro_type
+	</select>
+	
+	<select id="getDepartCount" resultType="com.orhonit.ole.report.dto.power.PowerAndRespDTO">
+		SELECT 
+			a.name enumDesc,COUNT(b.dept_id) count
+		FROM 
+			ole_base_dept a
+		LEFT JOIN 
+			ole_base_potence_dept b 
+		ON 
+			b.dept_id = a.id
+		<where>
+			<if test="areaId != null and areaId != ''">
+				a.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY 
+			a.name
+	</select>
+	
+	<!-- 查询各个部门得日常检查 -->	
+	<select id="getDayInspection" parameterType="java.lang.String" resultType="com.orhonit.ole.report.dto.power.PowerAndRespDTO">
+		SELECT 
+		a.name NAME,COUNT(b.dept_id) COUNT
+		FROM 
+		ole_base_dept a
+		LEFT JOIN 
+		ole_ef_check_daily b  ON a.id = b.dept_id
+		 <where>
+			<if test="areaId != null and areaId != ''">
+				a.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY 
+		a.name
+		order by count desc
+	</select>
+</mapper>

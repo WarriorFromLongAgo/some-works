@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.moral.mapper.DataValuesMapper">
+    <!-- 年级层德育统计 -->
+    <select id="selects_grade" resultType="int">
+		SELECT  SUM(b.fixed_score) AS score FROM moral_data_values AS b , moral_data_student AS a WHERE a.moral_column_id = b.id AND a.user_id = #{user_id} and b.semester_id = #{semester_id} and b.type = 2;
+	</select>
+    <select id="selects_school" resultType="int">
+		SELECT  SUM(b.fixed_score) AS score FROM moral_data_values AS b , moral_data_student AS a WHERE a.moral_column_id = b.id AND a.user_id = #{user_id} and b.semester_id = #{semester_id} and b.type = 1;
+	</select>
+	<select id="moral_base" resultType="int">
+		SELECT  points FROM moral_basic WHERE school_id = #{school_id} AND semester_id = #{semester_id};
+	</select>
+    <select id="student_name" resultType = "string">
+		SELECT  student_name FROM student_information WHERE user_id = #{user_id};
+	</select>
+    <select id="class_name" resultType = "string">
+		SELECT  eclass_name FROM student_eclass WHERE id = #{eclass_id};
+	</select>
+	<select id="selects_grade_month" resultType="int">
+		SELECT  SUM(b.fixed_score) AS score FROM moral_data_values AS b , moral_data_student AS a WHERE a.moral_column_id = b.id AND a.user_id = #{user_id} and (b.created_at &gt; #{start_times}) and (b.created_at &lt; #{end_times}) and b.type = 2;
+	</select>
+	<select id="selects_school_month" resultType="int">
+		SELECT  SUM(b.fixed_score) AS score FROM moral_data_values AS b , moral_data_student AS a WHERE a.moral_column_id = b.id AND a.user_id = #{user_id} and (b.created_at &gt; #{start_times}) and (b.created_at &lt; #{end_times}) and b.type = 1;
+	</select>
+
+	<select id="getDateValue"
+			resultType="java.util.HashMap"
+			parameterType="java.util.HashMap">
+
+		SELECT
+		a.*,
+		b.moral_education_name,
+		c.teacher_name,
+		d.grade_name,
+		e.eclass_name,
+		f.remarks as morl_rule_name
+		FROM
+		moral_data_values a
+		LEFT JOIN moral_item as b ON b.id = a.moral_education_id
+		LEFT JOIN teacher_information as c ON c.user_id = a.created_by
+		LEFT JOIN base_grades as d ON d.id = a.grade_id
+		LEFT JOIN student_eclass as e ON e.id = a.class_id
+		LEFT JOIN moral_rules as f ON f.id = a.moral_rules_id
+		<where>
+			<if test="maps.school_id!=null and maps.school_id!=''">
+				and a.school_id = #{maps.school_id}
+			</if>
+			<if test="maps.id!=null and maps.id!=''">
+				and a.id = #{maps.id}
+			</if>
+			<if test="maps.semester_id!=null and maps.semester_id!=''">
+				and a.semester_id = #{maps.semester_id}
+			</if>
+			and a.deleted_at is NULL
+		</where>
+	</select>
+	<select id="getOneDateValue"
+			resultType="java.util.HashMap"
+			parameterType="java.util.HashMap">
+
+		SELECT
+		a.*,
+		b.moral_education_name,
+		c.teacher_name,
+		d.grade_name,
+		e.eclass_name,
+		f.remarks as morl_rule_name
+		FROM
+		moral_data_values a
+		LEFT JOIN moral_item as b ON b.id = a.moral_education_id
+		LEFT JOIN teacher_information as c ON c.user_id = a.created_by
+		LEFT JOIN base_grades as d ON d.id = a.grade_id
+		LEFT JOIN student_eclass as e ON e.id = a.class_id
+		LEFT JOIN moral_rules as f ON f.id = a.moral_rules_id
+		<where>
+			and a.id = #{id}
+			and a.deleted_at is NULL
+		</where>
+	</select>
+	<select id="getDateValuepage"
+			resultType="java.util.HashMap"
+			parameterType="java.util.HashMap">
+
+		SELECT
+		a.*,
+		b.moral_education_name,
+		c.teacher_name,
+		d.grade_name,
+		e.eclass_name,
+		f.remarks as morl_rule_name
+		FROM
+		moral_data_values a
+		LEFT JOIN moral_item as b ON b.id = a.moral_education_id
+		LEFT JOIN teacher_information as c ON c.user_id = a.created_by
+		LEFT JOIN base_grades as d ON d.id = a.grade_id
+		LEFT JOIN student_eclass as e ON e.id = a.class_id
+		LEFT JOIN moral_rules as f ON f.id = a.moral_rules_id
+		<where>
+			<if test="maps.school_id!=null and maps.school_id!=''">
+				and a.school_id = #{maps.school_id}
+			</if>
+			<if test="maps.id!=null and maps.id!=''">
+				and a.id = #{maps.id}
+			</if>
+			<if test="maps.semester_id!=null and maps.semester_id!=''">
+				and a.semester_id = #{maps.semester_id}
+			</if>
+			and a.deleted_at is NULL
+		</where>
+		LIMIT #{dto.start},#{dto.limit}
+	</select>
+</mapper>

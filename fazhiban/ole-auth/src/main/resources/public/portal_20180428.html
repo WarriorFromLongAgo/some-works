@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>呼和浩特市行政执法监督平台</title>
+<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" media="screen" href="layui/css/layui.css">
+</head>
+<body>
+    <div class="warpper">
+        <!--头部-->
+        <div class="head">
+            <div class="head-box">
+                <div class="head-content">
+                    <div class="f-l">
+                        <img src="img/login/logo.png" width="661" height="165"/>
+                    </div>
+                    <div class="f-r head-list">
+                        <ul>
+                            <li>
+							   
+                                <span   class="icon-top admin-header-user">
+										<img style="width:48px;height:48px;"></img>
+								</span>
+                                <span class="user-info">
+		                   		 	<span class="layui-nav-more" style="color:#FFFFFF"><label id="nickname"></label></span></a>
+                                </span>
+                            </li>
+                            <a href="#" onclick="document.getElementById('mask').style.display='block'">
+                            <li class="cursor">
+                                <img src="img/login/icon-s04.png" width="20" height="20"/>
+                                修改密码
+                            </li>
+                            </a>
+                            <a href="/auth/logout" id="logout">
+                            <li class="cursor">
+                                <img src="img/login/icon-s03.png" width="20" height="20"/>
+                                退出
+                            </li>
+                            </a>
+                        </ul>                
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--内容-->
+        <div class="container">
+            <div class="main">
+                <ul>
+                	<a  href="javascript:;" onclick="checkPermission('/auth/sso/redirect/enforce','module:enforce:access')">
+	                    <li class="size-1 nav-bj1">
+	                        <img src="img/login/icon02.png" width="90" height="90" class="margin-1" />
+	                        <p>在线执法</p>
+	                    </li>
+                    </a>
+                    <a href="javascript:;" onclick="checkPermission('/auth/sso/redirect/tts','module:warn:access')">
+                    
+	                    <li class="size-2 nav-bj2">
+		                     <img src="img/login/icon07.png" width="90" height="90" class="margin-2" />
+	                        <p>监督预警</p>
+	                       
+	                    </li>
+	                </a>
+	                <a  href="javascript:;" onclick="checkPermission('/auth/sso/redirect/report','module:report:access')">
+	                    <li class="size-2 nav-bj3 margin-r-0">
+	                        <img src="img/login/icon03.png" width="90" height="90" class="margin-2" />
+	                        <p>决策分析</p>
+	                    </li>
+	                </a>
+	                <a href="javascript:;" onclick="checkPermission('/auth/sso/redirect/enforce','module:legal:access')">
+                    <li class="size-2 nav-bj4">
+                       <img src="img/login/icon08.png" width="90" height="90" class="margin-2" />
+	                        <p>法制审核</p>
+                    </li>
+                    </a >
+                    <a href="javascript:;" onclick="checkPermission('/auth/sso/redirect/enforce','module:repeat:access')">
+                    	<li class="size-2 nav-bj5 margin-r-0">
+                        	 <img src="img/login/icon09.png" width="90" height="90" class="margin-2" />
+	                        <p>行政复议</p>
+                    	</li>
+                    </a>
+                </ul>
+            </div>
+            
+            <div class="main">
+                <ul>
+                 <a href="javascript:;" onclick="checkPermission('/auth/sso/redirect/pa','module:pa:access')">
+                	<!-- <a href="http://47.100.82.50:8080/pa"  target="_blank"> -->
+	               		<li class="size-4 nav-bj6">
+	                        <img src="img/login/icon06.png" width="90" height="90" class="margin-3" />
+	                        <p>绩效考评</p>
+	                    </li>
+                    </a>
+                     <a  href="javascript:;" onclick="checkPermission('/auth/sso/redirect/base','module:base:access')">
+                    <li class="size-4 nav-bj7">
+	                    <img src="img/login/icon04.png" width="90" height="90" class="margin-3" />
+                        <p>基础信息</p>
+                    </li>
+                    </a>
+                    <a  href="javascript:;" onclick="checkPermission('/auth/sso/redirect/auth','module:auth:access')">
+	                    <li class="size-4 nav-bj8 ">
+	                        <img src="img/login/icon01.png" width="90" height="90" class="margin-3" />
+	                        <p>基础权限</p>
+	                    </li>
+                    </a>
+                    <a href="http://zfjd.hhhtfzb.gov.cn/ps/#page=subSystem"  target="_black">
+	                    <li class="size-4 nav-bj9 margin-r-0">
+	                        <img src="img/login/icon05.png" width="90" height="90" class="margin-3" />
+                        	<p>公众服务</p>
+	                    </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <!--弹出设置层-->
+        <div class="mask" id="mask">
+            <!--修改密码-->
+            <div class="set">
+                <a class="close" onclick="document.getElementById('mask').style.display='none'"></a>	
+                <div class="content-box">
+                    <ul>
+                        <li>
+                           <div class="title">原密码：</div>
+                           <div class="f-l">
+                             <input type="password" name="oldPassword" id="oldPassword" value="" placeholder="请输入原密码" class="input-2">
+                           </div> 
+                        </li>
+                        <li>
+                           <div class="title">新密码：</div>
+                           <div class="f-l">
+                             <input type="password" name="newPassword1" id="newPassword1" value="" placeholder="请输入新密码" class="input-2">
+                           </div> 
+                        </li>
+                        <li>
+                           <div class="title">确认密码：</div>
+                           <div class="f-l">
+                             <input type="password" name="newPassword2" id="newPassword2" value="" placeholder="请再次输入新密码" class="input-2">
+                           </div> 
+                        </li>
+                    </ul>
+                </div>
+                <div class="btn-box">
+                    <button class="btn-3" onclick="updatePass()">确 认</button>
+                </div>
+            </div>
+            
+            <!--信息提示-->
+            <div class="set hide" id="prompt">
+                <a class="close" onclick="document.getElementById('mask').style.display='none'"></a>	
+                <div class="content-box">
+                    <p class="prompt">密码修改成功！</p>
+                </div>
+                <div class="btn-box">
+                    <button class="btn-3" onclick="document.getElementById('mask').style.display='none'">关 闭</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+	<script type="text/javascript" src="js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/my/ws/login-listener.js"></script>
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<script type="text/javascript" src="layui/layui.all.js"></script>
+	<script type="text/javascript" src="js/jq.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript">
+		var pers = [];
+		var username;
+		layui.use(['layer'], function(){
+		    var layer = layui.layer;
+		});
+		$.ajax({
+			type : 'get',
+			url : '/auth/sso/module',
+			async : false,
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				for ( var i = 0 ; i < data.length ; i ++ ) {
+					pers.push(data[i].permission);
+				}
+			}
+		});
+		$.ajax({
+			type : 'get',
+			url : '/auth/users/current',
+			userdata : $("#form").serialize(),
+			success : function(data) {
+				username = data.username;
+			}
+		});
+		function checkPermission(redirectUrl, per) {
+			//console.log(redirectUrl);
+			if ( $.inArray(per, pers) < 0 ) {
+				layer.msg("未授权",{anim:6});
+				return;
+			}
+			//window.location.href = redirectUrl;
+			$.ajax({
+				type : 'get',
+				url : redirectUrl,
+				success : function(data) {
+					window.open(data);
+				}
+			});
+		}
+		
+		$(document).ready(function(){
+			showLoginInfo();
+			});
+		var pro = window.location.protocol;
+		var host = window.location.host;
+		var domain = pro + "//" + host;
+		// 登录信息
+		function showLoginInfo(){
+			$.ajax({  
+			    url:"/auth/users/current/person",  
+			    type:"get",  
+			    async:false,
+			    success:function(data){
+				if(data!=null){
+					$("#nickname").text(data.name);
+				  }
+			   	 if(data.picture != null && data.picture != ''){
+			   		url="/file/person/" +data.picture;
+			   		 //var url = domain + "/file/person/" + url;
+			   	 }else{
+			   		url = "/auth/img/avatars/sunny.png";
+			   	 }
+			   	var img = $(".admin-header-user img");
+			   	img.attr("src", domain + url);
+			    }
+			});
+		}
+		
+		function updatePass(){
+			if($("#newPassword1").val() != $("#newPassword2").val()){
+				layer.msg("两次输入的密码不一致，请重新输入!", {anim:6});
+				return;
+			}
+			$.ajax({
+				type : 'get',
+				url : '/auth/users/changePass?oldPassword='+$("#oldPassword").val()+'&newPassword='+$("#newPassword1").val(),
+				success : function(data) {
+					console.log(data);
+					if(data.code == 0){
+						layer.msg(data.data, {shift: -1, time: 3000}, function(){
+							window.location = $("#logout").attr('href');
+				        });
+					}else{
+						layer.msg(data.data, {shift: -1, time: 1000}, function(){
+							$("#oldPassword").val('');
+							$("#newPassword1").val('');
+							$("#newPassword2").val('');
+				        });
+					}
+				}
+			});
+			
+		}
+	</script>
+</body>
+
+</html>

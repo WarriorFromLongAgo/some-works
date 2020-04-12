@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.cases.ReportAreaAdminCaseDao">
+
+	<!-- 查询所有的区域列表 -->
+	<select id="findAreaList" resultType="com.orhonit.ole.report.dto.cases.AreaCaseCountDTO">
+		SELECT oba.`name`
+		FROM ole_base_area oba
+		WHERE oba.`parent_id` IN ('15','17') AND oba.is_effect = '1'
+	</select>
+
+	<!-- 查询各区域处理行政案件 -->
+	<select id="findAreaAndCase" resultType="com.orhonit.ole.report.dto.cases.AreaCaseCountDTO">
+
+		SELECT oba.`name` AS 'name',COUNT(oec.id) AS 'value'
+		FROM ole_base_area oba
+		LEFT JOIN ole_base_dept obd ON oba.`id` = obd.`area_id`
+		LEFT JOIN ole_ef_case oec ON oec.`dept_id` = obd.`id`
+		WHERE oec.`case_type` = '1'
+		<if test="year != null and year != ''">
+				AND YEAR(oec.`case_time`) = #{year}
+		</if>
+		GROUP BY oba.`name`
+	</select>
+</mapper>

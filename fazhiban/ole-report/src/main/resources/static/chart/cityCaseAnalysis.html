@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            样式定义
+        </title>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        name="viewport">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+        <style type="text/css">
+            .content {
+  /* background: url("img/common/charts_bg.jpg") no-repeat;*/
+  background:#000;
+  background-repeat:no-repeat;
+  background-size:cover;
+  padding:0px 15px;
+}
+.box1 {
+  padding: 0px;
+  margin:0px;
+}
+.box2 {
+  /* background: #00ffbb;*/
+  padding: 0px;
+}
+.box3 {
+  min-height: 500px;
+  padding: 0px;
+  border: 1px dashed #00CCFF;
+}
+.box4 {
+  min-height: 300px;
+  padding: 0px;
+  border: 1px dashed #00CCFF;
+}
+.fl_box {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap:wrap;
+}
+.fl_box li {
+  width: 50%;
+  display: block;
+  float: left;
+}
+.fl_box li a {
+  width: 100%;
+  line-height: 30px;
+  display: block;
+  text-align: center;
+}
+.fl_box li a:nth-child(1) {
+  background: rgba(0,51,153,0.6);
+}
+.fl_box li a:nth-child(2) {
+  background: rgba(0,51,204,0.6);
+}
+.fl_item {
+  width: 50%;
+  height:100px;
+  background: white;
+  background: rgba(0,51,153,0.6);
+  color: #fff;
+  /*text-shadow: 0 0 .1em,0 0 .3em;*/
+  position: relative;
+}
+.fl_item:hover {
+  -moz-box-shadow:3px 2px 5px #3399FF;
+  -webkit-box-shadow:3px 2px 5px #3399FF;
+  box-shadow:3px 2px 5px #3399FF;
+  position: relative;
+  top: -3px;
+  right: -3px;
+}
+.fl_item_name {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.fl_item_value {
+  height: 60px;
+  line-height: 60px;
+  font-size: 16px;
+  text-align: center;
+  background: rgba(0,51,204,0.6);
+}
+        </style>
+    </head>
+    
+    <body class="hold-transition skin-blue sidebar-mini" style="background-color: #ecf0f5">
+        <div class="wrapper">
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-7 col-sm-6 box1">
+                        <div class="col-sm-12 box3">
+                            <div class="col-sm-8">
+                                <div id="area1" style="height: 500px;">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="fl_box" id="fl_box">
+                                    <ul class="fl_box" id="fl_box">
+                                        <li>
+                                            <a>
+                                                呼和浩特市
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                新城区
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                赛罕区
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                回民区
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                玉泉区
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                托克托县
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                武川县
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                和林格尔县
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                清水河县
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                土默特左旗
+                                            </a>
+                                            <a>
+                                                0
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 box4">
+                            <div class="col-sm-8">
+                                <div id="area2" style="height: 300px;">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div id="area6" style="height: 300px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-6 box2">
+                        <div id="area3" style="height: 700px;">
+                        </div>
+                        <div id="area4" style="height: 50px;">
+                        </div>
+                        <div id="area5" style="height: 50px;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js">
+    </script>
+    <script type="text/javascript" src="js/echarts.min.3.8.2.js">
+    </script>
+    <script type="text/javascript" src="cityCaseAnalysis.js">
+    </script>
+
+</html>

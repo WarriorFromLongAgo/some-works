@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.enforce.ReportEnforcePersonDao">
+
+	<!-- 查询各区域执法人员总数-->
+	<select id="findAreaEnforcePersonCount" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		SELECT oba.`name` AS 'name',COUNT(obdp.`ID`) AS 'value'
+		FROM ole_base_area oba
+		LEFT JOIN ole_base_dept obd ON oba.`id` = obd.`area_id`
+		LEFT JOIN ole_base_dept_person obdp  ON obd.`id` = obdp.`dept_id`
+		WHERE oba.`is_effect` = '1' AND oba.`parent_id` IN ('15','17') 
+	    and obdp.del_flag='0' AND obdp.if_effect='1'
+		GROUP BY oba.`name`
+	</select>
+	
+	<!-- 查询执法人员各年龄段分布-->
+	<select id="findEnforcePersonAge" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		<![CDATA[
+			SELECT * 
+			FROM (SELECT (
+			CASE 
+			WHEN YEAR(birthday)<YEAR(NOW()) AND YEAR(birthday)>=YEAR(NOW())-30 THEN '1<30' 
+			WHEN YEAR(birthday)<=YEAR(NOW())-31 AND YEAR(birthday)>=YEAR(NOW())-40 THEN '31-40' 
+			WHEN YEAR(birthday)<=YEAR(NOW())-41 AND YEAR(birthday)>=YEAR(NOW())-50 THEN '41-50'
+			ELSE '>50' END) AS 'name',COUNT(*) AS 'value'
+			FROM ole_base_dept_person bdp
+			where    bdp.del_flag='0' AND bdp.if_effect='1'
+			GROUP BY (
+			CASE 
+			WHEN YEAR(birthday)<YEAR(NOW()) AND YEAR(birthday)>=YEAR(NOW())-30 THEN '1<30' 
+			WHEN YEAR(birthday)<=YEAR(NOW())-31 AND YEAR(birthday)>=YEAR(NOW())-40 THEN '31-40' 
+			WHEN YEAR(birthday)<=YEAR(NOW())-41 AND YEAR(birthday)>=YEAR(NOW())-50 THEN '41-50'
+			ELSE '>50' END)
+			HAVING COUNT(*)>0) a;
+		]]> 
+	</select>
+	
+	<!-- 查询各职位人数-->
+	<select id="findDutyPersonCount" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		SELECT osd.`enum_desc` AS 'name',COUNT(bdp.duty) AS 'value' , bdp.`duty`
+		FROM ole_base_dept_person bdp
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value` = bdp.`duty`
+		WHERE osd.`type_value` = '1706'
+		and bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY bdp.duty
+	</select>
+	
+	<!-- 查询人员表中的各种民族数量-->
+	<select id="findPersonNation" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		SELECT osd.`enum_desc` AS `name`,COUNT(bdp.nation) AS 'value'
+		FROM ole_base_dept_person bdp 
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value` = bdp.`nation`
+		WHERE osd.`type_value` = '1701'
+		and bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY bdp.nation
+	</select>
+	<!-- 学历分布-->
+	<select id="findEduList" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		SELECT osd.`enum_desc` AS 'name', COUNT(bdp.edu) AS 'value'
+		FROM ole_base_dept_person bdp
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value`= bdp.`edu`
+		WHERE osd.`type_value` = '1705'
+		and bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY bdp.edu
+	</select>
+	<!-- 政治面貌分布-->
+	<select id="findpoliticalList" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		SELECT osd.`enum_desc` AS 'name', COUNT(bdp.political) AS 'value'
+		FROM ole_base_dept_person bdp 
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value`= bdp.`political`
+		WHERE osd.`type_value` = '1702'
+		and bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY bdp.political
+	</select>
+</mapper>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../../css/bootstrap.min.css">
+<link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../../css/select2.min.css" rel="stylesheet">
+<link href="../../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		<div class="form-group" style="margin-top:20px;">
+			<input class="form-control" type="hidden" name="id" disabled="disabled" id="id">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处理方式<span class="btx">*</span></label>
+			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+				<select class="form-control" id="handleMode" name="handleMode"   onchange="Reconsideration()"
+				 data-bv-notempty="true"  data-bv-notempty-message="处理方式不能为空">
+					<option value="107" >发现问题</option>
+					<option value="108" selected = "selected">未发现问题</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处理意见<span class="btx">*</span></label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<textarea class="form-control" rows="5" cols="" name="dealContent" id="dealContent" placeholder="请输入处理意见"
+						data-bv-notempty="true"
+						data-bv-notempty-message="处理意见不可为空"></textarea>
+				</div>
+		</div>
+		<div class="form-actions">
+			<div class="row" align="center">
+				<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add()">
+					<i class="fa fa-save"></i> 提交
+				</button>
+			</div>
+		</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../../js/jq.js"></script>
+	<script type="text/javascript" src="../../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../../js/common.js"></script>
+	<script type="text/javascript" src="../../../js/constans.js"></script>
+	<script type="text/javascript" src="../../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../../layui/layui.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../../js/ueditor.all.min.js"></script>
+    <script src="../../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../../js/select2/select2.full.min.js"></script>  
+	<script src="../../../js/select2/zh-CN.js"></script>  
+	<script src="../../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+  <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+	
+      layui.use(['layer'], function(){
+		    var layer = layui.layer;
+		});
+       var userNickName;
+       var userId;
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			userdata : $("#form").serialize(),
+			success : function(userdata) {
+				userNickName = userdata.nickname;
+				userId=userdata.id;
+			}
+		});
+    	
+    	function Reconsideration(){
+    		var objS = document.getElementById("handleMode");
+       		 var handlenum = objS.options[objS.selectedIndex].value;
+       		 if (handlenum=='103')
+       		 {
+       			 $("#shr").show();
+       		 }else{
+       			 $("#shr").hide();
+       		 }
+       		 return;
+    	}
+    	/*
+    	  $.ajax({
+			type : 'get',
+			url : '/enforce/flow/getHaveRoleOpinionByDeptId',
+			success : function(data) {
+				if ( data.code == "0") {
+					var users = data.data;
+					var nextOpinionDom = '<option value=\"\">请选择审核人</option> ';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						nextOpinionDom += '<option value = "' + users[i].userId + '">' + users[i].nickName + '</option>';
+					}
+					$('#nextOpinionDom').html(nextOpinionDom);
+				}
+			}
+		});
+    	 */
+	  
+        $('#form').bootstrapValidator();
+        function add() {
+        	var handleMode = $('#handleMode').val();
+		    caseId = getUrlParam("caseId");
+		    content = $("#dealContent").val();
+        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = new Object();
+            formdata.assignee = userId;
+            formdata.businessId = caseId;
+            formdata.nextAssignee = userId;
+            formdata.flowKey = 'proCheck';
+            formdata.comment = content;
+            formdata.handleMode = $('#handleMode').val();
+            console.log(formdata);
+		    	$.ajax({
+    				type : 'post',
+    				url : '/enforce/flow/taskComplate',
+    				contentType: "application/json; charset=utf-8",  
+    				data : JSON.stringify(formdata),
+    				//data : JSON.stringify(flowDTO),
+    				success : function(data) {
+	    				layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+	    					window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+                  	 	});
+    				}
+    			});
+		    	
+		}
+
+    </script>
+</body>
+</html>

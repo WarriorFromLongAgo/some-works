@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文书详细内容</title>
+<style>
+	@page{margin:0;}
+	table,table tr th, table tr td { border:1px solid #000000; }
+    table { width:  min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse;} 
+</style>
+</head>
+<!-- 
+<body style="width: 756px;  text-align:center;margin:0 auto" >
+--> 
+<p><button type="button" onclick="doPrint()">打印</button></p>
+<!--startprint-->
+<body style="width: 756px;margin:0 auto;">
+<!--
+<div id="content"  style="width: 756px;  text-align:center;margin:0 auto" >
+--> 
+<div id="content" >
+</div >
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript">
+	    var templateId = getQuery('templateId');
+	    var checkId = getQuery('checkId');
+	    
+        $.ajax({
+			type : 'get',
+			url : '/tts/docContent/detail?templateId=' + templateId + '&caseId=' + checkId,
+			contentType: "application/json; charset=utf-8",  
+			success : function(data) {
+				$('#content').html(data.data.htmlContent);
+			}
+		});
+        
+    </script>
+</body>
+<!--endprint-->
+<script type="text/javascript">
+    function doPrint(){
+    	bdhtml=window.document.body.innerHTML;    
+        sprnstr="<!--startprint-->"; // 打印开始标识   
+        eprnstr="<!--endprint-->";   //打印结束标识 
+        prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);    
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); 
+        window.document.body.innerHTML=prnhtml; 
+        window.print();    
+	}   
+</script> 
+</html>

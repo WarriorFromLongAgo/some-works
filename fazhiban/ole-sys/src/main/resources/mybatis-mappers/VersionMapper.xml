@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.sys.dao.VersionDao">
+
+<!-- 版本列表查询-->
+	<select id="list" resultType="com.orhonit.ole.sys.dto.VersionDTO">
+		SELECT * FROM ole_app_version
+		<where>
+			<if test="params.versionName != null and params.versionName != ''">
+				and version_name like concat('%', #{params.versionName}, '%')
+			</if>
+		</where>
+		order by create_date desc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<!-- 版本列表查询总数-->
+	<select id="count" resultType="int">
+		SELECT count(*) FROM ole_app_version
+		<where>
+			<if test="params.versionName != null and params.versionName != ''">
+				and version_name like concat('%', #{params.versionName}, '%')
+			</if>
+		</where>
+		;	
+	</select>
+
+</mapper>

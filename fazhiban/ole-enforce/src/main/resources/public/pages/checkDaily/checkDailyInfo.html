@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<link rel="stylesheet" href="../../css/font-awesome/css1/font-awesome.css" media="all">
+<style type="text/css">
+.conter *{
+	margin: 0;
+	padding: 0;
+	border-style: solid 0px;
+}
+.conter{
+	position: relative;
+	width: 100%;
+}
+.ul{
+	
+}
+.ulline{
+	float: left;
+	height: 125px;
+	overflow: hidden;
+}
+.li{
+	width: 100px;
+	float: left;
+	list-style: none;
+	border: 0px;
+}
+.img{
+	width: 100px;
+	height: 100px;
+}
+.marquee{
+	height: 20px;
+	line-height: 20px;
+	width: 95%;
+	overflow: hidden;
+}
+
+.openclose{
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+.showp1{
+	background: #000 ;
+	font-size: 150%;
+	color: white;
+	opacity: 0.7;
+	position: absolute;
+	margin-top: -125px;
+	width: 100px;
+	z-index: 100;
+	text-align: center;
+	font-weight: 900;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
+}
+.showp1:hover{
+	color: red;
+}
+.download:hover{
+	color: red;
+}
+.download{
+	background: #000 ;
+	font-size: 150%;
+	position: absolute;
+	margin-top: -58px;
+	width: 100px;
+	z-index: 100;
+	opacity: 0.7;
+	color: white;
+	text-align: center;
+	border-bottom-right-radius:10px;
+	border-bottom-left-radius:10px;
+}
+
+.control-label {
+	text-align: left !important;
+}
+
+.form-group {
+	margin-bottom: 5px;
+}
+
+.form-horizontal {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+	border: 1px solid #dddddd!important;
+	text-align: left;
+}
+
+</style>
+</head>
+<body>
+<div class="layui-tab layui-tab-card" style="width: 98%;margin: 10px auto;position: relative;top: 50px;">
+	<ul class="layui-tab-title" style="position: fixed;top: 0;z-index: 1;width:100%;">
+		<li class="layui-this">案件详情</li>
+		<li>文书列表</li>
+		<li>文件列表</li>
+		<li>流程审批记录</li>
+	</ul>
+	<div class="layui-tab-content" style="height: 100%;">
+		<div class="layui-tab-item layui-show">
+			<form class="form-horizontal" onsubmit="return false" id="form">
+				<fieldset>
+					<div class="form-group">
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">检查内部编号:</label>
+							<label class="col-md-6 control-label">检查编号:</label>
+						</div>
+
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkId" id="checkId">
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkNum" id="checkNum">
+						</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">主执法人员姓名:</label>
+							<label class="col-md-6 control-label">协办人员姓名:</label>
+						</div>
+
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkZzfryname" id="checkZzfryname">
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkFzfryname" id="checkFzfryname">
+						</div>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">检查标题:</label>
+							<label class="col-md-6 control-label">检查类型:</label>
+						</div>
+
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkTitle" id="checkTitle">
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkMode" id="checkMode">
+						</div>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">检查街道名称:</label>
+							<label class="col-md-6 control-label">检查时间:</label>
+						</div>
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="roadName" id="roadName">
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="checkedDate" id="checkedDate">
+						</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">检查状态:</label>
+						</div>
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" name="status" id="status">
+						</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12">
+							<label class="col-md-6 control-label">检查情况:</label>
+						</div>
+
+						<div class="col-md-12">
+						<div class="col-md-12">
+							<textarea class="form-control" readonly="readonly" type="text" name="checkSituation" id="checkSituation"></textarea>
+						</div>
+						</div>
+					</div>
+
+				</fieldset>
+				<!--<hr />-->
+
+				<div class="form-group">
+
+					<div class="col-md-12">
+					<label class="col-md-6 control-label">检查对象类型:</label>
+					</div>
+
+					<div class="col-md-12">
+					<div class="col-md-6">
+						<input class="form-control" readonly="readonly" type="text" id="checkObjectType" name="checkObjectType">
+					</div>
+					</div>
+				</div>
+				<fieldset style="display: none" id="person">
+					<div class="form-group">
+
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">被检查人:</label>
+							<label class="col-md-6 control-label">被检查人身份证号:</label>
+						</div>
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" id="checkedUserName" name="checkedUserName">
+						</div>
+							<div class="col-md-6">
+								<input class="form-control" readonly="readonly" type="text" id="checkedUserId" name="checkedUserId">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset id="company" style="display: none">
+					<div class="form-group">
+
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">被检查单位名称:</label>
+							<label class="col-md-6 control-label">法定代表人:</label>
+						</div>
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" id="unitName" name="unitName">
+						</div>
+							<div class="col-md-6">
+								<input class="form-control" readonly="readonly" type="text" id="legalPerson" name="legalPerson">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<div class="col-md-12">
+						<label class="col-md-6 control-label">注册号:</label>
+						</div>
+						<div class="col-md-12">
+						<div class="col-md-6">
+							<input class="form-control" readonly="readonly" type="text" id="registNum" name="registNum">
+						</div>
+						</div>
+					</div>
+
+				</fieldset>
+				<!--<hr/>-->
+				<fieldset id="noPartyType" style="display: none">
+					<div class="form-group">
+						<label class="col-md-2 control-label">还未填写当事人信息</label>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="layui-tab-item">
+			<form class="form-horizontal" onsubmit="return false" id="form2">
+
+				<fieldset>
+					<div class="form-group">
+						<!--<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('docDom',this)">文书列表<i class="fa fa-angle-double-up"></i></label>-->
+						<div class="col-md-12" id="docDom" style="text-align: center;">
+
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="layui-tab-item">
+			<form class="form-horizontal" onsubmit="return false" id="form3">
+				<fieldset>
+					<div class="form-group">
+						<!--<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('fileDom',this)">文件列表<i class="fa fa-angle-double-up"></i></label>-->
+						<div class="col-md-12" id="fileDom" style="text-align: center;">
+
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="layui-tab-item">
+			<form class="form-horizontal" onsubmit="return false" id="form4">
+				<fieldset>
+					<div class="form-group">
+						<!--<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('flowDom',this)">流程审批记录<i class="fa fa-angle-double-up"></i></label>-->
+						<div class="col-md-12" id="flowDom" style="text-align: center">
+
+						</div>
+					</div>
+				</fieldset>
+
+				<!-- <div class="form-actions">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="submit" onclick="backToList();">
+								<i class="fa fa-save"></i> 返回
+							</button>
+						</div>
+					</div>
+				</div> -->
+			</form>
+		</div>
+	</div>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.all.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+    var checkNum = '';
+    
+    function getQuery( name ) {
+	    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	    var r = window.location.search.substr(1).match(reg);
+	    if(r!=null) return  unescape(r[2]); return null;
+	}
+    var id = getQuery('checkId');
+    
+    if ( id == null || id == '' ) {
+    	alert('参数异常.');
+    	window.location.href = 'checkDailyList.html';
+    }
+    $.ajax({
+		type : 'get',
+		url : '/enforce/checkDaily/query/' + id,
+		contentType: "application/json; charset=utf-8",  
+		async : false,
+		success : function(data) {
+			if ( data.code == '0') {
+				var checkInfo = data.data;
+				$('#checkId').val(checkInfo.checkId);
+				$('#checkNum').val(checkInfo.checkNum);
+				checkNum = checkInfo.checkNum;
+				$('#checkTitle').val(checkInfo.checkTitle);
+				$('#checkMode').val(checkInfo.checkMode);
+				$('#roadName').val(checkInfo.roadName);
+				$('#checkedDate').val(checkInfo.checkedDate);
+				$('#checkSituation').html(checkInfo.checkSituation);
+				$('#checkZzfryname').val(checkInfo.checkZzfryname);
+				$('#checkFzfryname').val(checkInfo.checkFzfryname);
+				$('#status').val(checkInfo.status);
+				
+				if ( checkInfo.checkObjectType == '公民' ) {
+					$("#person").css('display','block');
+				} else if (checkInfo.checkObjectType == '法人或其他组织') {
+					$("#company").css('display','block');
+				} else {
+					$('#noPartyType').css('display','block');
+				}
+				$('#checkObjectType').val(checkInfo.checkObjectType);
+				$('#checkedUserName').val(checkInfo.checkedUserName);
+				$('#checkedUserId').val(checkInfo.checkedUserId);
+				$('#unitName').val(checkInfo.unitName);
+				$('#legalPerson').val(checkInfo.legalPerson);
+				$('#registNum').val(checkInfo.registNum);
+			}
+		}
+	});
+    
+       $.ajax({
+			type : 'get',
+			url : '/enforce/checkDaily/query/docContent/' + id,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if (data.code == '0') {
+					var docs = data.data;
+					var docDomContent = '';
+					var hasDoc = "0";
+					if ( docs != null && docs.length > 0 ) {
+						hasDoc = "1";
+						for ( var i = 0 ; i < docs.length ; i++) {
+							if( !(docs[i].templateName == null)) {
+								docDomContent = '<table class="table"><tr><th>案件状态</th><th>文书模板</th></tr>';
+								for ( var i = 0 ; i < docs.length ; i++) {
+		        					docDomContent += '<tr>';
+									var href = '/enforce/pages/docContent/docContentDetail.html?templateId='+docs[i].templateId+'&checkId='+id+'&contentId='+docs[i].docContentId;
+									docDomContent += '<td>'+docs[i].checkStatus+'</td><td><a href="javascript:;" onclick="window.open(\''+href+'\')">'+ docs[i].templateName +'</a></td>';
+		        					docDomContent += '</tr>';
+								}
+								docDomContent += '</table>';
+							}
+						}
+					}
+					if ( hasDoc == "0" ) {
+						$('#docDom').html('该案件还没添加任何文书');
+					} else {
+						$('#docDom').html(docDomContent);
+					}
+				}
+			}
+		});
+       /**
+	     * 获取案件的文件列表
+	     */
+	    $.ajax({
+			type : 'get',
+			url : "/enforce/attachFile/caseFileList/"+id,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if (data.code == '0') {
+					$('#filesNum').html('(' + data.data.length + ')');
+					var imgs = ['jpg','jpeg','png','bmp','gif'];
+					var fileComments = data.data;
+					var fileDomContent = '';
+					if ( fileComments != null && fileComments.length > 0 ) {
+						fileDomContent = '<div class="conter"><ul class="ul">';
+						for ( var i = 0 ; i < fileComments.length ; i++) {
+							var imgsrc = '../../images/'+ fileComments[i].fileType +'.png';
+							if(imgs.indexOf(fileComments[i].fileType) != -1){
+								imgsrc = fileComments[i].url;
+							}
+							fileDomContent += '<li class="li">';
+							fileDomContent += '<img id="img'+fileComments[i].id+'" class="img" src="'+imgsrc+'"/>';
+							fileDomContent += '<marquee class="marquee" scrolldelay="200"><p>'+ fileComments[i].fileName+'</p></marquee>';
+							fileDomContent += '<p1 class="showp1" style="display: none;"  onclick="showFile(\''+ fileComments[i].id +'\',\''+ fileComments[i].caseId +'\')">查看</p1>';
+							fileDomContent += '<p1 class="download" style="display: none;" onclick="downloadFile(\''+ fileComments[i].id +'\')">下载</p1></li>';
+						}
+						fileDomContent += '</ul><img class="openclose" src="../../images/collapse.png" /><div style="clear: both;"></div></div>';
+						$('#fileDom').html(fileDomContent);
+					}else{
+						$('#fileDom').html('该案件没有上传任何文件');
+					}
+					
+				}else{
+					$('#fileDom').html("查询文件信息失败！");
+				}
+			}
+		});
+       if ( $('#status').val() != '暂存') {
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/checkDaily/flow/comment/' + checkNum + '/' + 'dayCheck',
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if (data.code == '0') {
+					var flowComments = data.data;
+					var flowDomContent = '';
+					if ( flowComments != null && flowComments.length > 0 ) {
+						flowDomContent = '<table class="table"><tr><th>用户</th><th>任务名称</th><th>时间</th><th>批注</th></tr>';
+						for ( var i = 0 ; i < flowComments.length ; i++) {
+							flowDomContent += '<tr>';
+							flowDomContent += '<td>' +flowComments[i].user+ '</td><td>'+flowComments[i].taskName+'</td><td>'+flowComments[i].time+'</td><td>'+flowComments[i].msg+'</td>';
+							flowDomContent += '</tr>';
+						}
+						flowDomContent += '</table>';
+					}
+					$('#flowDom').html(flowDomContent);
+				}
+			}
+		});
+       }
+	    function backToList() {
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+	    }
+	    
+	    var toggleFlowFlag=0;
+	    var toggleFileFlag=0;
+	    var toggleDocFlag=0;
+	    function showHide(id,dom){
+	    	var $dom = $(dom);//转换成dom对象
+	    	$("#"+id).toggle(1000);
+	    	
+	    	if(id=="flowDom"){
+	    		if(!toggleFlowFlag){
+	    			$dom.find("i").attr({class:"fa fa-angle-double-down"});
+	    			toggleFlowFlag=1;
+	    		}else{
+	    			$dom.find("i").attr({class:"fa fa-angle-double-up"});
+	    			toggleFlowFlag=0;
+	    		}
+	    	}else if(id=="fileDom"){
+	    		if(!toggleFileFlag){
+	    			$dom.find("i").attr({class:"fa fa-angle-double-down"});
+	    			toggleFileFlag=1;
+	    		}else{
+	    			$dom.find("i").attr({class:"fa fa-angle-double-up"});
+	    			toggleFileFlag=0;
+	    		}
+	    	}else if(id=="docDom"){
+	    		if(!toggleDocFlag){
+	    			$dom.find("i").attr({class:"fa fa-angle-double-down"});
+	    			toggleDocFlag=1;
+	    		}else{
+	    			$dom.find("i").attr({class:"fa fa-angle-double-up"});
+	    			toggleDocFlag=0;
+	    		}
+	    	}
+	    }
+	    function showFile(id,caseId){
+			parent.layer.open({
+				type: 2,
+		        title: '在线预览',
+		        shade: [0],
+		        area: ['80%', '90%'],
+		        maxmin: true,
+		        shift: 2,
+		        content: '/enforce/pages/attachFile/fileShow.html?id=' + id + '&caseId=' + caseId,
+		        success: function(layero){
+		        		setTimeout(function() {
+		        			$(layero).removeClass("layer-anim-02");
+		        	  }, 0);
+				}
+		    });
+		}
+		
+		function downloadFile(id){
+			var download = document.createElement("a");
+			download.href='/enforce/attachFile/download?id='+id;
+			download.click();
+		}
+		
+		var oc = true;
+		$('.openclose').click(function(){
+			//获取基本信息
+			var linum = $('.ul .li').length;
+			var liwidth = $('.ul .li').width();
+			var parwidth = $('.ul').parent().width();
+			oc = !oc;
+			if((linum + 1) * liwidth >= parwidth){
+				//改变文件列表显示
+				if(oc){
+					$('.ul').removeClass('ulline');
+					$('.ul').removeAttr('style');
+				}else{
+					$('.ul').addClass('ulline');
+					$('.ul').width((parseInt(parwidth/100) - 1) * 100);
+				}
+			}
+			
+			//改变按钮图片
+			if(!oc){
+				$('.openclose').attr('src','../../images/expand.png');
+			}else{
+				$('.openclose').attr('src','../../images/collapse.png');
+			}
+		});
+		$('.li').mouseover(function(){
+			 $(this).children("p1").attr('style','display: block;');
+		});
+		$('.li').mouseout(function(){
+			 $(this).children("p1").hide();
+		});
+    </script>
+</body>
+</html>

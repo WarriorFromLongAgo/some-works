@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet"  href="/enforce/layui/css/layui.css" media="all" />
+<link rel="stylesheet"  href="/enforce/layui/css/global.css" media="all" />
+<link rel="stylesheet"  type="text/css"  media="screen"   href="../../css/bootstrap.min.css">
+<link rel="stylesheet"  href="../../css/AdminLTE.min.css">
+<style>
+.layui-side-scroll_auto {
+	width: 220px;
+	height: 100%;
+	overflow-x: auto
+}
+</style>
+</head>
+<body  style="width:100%" class="layui-side-scroll_auto">
+	<div class="row"  >
+		<div class="col-md-12" >
+			<div class="box" id="boxDom" class="layer-photos-demo">
+				<!-- 1.获取到规则流程图 -->
+				<img style="position: absolute;top: 0px;left: 0px; " src="" id="flowImg">
+				<!-- 2.根据当前活动的坐标，动态绘制DIV -->
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+   <script type="text/javascript" src="../../layui/layui.js"></script>
+   	<script type="text/javascript" src="../../js/main.js"></script>
+	<script type="text/javascript">
+	
+		function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+		}
+	    var taskId = getQuery('taskId');
+	    var key = getQuery('key');
+	    if (key == null || key == ''){
+	    	key = 0;
+	    }
+	    var caseNum = getQuery('caseNum');
+	    if (caseNum == null || caseNum == ''){
+	    	caseNum = 0;
+	    }
+	    
+	    $("#flowImg").attr("src", '/enforce/flow/view/currentFlow/' + taskId + '/'+ key +'/' + caseNum);
+	    
+	    /* $.ajax({
+			type : 'get',
+			url : '/enforce/flow/view/currentFlow/' + taskId,
+			success : function(data) {
+				if ( data.code == "0") {
+					console.log(data.data.deploymentId);
+					console.log(data.data.imageName);
+					
+					var coor = data.data.imageCoordinate;
+					
+					
+					$("#flowImg").attr("src", '/enforce/flow/flow/image/' + data.data.deploymentId + '/' + data.data.imageName);
+					
+					
+					
+					var currentNode = '<div style="position: absolute;border-radio:1px; border:5px solid red;top:' ; // <s:property value="#acs.y"/>px;left: <s:property value="#acs.x"/>px;width: <s:property value="#acs.width"/>px;height:<s:property value="#acs.height"/>px;   "></div>
+					currentNode += coor.y;
+					currentNode += 'px;left: ' + coor.x + 'px;width: ';
+					currentNode += coor.width + 'px;height:' + coor.height + 'px;   "></div>';
+					
+					$('#boxDom').append(currentNode);
+					
+					
+				}
+			}
+		}); 
+
+		*/
+		function toProcessPage(taskName, businessId) {
+			parent.getMethodValue(taskName, businessId);
+		}
+		
+		function viewFlowImage(taskId) {
+			$.ajax({
+				type : 'get',
+				url : '/enforce/flow/view/current/' + taskId,
+				success : function(data) {
+					console.log(data);
+				}
+			});
+		}
+	</script>
+</body>
+</html>

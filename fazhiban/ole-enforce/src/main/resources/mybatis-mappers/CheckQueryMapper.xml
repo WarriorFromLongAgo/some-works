@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.CheckQueryDao">
+	<sql id="where">
+		<where>
+		  	1=1
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET (CHECK_PERSON.deptId ,#{params.deptIds})
+			</if>
+			<if test="params.deptId != null and params.deptId != ''">
+				and CHECK_PERSON.deptId = #{params.deptId} 
+			</if>
+			<if test="params.checkTitle != null and params.checkTitle != ''">
+				and ck.check_title like concat('%', #{params.checkTitle}, '%')
+			</if>
+			<if test="params.checkObject != null and params.checkObject != ''">
+				and ck.check_object like concat('%', #{params.checkObject}, '%')
+			</if>
+			<if test="params.checkNum != null and params.checkNum != ''">
+				and ck.check_num like concat('%', #{params.checkNum}, '%')
+			</if>
+			<if test="params.checkNum != null and params.checkNum != ''">
+				and ck.check_num like concat('%', #{params.checkNum}, '%')
+			</if>
+			<if test="params.startDate != null and params.startDate != ''">
+				and ck.start_date >= #{params.startDate}
+			</if>
+			<if test="params.endDate != null and params.endDate != ''">
+				and ck.start_date &lt;= #{params.endDate}
+			</if>
+			<if test="params.status != null and params.status != ''">
+				AND ck.status = #{params.status}
+			</if>	
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 1 ">
+				AND  date(ck.create_date) = curdate()
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ck.create_date)		
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ck.create_date)			
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ck.create_date)			
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 5  ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ck.create_date)	
+			</if>
+		</where>
+	</sql>
+
+	<select id="count" resultType="int">
+	SELECT   COUNT(DISTINCT ck.id) FROM ole_ef_check ck
+		LEFT JOIN ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value = '1501'
+		LEFT JOIN 
+		(SELECT ECP.check_id,ECP.dept_id deptId,GROUP_CONCAT( BDP.name) PERSONNAME FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON BDP  
+		WHERE FIND_IN_SET(BDP.ID,ECP.person_id)  GROUP BY CHECK_ID, ECP.dept_id ) CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+		LEFT JOIN ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+		<include refid="where" />
+	</select>
+	
+	<select id="getCount" resultType="int">
+	SELECT
+			COUNT(DISTINCT ck.id)
+	FROM ole_ef_check ck
+	<where>
+		  ck.create_by=#{params.createBy}
+			<!-- <if test="params.checkTitle != null and params.checkTitle != ''">
+				and ck.check_title like concat('%', #{params.checkTitle}, '%')
+			</if>			
+			<if test="params.status != null and params.status != ''">
+				AND ck.status = #{params.status}
+			</if>	
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 1 ">
+				AND  date(ck.create_date) = curdate()
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ck.create_date)		
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ck.create_date)			
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ck.create_date)			
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 5  ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ck.create_date)	
+			</if> -->
+		</where>
+	</select>
+
+
+	<!-- 专项下达通知列表（查询当前登录人创建的检查） -->
+	<select id="listCopy" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+		SELECT
+			ck.id AS id,
+			ck.check_title AS checkTitle,
+			ck.check_object AS checkObject,
+			dic.enum_desc AS status,
+			ck.start_date AS startDate,
+			ck.check_num AS checkNum,
+			ck.create_by AS createBy,
+			ck.create_name AS createName,
+			cr.road_name AS roadName,
+			cp.person_id AS personId,
+			dp.name AS personName,
+			cr.assist_person_id AS assistPersonId,
+			dp1.name AS assistPersonName
+		FROM ole_ef_check ck
+		LEFT JOIN ole_ef_check_person cp ON cp.check_id = ck.id
+		LEFT JOIN ole_ef_check_record cr ON cr.check_id = ck.id
+		LEFT JOIN ole_base_dept_person dp ON dp.id = cp.person_id
+		LEFT JOIN ole_base_dept_person dp1 ON dp1.id = cr.assist_person_id
+		LEFT JOIN ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value = '1501'
+	<where>
+		  	ck.create_by=#{params.createBy}
+			<if test="params.checkTitle != null and params.checkTitle != ''">
+				and ck.check_title like concat('%', #{params.checkTitle}, '%')
+			</if>			
+			<if test="params.status != null and params.status != ''">
+				AND ck.status = #{params.status}
+			</if>	
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 1 ">
+				AND  date(ck.create_date) = curdate()
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ck.create_date)		
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ck.create_date)			
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ck.create_date)			
+			</if>
+			<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 5  ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ck.create_date)	
+			</if>
+		</where>
+		order by ck.create_date desc
+	    limit #{start}, #{length}
+	</select>
+	
+	<select id="list" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+	SELECT
+  ck.id AS id,
+  ck.check_title   AS checkTitle,
+  ck.check_object  AS checkObject,
+  dic.enum_desc    AS STATUS,
+  ck.start_date    AS startDate,
+  ck.end_date      AS endDate,
+  ck.check_num     AS checkNum,
+  ck.check_basis   AS checkBasis,
+  ck.check_content AS checkContent,
+  ck.check_way     AS checkWay,
+  ck.create_by     AS createBy,
+  ck.create_name   AS createName,
+  CHECK_PERSON.deptId AS deptId,
+  bd.name AS deptName,
+ CHECK_PERSON.PERSONNAME AS personName
+FROM ole_ef_check ck
+LEFT JOIN ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value = '1501'
+LEFT JOIN 
+(SELECT ECP.check_id,ECP.dept_id deptId,GROUP_CONCAT( BDP.name) PERSONNAME FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON BDP  
+WHERE FIND_IN_SET(BDP.ID,ECP.person_id)  GROUP BY CHECK_ID, ECP.dept_id ) CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+LEFT JOIN ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+	<include refid="where" />
+	order by ck.create_date desc
+    limit #{start}, #{length}
+	</select>
+	
+	<select id="listApp" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+		SELECT
+		ck.id AS id,
+		ck.check_title AS checkTitle,
+		ck.check_object AS
+		checkObject,
+		dic.enum_desc AS STATUS,
+		ck.start_date AS startDate,
+		ck.end_date AS endDate,
+		ck.check_num AS checkNum,
+		ck.check_basis AS
+		checkBasis,
+		ck.check_content AS checkContent,
+		ck.check_way AS checkWay,
+		ck.create_by AS createBy,
+		ck.create_name AS createName,
+		CHECK_PERSON.deptId AS deptId,
+		bd.name AS deptName,
+		CHECK_PERSON.PERSONNAME AS personName
+		FROM ole_ef_check ck
+		LEFT JOIN
+		ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value
+		=
+		'1501'
+		LEFT JOIN
+		(SELECT ECP.check_id,ECP.dept_id deptId,GROUP_CONCAT(
+		BDP.name) PERSONNAME
+		FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON
+		BDP
+		WHERE FIND_IN_SET(BDP.ID,ECP.person_id) GROUP BY CHECK_ID,
+		ECP.dept_id )
+		CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+		LEFT JOIN
+		ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+		<include refid="where" />
+		order by ck.create_date desc
+		<if test="params.currentPage != null and params.pageSize !=null">
+		 limit #{params.currentPage}, #{params.pageSize};
+	   </if>
+	</select>
+	
+	<select id="getCheckZfryIdByCheckNum" resultType="java.lang.String">
+		 select ecp.person_id 
+		 from ole_ef_check ec , 
+		 ole_ef_check_person ecp
+		 where ec.id=ecp.check_id 
+		 AND ec.check_num=#{checkNum}
+	</select>
+</mapper>

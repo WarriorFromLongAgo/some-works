@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppOsExamQuestionDao">
+    <resultMap type="com.orhonit.modules.generator.app.entity.AppOsExamQuestionEntity" id="AppOsExamQuestionMap">
+        <result property="id" column="id"/>
+        <result property="paperNo" column="paper_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="questionNo" column="question_no"/>
+        <result property="questionAnswer" column="question_answer"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <insert id="insertOsExamQuestion">
+        INSERT INTO os_exam_question(
+            id,
+			paper_no,
+			user_id,
+			question_no,
+			question_answer,
+			type,
+			create_time,
+			update_time
+			)VALUES(
+			#{id},
+			#{paperNo},
+			#{userId},
+			#{questionNo},
+			#{questionAnswer},
+			#{type},
+			#{createTime},
+			#{updateTime}
+			)
+    </insert>
+    
+    <!-- 查找试卷的答案 -->
+	<select id="selectByPaperNo" resultMap="AppOsExamQuestionMap">
+		select 
+			id,paper_no,user_id,question_no,question_answer
+		from os_exam_question 
+		where 
+			paper_no = #{paperNo} and user_id = #{userId}
+			and is_del='0'
+	</select>
+	
+	<!-- 在线考试查找是否有试题 -->
+	<select id="selectOnlyOnlineExam"  resultMap="AppOsExamQuestionMap">
+		select * from os_exam_question q where q.user_id = #{userId} and q.type = '5' and q.paper_no = #{examId} and q.is_del='0'
+	</select>
+	<!-- // 删除正式考试的答案 -->
+	<delete id="deleteOnlyOnlineExamQuestion">
+		delete from os_exam_question where user_id =  #{userId} and type = '5' and paper_no = #{examId}
+	</delete>
+    
+</mapper>

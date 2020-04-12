@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.pa.modules.sys.dao.OfficeDao">
+
+	<sql id="officeColumns">
+		a.id,
+		a.code,
+		a.name_spell AS "nameSpell",
+		a.parent_id AS "parentId",
+		a.area_id AS "area",
+		b.name AS "areaName",
+		a.address, 
+		a.legal_person AS "legalPerson",
+		a.level,
+		a.dept_property AS "deptProperty",
+		a.name,
+		a.sort,
+		a.law_type AS "lawType",
+		a.tel, 
+		a.if_effect AS "ifEffect",
+		a.del_flag AS "delFlag",
+		a.create_name AS "createBy",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_name AS "updateBy",
+		a.short_name AS "shortName"
+	</sql>
+	
+	<sql id="officeJoins">
+		LEFT JOIN ole_base_area b ON b.id = a.area_id		
+    </sql>
+	
+	<select id="get" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM ole_base_dept a
+		<include refid="officeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM ole_base_dept a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		OR a.id = #{currentUser.office.id}
+		ORDER BY a.sort
+	</select>
+			
+	<select id="findAllList" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM ole_base_dept a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.sort
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM ole_base_dept a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_id= #{parentIds}
+		ORDER BY a.sort
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ohs_base_dept(
+			id,
+			code,
+			name_spell,
+			parent_id,
+			area_id,		
+			address, 
+			legal_person,
+			level,
+			dept_property,
+			name,
+			sort,
+			law_type,
+			tel, 
+			if_effect,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			short_name
+		) VALUES (
+			#{id}, 
+			#{code},
+			#{nameSpell},
+			#{parentId},
+			#{area},
+			#{address},
+			#{legalPerson},
+			#{level},
+			#{deptProperty},
+			#{name},
+			#{sort},
+			#{lawType},
+			#{tel},a.tel, 
+			#{ifEffect},
+			#{delFlag},
+			#{createName},
+			#{createDate},
+			#{updateName},
+			#{updateDate},
+			#{shortName} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ohs_base_dept SET 
+			code = #{code}, 
+			name_spell = #{nameSpell}, 
+			parent_id = #{parentId}, 
+			area_id = #{area}, 		
+			address = #{address}, 
+			legal_person = #{legalPerson}, 
+			level = #{level}, 
+			dept_property = #{deptProperty}, 
+			name = #{name}, 
+			sort = #{sort}, 
+			law_type = #{lawType}, 
+			tel = #{tel}, 
+			if_effect = #{ifEffect}, 
+			del_flag = #{delFlag}, 
+			create_by = #{createName}, 
+			create_date = #{createDate}, 
+			update_by = #{updateName}, 
+			update_date = #{updateDate}, 
+			short_name= #{shortName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE ohs_base_dept SET 
+			parent_id = #{parentId}, 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ohs_base_dept SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id};
+	</update>
+	<select id="findTreeByIdLike" resultType="Office">
+		SELECT 
+			<include refid="officeColumns"/>
+		FROM 
+			ole_base_dept a
+			<include refid="officeJoins"/>
+		WHERE 
+			a.parent_id = #{id};
+	</select>
+	
+</mapper>

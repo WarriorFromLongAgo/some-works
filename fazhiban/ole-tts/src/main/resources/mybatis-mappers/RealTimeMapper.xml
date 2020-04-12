@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.tts.dao.RealTimeDao">
+	<select id="caseList" resultType="com.orhonit.ole.tts.dto.CaseListDTO">
+		
+		SELECT  ec.id as id,
+			ec.case_name AS caseName, 
+			ec.case_num AS caseNum, 
+			sd.enum_desc AS caseSource,
+			bd.name AS deptName,
+			ec.case_address caseAddress,
+			ec.case_zzfryname As casezzfryName,
+			ec.case_time AS caseTime,
+			ec.case_apply_date caseApplyDate,
+			ec.case_zpdate caseZpDate,
+			ec.case_handler AS caseHandler,
+			ec.case_zzfryname AS zzfryName,
+			ec.case_zpr AS zprId,
+			sd1.enum_desc AS caseStatus
+			FROM ole_ef_case ec 
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.case_status AND sd1.type_value = '1500' 
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = ec.case_source AND sd.type_value = #{params.typeValue}
+			LEFT JOIN ole_base_dept bd ON bd.id = ec.dept_id
+		<where>
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET (ec.dept_id ,#{params.deptIds})
+			</if>
+			<if test="params.deptId != null and params.deptId != ''">
+				and ec.dept_id = #{params.deptId} 
+			</if>
+			<if test="params.id != null and params.id != ''">
+				and ec.case_num like concat('%', #{params.id}, '%')
+			</if>
+			<if test="params.caseName != null and params.caseName != ''">
+				and ec.case_name like concat('%', #{params.caseName}, '%')
+			</if>
+			<if test="params.zzfryName != null and params.zzfryName != ''">
+				and ec.case_zzfryname like concat('%', #{params.zzfryName}, '%')
+			</if>
+			<if test="params.caseTime != null and params.caseTime != ''">
+				and DATEDIFF(DATE_FORMAT(ec.case_time,'%Y-%m-%d'),#{params.caseTime})=0
+			</if>
+			<if test="params.caseStatus != null">
+				and ec.case_status = #{params.caseStatus} 
+			</if>
+			<if test="params.flowType != null and params.flowType != ''">
+				and ec.flow_type = #{params.flowType} 
+			</if>
+			<if test="params.flowType == null or params.flowType == ''">
+				and ec.flow_type != '3' 
+			</if>
+		</where>
+		order by ec.create_date desc
+		limit #{start}, #{length};
+        
+        
+	</select>
+	
+	<select id="caseCount" resultType="int">
+	SELECT  count(*)FROM ole_ef_case ec 
+				LEFT JOIN ole_sys_dict sd ON sd.enum_value = ec.case_source AND sd.type_value = #{params.typeValue}
+		 
+		<where>
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET (ec.dept_id ,#{params.deptIds})
+			</if>
+			<if test="params.deptId != null and params.deptId != ''">
+				and ec.dept_id = #{params.deptId} 
+			</if>
+			<if test="params.id != null and params.id != ''">
+				and ec.case_num like concat('%', #{params.id}, '%')
+			</if>
+			<if test="params.caseName != null and params.caseName != ''">
+				and ec.case_name like concat('%', #{params.caseName}, '%')
+			</if>
+			<if test="params.zzfryName != null and params.zzfryName != ''">
+				and ec.case_zzfryname like concat('%', #{params.zzfryName}, '%')
+			</if>
+			<if test="params.caseTime != null and params.caseTime != ''">
+				and DATEDIFF(DATE_FORMAT(ec.case_time,'%Y-%m-%d'),#{params.caseTime})=0
+			</if>
+			<if test="params.caseStatus != null">
+				and ec.case_status = #{params.caseStatus} 
+			</if>
+			<if test="params.flowType != null and params.flowType != ''">
+				and ec.flow_type = #{params.flowType} 
+			</if>
+			<if test="params.flowType == null or params.flowType == ''">
+				and ec.flow_type != '3' 
+			</if>
+		</where>
+		;	
+	</select>
+	
+	<select id="execFunction" resultType="java.lang.String">
+		SELECT superviseGetBaseDeptByParentId(#{deptId})
+	</select>
+	
+	<!-- 获取案件详情 -->
+	<select id="getCaseDetailInfo" resultType="com.orhonit.ole.tts.dto.CaseDetailInfoDTO">
+		SELECT EF.ID caseId , EF.CASE_NAME caseName, SD.ENUM_DESC caseSource, EF.case_address caseAddress,ef.case_apply_date caseApplyDate,
+			ef.brief_case_content briefCaseContent, ef.case_handler caseHandler, SU.NICKNAME caseZpr,
+			EF.CASE_ZPDATE caseZpdate, ef.case_zzfryname caseZzfryname,ef.case_zzfryid caseZzfryid, ef.case_fzfryname caseFzfryname,
+			SDCS.enum_desc AS caseStatus, ef.case_num caseNum, ef.update_date caseUpdateDate, SDCT.enum_desc caseType,
+			ef.case_time caseTime, SDPT.enum_desc  AS type ,epi.name  AS name,epi.age   AS age,SDPX.enum_desc   AS sex,epi.tel   AS tel,epi.id_card  AS idCard,epi.post_code AS postCode,
+			epi.address AS address,epi.unit_name AS unitName,epi.unit_address AS unitAddress,epi.legal_name AS legalName,epi.org_id_card AS orgIdCard,epi.org_code AS orgCode, EF.CHECK_ID AS checkId
+		FROM OLE_EF_CASE EF 
+			LEFT JOIN OLE_SYS_DICT SD ON EF.CASE_SOURCE = SD.ENUM_VALUE AND SD.TYPE_VALUE = #{params.typeCaseSource}
+			LEFT JOIN OLE_SYS_DICT SDCS ON EF.CASE_STATUS = SDCS.ENUM_VALUE AND SDCS.TYPE_VALUE = #{params.typeCaseStatus}
+			LEFT JOIN OLE_SYS_DICT SDCT ON EF.CASE_TYPE = SDCT.ENUM_VALUE AND SDCT.TYPE_VALUE = #{params.typeCaseType}
+			LEFT JOIN OLE_SYS_USER SU ON EF.CASE_ZPR = SU.ID 
+			LEFT JOIN ole_ef_party_info epi ON ef.id = epi.case_id 
+			LEFT JOIN OLE_SYS_DICT SDPX ON epi.sex = SDPX.ENUM_VALUE AND SDPX.TYPE_VALUE = #{params.typePartySex}
+			LEFT JOIN OLE_SYS_DICT SDPT ON epi.type = SDPT.ENUM_VALUE AND SDPT.TYPE_VALUE = #{params.typePartyType}
+			WHERE EF.ID = #{caseId};
+	</select>
+	
+	<select id="findCaseDoc" resultType="com.orhonit.ole.tts.dto.CaseDocDTO">
+		SELECT 
+			edt.name AS templateName ,
+			edt.id AS templateId,
+			edt.code AS templateCode,
+			caseStatusDict.enum_desc  caseStatus,
+			ec.check_id AS checkId
+		FROM ole_ef_doc_content edc   
+			LEFT JOIN ole_ef_doc_template edt ON edt.id = edc.template_id 
+			LEFT JOIN ole_ef_case ec   ON edc.case_id = ec.id
+			LEFT JOIN ole_sys_dict caseStatusDict ON caseStatusDict.enum_value = edc.flow_status AND caseStatusDict.type_value in  ('1500','1501','1502')
+		WHERE ( ec.id = #{caseId} 
+			OR edc.case_id = (SELECT id FROM ole_ef_check_daily WHERE id = ( SELECT check_id FROM ole_ef_case WHERE id = #{caseId}))
+			) ; 
+	</select>
+</mapper>

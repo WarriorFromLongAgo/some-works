@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgPortrayalValueDao">
+    <!--答题考试-->
+    <select id="findAnswer" resultType="java.lang.Integer">
+        SELECT count(0) FROM os_exam_scope WHERE user_id = #{userId} and paper_score >= 60
+    </select>
+    <!--工作点子-->
+    <select id="findWorkIdea" resultType="java.lang.Integer">
+        SELECT count(0) FROM idea_team_up_ideas WHERE create_user_id = #{userId}
+    </select>
+    <!--成果分享-->
+    <select id="findShare" resultType="java.lang.Integer">
+        SELECT count(0) FROM everybody_share WHERE share_user_id = #{userId}
+    </select>
+    <!--组织生活-->
+    <select id="findOrgLive" resultType="java.lang.Integer">
+        SELECT count(0) FROM tb_meeting tm  WHERE tm.meet_id IN(SELECT tp.meet_id FROM tb_meet_people tp WHERE tp.user_id = #{userId})
+    </select>
+    <!--包联帮扶-->
+    <select id="findHelp" resultType="java.lang.Integer">
+        SELECT count(0) FROM core_work cw WHERE cw.serve_id IN(SELECT cc.serve_id FROM core_work_crew cc WHERE cc.user_id = #{userId}) AND cw.work_id = 1
+    </select>
+    <!--志愿服务-->
+    <select id="findVolunteer" resultType="java.lang.Integer">
+        SELECT count(0) FROM core_work cw WHERE cw.serve_id IN(SELECT cc.serve_id FROM core_work_crew cc WHERE cc.user_id = #{userId}) AND cw.work_id = 2
+    </select>
+    <!--爱心捐助-->
+    <select id="findDonate" resultType="java.lang.Integer">
+        SELECT count(0) FROM core_work cw WHERE cw.serve_id IN(SELECT cc.serve_id FROM core_work_crew cc WHERE cc.user_id = #{userId}) AND cw.work_id = 3
+    </select>
+    <!--履职尽责-->
+    <select id="findResumption" resultType="java.lang.Integer">
+        SELECT count(0) FROM zg_work_plan WHERE user_id = #{userId} and exposure = 1
+    </select>
+    <!--亮点工作-->
+    <select id="findLightspot" resultType="java.lang.Integer">
+        SELECT count(0) FROM tb_news WHERE user_id = #{userId} and new_model = 19
+    </select>
+    <!--特色工作-->
+    <select id="findFeature" resultType="java.lang.Integer">
+        SELECT count(0) FROM tb_news WHERE user_id = #{userId} and new_model = 20
+    </select>
+    <!--理论学习-->
+    <select id="findStudy" resultType="java.lang.Integer">
+        SELECT count(0) FROM os_course_record WHERE user_id = #{userId}
+    </select>
+    <!--思悟笔记-->
+    <select id="findThinkNote" resultType="java.lang.Integer">
+        SELECT count(0) FROM wyw_note WHERE create_userid = #{userId}
+    </select>
+
+</mapper>

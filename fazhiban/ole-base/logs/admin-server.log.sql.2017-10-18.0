@@ -1,0 +1,96 @@
+2017-10-18 10:37:50,670 [http-nio-8080-exec-7] ==>  Preparing: select * from sys_user t where t.username = ? 
+2017-10-18 10:37:50,818 [http-nio-8080-exec-7] ==> Parameters: admin(String)
+2017-10-18 10:37:50,841 [http-nio-8080-exec-7] <==      Total: 1
+2017-10-18 10:37:50,863 [taskExecutor-1] ==>  Preparing: insert into sys_logs(userId, module, flag, remark, createTime) values(?, ?, ?, ?, now()) 
+2017-10-18 10:37:50,909 [taskExecutor-1] ==> Parameters: 1(Long), web端登陆(String), true(Boolean), null
+2017-10-18 10:37:50,935 [taskExecutor-1] <==    Updates: 1
+2017-10-18 10:37:51,133 [http-nio-8080-exec-10] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 10:37:51,147 [http-nio-8080-exec-10] ==> Parameters: 1(Long)
+2017-10-18 10:37:51,174 [http-nio-8080-exec-10] <==      Total: 26
+2017-10-18 10:38:17,019 [http-nio-8080-exec-3] ==>  Preparing: select * from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.userId = ? 
+2017-10-18 10:38:17,021 [http-nio-8080-exec-3] ==> Parameters: 1(Long)
+2017-10-18 10:38:17,035 [http-nio-8080-exec-3] <==      Total: 1
+2017-10-18 10:38:17,038 [http-nio-8080-exec-3] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 10:38:17,039 [http-nio-8080-exec-3] ==> Parameters: 1(Long)
+2017-10-18 10:38:17,047 [http-nio-8080-exec-3] <==      Total: 26
+2017-10-18 10:38:17,056 [http-nio-8080-exec-3] ==>  Preparing: select * from sys_permission t order by t.sort 
+2017-10-18 10:38:17,057 [http-nio-8080-exec-3] ==> Parameters: 
+2017-10-18 10:38:17,065 [http-nio-8080-exec-3] <==      Total: 26
+2017-10-18 10:39:06,435 [http-nio-8080-exec-6] ==>  Preparing: select count(1) from sys_role t 
+2017-10-18 10:39:06,442 [http-nio-8080-exec-6] ==> Parameters: 
+2017-10-18 10:39:06,445 [http-nio-8080-exec-6] <==      Total: 1
+2017-10-18 10:39:06,449 [http-nio-8080-exec-6] ==>  Preparing: select * from sys_role t order by updateTime desc limit ?, ? 
+2017-10-18 10:39:06,453 [http-nio-8080-exec-6] ==> Parameters: 0(Integer), 10(Integer)
+2017-10-18 10:39:06,457 [http-nio-8080-exec-6] <==      Total: 2
+2017-10-18 10:39:14,083 [http-nio-8080-exec-3] ==>  Preparing: select * from sys_permission t order by t.sort 
+2017-10-18 10:39:14,084 [http-nio-8080-exec-3] ==> Parameters: 
+2017-10-18 10:39:14,090 [http-nio-8080-exec-3] <==      Total: 26
+2017-10-18 10:39:49,171 [http-nio-8080-exec-7] ==>  Preparing: select count(1) from file_info t 
+2017-10-18 10:39:49,173 [http-nio-8080-exec-7] ==> Parameters: 
+2017-10-18 10:39:49,180 [http-nio-8080-exec-7] <==      Total: 1
+2017-10-18 10:41:34,535 [http-nio-8080-exec-8] ==>  Preparing: select * from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.userId = ? 
+2017-10-18 10:41:34,537 [http-nio-8080-exec-8] ==> Parameters: 1(Long)
+2017-10-18 10:41:34,540 [http-nio-8080-exec-8] <==      Total: 1
+2017-10-18 10:41:34,541 [http-nio-8080-exec-8] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 10:41:34,543 [http-nio-8080-exec-8] ==> Parameters: 1(Long)
+2017-10-18 10:41:34,551 [http-nio-8080-exec-8] <==      Total: 26
+2017-10-18 10:41:34,565 [http-nio-8080-exec-8] ==>  Preparing: select count(1) from articles t 
+2017-10-18 10:41:34,567 [http-nio-8080-exec-8] ==> Parameters: 
+2017-10-18 10:41:34,575 [http-nio-8080-exec-8] <==      Total: 1
+2017-10-18 10:42:01,129 [http-nio-8080-exec-9] ==>  Preparing: select count(1) from sys_logs t left join sys_user u on u.id = t.userId 
+2017-10-18 10:42:01,131 [http-nio-8080-exec-9] ==> Parameters: 
+2017-10-18 10:42:01,134 [http-nio-8080-exec-9] <==      Total: 1
+2017-10-18 10:42:01,135 [http-nio-8080-exec-9] ==>  Preparing: select t.*, u.username, u.nickname from sys_logs t left join sys_user u on u.id = t.userId order by createTime desc limit ?, ? 
+2017-10-18 10:42:01,137 [http-nio-8080-exec-9] ==> Parameters: 0(Integer), 10(Integer)
+2017-10-18 10:42:01,584 [http-nio-8080-exec-9] <==      Total: 10
+2017-10-18 11:32:18,553 [http-nio-8080-exec-10] ==>  Preparing: select * from sys_user t where t.username = ? 
+2017-10-18 11:32:18,555 [http-nio-8080-exec-10] ==> Parameters: admin(String)
+2017-10-18 11:32:18,569 [http-nio-8080-exec-10] <==      Total: 1
+2017-10-18 11:32:18,574 [taskExecutor-4] ==>  Preparing: insert into sys_logs(userId, module, flag, remark, createTime) values(?, ?, ?, ?, now()) 
+2017-10-18 11:32:18,574 [taskExecutor-4] ==> Parameters: 1(Long), web端登陆(String), true(Boolean), null
+2017-10-18 11:32:18,581 [taskExecutor-4] <==    Updates: 1
+2017-10-18 11:32:18,694 [http-nio-8080-exec-3] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 11:32:18,694 [http-nio-8080-exec-3] ==> Parameters: 1(Long)
+2017-10-18 11:32:18,707 [http-nio-8080-exec-3] <==      Total: 26
+2017-10-18 13:33:32,267 [http-nio-8080-exec-6] ==>  Preparing: select * from sys_user t where t.username = ? 
+2017-10-18 13:33:32,268 [http-nio-8080-exec-6] ==> Parameters: admin(String)
+2017-10-18 13:33:32,272 [http-nio-8080-exec-6] <==      Total: 1
+2017-10-18 13:33:32,279 [taskExecutor-7] ==>  Preparing: insert into sys_logs(userId, module, flag, remark, createTime) values(?, ?, ?, ?, now()) 
+2017-10-18 13:33:32,280 [taskExecutor-7] ==> Parameters: 1(Long), web端登陆(String), true(Boolean), null
+2017-10-18 13:33:32,286 [taskExecutor-7] <==    Updates: 1
+2017-10-18 13:33:32,403 [http-nio-8080-exec-5] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 13:33:32,403 [http-nio-8080-exec-5] ==> Parameters: 1(Long)
+2017-10-18 13:33:32,415 [http-nio-8080-exec-5] <==      Total: 26
+2017-10-18 13:36:53,562 [http-nio-8080-exec-3] ==>  Preparing: select * from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.userId = ? 
+2017-10-18 13:36:53,563 [http-nio-8080-exec-3] ==> Parameters: 1(Long)
+2017-10-18 13:36:53,565 [http-nio-8080-exec-3] <==      Total: 1
+2017-10-18 13:36:53,567 [http-nio-8080-exec-3] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 13:36:53,567 [http-nio-8080-exec-3] ==> Parameters: 1(Long)
+2017-10-18 13:36:53,572 [http-nio-8080-exec-3] <==      Total: 26
+2017-10-18 13:36:53,574 [http-nio-8080-exec-3] ==>  Preparing: select count(1) from articles t 
+2017-10-18 13:36:53,575 [http-nio-8080-exec-3] ==> Parameters: 
+2017-10-18 13:36:53,577 [http-nio-8080-exec-3] <==      Total: 1
+2017-10-18 13:37:12,753 [http-nio-8080-exec-2] ==>  Preparing: select count(1) from articles t 
+2017-10-18 13:37:12,757 [http-nio-8080-exec-2] ==> Parameters: 
+2017-10-18 13:37:12,760 [http-nio-8080-exec-2] <==      Total: 1
+2017-10-18 13:38:51,666 [http-nio-8080-exec-7] ==>  Preparing: select count(1) from sys_user t 
+2017-10-18 13:38:51,668 [http-nio-8080-exec-7] ==> Parameters: 
+2017-10-18 13:38:51,670 [http-nio-8080-exec-7] <==      Total: 1
+2017-10-18 13:38:51,672 [http-nio-8080-exec-7] ==>  Preparing: select * from sys_user t order by username desc, nickname asc limit ?, ? 
+2017-10-18 13:38:51,673 [http-nio-8080-exec-7] ==> Parameters: 0(Integer), 10(Integer)
+2017-10-18 13:38:51,676 [http-nio-8080-exec-7] <==      Total: 2
+2017-10-18 13:38:52,844 [http-nio-8080-exec-1] ==>  Preparing: select count(1) from sys_user t 
+2017-10-18 13:38:52,844 [http-nio-8080-exec-1] ==> Parameters: 
+2017-10-18 13:38:52,846 [http-nio-8080-exec-1] <==      Total: 1
+2017-10-18 13:38:52,848 [http-nio-8080-exec-1] ==>  Preparing: select * from sys_user t order by username desc, nickname asc limit ?, ? 
+2017-10-18 13:38:52,848 [http-nio-8080-exec-1] ==> Parameters: 0(Integer), 10(Integer)
+2017-10-18 13:38:52,853 [http-nio-8080-exec-1] <==      Total: 2
+2017-10-18 13:39:22,732 [http-nio-8080-exec-8] ==>  Preparing: select * from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.userId = ? 
+2017-10-18 13:39:22,732 [http-nio-8080-exec-8] ==> Parameters: 1(Long)
+2017-10-18 13:39:22,735 [http-nio-8080-exec-8] <==      Total: 1
+2017-10-18 13:39:22,736 [http-nio-8080-exec-8] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-10-18 13:39:22,736 [http-nio-8080-exec-8] ==> Parameters: 1(Long)
+2017-10-18 13:39:22,746 [http-nio-8080-exec-8] <==      Total: 26
+2017-10-18 13:39:22,752 [http-nio-8080-exec-8] ==>  Preparing: select * from sys_permission t order by t.sort 
+2017-10-18 13:39:22,753 [http-nio-8080-exec-8] ==> Parameters: 
+2017-10-18 13:39:22,768 [http-nio-8080-exec-8] <==      Total: 26

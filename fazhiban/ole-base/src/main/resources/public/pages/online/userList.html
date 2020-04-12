@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+</head>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 100%">
+                    <div align="left">
+	                    <table style="width: 100%">
+	                    </table>
+					</div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr>
+                                    <th>username</th>
+                                    <th>昵称</th>
+                                    <th>手机号</th>
+                                    <th>邮箱</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/ws/online-user-istener.js"></script>
+<script type="text/javascript">
+var example;
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+        	"searching": false,
+        	"processing": false,
+        	"serverSide" : true,
+        	"paging" : false,
+        	"ajax": {
+        		"url" : "/online/users",
+        		"type":"get",
+        		"data":function(d){
+    				
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",	
+            "columns": [
+                { "data": "username", "defaultContent": ""},
+                { "data": "nickname", "defaultContent": ""},
+                { "data": "phone", "defaultContent": ""},
+                { "data": "email", "defaultContent": ""},
+                
+            ],
+            "columnDefs": [
+                { "name": "username", "targets": 0 },
+                { "name": "nickname", "targets": 1 },
+                { "name": "phone", "targets": 2 },
+                { "name": "email", "targets": 3 },
+              ]
+        } );
+}
+
+//setInterval("reloadList()", 10000);
+function reloadList(){
+	example.ajax.reload();
+}
+
+init();
+</script>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		
+			<div class="form-group">
+				
+				<label class="col-md-2 control-label">级别</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" readonly="readonly" id="level" />
+				</div>
+				<!-- <label class="col-md-2 control-label">星级</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" readonly="readonly" id="star" />
+				</div>	 -->
+				<label class="col-md-2 control-label">类型</label>
+				<div class="col-md-4" >
+					<input class="form-control" type="text" readonly="readonly" id="warnType" />
+				</div>
+			</div>
+			
+			<div class="form-group">			
+				<label class="col-md-2 control-label">发送人</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="createName">
+				</div>
+				
+				<label class="col-md-2 control-label">预警时间</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="createDate">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<!-- <label class="col-md-2 control-label">接收人</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="personName">
+				</div>
+				 -->
+				<label class="col-md-2 control-label">部门</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="deptName">
+				</div>
+			</div>
+			
+
+			<div class="form-group">
+				<label class="col-md-2 control-label">预警内容</label>
+				<div class="col-md-10">
+					<textarea  class="form-control"  style="overflow-x:hidden"  rows="3"   cols="" readonly="readonly" id="content" >
+					
+					</textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">案件/检查名称</label>
+				<div class="col-md-10">
+					<textarea  class="form-control"  style="overflow-x:hidden"  rows="3"   cols="" readonly="readonly" id="recordTitle" >
+					
+					</textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">案件/检查主键</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="recordId" id="recordId" readonly="readonly"
+						data-bv-notempty="true"/>
+				</div>
+				
+				<label class="col-md-2 control-label">案件/检查编号</label>
+				<div class="col-md-4" id="recordCode" style="height:31.99px;">
+					<!-- <input class="form-control" readonly="readonly" type="text" name="caseTime" id="record_code"> -->
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">案件/检查状态</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="recordStatus" id="recordStatus" readonly="readonly"
+						data-bv-notempty="true"/>
+				</div>
+				
+				<label class="col-md-2 control-label">流程类型</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="flowType" id="flowType" readonly="readonly"
+						data-bv-notempty="true"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+			
+				<label class="col-md-2 control-label">预警指标</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="taskType" id="taskType" readonly="readonly"
+						data-bv-notempty="true"/>
+				</div>
+				
+				<label class="col-md-2 control-label">定时任务编号</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="taskId" id="taskId" readonly="readonly"
+						data-bv-notempty="true"/>
+				</div>
+			</div>
+			<!-- <div class="form-group">
+				<label class="col-md-2 control-label">处理结果</label>
+				<div class="col-md-10">
+					<textarea class="form-control" rows="3" cols="" name="dealResult" id="dealResult" placeholder="请输入处理结果"
+						data-bv-notempty="true"
+						data-bv-notempty-message="处理结果不可为空"></textarea>
+				</div>
+			</div> -->
+			
+			</fieldset>
+			
+			<fieldset>
+			<div class="form-group">
+				<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('warnInfoDom',this)">预警接收人员记录<i class="fa fa-angle-double-up"></i></label>
+				<div class="col-md-10" id="warnInfoDom">
+					
+				</div>
+			</div>
+			</fieldset>
+
+
+			
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+
+						<!-- <button id="chuli" class="btn btn-primary" type="submit" onclick="up(this);" data-id="">
+							 处理
+						</button>
+ -->
+
+						<button class="btn btn-primary" type="submit" onclick="backToList();">
+							<i class="fa fa-save"></i> 返回
+						</button>
+					</div>
+				</div>
+			</div>
+			
+		
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.all.js"></script>
+	<script type="text/javascript" src="../../js/my/permission.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+
+    	var caseNum = '';
+    
+	    function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+		}
+	    var id = getQuery('yujId');
+
+	    var type = getQuery('type');
+
+	    if ( id == null || id == '' ) {
+	    	alert('参数异常.');
+	    	window.location.href = 'yujList.html';
+	    }
+	   
+	    
+	    var herf='';
+	    //根据id获取信息
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/yuj/query/' + id,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if ( data.code == '0') {
+					var yujInfo = data.data;
+					var yujPerson = yujInfo.yujPersons;
+					$('#level').val(yujInfo.level);
+					/* $('#star').val(yujInfo.star); */
+					$('#warnType').val(yujInfo.warnType);
+					$('#deptName').val(yujPerson[0].deptName);
+					$('#createName').val(yujInfo.createName);
+					$('#createDate').val(yujInfo.createDate);
+					$('#content').val(yujInfo.content);
+					$('#personName').val(yujPerson[0].personName);
+                    $('#recordId').val(yujInfo.recordId);
+					$('#recordTitle').val(yujInfo.recordTitle);
+					$('#recordStatus').val(yujInfo.recordStatus);
+					$('#flowType').val(yujInfo.flowType);
+					$('#taskType').val(yujInfo.type);
+					$('#taskId').val(yujInfo.taskId);
+					if(yujInfo.recordCode.indexOf("CF")>-1){
+						href = '<a  style="color:#009688;line-height:31.99px;" href="javascript:;" onclick="showCaseInfo(\''+yujInfo.recordId+'\' )">' + yujInfo.recordCode + '</a>';
+					}else if (yujInfo.record_code.indexOf("ZXJC")>-1){
+						href = '<a  style="color:#009688;line-height:31.99px;" href="javascript:;" onclick="showCheckInfo(\''+yujInfo.recordId+'\' )">' + yujInfo.recordCode + '</a>';
+					}else if(yujInfo.record_code.indexOf("RC")>-1){
+						href = '<a  style="color:#009688;line-height:31.99px;" href="javascript:;" onclick="showDailyInfo(\''+yujInfo.recordId+'\' )">' + yujInfo.recordCode + '</a>';
+					}
+					$('#recordCode').append(href);
+					
+					var warnInfo = '';
+					if ( yujPerson != null && yujPerson.length > 0 ) {
+						var result = '';
+						var updateDate = '';
+						warnInfo = '<table class="table"><tr><th style="width:10%">接收人</th><th style="width:60%">处理结果</th><th  style="width:20%">处理时间</th><th  style="width:10%">是否处理</th></tr>';
+						for ( var i = 0 ; i < yujPerson.length ; i++) {
+							if(yujPerson[i].dealResult == '' || yujPerson[i].dealResult ==null){
+								result = '暂未处理该预警！';
+							}else{
+								result = yujPerson[i].dealResult;
+							}
+							if(yujPerson[i].updateDate == '' || yujPerson[i].updateDate ==null){
+								updateDate = '无';
+							}else{
+								updateDate = yujPerson[i].updateDate;
+							}
+							warnInfo += '<tr>';
+							warnInfo += '<td>' +yujPerson[i].personName+ '</td><td>'+result+'</td><td>'+updateDate+'</td><td>'+yujPerson[i].isDeal+'</td>';
+							warnInfo += '</tr>';
+						}
+						warnInfo += '</table>';
+					}
+					$('#warnInfoDom').html(warnInfo);
+				}
+			}
+		});
+
+	    function showCaseInfo(caseId) {
+	        window.layer.open({
+	        	type: 2,
+	            title: '案件详情页面',
+	            shade: [0],
+	            area: ['100%', '100%'],
+	            shift: 2,
+	            content: '/enforce/pages/case/caseDetailInfo.html?caseId=' + caseId
+	        });
+	    }
+	    
+	    function showCheckInfo(checkId) {
+	    	window.layer.open({
+	        	type: 2,
+	            title: '专项检查详情页面',
+	            shade: [0],
+	            area: ['90%', '70%'],
+	            shift: 2,
+	            content: '/enforce/pages/special/lssuedInfo.html?checkId=' + checkId
+	        });
+	    }
+	    
+	    function showDailyInfo(checkId) {
+	    	window.layer.open({
+	        	type: 2,
+	            title: '日常检查详情页面',
+	            shade: [0],
+	            area: ['90%', '99%'],
+	            shift: 2,
+	            content: '/enforce/pages/checkDaily/checkDailyInfo.html?checkId=' + checkId
+	        });
+	    }
+	    
+        function backToList() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+       
+
+	</script>
+</body>
+</html>

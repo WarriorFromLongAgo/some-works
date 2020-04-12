@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppIdeaThumbsUpDao">
+    <resultMap type="com.orhonit.modules.generator.app.entity.AppIdeaThumbsUpEntity" id="AppIdeaThumbsUpMap">
+        <result property="thumbsupId" column="thumbs_up_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="ideaId" column="idea_id"/>
+    </resultMap>
+</mapper>

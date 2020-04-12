@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>执法人员列表</title>
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<style type="text/css">
+.hidden{  
+    display:none;  
+} 
+.layui-layer-title {background-color: #5b8bff;}
+</style>
+ 
+</head>
+<body>
+	<div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div>
+				<header style="height: 100%">
+					<div align="left">
+						<table style="width: 100%">
+							<tr>
+								<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											姓名： <input id="name"  name="name" type="text" class="form-control"
+												placeholder="人员姓名"> 
+											身份证号： <input id="card_num" name="card_num"
+												type="text" class="form-control" placeholder="身份证号码">
+											主体： <input id="dept_name" name="dept_name"
+												type="text" class="form-control" placeholder="执法主体名称">
+											性质：
+											<select class="form-control input-sm" id="law_type">
+												<option value="">全部</option>
+												<option value="1">执法人员</option>
+												<option value="2">监督人员</option>												
+											</select>
+											<button id="searchBt" class="layui-btn layui-btn-small">
+												<i class="layui-icon">&#xe615;</i>搜索
+											</button>
+										</div>
+									</form>
+								</td>
+								
+								<td align="right">
+									<button class="layui-btn layui-btn-small" permission="sys:person:add" onclick="addLep()">
+										<i class="layui-icon">&#xe608;</i> 添加
+									</button>
+								</td>
+								<td align="right">
+	                   				<button class="layui-btn layui-btn-small" onclick="downloadBaseListToExcel()">
+                                      <i class="layui-icon">&#xe609;</i> 导出
+                                    </button>
+	                   			</td>
+								
+							</tr>
+						</table>
+					</div>
+				</header>
+
+				<div>
+					<div class="widget-body no-padding">
+						<table id="dt-table"
+							class="table table-striped table-bordered table-hover"
+							style="width: 100%">
+							<thead>
+								<tr>
+									<th width="1%" style="display:none">id</th>
+									<th width="19%">人员姓名</th>
+									<th width="20%">身份证号</th>
+									<th width="15%">执法主体</th>
+									<th>职务类型</th>
+									<th width="15%">执法证号</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/constans.js"></script>	
+<script type="text/javascript">
+var pers = checkPermission();
+var example;
+layui.use(['layer','laydate'], function(){
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+    laydate.render({
+       elem: '#beginTime'
+    });
+    laydate.render({
+       elem: '#endTime'
+    });
+});
+
+getDictList(dict.duty,"job_type");
+function addLep(){
+	 layer.open({
+	            type: 2,
+	            title: ['执法人员添加','background-color:#5b8bff;'],
+	            shade: [0],
+	            area: ['90%', '90%'],
+	            shift: 2,
+	            content: 'addLep.html' //iframe的url，no代表不显示滚动条
+	        });
+	}
+	
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+        	"searching": false,
+        	"processing": false,
+            "ordering": false,
+        	"serverSide" : true,
+        	"ajax": {
+        		"url" : "/base/LepLists",
+        		"type":"get",
+        		"data":function(d){
+        			d.name = $('#name').val();
+        			d.card_num = $('#card_num').val();
+        			d.job_type = $('#job_type').val();
+        			d.dept_name = $('#dept_name').val();
+        			d.law_type = $('#law_type').val();        			
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+            "columns": [
+				{"data" : "id", "defaultContent" : "","sClass":"hidden"},
+				{"data" : "name", "defaultContent" : ""},
+				{"data" : "card_num", "defaultContent" : ""},
+				{"data" : "dept_id", "defaultContent" : ""},
+				{"data" : "duty", "defaultContent" : ""},
+				{"data" : "cert_num", "defaultContent" : ""},
+				{"data": "", "defaultContent": ""},
+            ],
+            "columnDefs": [
+				{"name" : "id", "targets" : 0,"sClass":"hidden"},
+				{"name" : "name", "targets" : 1},
+				{"name" : "card_num", "targets" : 2},
+				{"name" : "dept_id", "targets" : 3},
+				{"name" : "duty", "targets" : 4},
+				{"name" : "cert_num", "targets" : 5},
+				{ 
+                	"targets": 6,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                        var edit = buttonEdit(id, "sys:person:update", pers);
+                		var del = buttonDel(id, "sys:person:del", pers);
+                        return edit+del;
+                     }
+                }
+              ],
+           "order": [[ 5, "desc" ]]
+        } );
+}
+
+function update(id){
+	layer.open({
+        type: 2,
+        title: ['执法人修改','background-color:#5b8bff;'],
+        shade: [0],
+        area: ['90%', '85%'],
+        shift: 2,
+        content: "updateLep.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+	function del(id){
+		layer.confirm('确定要删除吗？', {
+	        btn : [ '确定', '取消' ]
+	    }, function() {
+	        $.ajax({
+	            type : 'delete',
+	            url : '/base/leptions/'+id,
+	            success : function(data) {
+	                example.ajax.reload();
+	                layer.msg("删除成功");
+	            }
+	        });
+	        
+	        layer.close(1);
+	    });
+	}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+init();
+
+function downloadBaseListToExcel(){
+	var name = $('#name').val();
+	var cardNum = $('#card_num').val();
+	var jobType = '';
+	var deptName = $('#dept_name').val();
+	
+	var download = document.createElement("a");
+	download.href="/base/outputExcelFile/excel?type=person&name="+name+"&cardNum="+cardNum+"&jobType="+jobType + "&deptName=" + deptName;
+	download.click();
+	
+	layer.msg("生成文件中。。。请稍候。。。", {anim:5});
+}
+</script>

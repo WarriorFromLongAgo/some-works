@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<div class="form-group">
+				<label class="col-xs-1 col-sm-1 col-md-1 col-lg-1 control-label" id="scoreInTime" style="color: red;width: 480px;text-align: center;"></label>
+		   		<label class="col-xs-1 col-sm-1 col-md-1 col-lg-1 control-label" id="scoreInTimePage" style="color: red;width: 480px;text-align: center;"></label>
+			<!-- <label class="col-xs-1 col-sm-1 col-md-1 col-lg-1 control-label" id="scoreInTime" style="color: red;font: 15px;padding: left;">备注1</label>
+		   	<label class="col-xs-1 col-sm-1 col-md-1 col-lg-1 control-label" id="scoreInTimePage" style="color: red;padding: right;">备注1</label> -->
+		</div>
+		<fieldset>
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" >
+			  <ul class="layui-tab-title"  id="tabs">
+			  </ul>
+			  <div class="layui-tab-content"  id="tabcontents"    style="margin-left:10px;" >
+			  </div>
+		</div>
+		<div class="form-group">
+		   <label class="col-xs-1 col-sm-1 col-md-1 col-lg-1 control-label">备注</label>
+				<div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+					<textarea class="form-control" rows="5" cols="3" name="remark" id="remark" placeholder="备注"></textarea>
+				</div>
+		</div>
+		<div class="form-actions">
+			<div class="row" align="center"  id="submitDiv"  style="display:none;">
+			       <button class="btn btn-warning" type="submit" id="submitBtn" onclick="saveReview(1)">
+						<i class="fa fa-save"></i>暂存
+					</button>
+					<button class="btn btn-primary" type="submit" id="submitBtn" onclick="saveReview(2)">
+						<i class="fa fa-save"></i> 提交
+					</button>
+				</div>
+		</div>
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>  
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+	
+  <script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+
+    <script type="text/javascript">
+	    layui.use(['layer'], function(){
+			    var layer = layui.layer;
+			});
+	    layui.use('element', function(){
+	    	  var $ = layui.jquery
+	    	  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+	    });
+		var caseId = getQuery("id");	
+		var checkedScore=0;
+		var pageScore=0;
+		var score=0;
+		function saveReview(type){
+			var itemIds ="[";
+			var objs = new Array();
+			$("li[name='tabs']").each(function(){
+				var itemId=$(this).data("typeid");
+				var obj = new Object();
+				obj.itemId =itemId;
+				obj.isTop=1;
+				objs.push(obj);
+				$("#tab"+itemId).find("input:checkbox[name='itemId']:checked").each(function() { // 遍历name=itemId的多选框
+					score=score+$(this).data("score");
+					var obj = new Object();
+					obj.itemId =$(this).val()+"";
+					obj.isTop=0;
+					objs.push(obj);
+				});
+			});
+			var remark = $("#remark").val();
+		    var formdata = new Object(); 
+			formdata.caseId = caseId;
+			formdata.remark = remark;
+			formdata.itemIdsStr=JSON.stringify(objs);
+			formdata.status=type;
+			formdata.score=score;
+			$.ajax({
+				type : 'post',
+				url : '/tts/review/save',
+				contentType: "application/json; charset=utf-8",  
+	   			data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+						var index = parent.layer.getFrameIndex(window.name);
+		    			parent.caseComment();
+						parent.layer.close(index);  			    			
+					});		
+				}
+			});
+		}
+		
+		$.ajax({
+			type : 'get',
+			url : '/tts/review/tree',
+			contentType: "application/json; charset=utf-8",  
+			success : function(data) {
+				var str="";
+				var strcon="";
+				$("#tabs").html(str);
+				$("#tabcontents").html(strcon);
+				for(var  i=0;i<data.length;i++){
+					if(i==0){
+						str=str+'<li class="layui-this"  data-typeid="'+data[i].id+'"  name="tabs">'+data[i].text+'</li>';
+						strcon=strcon+'<div class="layui-tab-item layui-show" id="tab'+data[i].id+'"> </div>';
+						clicktab(data[i].id);
+					}else{
+						str=str+'<li name="tabs"  data-typeid="'+data[i].id+'" >'+data[i].text+'</li>';
+						strcon=strcon+'<div class="layui-tab-item"  id="tab'+data[i].id+'"> </div>';
+						clicktab(data[i].id);
+					}
+				}
+				$("#tabs").html(str);
+				$("#tabcontents").html(strcon);
+				
+			}
+		});	
+		
+		///////////////////
+		////var formdataScore = new Object(); 
+		////formdataScore.caseId = caseId;
+		////alert(formdataScore.caseId);
+		//$.ajax({
+		//	type : 'get',
+		//	url : "/tts/review/recordScore?caseId="+caseId,
+		//	contentType: "application/json; charset=utf-8",
+		//	//data : JSON.stringify(formdataScore),
+		//	//data:"caseId:"+caseId,
+		//	success : function(data) {
+		//		if(null==data||$.isEmptyObject(data)||"undefined"==data||null==data.score||"undefined"==data.score) {
+		//			pageScore = 100;
+		//			$("#scoreInTime").html("案件分数:"+pageScore);
+		//		} else {
+		//			pageScore = data.score;
+		//			$("#scoreInTime").html("案件分数:"+pageScore);
+		//		}
+		//		/* if($.isEmptyObject(data)) {
+		//			pageScore = 100;
+		//			$("#scoreInTime").html("页面分数:"+pageScore);
+		//		} else {
+		//			pageScore = data.score;
+		//			$("#scoreInTime").html("页面分数:"+pageScore);
+		//		} */
+		//	}
+		//});
+		
+		var userId='';
+		$.ajax({
+			type : 'get',
+			url : '/tts/users/current',
+			userdata : $("#form").serialize(),
+			success : function(userdata) {
+				userId = userdata.username;
+			}
+		});
+		
+		
+		/* $.ajax({
+			type : 'post',
+			url : '/tts/review/save',
+			contentType: "application/json; charset=utf-8",  
+   			data : JSON.stringify(formdata),
+			success : function(data) {
+				layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+					var index = parent.layer.getFrameIndex(window.name);
+	    			parent.caseComment();
+					parent.layer.close(index);  			    			
+				});		
+			}
+		});  */
+		
+		function clicktab(typeid){
+			$.ajax({
+				type : 'get',
+				url : '/tts/review/getItemIdByParentId?typeid='+typeid+'&caseId='+caseId,
+				contentType: "application/json; charset=utf-8",  
+				success : function(data) {
+					var str="";
+					$("#tab"+typeid).html(str);
+					for(var  i=0;i<data.length;i++){
+						str=str+'<div class="row">';
+						str=str+'<label class="checkbox-inline"  style="margin-left:10px;">';
+						str=str+'<input type="checkbox" data-score="'+data[i].score+'"  name="itemId"  ';
+						if(data[i].isSelected=='1'){
+							str=str+' checked="true" ';
+							checkedScore = parseInt(checkedScore)+parseInt(data[i].score);
+						}
+						str=str+'style="width:18px;height:18px;" onclick="checkboxOnClick(this,'+data[i].score+')" value="'+data[i].id+'"> '+data[i].name+'</input>';
+						str=str+'</label>';
+						str=str+'</div>';
+						if(data[i].remark!=null&&data[i].remark!=''){
+							$("#remark").val(data[i].remark);
+						}
+					}
+					$("#scoreInTimePage").html("已选分数："+checkedScore);
+					if(checkedScore > 0) {
+						pageScore = 100 - checkedScore;
+						
+					} else {
+						pageScore = 100;
+					}
+					$("#scoreInTime").html("案件分数:"+pageScore);
+					if(userId==data[0].createBy&&data[0].status!=null&&data[0].status=='1'){
+						$("#submitDiv").show();
+					}else if(data[0].status==null||data[0].status==''){
+						$("#submitDiv").show();
+					}
+					$("#tab"+typeid).html(str);
+					
+				}
+			});  
+		}
+		
+		// 复选框选中是计算分数
+		function checkboxOnClick(checkbox,columnScore){
+
+			if(checkbox.checked == true){
+				checkedScore = parseInt(checkedScore)+parseInt(columnScore);
+				pageScore = parseInt(pageScore)-parseInt(columnScore);
+				$("#scoreInTimePage").html("选中的分数："+checkedScore);
+				$("#scoreInTime").html("页面分数:"+pageScore);
+			}else{
+				checkedScore = parseInt(checkedScore)-parseInt(columnScore);
+				pageScore = parseInt(pageScore)+parseInt(columnScore);
+				$("#scoreInTimePage").html("选中的分数："+checkedScore);
+				$("#scoreInTime").html("页面分数:"+pageScore);
+			}
+		}
+    </script>
+</body>
+</html>

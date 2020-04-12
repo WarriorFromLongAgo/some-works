@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgMeetFileDao">
+<insert id="saveFile" parameterType ="com.orhonit.modules.generator.entity.ZgMeetFileEntity" >
+		INSERT INTO zg_meet_file(id,meet_id,file_name,file_new_name,file_path,file_suffix,file_type,create_time)
+		VALUES(#{id},#{meetId},#{fileName},#{fileNewName},#{filePath},#{fileSuffix},#{fileType},#{createTime})
+</insert>
+
+</mapper>

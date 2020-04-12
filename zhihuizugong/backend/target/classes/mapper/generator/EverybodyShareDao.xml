@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppEverybodyShareDao">
+   <resultMap type="com.orhonit.modules.generator.app.entity.AppEverybodyShareEntity" id="EverybodyShareMap">
+       <result property="shareId" column="share_id"/>
+       <result property="shareTitle" column="share_title"/>
+       <result property="shareContent" column="share_content"/>
+       <result property="shareUrl" column="share_url"/>
+       <result property="shareCreateTime" column="share_create_time"/>
+       <result property="shareUserId" column="share_user_id"/>
+       <result property="shareType" column="share_type"/>
+       <result property="userTrueName" column="userTrueName"/>
+         <!--  <association property="userTrueName" javaType="com.orhonit.modules.generator.app.vo.EverybodyShareVO">
+            <id column="userId" property="shareUserId"/>
+            <result column="userTrueName" property="userTrueName"/>
+          </association> -->
+   </resultMap>
+
+    <!-- 大家来分享 列表 -->
+     <select id="listEvery" resultMap="EverybodyShareMap">
+        SELECT 
+			a.share_id,
+			a.share_title,
+			a.share_content,
+			a.share_url,
+			a.share_type,
+			a.share_create_time,
+			a.share_user_id,
+			er.user_true_name AS userTrueName,
+			a.lower_id,
+			a.lower_name
+	    FROM 
+	        everybody_share a,
+		    sys_user er
+		WHERE
+		    a.share_user_id = er.user_id
+	   <!--  WHERE 1=1 -->
+	     <if test="params.shareUserId>0">
+	        AND  a.share_user_id = #{params.shareUserId}
+	     </if>
+	     <if test="params.shareTitle != null and params.shareTitle != ''">
+			 AND a.share_title LIKE CONCAT(CONCAT('%', #{params.shareTitle}), '%')
+		 </if>
+		ORDER BY a.share_create_time desc
+	    LIMIT #{params.beginLimit},#{params.limit} 
+     </select>
+     <!-- 录入分享 -->
+     <insert id="insertEveryBodyShare">
+         INSERT INTO  everybody_share
+	         (
+		         share_title,
+		         share_content,
+		         share_url,
+		         share_user_id,
+		         share_type,
+		         lower_id,
+		         lower_name,
+		         share_create_time
+		         )VALUES(
+		         #{shareTitle},
+		         #{shareContent},
+		         #{shareUrl},
+		         #{shareUserId},
+		         #{shareType},
+		         (SELECT lower_id FROM sys_user WHERE user_id=#{shareUserId}),
+		         (SELECT lower_name FROM sys_user WHERE user_id=#{shareUserId}),
+		         #{shareCreateTime}
+	         )
+     </insert>
+
+</mapper>

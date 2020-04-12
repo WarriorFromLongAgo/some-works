@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgDefaultScoreDeptDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgDefaultScoreDeptEntity" id="zgDefaultScoreDeptMap">
+        <result property="id" column="id"/>
+        <result property="lowerId" column="lower_id"/>
+        <result property="lowerName" column="lower_name"/>
+        <result property="studyDefault" column="study_default"/>
+        <result property="thinkDefault" column="think_default"/>
+        <result property="executeDefault" column="execute_default"/>
+        <result property="innovateDefault" column="innovate_default"/>
+        <result property="synergyDefault" column="synergy_default"/>
+        <result property="serveDefault" column="serve_default"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgDefaultScoreDeptEntity">
+        INSERT INTO zg_default_score_dept ( id, lower_id, lower_name, study_default, think_default, execute_default,
+         innovate_default, synergy_default, serve_default, update_time )
+        VALUES
+	    (
+        #{id},#{lowerId},(SELECT lower_name FROM ta_department_member WHERE lower_id = #{lowerId}),#{studyDefault},#{thinkDefault},#{executeDefault},#{innovateDefault},
+        #{synergyDefault},#{serveDefault},#{updateTime})
+    </insert>
+
+    <select id="findLowerName" resultType="com.orhonit.modules.sys.entity.TaDepartmentMemberEntity">
+        select * from ta_department_member where lower_id = #{lowerId}
+    </select>
+
+    <select id="findDefaultDeptList" resultType="com.orhonit.modules.generator.entity.ZgDefaultScoreDeptEntity">
+        select * from zg_default_score_dept where lower_id = #{lowerId}
+    </select>
+</mapper>

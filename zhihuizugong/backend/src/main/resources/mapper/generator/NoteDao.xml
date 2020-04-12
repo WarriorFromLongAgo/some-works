@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.NoteDao">
+
+  <resultMap type="com.orhonit.modules.generator.entity.NoteEntity" id="noteMap">
+     <result property="noteId" column="note_id"/>
+     <result property="content" column="content"/>
+     <result property="createTime" column="create_time"/>
+  </resultMap>
+
+</mapper>

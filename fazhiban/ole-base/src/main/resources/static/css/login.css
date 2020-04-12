@@ -1,0 +1,111 @@
+/*
+ * login
+ */
+.boxs{
+	height: 100vmin;
+	background: url(../img/login/login_bg.jpg) no-repeat center center;
+	background-size: cover;
+}
+.boxs .inside{
+	height: 60%;
+	margin-top: 60px;
+	padding:0;
+	width:30%;
+}
+.boxs .inside .logo img{
+	width: 100%;
+}
+.boxs .inside .inputs{
+	width: 100%;
+	height: 68%;
+}
+.boxs .inside .inputs .left{
+	width: 50%;
+	height:100%;
+	float: left;
+}
+.boxs .inside .inputs .right{
+	width: 50%;
+	height:100%;
+	float: right;
+	//background: salmon;
+}
+.boxs .inside .inputs .right img{
+	width: 100%;
+	height:100%;
+}
+.boxs .inside .inputs .left .in-input{
+	width: 100%;
+	height:47%;
+}
+.boxs .inside .inputs .left .in-input input{
+	height: 37px;
+	margin-top:20px;
+	width: 100%;
+	color: #555;
+	background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    padding-left: 10px;
+}
+.boxs .inside .inputs .left .in-pssword{
+	height: 15%;
+	width: 100%;
+}
+.boxs .inside .inputs .left .in-pssword span,a{ 
+	color: white;
+	font-size:15px ;
+}
+.boxs .inside .inputs .left .in-pssword a{ 
+	display: block;
+	float: right;
+}
+.boxs .inside .inputs .left .in-pssword a:hover{ 
+	color:#31708f;
+	text-decoration: none;
+}
+.boxs .inside .inputs .left .button button{ 
+	width: 85px;
+}
+
+
+
+
+
+/*
+ * 居中
+ */
+.flex-row.flex-center {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.flex-row.flex-middle {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.flex-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.flex-row {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+

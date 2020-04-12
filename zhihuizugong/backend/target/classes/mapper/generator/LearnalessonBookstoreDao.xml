@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.orhonit.modules.generator.dao.LearnalessonBookstoreDao">
+    <resultMap type="com.orhonit.modules.generator.entity.LearnalessonBookstoreEntity" id="LearnalessonBookstoreMap">
+    
+    </resultMap>
+    
+    
+    <update id="updateStore" parameterType="com.orhonit.modules.generator.entity.LearnalessonBookstoreEntity">
+        UPDATE learnalesson_bookstore 
+        <set>
+          <if test="bookstoreName!=null">bookstore_name=#{bookstoreName},</if>
+          <if test="bookstoreType!=null">bookstore_type=#{bookstoreType},</if>
+          <if test="bookstoreAddress!=null">bookstore_address=#{bookstoreAddress},</if>
+          <if test="describe!=null">`describe`=#{describe},</if>
+          <if test="leadabookIntegral>0">leadabook_integral=#{leadabookIntegral},</if>
+          <if test="bookAuther!=null">book_auther=#{bookAuther},</if>
+          <if test="readabookNumber!=null">readabook_number=#{readabookNumber},</if>
+          <if test="bookstorePic!=null">bookstore_pic=#{bookstorePic},</if>
+          <if test="catalog!=null">catalog=#{catalog}</if>
+        </set> 
+		WHERE bookstore_id=#{bookstoreId} 
+    </update>
+
+</mapper>

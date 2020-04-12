@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.dao.OrganizationWorkshopDao">
+       <resultMap type="com.orhonit.modules.generator.entity.OrganizationWorkshopEntity"
+		id="OrganizationWorkshopMap">
+		<result property="courseId" column="course_id" />
+		<result property="courseName" column="course_name" />
+		<result property="isLocal" column="is_local" />
+		<result property="courseAddress" column="course_address" />
+		<result property="coursePic" column="course_pic" />
+		<result property="courseType" column="course_type" />
+		<result property="courseLabel" column="course_label" />
+		<result property="courseDesc" column="course_desc" />
+		<result property="selectType" column="select_type" />
+		<result property="commendType" column="commend_type" />
+		<result property="isMessage" column="is_message" />
+		<result property="courseTime" column="course_time" />
+		<result property="courseIntegral" column="course_integral" />
+		<result property="courseAuthor" column="course_author" />
+		<result property="createTime" column="create_time" />
+		<result property="isRelease" column="is_release" />
+		<result property="studyNum" column="study_num" />
+		<result property="effectiveTime" column="effective_time" />
+	</resultMap>
+    <sql id="LeftJointSelect">
+    SELECT 
+		shop.course_id,shop.study_num,shop.select_type,shop.is_release,shop.is_message,shop.is_local,
+		shop.effective_time,shop.create_time,shop.course_type,shop.course_time,shop.course_pic,
+	    shop.course_name,shop.course_label,shop.course_integral,shop.course_desc,user.user_true_name AS courseAuthor,
+		shop.course_address,shop.commend_type,record.study_status,record.identifier
+	FROM 
+	    os__organization_workshop shop 
+	LEFT JOIN  os_course_record record on shop.course_id = record.course_id
+	LEFT JOIN  sys_user user on shop.course_author = user.user_id
+    </sql>
+       
+       
+        <update id="updateShop" parameterType="com.orhonit.modules.generator.entity.OrganizationWorkshopEntity">
+            UPDATE os__organization_workshop
+		    <set>
+				  <if test="courseName!=null">course_name=#{courseName},</if>
+				  <if test="courseAddress!=null">course_address=#{courseAddress},</if>
+				  <if test="coursePic!=null">course_pic=#{coursePic},</if>
+				  <if test="courseType!=null">course_type=#{courseType},</if>
+				  <if test="courseIntegral!=null">course_integral=#{courseIntegral},</if>
+				  <if test="courseAuthor!=null">course_author=#{courseAuthor},</if>
+				  <if test="courseDesc!=null">course_desc=#{courseDesc},</if>
+				  <if test="commendType!=null">commend_type=#{commendType}</if>
+			</set>
+			WHERE course_id=#{courseId}
+        </update>
+        
+        <select id="list" resultType="com.orhonit.modules.generator.vo.OrganizationWorkshopVO">
+            <include refid="LeftJointSelect"/>
+		     where 1=1
+			   <if  test="null !=courseType and ''!=courseType">
+			      AND shop.course_type=#{courseType}
+			   </if >
+			   ORDER BY shop.course_id DESC
+			   LIMIT #{beginLimit},#{limit}
+        </select>
+        
+        <select id="selectList1" resultType="com.orhonit.modules.generator.vo.OrganizationWorkshopVO">
+            <include refid="LeftJointSelect"/>
+             ORDER BY shop.course_id DESC
+			 LIMIT #{beginLimit},#{limit}
+        </select>
+        
+        <!-- 讲堂列表 -->
+        <select id="shipinList" resultType="com.orhonit.modules.generator.entity.OrganizationWorkshopEntity">
+             <include refid="LeftJointSelect"/>
+             where 1=1
+             <if test="params.courseName !='' and params.courseName !=null">
+                AND shop.course_name like concat(concat('%',#{params.courseName}),'%')
+             </if>
+             <if test="params.courseType !='' and params.courseType !=null">
+                AND shop.course_type=#{params.courseType}
+             </if>
+              ORDER BY shop.course_id DESC
+			  LIMIT #{params.beginLimit},#{params.limit}
+        </select>
+        
+
+</mapper>

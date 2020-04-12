@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+
+<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+<script type="text/javascript">
+       orhonIMEinit = {
+           element: "",
+           ele_except: "",
+           editor: {
+               IME_Mount: true,
+               tinymce: "",
+               ueditor: "",
+           },
+           IME_cssurl: "",
+           IME_theme: "",
+           Output_Unicode: true,
+       };
+       Iframe_init = {
+           iframes: "",
+           ifr_except: "",
+           element: "",
+           ele_except: "",
+       };
+</script>
+</head>
+<body>
+<div class="centent">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+            <input type="hidden" id="id" name="id">
+            <input type="hidden" id="right_duty_id" name="right_duty_id">
+            <input type="hidden" id="wz_catalog_id" name="wz_catalog_id">
+            <input type="hidden" id="fz_catalog_id" name="fz_catalog_id">
+            <input type="hidden" name="potence_id">
+            <div class="form-group">
+				<label class="control-label">ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠨᠡᠷ᠎ᠡ</label>
+				<input class="form-control not-null" iname="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠨᠡᠷ᠎ᠡ " placeholder="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠨᠡᠷ᠎ᠡ " type="text" name="name" id="name" readonly="readonly" />
+			</div>
+			<div class="form-group">
+                <label class="control-label">ᠵᠠᠷᠴᠢᠮ  ᠡᠴᠡ ᠵᠦᠷᠢᠴᠡᠭᠰᠡᠨ ᠠᠭᠤᠯᠭ᠎ᠠ </label>
+				<textarea class="form-control not-null" inmae="ᠶᠣᠰᠣᠨ ᠠᠴᠠ ᠵᠦᠷᠢᠴᠡᠭᠰᠡᠨ ᠠᠭᠤᠯᠭ᠎ᠠ  " rows="5" placeholder="ᠶᠣᠰᠣᠨ ᠠᠴᠠ ᠵᠦᠷᠢᠴᠡᠭᠰᠡᠨ ᠠᠭᠤᠯᠭ᠎ᠠ  " name="wz_content"  id="wz_content"></textarea>
+			</div>
+				
+			<div class="form-group">
+				<label class="control-label">ᠬᠤᠯᠪᠤᠭᠳᠠᠬᠤ ᠵᠠᠷᠴᠢᠮ ᠡᠴᠡ ᠵᠥᠷᠢᠴᠡᠬᠦ  </label>
+                <input class="easyui-combotree" id="potence_id" type="text"/>
+			</div>
+
+			<div class="form-group">
+                <label class="control-label">ᠲᠣᠷᠭᠠᠭᠤᠯᠢ ᠶᠢᠨ ᠳᠦᠷᠢᠮ ᠦᠨ ᠠᠭᠤᠯᠭ᠎ᠠ </label>
+				<textarea class="form-control not-null" inmae="ᠲᠣᠷᠭᠠᠭᠤᠯᠢ ᠶᠢᠨ ᠳᠦᠷᠢᠮ  ᠦᠨ ᠠᠭᠤᠯᠭ᠎ᠠ " rows="5" placeholder="ᠲᠣᠷᠭᠠᠭᠤᠯᠢ ᠶᠢᠨ ᠳᠦᠷᠢᠮ  ᠦᠨ ᠠᠭᠤᠯᠭ᠎ᠠ " name="fz_content"  id="fz_content"></textarea>
+			</div>
+			
+			<div class="form-group">
+				<label class="control-label">ᠬᠤᠯᠪᠤᠭᠳᠠᠬᠤ ᠵᠠᠷᠴᠢᠮ ᠡᠴᠡ ᠵᠥᠷᠢᠴᠡᠬᠦ  </label>
+				<!--<label class="control-label"></label>-->
+                <input class="easyui-combotree" id="pot_fz_id" type="text"/>
+			</div>
+			
+			<div class="form-group">
+				<label class="control-label">ᠬᠦᠴᠦᠨ ᠲᠡᠶ ᠪᠤᠯᠤᠭᠰᠠᠨ ᠡᠰᠡᠬᠦ </label>
+				<select name="is_effect" class="form-control input-sm" id="is_effect">
+					<option value="">1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+				</select>
+			</div>
+
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add()" style="margin-top:50px">
+							<i class="fa fa-save"></i> ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ
+						</button>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script src="../../js/select2/js/select2.full.js"></script>
+	<script type="text/javascript">
+		$(function () {
+		    console.log("ready");
+		    console.log($("select"));
+		    $('select').select2();
+		    $(document)
+		        .on('click', '.select2.select2-container', function () {
+		            var self = $(this);
+		            setTimeout(function () {
+		                $('.select2-container--open').height(self.height()).width(self.width());
+		                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+		            }, 100);
+		        })
+		        // .on("DOMNodeInserted", function (e) {
+		        //     $('select').select2();
+		        //
+		        // })
+		
+		})
+		layui.use('layer', function(){
+		    var layer = layui.layer;
+		});
+		
+		getDictList("1072","is_effect");
+		
+		var id = getUrlParam("id");
+		var connid = getUrlParam("connid");
+		$("#id").val(connid);
+		$("#right_duty_id").val(id);
+		
+		initData();
+		function initData(){
+			if(id != ""){
+				$.ajax({
+					type : 'get',
+					url : '/base/lartions/'+id,
+					async : false,
+					success : function(data) {
+						$("#name").val(data.name);
+					}
+				});
+				
+			}
+		}
+		
+		initConData();
+		function initConData(){
+			if(connid != ""){
+				$.ajax({
+					type : 'get',
+					url : '/base/lartions/getCon/'+connid,
+					async : false,
+					success : function(data) {
+						$("#is_effect").val(data.is_effect);
+						$("#wz_content").val(data.wz_content);
+						$("#fz_content").val(data.fz_content);
+						var wzs=data.wz_catalog_id;
+						$("#potence_id").combotree({
+							method:'get',		//请求方式	
+							url : '/base/lrltionws/lrlss',	//请求的URL
+							required: false,
+							onLoadSuccess: function (node, data) {
+								$('#potence_id').combotree('setValue', {id:wzs,text:wzs});
+						    }, 
+							onChange:function(newV,oldV){
+								$("#wz_catalog_id").val(newV);
+							}
+						});
+						
+						var fzs=data.fz_catalog_id;
+						$("#pot_fz_id").combotree({
+							method:'get',		//请求方式	
+							url : '/base/lrltionws/lrlss',	//请求的URL
+							required: false,
+							onLoadSuccess: function (node, data) {
+								$('#pot_fz_id').combotree('setValue', {id:fzs,text:fzs});
+						    }, 
+							onChange:function(newV,oldV){
+								$("#fz_catalog_id").val(newV);
+							}
+						});
+					}
+				});
+				
+			}
+		}
+		
+		function add() {
+			//$('#form').bootstrapValidator();
+			//var bootstrapValidator = $("#form").data('bootstrapValidator');
+			//bootstrapValidator.validate();
+		    //if(!bootstrapValidator.isValid()){
+			//  return;
+		    //}
+			if($('#potence_id').val()==null||$('#potence_id').val()==''){
+				alert("ᠬᠤᠯᠪᠤᠭᠳᠠᠯᠳᠤ ᠵᠦᠷᠢᠴᠡᠭᠰᠡᠨ ᠶᠤᠰᠤ ᠨᠢ ᠬᠣᠭᠣᠰᠣᠨ  ");
+				return;
+			}
+			if($('#pot_fz_id').val()==null||$('#pot_fz_id').val()==''){
+				alert("ᠬᠤᠯᠪᠤᠭᠳᠠᠯᠳᠤ ᠲᠣᠷᠭᠠᠬᠤ ᠳᠦᠷᠢᠮ ᠨᠢ ᠬᠣᠭᠣᠰᠣᠨ ");
+				return;
+			}
+			//数据格式校验
+			if (!dataCheck_mn()) {
+				return;
+			}
+			
+			 $('#submitBtn').removeAttr("disabled");
+	         $('#submitBtn').attr("disabled",false); 
+		    var formdata = $("#form").serializeObject();
+
+			$.ajax({
+				type : 'post',
+				url : '/base/lartions/saveCon',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("ᠨᠡᠮᠡᠵᠦ ᠤᠷᠤᠭᠤᠯᠪᠠ", {shift: -1, time: 1000}, function(){
+						 window.parent.location.reload();
+						 var index = parent.layer.getFrameIndex(window.name);
+						 parent.layer.close(index);
+                  });
+				}
+			});
+		}
+		
+		function selectCss(){
+			layer.open({
+				  type: 2,
+				  title: "鏍峰紡",
+				  area: ['800px', '400px'],
+				  shadeClose: true,
+				  content: ['icon.html']
+				});
+		}
+	</script>
+</body>
+</html>

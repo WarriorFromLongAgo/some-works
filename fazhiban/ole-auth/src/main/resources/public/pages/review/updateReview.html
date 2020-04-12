@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">评查内容<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="评查内容" placeholder="评查内容" type="text" name="name" id="name"/>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label"><span class="btx">*</span>评分方法及标准</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="评分方法及标准" placeholder="评分方法及标准" name="content" id="content"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+			
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">排序</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="排序" name="sort" id="sort" />
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">分数</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="分数" name="score" id="score" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">分类</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="parent_id" type="text" name="parent_id" style="width:100%"/>
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否有效</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="ifEffect" class="form-control input-sm" id="ifEffect">
+					</select>
+				</div>
+			</div>
+			
+
+			<div class="form-actions" style="margin-top:50px">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" type="submit" onclick="update()" id="submitBtn" style="margin-left:10px">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use(['layer','laydate'], function(){
+	        var layer = layui.layer;
+	        var laydate = layui.laydate;
+	    });
+	
+		//分类下拉树
+		$("#parent_id").combotree({
+			method:'get',		//请求方式	
+			url : '/auth/review/tree',	//请求的URL
+			required: false,
+			cascadeCheck:false,
+			onLoadSuccess: function (node, data) {
+				if(null!=data&&data.length>0){
+					initData();	
+				}
+				
+		    }, 
+			onChange:function(newV,oldV){
+				
+			}
+		});
+		
+	  //设置法规类别字典列表
+    	$.ajax({
+			type : 'get',
+			url : '/auth/dict/list/1709',
+			contentType: "application/json; charset=utf-8", 
+			async: false,
+			success : function(data) {
+				if ( data.code == 0 ) {
+					var dicts= '';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						dicts += '<option value = "' + data.data[i].enumValue + '">' + data.data[i].enumDesc + '</option>';
+					}
+					$('#ifEffect').append(dicts);
+				}	
+			}
+		});
+	
+		
+	function initData(){
+		var id = getUrlParam("id");
+		if(id != ""){
+			$.ajax({
+				type : 'get',
+				url : '/auth/review/'+id,
+				async : false,
+				success : function(data) {
+					$("#id").val(data.id);
+					$("#name").val(data.name);
+					$("#content").val(data.content);
+					$("#ifEffect").val(data.ifEffect);
+					if(data.parentId != 0){
+						$('#parent_id').combotree('setValue', data.parentId);
+					}
+					$("#sort").val(data.sort);
+					$("#score").val(data.score);
+				}
+			});
+			
+		}
+	}
+	
+		function update() {
+			//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+			
+			 $('#submitBtn').removeAttr("disabled");
+	         $('#submitBtn').attr("disabled",true); 
+		    
+	     	var id = getUrlParam("id");
+		    var formdata = $("#form").serializeObject();
+		    formdata.id=id;
+		    formdata.parentId=$("#parent_id").val();
+		    formdata.parentName=$("#parent_id").combotree('getText');
+		    
+			$.ajax({
+				type : 'post',
+				url : '/auth/review/updateItem',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("更新成功", {shift: -1, time: 1000}, function(){
+						 //window.parent.location.reload();
+						 window.parent.example.draw(false);
+						 var index = parent.layer.getFrameIndex(window.name);
+						 parent.layer.close(index);
+                  });
+				}
+			});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.PersonDao">
+
+ 	<!-- 根据人员ID查询主执法人员信息 -->
+	<select id="getZzfrInfo" resultType="com.orhonit.ole.enforce.dto.ZfrDTO">
+	SELECT
+		bdp.name AS caseZzfryname,
+		bdp.cert_num AS caseZzfrycertNum,
+		obd.name AS caseZzfrydeptName
+	FROM ole_base_dept_person AS bdp
+	LEFT JOIN ole_base_dept obd ON obd.id = bdp.dept_id
+	WHERE bdp.id= #{id};
+	</select>
+	
+	<!-- 根据人员ID查询外勤人员信息 -->
+	<select id="getWqrInfo" resultType="com.orhonit.ole.enforce.dto.ZfrDTO">
+	SELECT
+		bdp.name AS caseWqryname,
+		bdp.cert_num AS caseWqrycertNum,
+		obd.name AS caseWqrydeptName
+	FROM ole_base_dept_person AS bdp
+	LEFT JOIN ole_base_dept obd ON obd.id = bdp.dept_id
+	WHERE bdp.id= #{id};
+	</select>
+	
+	<!-- 根据人员ID查询副执法人员信息 -->
+	<select id="getFzfrInfo" resultType="com.orhonit.ole.enforce.dto.ZfrDTO">
+		SELECT
+			GROUP_CONCAT(bdp.name) AS caseFzfryname,
+			GROUP_CONCAT(bdp.cert_num) AS caseFzfrycertNum,
+			GROUP_CONCAT(obd.name) AS caseFzfrydeptName
+		FROM ole_base_dept_person AS bdp
+		LEFT JOIN ole_base_dept obd ON obd.id = bdp.dept_id
+		WHERE FIND_IN_SET(bdp.id, #{id});
+	</select>
+	
+	<!-- 获取执法人员信息 -->
+	<select id="getPersonInfoByPersonId" resultType="com.orhonit.ole.sys.dto.PersonDTO">
+		SELECT
+			bdp.id ,
+			bdp.name,
+			bdp.cert_num certNum,
+			bdp.dept_id deptId,
+			bdp.if_effect isEffect,
+			bdp.del_flag as delFlag
+		FROM ole_base_dept_person AS bdp
+		<where>
+		 	bdp.id = #{peronId} 
+		</where>
+	</select>
+	
+	<!-- 获取执法人员 -->
+	<select id="getPersonListByParam" resultType="com.orhonit.ole.sys.dto.PersonDTO">
+		SELECT
+			bdp.id ,
+			bdp.name,
+			bdp.cert_num certNum,
+			bdp.dept_id deptId,
+			bd.name as deptName,
+			bdp.if_effect isEffect,
+			bdp.tel tel,
+			bdp.picture picture
+		FROM ole_base_dept_person AS bdp
+		LEFT JOIN ole_base_dept as bd on bd.id=bdp.dept_id
+		<where>
+		 	bdp.del_flag="0"
+			<if test="params.certNum != null and params.certNum != ''">
+				AND bdp.cert_num = #{params.certNum} 
+			</if>
+			
+			<if test="params.deptId != null and params.deptId != ''">
+				AND bdp.dept_id = #{params.deptId} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="getPersonDTO" resultType="com.orhonit.ole.enforce.dto.ps.PssPersonDTO">
+	SELECT 
+		id id,
+		name name,
+		cert_num certNum,
+		dept_id deptId
+	FROM 
+		ole_base_dept_person
+		<where>
+			1=1
+		<if test="param.name != null and param.name != ''">
+		 and name =#{param.name}
+		</if>
+		
+		<if test="param.certNum != null and param.certNum != ''">
+		and cert_num =#{param.certNum}
+		</if>
+		
+		<if test="param.deptId != null and param.deptId != ''">
+		and dept_id =#{param.deptId}
+		</if>
+			
+		</where>
+	</select>
+	
+	<select id="getPerDTO" resultType="com.orhonit.ole.enforce.dto.ps.PssPerDTO">
+	SELECT 
+		dp.id id,
+		dp.name name,
+		dp.cert_num certNum,
+		dp.law_type lawType,
+		d.name deptId
+	FROM 
+		ole_base_dept_person dp
+		left join ole_base_dept d on dp.dept_id=d.id
+		<where>
+		dp.del_flag="0"
+		<if test="ping.certNum != null and ping.certNum != ''">
+		and dp.cert_num =#{ping.certNum}
+		</if>
+		
+		<if test="ping.name != null and ping.name != ''">
+		 and dp.name like concat('%', #{ping.name}, '%')
+		</if>
+		
+		<if test="ping.lawType != null and ping.lawType != ''">
+		and dp.law_type =#{ping.lawType}
+		</if>
+		
+		<if test="ping.deptId != null and ping.deptId != ''">
+		and dp.dept_id =#{ping.deptId}
+		</if>
+			
+		</where>
+	</select>
+	<!-- 执法人员详细 -->
+	<select id="getSelectByPersonId" resultType="com.orhonit.ole.enforce.dto.ps.CheckPersonDTO">
+	SELECT
+		p.id id,
+		p.code code,
+		p.name name,
+		p.sex sex,
+		p.nation nation,
+		p.tel tel,
+		p.political political,
+		p.birthday birthday,
+		p.edu edu,
+		p.card_num cardum,
+		p.picture	picture,
+		p.duty	duty,
+		p.dept_id deptId, 
+		p.cert_type certNum,
+		p.mgl_name nameMgl
+	FROM
+	ole_base_dept_person p
+	where
+	p.del_flag="0"
+	and id=#{personIdMp.personId} 
+	
+	</select>
+	<!-- 各个区域执法人员执法类型数量统计 -->
+	<select id="getPeAndArSelect" resultType="com.orhonit.ole.enforce.dto.ps.PeAndArSelectDTO">
+	SELECT 
+		d.id deptId,
+		a.`name` areaName,
+		count(p.`name`) personCount,
+		p.law_type lawType,
+		d.name deptName
+	FROM 
+		ole_base_area a
+	LEFT JOIN
+		ole_base_dept d ON d.area_id=a.id
+	LEFT JOIN
+		ole_base_dept_person p ON p.dept_id=d.id 
+	WHERE
+		d.is_ps="1" and d.del_flag="0" and p.del_flag="0" and d.if_effect="1"
+    GROUP BY
+		d.id
+	</select>
+	<!-- PC各个区域执法人员数量统计 -->
+	<select id="getPeAndAr" resultType="com.orhonit.ole.enforce.dto.ps.PeAndArSelectDTO">
+	SELECT 
+		d.id deptId,
+		a.`name` areaName,
+		count(p.`name`) personCount,
+		p.law_type lawType,
+		d.short_name deptName,
+		d.mgl_name deptNameMgl,
+		d.mgl_short_name deptShortNameMgl
+	FROM 
+		ole_base_area a
+	LEFT JOIN
+		ole_base_dept d ON d.area_id=a.id
+	LEFT JOIN
+		ole_base_dept_person p ON p.dept_id=d.id AND p.law_type=1
+	WHERE
+		d.is_ps="1" and d.del_flag="0" and p.del_flag="0" and d.if_effect="1"
+    GROUP BY
+		d.id
+	</select>
+<!-- 一个地区下的一个部门或全部部门的权责分类统计 -->
+	<select id="getPeAndDepByAre" resultType="com.orhonit.ole.enforce.dto.ps.PeAndDepDTO">
+	SELECT
+		a.id	areaId,    
+		d.id	depId,	   
+		d.name 	name,	  
+		count(d.name )	personCount,
+		p.law_type	lawType    
+	FROM
+		ole_base_area	a,
+		ole_base_dept	d,
+		ole_base_dept_person p
+	WHERE
+		p.dept_id=d.id 
+		and
+		d.area_id=a.id
+		and d.is_ps="1" and d.del_flag="0" and p.del_flag="0" and d.if_effect="1"
+		AND
+		a.id= #{pADBMap.areaId}
+		GROUP BY
+		d.`name`
+
+	</select>
+	
+	<!-- 根据ID 查询人员信息 -->
+	<select id="findPersonInfo" resultType="com.orhonit.ole.sys.dto.PersonDTO">
+	SELECT
+		id,name,cert_num as certNum,dept_id as deptId
+	FROM ole_base_dept_person 
+	WHERE id= #{id}
+	</select>
+	
+	<!-- 根据ID 查询用户信息 -->
+	<select id="findUserInfo" resultType="com.orhonit.ole.sys.dto.PersonDTO">
+	SELECT
+		u.id,p.name,p.cert_num as certNum,p.dept_id as deptId
+	FROM ole_base_dept_person p
+	left join ole_sys_user u on p.id=u.person_id
+	WHERE p.id= #{id}
+	</select>
+	
+	<!-- 根据执法人员ID 查询用户ID -->
+	<select id="findPersonId" resultType="com.orhonit.ole.sys.dto.PersonDTO">
+	SELECT
+		id
+	FROM ole_sys_user
+	WHERE person_id= #{id};
+	</select>
+
+	<!-- 执法人员查询 -->
+	<select id="getSelectLaw" resultType="com.orhonit.ole.enforce.dto.ps.LawPersonDTO">
+	select
+		oba.id areaId,								
+		oba.name areaName,							
+		count(obdp.name) personCount,					
+		obdp.law_type lawType	
+	from
+		ole_base_area oba
+		left join ole_base_dept obd on oba.id=obd.area_id and obd.is_ps='1'	
+		left join ole_base_dept_person obdp on obdp.dept_id = obd.id 
+	where
+		LENGTH(oba.`code`)=6
+		and obd.is_ps="1" and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+	GROUP BY
+		oba.`name`,obdp.law_type
+
+	</select>
+	<!-- 监督人员查询 -->
+	<select id="getSelectSup" resultType="com.orhonit.ole.enforce.dto.ps.LawPersonDTO">
+		select
+		oba.id areaId,								
+		oba.name areaName,							
+		count(obdp.name) personCount,					
+		obdp.law_type lawType	
+	from
+		ole_base_area oba
+		left join ole_base_dept obd on oba.id=obd.area_id and obd.is_ps='1'	
+		left join ole_base_dept_person obdp on obdp.dept_id = obd.id and obdp.law_type=1
+	where
+		LENGTH(oba.`code`)=6
+		and obd.is_ps="1" and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+	GROUP BY
+		oba.`name`
+	</select>
+	
+	<!-- 执法人员统计 -->
+	<select id="getAllLaw" resultType="com.orhonit.ole.enforce.dto.ps.LawPersonDTO">
+	select
+		oba.id areaId,								
+		oba.name areaName,							
+		count(obdp.name) personCount,					
+		obdp.law_type lawType	
+	from
+		ole_base_area oba
+		left join ole_base_dept obd on oba.id=obd.area_id and obd.is_ps='1'	and obd.is_ps="1" and obd.del_flag="0" and obd.if_effect="1"
+		left join ole_base_dept_person obdp on obdp.dept_id = obd.id and obdp.law_type=1  and obdp.del_flag="0" 
+	where
+		LENGTH(oba.`code`)=6
+		
+	GROUP BY
+		oba.`name`
+	</select>
+	
+	<select id="findPersonName" resultType="com.orhonit.ole.sys.dto.PersonDTO" >
+		select u.id,p.name as name from ole_base_dept_person as p 
+		LEFT JOIN ole_sys_user  as u ON p.ID=u.person_id
+		LEFT JOIN ole_sys_role_user as ru on ru.userId=u.id 
+		LEFT JOIN ole_sys_role as r on r.id=ru.roleId 
+		WHERE
+			u.dept_id = #{params.deptId}
+		AND r.id= #{params.roleId}
+	</select>
+	
+	<!-- 获取执法人员 -->
+	<select id="getPersonListByDeptId" resultType="com.orhonit.ole.enforce.dto.PersonAppDTO">
+		SELECT
+			id ,
+			name,
+			cert_num certNum,
+			dept_id deptId,
+			if_effect isEffect
+		FROM ole_base_dept_person 
+		where	
+			dept_id = #{deptId} 			
+	</select>
+	
+	<!--PS 执法人员列表查询总数 -->
+	<select id="getMessageNum" resultType="INTEGER" parameterType="String">
+       SELECT count(obdp.name)
+      	FROM ole_base_dept_person obdp 
+    	LEFT JOIN ole_base_dept obd ON obd.id = obdp.dept_id and obd.is_ps='1'
+		LEFT JOIN  ole_base_area oba 	ON  oba.id = obd.area_id  
+		LEFT JOIN ole_sys_dict osd ON obdp.duty = osd.enum_value and osd.type_value = "1706"
+		<where>
+			obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			<if test="_parameter != null and _parameter != ''">
+				AND oba.name=#{areaName}
+			</if>
+		</where>
+      		
+    </select>
+    
+    <!--PS PC执法人员列表查询总数 -->
+	<select id="getMessagNum" resultType="INTEGER" parameterType="String">
+       SELECT count(obdp.name)
+      	FROM ole_base_dept_person obdp 
+    	LEFT JOIN ole_base_dept obd ON obd.id = obdp.dept_id and obd.is_ps='1'
+		LEFT JOIN  ole_base_area oba 	ON  oba.id = obd.area_id  
+		LEFT JOIN ole_sys_dict osd ON obdp.duty = osd.enum_value and osd.type_value = "1706"
+		<where>
+			obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			and obdp.law_type=1
+			<if test="_parameter != null and _parameter != ''">
+				AND oba.name=#{areaName}
+			</if>
+		</where>
+      		
+    </select>
+	<!--PS 执法人员列表查询总数 -->
+	<select id="getMesNum" resultType="INTEGER" parameterType="String">
+       SELECT count(obdp.name)
+      	FROM ole_base_dept_person obdp 
+    	LEFT JOIN ole_base_dept obd ON obd.id = obdp.dept_id and obd.is_ps='1'
+		LEFT JOIN  ole_base_area oba ON oba.id = obd.area_id  
+		LEFT JOIN ole_sys_dict osd ON obdp.duty = osd.enum_value and osd.type_value = "1706"
+		<where>
+			1=1
+			and obdp.law_type=1
+			and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			<if test="_parameter != null and _parameter != ''">
+				AND obd.id=#{params.deptId}
+			</if>
+		</where>
+      		
+    </select>
+	<!-- PS 根据区域id查询执法人员详细信息 -->
+	<select id="getSelectByAreaId" resultType="com.orhonit.ole.enforce.dto.ps.SelectPersonByAreaIdDTO">
+		SELECT
+			obdp.id id,
+			obdp. NAME NAME,
+			obdp.sex sex,
+			osd.enum_desc duty,
+			obd.law_type lawType,
+			obdp.cert_num certNum,
+			oba. NAME lawArea,
+			obd.id deptId
+		FROM
+			ole_base_dept_person obdp
+		LEFT JOIN
+			ole_base_dept obd ON obd.id = obdp.dept_id and obd.is_ps="1"
+		LEFT JOIN
+			ole_base_area oba ON oba.id = obd.area_id
+		LEFT JOIN
+			ole_sys_dict osd ON obdp.duty = osd.enum_value and obdp.duty = "1706"
+		WHERE
+			obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			and oba.name=#{areaName}
+		LIMIT  #{startIndex},#{pageSize}  
+	</select>
+	
+	<!-- PS PC根据区域id查询执法人员信息 -->
+	<select id="getByAreaId" resultType="com.orhonit.ole.enforce.dto.ps.SelectPersonByAreaIdDTO">
+		SELECT
+			obdp.id id,
+			obdp. NAME NAME,
+			obdp.sex sex,
+			osd.enum_desc duty,
+			obdp.law_type lawType,
+			obdp.cert_num certNum,
+			oba. NAME lawArea,
+			obd.id deptId,
+			obdp.mgl_name as nameMgl
+		FROM
+			ole_base_dept_person obdp
+		LEFT JOIN
+			ole_base_dept obd ON obd.id = obdp.dept_id and obd.is_ps="1"
+		LEFT JOIN
+			ole_base_area oba ON oba.id = obd.area_id
+		LEFT JOIN
+			ole_sys_dict osd ON obdp.duty = osd.enum_value and obdp.duty = "1706"
+		WHERE
+			obdp.law_type=1
+			and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			and oba.id=#{areaName}
+		LIMIT  #{startIndex},#{pageSize}  
+	</select>
+	<!-- PS 根据deptId查询执法人员详细信息 -->
+	<select id="getSelectBydeptIdPC" resultType="com.orhonit.ole.enforce.dto.ps.SelectPersonByAreaIdDTO">
+		select 
+			obdp.id id,
+			obdp.name name,
+			obdp.sex sex,
+			osd.enum_desc duty,
+			obd.law_type lawType,
+			obdp.cert_num certNum,
+			oba.name lawArea,
+			obd.id deptId,
+			obd.name deptName,
+			obd.mgl_name deptNameMgl,
+			obdp.mgl_name nameMgl
+		from
+			ole_base_dept_person  obdp
+		LEFT JOIN
+			ole_base_dept obd on obd.id=obdp.dept_id and obd.is_ps="1"
+		LEFT JOIN	
+			ole_base_area oba on oba.id=obd.area_id
+		LEFT JOIN
+			ole_sys_dict osd ON obdp.duty = osd.enum_value and obdp.duty = "1706"
+		where
+			obdp.law_type=1
+			and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			and obd.id=#{deptId}
+		LIMIT  #{startIndex},#{pageSize}  
+	</select>
+	<!-- PS 根据deptId查询执法人员详细信息 -->
+	<select id="getSelectBydeptId" resultType="com.orhonit.ole.enforce.dto.ps.SelectPersonByAreaIdDTO">
+		select 
+			obdp.id id,
+			obdp.name name,
+			obdp.sex sex,
+			osd.enum_desc duty,
+			obd.law_type lawType,
+			obdp.cert_num certNum,
+			oba.name lawArea,
+			obd.id deptId,
+			obdp.picture picture,
+			obdp.mgl_name nameMgl
+		from
+			ole_base_dept_person  obdp
+		LEFT JOIN
+			ole_base_dept obd on obd.id=obdp.dept_id and obd.is_ps="1"
+		LEFT JOIN	
+			ole_base_area oba on oba.id=obd.area_id
+		LEFT JOIN
+			ole_sys_dict osd ON obdp.duty = osd.enum_value and osd.type_value = "1706"
+		where
+			obdp.law_type=1
+			and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+			and obd.id=#{param.deptId}
+	</select>
+	<!--PS 根据人员ID查询人员详细 -->
+	<select id="getSelectPersonById" resultType="com.orhonit.ole.enforce.dto.ps.SelectPersonById">
+	select	
+		obdp.picture picture,		
+		obd.name	deptName,
+		obdp.name	name,
+		obdp.sex	sex,
+		obdp.code	code,
+		osd1.enum_desc	edu,
+		obdp.birthday	birthday,
+		osd2.enum_desc	duty,
+		osd.enum_desc	nation,
+		obdp.tel	tel,
+		obdp.cert_num	certNum,
+		obdp.create_name	createName,
+		obdp.mgl_name nameMgl,
+		obd.mgl_name deptNameMgl,
+		obd.mgl_short_name deptShortNameMgl,
+		obdp.cert_type certType,
+		obdp.cert_category certCategory,
+		obdp.other_date otherDate,
+		obdp.lawarea lawarea
+	from
+		ole_base_dept_person obdp
+	LEFT JOIN
+		ole_base_dept obd ON obdp.dept_id=obd.id and obd.is_ps="1"
+	LEFT JOIN
+		ole_sys_dict osd ON osd.enum_value=obdp.nation and osd.type_value='1701'
+	LEFT JOIN
+		ole_sys_dict osd1 ON osd1.enum_value=obdp.edu and osd1.type_value='1705'
+	LEFT JOIN
+		ole_sys_dict osd2 ON osd2.enum_value=obdp.duty and osd2.type_value='1706'
+	where
+		obdp.law_type=1
+		and obd.del_flag="0" and obdp.del_flag="0" and obd.if_effect="1"
+		and obdp.ID=#{mapGetSelectPersonById.personId}
+	</select>
+	
+	<!-- 根据人员ID查询副执法人员信息 -->
+	<select id="getAppPersonListByParam" resultType="com.orhonit.ole.enforce.dto.PersonAppDTO">
+		SELECT
+			bdp.id ,
+			bdp.name name,
+			bdp.cert_num certNum,
+			bdp.dept_id deptId,
+			bdp.if_effect isEffect
+		FROM ole_base_dept_person bdp
+		<where>
+			bdp.dept_id = #{param.deptId}
+			and bdp.id in ( select person_id from ole_sys_user where dept_id = #{param.deptId} and id in (
+				select userId from ole_sys_role_user where roleId = #{param.roleId}
+				)
+			)
+			and bdp.if_effect ='1'
+			<if test="param.personName != null and param.personName != ''">
+				and bdp.name like concat('%', #{param.personName}, '%')
+			</if>
+			
+		</where>
+	</select>
+	
+	<select id="getPersonRole" resultType="com.orhonit.ole.enforce.dto.PersonAppDTO">
+		SELECT
+			bdp.id ,
+			bdp.name name,
+			bdp.cert_num certNum,
+			bdp.dept_id deptId,
+			bdp.if_effect isEffect,
+			sru.roleId roleId,
+			su.id userId
+		FROM ole_base_dept_person bdp, ole_sys_user su, ole_sys_role_user sru
+		where su.person_id = bdp.ID and sru.userId = su.id and  bdp.id = #{personId}
+	</select>
+</mapper>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.FilingDao">
+
+	<!-- <select id="rightAll" resultType="com.orhonit.ole.enforce.dto.RightDTO">
+		SELECT * FROM ole_base_potence pc
+		LEFT JOIN ole_base_potence_law_map lp ON  lp.right_duty_id =pc.id
+		LEFT JOIN ole_base_potence_dept pe  ON pe.id =lp.right_duty_id
+		WHERE lp.right_duty_id IN (
+		SELECT bp.id FROM ole_base_potence bp
+		LEFT JOIN ole_base_potence_dept pe ON bp.id = pe.potence_id
+		WHERE pe.dept_id_agent =#{dept_id}
+		)	
+	</select> -->
+	
+	<select id="rightAll" resultType="com.orhonit.ole.enforce.dto.RightDTO">
+		SELECT * FROM ole_base_potence bp
+		LEFT JOIN ole_base_potence_dept pe ON bp.id = pe.potence_id
+		WHERE pe.dept_id_agent =#{dept_id} and  bp.pro_type='0'
+	</select>
+	
+	<select id="zfyjList"  resultType="com.orhonit.ole.enforce.dto.RightDTO">
+		SELECT  * FROM ole_base_potence_law_map lp
+		LEFT JOIN ole_base_potence_dept pe  ON pe.id =lp.right_duty_id
+		WHERE lp.right_duty_id =#{id}
+	</select>
+	
+	<select id="cfyjList"  resultType="com.orhonit.ole.enforce.dto.RightDTO">
+		SELECT  * FROM ole_base_potence_law_map lp
+		LEFT JOIN ole_base_potence_dept pe  ON pe.id =lp.right_duty_id
+		WHERE FIND_IN_SET(lp.id,#{id})
+	</select>
+	<!-- 权责列表查询 -->
+	<select id="selectPotenceList" resultType="com.orhonit.ole.enforce.dto.ps.PotenceListDTO">
+	SELECT
+		d.id deptId,
+		p.id potenceId,
+		d.mgl_name deptNameMgl,
+		d.short_name deptName,
+		p.`name` potenceName,
+		p.pro_type proType,
+		count(p.id) potenceCount
+	FROM
+		ole_base_dept d
+	LEFT JOIN
+		ole_base_potence_dept pd ON pd.dept_id = d.id
+	LEFT JOIN
+		ole_base_potence p ON p.id = pd.potence_id
+	<where>
+		d.del_flag=0 and d.if_effect="1" and d.is_ps="1"
+	<if test="plMap.areaId != null and plMap.areaId  != ''">
+		and d.id =#{plMap.areaId}
+	</if>
+	
+	<if test="plMap.deptId != null and plMap.deptId != ''">
+		and d.id =#{plMap.deptId}
+	</if>
+	
+	<if test="plMap.proType != null and plMap.proType != ''">
+		and p.pro_type =#{plMap.proType}
+	</if>
+	
+	<if test="plMap.deptProperty != null and plMap.deptProperty != ''">
+		and d.dept_property =#{plMap.deptProperty}
+	</if> 
+	</where>
+	GROUP BY
+			d.id
+	</select>
+	<!-- 根据deptId权责列表查询 -->
+	<select id="selectPotenceListBydeptId" resultType="com.orhonit.ole.enforce.dto.ps.PotenceListDTO">
+		SELECT
+			d.id deptId,
+			p.id potenceId,
+			d.`name` deptName,
+			d.mgl_name deptNameMgl,
+			p.`name` potenceName,
+			osd.enum_desc proType
+		FROM
+			ole_base_potence p
+		LEFT JOIN
+			ole_base_potence_dept pd ON p.id = pd.potence_id
+		LEFT JOIN
+			ole_base_dept d ON pd.dept_id = d.id and d.is_ps='1' and d.del_flag=0 and d.if_effect="1" 
+		LEFT JOIN 
+			ole_sys_dict osd ON p.pro_type = osd.enum_value and osd.type_value='1712'
+		<where>
+			<if test="plMap.deptId != null and plMap.deptId != ''">
+				d.id =#{plMap.deptId}
+			</if>
+			<if test="plMap.proType != null and plMap.proType != ''">
+				and p.pro_type =#{plMap.proType}
+			</if>
+			<if test="plMap.title != null and plMap.title != ''">
+				and p.name like concat('%', #{plMap.title}, '%')
+			</if>
+		</where>
+		<!--<if test="plMap.start != null and plMap.start != '' and plMap.length != null and plMap.length != ''">-->
+			limit #{plMap.start},#{plMap.length}
+		<!--</if>-->
+	</select>
+
+	<select id="selectPotenceListBydeptIdCount" resultType="int">
+		SELECT count(1)
+		FROM
+		ole_base_potence p
+		LEFT JOIN
+		ole_base_potence_dept pd ON p.id = pd.potence_id
+		LEFT JOIN
+		ole_base_dept d ON pd.dept_id = d.id and d.is_ps='1' and d.del_flag=0 and d.if_effect="1"
+		<where>
+			<if test="plMap.deptId != null and plMap.deptId != ''">
+				d.id =#{plMap.deptId}
+			</if>
+			<if test="plMap.proType != null and plMap.proType != ''">
+				and p.pro_type =#{plMap.proType}
+			</if>
+			<if test="plMap.title != null and plMap.title != ''">
+				and p.name like concat('%', #{plMap.title}, '%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 各个地区权责清单统计 -->
+	<select id="AreaAndPotSelect" resultType="com.orhonit.ole.enforce.dto.ps.AreaAndPotDTO">
+		SELECT
+			a.id	areaId,			
+			a.name	name,
+			COUNT(p.name) potenceCount
+		FROM
+			ole_base_area a
+			left join ole_base_dept d on a.id=d.area_id and d.is_ps="1" and d.del_flag=0 and d.if_effect="1" 
+			left join ole_base_potence_dept pd on d.id=pd.dept_id
+			left join ole_base_potence p on pd.potence_id=p.id
+		where 
+			LENGTH(a.`code`)=6
+			
+		GROUP BY
+			a.`name`
+	</select> 
+	
+	<!-- 一个地区下的一个部门或全部部门的权责分类统计 -->
+	<select id="getAreaAndPotAndProPot" resultType="com.orhonit.ole.enforce.dto.ps.AreaAndPotAndProPotDTO">
+	SELECT
+		obp.id potenceId,
+		obpd.dept_id   depId,	 
+		obd.name  deptName,
+		obd.mgl_name  deptNameMgl,
+		obp.name potenceName,	
+		osd.enum_desc proType,
+		obp.pro_type type,
+		count(obp.id) potenceCount
+	FROM
+		ole_base_potence obp 
+	RIGHT JOIN	
+		ole_base_potence_dept obpd ON obp.id=obpd.potence_id
+	RIGHT JOIN
+		ole_base_dept obd ON  obd.id=obpd.dept_id and obd.is_ps="1" and obd.del_flag=0 and obd.if_effect="1" 
+	LEFT JOIN
+		ole_sys_dict osd on obp.pro_type=osd.enum_value and osd.type_value='1712'
+	<where>
+		
+	 <if test="areaAndPotAndProPotMap.deptId != null and areaAndPotAndProPotMap.deptId !='' ">
+		obd.id=#{areaAndPotAndProPotMap.deptId}	
+	</if>
+	
+	<if test="areaAndPotAndProPotMap.areaId != null and areaAndPotAndProPotMap.areaId !='' ">
+		and oba.id=#{areaAndPotAndProPotMap.areaId}
+	</if> 
+	</where>
+		GROUP BY
+			obp.pro_type	
+	</select>
+	<!-- 权责清单（条形图） -->
+	<select id="RigAndPotList" resultType="com.orhonit.ole.enforce.dto.ps.RigAndPotListDTO">
+		select 
+			obp.id potenceId,
+			COUNT(obp.name) potenceCount,
+			obp.pro_type proType,
+			osd.enum_desc ddesc
+		from
+			ole_base_potence obp
+		LEFT JOIN
+			(SELECT * from ole_base_potence_dept) bpd  on obp.id=bpd.potence_id
+		LEFT JOIN
+			(SELECT * from ole_base_dept WHERE is_ps="1" and del_flag=0 and if_effect="1" ) bd on bpd.dept_id=bd.id
+		LEFT JOIN
+			(SELECT * from ole_sys_dict ) osd ON obp.pro_type=osd.enum_value
+		WHERE
+			osd.type_value='1712'
+		GROUP BY
+			obp.pro_type
+
+	</select>
+	<!-- 权责详细信息 -->
+	<select id="potenceDetail" resultType="com.orhonit.ole.enforce.dto.ps.AreaAndPotDTO">
+		SELECT
+			bp.name potenceName,
+			bp.approval_req approvalReq,
+			bp.limit_time limitTime,
+			bp.duty duty,
+			bp.duty_ref dutyRef,
+			bp.acc_basis accBasis,
+			bp.remarks,
+			bp.process_id,
+			bpd.dept_id_agent_name deptAgentName,
+			bdTwo.name deptName,
+			bdTwo.tel,
+			bplm.wz_catalog_name lawName,
+			bplm.wz_item wzItem
+		FROM
+			ole_base_potence bp
+		LEFT JOIN
+			ole_base_potence_dept bpd ON bp.id=bpd.potence_id
+		LEFT JOIN
+			ole_base_dept bdTwo ON bdTwo.id=bpd.dept_id_agent and bdTwo.is_ps='1' and bdTwo.del_flag=0 and bdTwo.if_effect="1" 
+		LEFT JOIN
+			ole_base_potence_law_map bplm ON bplm.right_duty_id=bp.id
+		LEFT JOIN
+			ole_base_law_category blc ON bplm.wz_catalog_id=blc.id
+		where
+			bp.id=#{map.potenceId}
+		limit 1
+	</select>
+	<select id="wzList" resultType="com.orhonit.ole.enforce.dto.api.ApiBaseLawMapDTO">
+	select id,wz_catalog_id,wz_content,wz_item,fz_catalog_id,fz_content,fz_item
+	from ole_base_potence_law_map  
+	where right_duty_id=#{id}
+	</select>
+	
+	
+	<select id="getLawList" resultType="com.orhonit.ole.enforce.dto.api.ApiBaseLawInfo">
+	select id,wz_catalog_name  law_name
+	from ole_base_potence_law_map  
+	where right_duty_id  in (SELECT potence_id FROM ole_base_potence_dept where dept_id=#{id} )
+	</select>
+	
+</mapper>

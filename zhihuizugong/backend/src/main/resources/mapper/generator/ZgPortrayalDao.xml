@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgPortrayalDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgPortrayalEntity" id="zgPortrayalMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="studyRank" column="study_rank"/>
+        <result property="thinkRank" column="think_rank"/>
+        <result property="executeRank" column="execute_rank"/>
+        <result property="innovateRank" column="innovate_rank"/>
+        <result property="synergyRank" column="synergy_rank"/>
+        <result property="serveRank" column="serve_rank"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    <!--个人创新力-->
+    <select id="findInRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    tb_news
+        WHERE
+	    user_id = #{userId}
+	    AND new_model = 18
+    </select>
+    <!--科室创新力-->
+    <select id="findInDeptRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    tb_news
+        WHERE
+	    lower_id = #{lowerId}
+	    AND new_model = 6
+    </select>
+    <!--个人执行力-->
+    <select id="findExRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    zg_work_plan
+        WHERE
+	    user_id = #{userId}
+	    AND exposure = 1
+    </select>
+    <!--科室执行力-->
+    <select id="findExDeptRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    zg_work_plan
+        WHERE
+	    lower_id = #{lowerId}
+	    AND exposure = 1
+    </select>
+    <!--个人思考力-->
+    <select id="findThRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    wyw_note
+        WHERE
+	    create_userid = #{userId}
+    </select>
+    <!--科室思考力-->
+    <select id="findThDeptRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    wyw_note
+        WHERE
+	    lower_id = #{lowerId}
+    </select>
+    <!--个人学习力-->
+    <select id="findStRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    os_course_record
+        WHERE
+	    user_id = #{userId}
+    </select>
+    <!--科室学习力-->
+    <select id="findStDeptRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    os_course_record
+        WHERE
+	    lower_id=#{lowerId}
+    </select>
+    <!--个人协同力-->
+    <select id="findSyRank" resultType="java.lang.Integer">
+        SELECT
+        SUM(a)
+        FROM
+        (
+        SELECT
+        count(0) a
+        FROM
+        please_help_me
+        WHERE
+        help_user_id = #{userId} UNION
+        SELECT
+        count(0) a
+        FROM
+        idea_team_up_ideas
+        WHERE
+        create_user_id = #{userId} UNION
+        SELECT
+        count(0) a
+        FROM
+        everybody_share
+        WHERE
+        share_user_id = #{userId}
+        ) b
+    </select>
+    <!--科室协同力-->
+    <select id="findSyDeptRank" resultType="java.lang.Integer">
+        SELECT
+        SUM(a)
+        FROM
+        (
+        SELECT
+        count(0) a
+        FROM
+        please_help_me
+        WHERE
+        lower_id = #{lowerId} UNION
+        SELECT
+        count(0) a
+        FROM
+        idea_team_up_ideas
+        WHERE
+        lower_id = #{lowerId} UNION
+        SELECT
+        count(0) a
+        FROM
+        everybody_share
+        WHERE
+        lower_id = #{lowerId}
+        ) b
+    </select>
+    <!--个人服务力-->
+    <select id="findSeRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    core_work_crew
+        WHERE
+	    user_id =#{userId}
+    </select>
+    <!--科室服务力-->
+    <select id="findSeDeptRank" resultType="java.lang.Integer">
+        SELECT
+	    count(0)
+        FROM
+	    core_work_crew
+        WHERE
+	    lower_id = #{lowerId}
+    </select>
+
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgPortrayalEntity">
+        insert into zg_portrayal(id,user_id,study_rank,think_rank,execute_rank,innovate_rank,synergy_rank,serve_rank,update_time,type)
+        values(#{id},#{userId},#{studyRank},#{thinkRank},#{executeRank},
+        #{innovateRank},#{synergyRank},#{serveRank},#{updateTime},#{type})
+    </insert>
+
+
+    <select id="findListCount" resultType="com.orhonit.modules.generator.entity.ZgPortrayalEntity">
+        SELECT
+	    *
+        FROM
+	    ( SELECT count( 0 ) thinkRank FROM wyw_note ) a,
+	    ( SELECT count( 0 ) innovateRank FROM tb_news WHERE new_model = 6 ) b,
+	    ( SELECT count( 0 ) executeRank FROM zg_work_plan WHERE exposure = 1 ) c,
+	    ( SELECT count( 0 ) studyRank FROM os_course_record ) d,
+	    ( SELECT count( 0 ) serveRank FROM core_work_crew ) e,
+	    (
+        SELECT
+	    SUM( a ) synergyRank
+        FROM
+	    (
+        SELECT
+	    count( 0 ) a
+        FROM
+	    please_help_me UNION
+        SELECT
+	    count( 0 ) a
+        FROM
+	    idea_team_up_ideas UNION
+        SELECT
+	    count( 0 ) a
+        FROM
+	    everybody_share
+	    ) b
+	    ) f
+    </select>
+
+    <select id="findList" resultType="com.orhonit.modules.generator.entity.ZgPortrayalEntity">
+        select
+        *
+        from zg_portrayal
+        where type = #{type}
+    </select>
+</mapper>

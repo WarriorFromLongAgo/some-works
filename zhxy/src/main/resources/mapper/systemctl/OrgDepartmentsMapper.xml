@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.systemctl.mapper.OrgDepartmentsMapper">
+    <select id="getDepartmentTeacher"
+            resultType="java.util.HashMap"
+            parameterType="java.util.HashMap">
+
+        SELECT
+        a.*,
+        b.teacher_name
+        FROM
+        systemctl_org_department_user_relation a
+        LEFT JOIN teacher_information as b ON b.user_id = a.user_id
+        <where>
+            <if test="maps.department_id!=null and maps.department_id!=''">
+                and a.department_id = #{maps.department_id}
+            </if>
+        </where>
+    </select>
+    <select id="getDepartmentTeacherpage"
+            resultType="java.util.HashMap"
+            parameterType="java.util.HashMap">
+
+        SELECT
+        a.*,
+        b.teacher_name
+        FROM
+        systemctl_org_department_user_relation a
+        LEFT JOIN teacher_information as b ON b.user_id = a.user_id
+        <where>
+            <if test="maps.department_id!=null and maps.department_id!=''">
+                and a.department_id = #{maps.department_id}
+            </if>
+        </where>
+        LIMIT #{dto.start},#{dto.limit}
+    </select>
+    <insert id="departmentToGrade"  parameterType="java.util.List">
+        insert into systemctl_org_department_grade_relation(department_id,grade_id) values
+        <foreach collection="list" separator="," item="map">
+            (#{map.department_id}, #{map.grade_id})
+        </foreach>
+    </insert>
+    <insert id="departmentToSubject"  parameterType="java.util.List">
+        insert into systemctl_org_department_subject_relation(department_id,subject_id) values
+        <foreach collection="list" separator="," item="map">
+            (#{map.department_id}, #{map.subject_id})
+        </foreach>
+
+    </insert>
+    <insert id="departmentToDuties"  parameterType="java.util.List">
+        insert into systemctl_org_department_duty_relation(department_id,duty_id) values
+        <foreach collection="list" separator="," item="map">
+            (#{map.department_id}, #{map.duty_id})
+        </foreach>
+
+    </insert>
+</mapper>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>执法主体添加</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset>
+		
+		    <div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">所属区域</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="area_id" type="text"  name="area_id"  style="width:100%"/>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">上级主体</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="parent_id" type="text" name="parent_id" style="width:100%"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体编码</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="主体编码" type="text" name="code" id="code" readonly="readonly">
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体名称<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="主体名称" placeholder="主体名称" type="text" name="name" id="name">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">名称全拼<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="名称全拼" placeholder="名称全拼" type="text" name="name_spell" id="name_spell">
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">法定代表</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="法定代表人" name="legal_person" id="legal_person"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体地址</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="主体地址" name="address" id="address"/>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">联系电话</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="联系电话" name="tel" id="tel"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体名称简称<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="主体名简称" placeholder="主体名称简称" name="short_name" id="short_name"/>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法区域<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="执法区域" placeholder="执法区域" name="lawarea" id="lawarea"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体性质<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="dept_property" iname="主体性质" class="form-control input-sm not-null" id="dept_property">
+					   <option value="">请选择</option>
+					</select>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体级别<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="level" class="form-control input-sm not-null" iname="主体级别" id="level">
+					   <option value="">请选择</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法性质<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="law_type" class="form-control input-sm not-null" iname="执法性质" id="law_type">
+					   <option value="">请选择</option>
+					</select>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否公示<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="is_ps" class="form-control input-sm not-null"  iname="是否公示"  id="is_ps">
+					   <option value="">请选择</option>
+					</select>
+				</div>
+            </div>
+            <div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否启用</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="if_effect" class="form-control input-sm" id="if_effect">
+					 
+					</select>
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">排序</label>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <input class="form-control" placeholder="排序" name="sort" id="sort" type="number" value="100">
+                </div>
+            </div>
+
+			<div class="form-actions" style="margin-bottom:30px;">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" onclick="custom_close()">重置</button>
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add()" style="margin-left:10px">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use('layer', function(){
+		    var layer = layui.layer;
+		});
+		
+		getDictList(dict.dept_level,"level");
+		getDictList(dict.dept_property,"dept_property");
+		getDictList(dict.duty_law_type,"law_type");
+		getDictList(dict.is_effect,"if_effect");
+		getDictList(dict.is_ps,"is_ps");
+		
+		setCode();
+		function setCode(){
+			
+			$.ajax({
+				url:"/base/ltctions/getSerialNum",
+				type:"GET",
+				success:function(data){
+					$('#code').val(data);
+				}
+			});
+			/* var timestamp = (new Date()).getTime(); */
+			
+		}
+		
+		$("#area_id").combotree({
+			method:'get',		//请求方式	
+			url : '/base/sections/area',	//请求的URL
+			required: false, 
+			cascadeCheck:false,
+			onLoadSuccess: function (node, data) {
+				if(null!=data&&data.length>0){
+					//$("#area_id").combotree('setValue',data[0].text)
+				}
+		    }, 
+			onChange:function(newV,oldV){
+			}
+		});
+		
+		$("#parent_id").combotree({
+			method:'get',		//请求方式	
+			url : '/base/LtcAtts/ltcs',	//请求的URL
+			required: false,
+			cascadeCheck:false,
+			onLoadSuccess: function (node, data) {
+				if(null!=data&&data.length>0){
+					//$("#parent_id").combotree('setValue',data[0].text)
+				}
+		    }, 
+			onChange:function(newV,oldV){
+			}
+		});
+		
+		function add() {
+			if($('#area_id').val()==null||$('#area_id').val()==''){
+				layer.msg("所属区域为空",{anim:6});
+				/* alert("所属区域为空"); */
+				return;
+			}
+			/* if($('#parent_id').val()==null||$('#parent_id').val()==''){
+				layer.msg("上级主体为空",{anim:6});
+				return;
+			} */
+			//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+			
+			 $('#submitBtn').removeAttr("disabled");
+	         $('#submitBtn').attr("disabled",false); 
+		    var formdata = $("#form").serializeObject();
+			$.ajax({
+				type : 'post',
+				url : '/base/ltctions',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+						 window.parent.location.reload();
+						 var index = parent.layer.getFrameIndex(window.name);
+						 parent.layer.close(index);
+                    });
+				}
+			});
+		}
+		
+		
+		function custom_close(){
+			$('#parent_id').val("");
+			$('#name').val("");
+			$('#name_spell').val("");
+			$('#legal_person').val("");
+			$('#address').val("");
+			$('#tel').val("");
+			$('#dept_property').val("1");
+			$('#level').val("1");
+			$('#law_type').val("0");
+			$('#sort').val("100");
+		}
+	</script>
+</body>
+</html>

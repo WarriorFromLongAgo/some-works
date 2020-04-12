@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppIdeaCommentDao">
+    <resultMap type="com.orhonit.modules.generator.app.vo.AppIdeaCommentVO" id="AppIdeaCommentMap">
+       <result property="ideaCommentId" column="idea_comment_id"/>
+       <result property="ideaCommentContent" column="idea_comment_content"/>
+       <result property="userId" column="user_id"/>
+       <result property="ideaId" column="idea_comment_id"/>
+       <result property="createTime" column="create_time"/>
+       <result property="commentReplyCount" column="comment_reply_count"/>
+       <result property="commentCrtName" column="ideauserName"/>
+          <collection property="appIdeaCommentReplyVO" ofType="com.orhonit.modules.generator.app.vo.AppIdeaCommentReplyVO">
+		        <result property="replyContent" column="commentReplyContent"/>
+		        <result property="isReply" column="isReply"/>
+		        <result property="replyTime" column="ideaReplyTime"/>
+	            <result property="crtTime" column="crtTime"/>
+	            <result property="userName" column="replyuserName"/>
+	            <result property="commentReplyCount" column="commentReplyCount"/>
+			</collection>
+    </resultMap>
+    
+    <!-- 点子  评论列表 -->
+  <select id="getIdeaCommentByPage" resultMap="AppIdeaCommentMap">
+    SELECT
+		a.idea_comment_id,
+		a.idea_comment_content,
+		a.user_id,
+		a.idea_id,
+		a.create_time,
+		a.comment_reply_count  AS commentReplyCount,
+		o.user_true_name AS ideauserName,
+		ly.reply_content AS commentReplyContent,
+		ly.is_reply AS isReply,
+		ly.reply_time AS ideaReplyTime,
+		er.user_true_name AS replyuserName
+	FROM 
+		idea_comment a
+		LEFT JOIN idea_comment_reply ly ON a.idea_comment_id = ly.idea_comment_id
+		LEFT JOIN sys_user o ON a.user_id = o.user_id
+		LEFT JOIN sys_user er ON er.user_id = ly.user_id
+	WHERE
+		a.idea_id=#{ideaId}
+		LIMIT #{beginLimit},#{limit}
+  </select>
+  
+  <!-- 评论+1 -->
+    <update id= "replyCount">
+		UPDATE
+		idea_comment SET comment_reply_count = comment_reply_count+1
+		WHERE idea_comment_id = #{ideaCommentId}
+	</update>
+	
+	<!-- 单条评论和其他的评论回复 -->
+	<select id="newComAndReply" resultMap="AppIdeaCommentMap">
+				SELECT
+					pl.user_id,
+					pl.idea_comment_id,
+					pl.idea_comment_content,
+					pl.create_time,
+					pl.comment_reply_count AS commentReplyCount,
+					suser.user_nickname AS tncnickname,
+					plf.reply_content AS replyContent,
+					su.user_nickname AS ideaCommentUserName,
+					plf.is_reply AS isReply,
+					plf.reply_time AS replyTime
+				FROM
+					idea_comment pl
+					LEFT JOIN idea_comment_reply plf ON pl.idea_comment_id = plf.idea_comment_id
+					LEFT JOIN sys_user suser ON pl.user_id = suser.user_id	
+					LEFT JOIN sys_user su ON su.user_id = plf.user_id
+				WHERE
+				    pl.idea_comment_id = #{ideaCommentId}
+					ORDER BY plf.reply_id DESC
+					LIMIT #{beginLimit},#{limit}
+	</select>
+  
+</mapper>

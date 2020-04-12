@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>执法区域预警</title>
+<link href="other/css/style.css" rel="stylesheet" type="text/css" />
+<link href="other/style/common.css" rel="stylesheet" type="text/css">
+<link href="other/css/layout.css" type="text/css" rel="stylesheet">
+<link href="other/images/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript"	src="../../js/jquery-ztree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript"	src="http://api.map.baidu.com/api?v=2.0&ak=eBcmZoBfRi9MGENgw2tmmLMI8tYr7rYS"></script>
+<style>
+div.zTreeDemoBackground {
+	width: 300px;
+	margin-left: 10px;
+	 height:520px;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+ztree * {padding:0; margin:0; font-size:12px; font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif}
+.ztree {margin:0; padding:2px; color:#333}
+.ztree li{padding:0; margin:0; list-style:none; line-height:14px; text-align:left; white-space:nowrap; outline:0}
+.ztree li ul{ margin:0; padding:0 0 0 18px}
+.ztree li ul.line{ background:url(./img/line_conn.gif) 0 0 repeat-y;}
+
+.ztree li a {padding:1px 3px 0 0; margin:0; cursor:pointer; height:17px; color:#333; background-color: transparent;
+	text-decoration:none; vertical-align:top; display: inline-block}
+.ztree li a:hover {text-decoration:underline}
+/*.ztree li a.curSelectedNode {padding-top:0px; background-color:#FFE6B0; color:black; height:16px; border:1px #FFB951 solid; opacity:0.8;}*/
+.ztree li a.curSelectedNode {padding-top:0px; background-color:#F6F6F6; color:#0663A2; height:16px; border:1px #DDDDDD solid; opacity:0.8;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+/*.ztree li a.curSelectedNode {padding-top:0px; color:#0663a2; font-weight:bold; height:16px; opacity:0.8;}*/
+.ztree li a.curSelectedNode_Edit {padding-top:0px; background-color:#FFE6B0; color:black; height:16px; border:1px #FFB951 solid; opacity:0.8;}
+.ztree li a.tmpTargetNode_inner {padding-top:0px; background-color:#316AC5; color:white; height:16px; border:1px #316AC5 solid;
+	opacity:0.8; filter:alpha(opacity=80)}
+.ztree li a.tmpTargetNode_prev {}
+.ztree li a.tmpTargetNode_next {}
+.ztree li a input.rename {height:14px; width:80px; padding:0; margin:0;
+	font-size:12px; border:1px #7EC4CC solid; *border:0px}
+.ztree li span {line-height:16px; margin-right:2px}
+.ztree li span.button {line-height:0; margin:0; width:16px; height:16px; display: inline-block; vertical-align:middle;
+	border:0 none; cursor: pointer;outline:none;
+	background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
+	background-image:url("./img/zTreeStandard.png"); *background-image:url("./img/zTreeStandard.gif")}
+/* IE7 fix */
+.ztree li span.button.level0 {*margin-left:-15px;}
+
+.ztree li span.button.chk {width:13px; height:13px; margin:0 3px 0 0; cursor: auto}
+.ztree li span.button.chk.checkbox_false_full {background-position:0 0}
+.ztree li span.button.chk.checkbox_false_full_focus {background-position:0 -14px}
+.ztree li span.button.chk.checkbox_false_part {background-position:0 -28px}
+.ztree li span.button.chk.checkbox_false_part_focus {background-position:0 -42px}
+.ztree li span.button.chk.checkbox_false_disable {background-position:0 -56px}
+.ztree li span.button.chk.checkbox_true_full {background-position:-14px 0}
+.ztree li span.button.chk.checkbox_true_full_focus {background-position:-14px -14px}
+.ztree li span.button.chk.checkbox_true_part {background-position:-14px -28px}
+.ztree li span.button.chk.checkbox_true_part_focus {background-position:-14px -42px}
+.ztree li span.button.chk.checkbox_true_disable {background-position:-14px -56px}
+.ztree li span.button.chk.radio_false_full {background-position:-28px 0}
+.ztree li span.button.chk.radio_false_full_focus {background-position:-28px -14px}
+.ztree li span.button.chk.radio_false_part {background-position:-28px -28px}
+.ztree li span.button.chk.radio_false_part_focus {background-position:-28px -42px}
+.ztree li span.button.chk.radio_false_disable {background-position:-28px -56px}
+.ztree li span.button.chk.radio_true_full {background-position:-42px 0}
+.ztree li span.button.chk.radio_true_full_focus {background-position:-42px -14px}
+.ztree li span.button.chk.radio_true_part {background-position:-42px -28px}
+.ztree li span.button.chk.radio_true_part_focus {background-position:-42px -42px}
+.ztree li span.button.chk.radio_true_disable {background-position:-42px -56px}
+
+.ztree li span.button.switch {width:18px; height:18px}
+.ztree li span.button.root_open{background-position:-92px -54px}
+.ztree li span.button.root_close{background-position:-74px -54px}
+.ztree li span.button.roots_open{background-position:-92px 0}
+.ztree li span.button.roots_close{background-position:-74px 0}
+.ztree li span.button.center_open{background-position:-92px -18px}
+.ztree li span.button.center_close{background-position:-74px -18px}
+.ztree li span.button.bottom_open{background-position:-92px -36px}
+.ztree li span.button.bottom_close{background-position:-74px -36px}
+.ztree li span.button.noline_open{background-position:-92px -72px}
+.ztree li span.button.noline_close{background-position:-74px -72px}
+.ztree li span.button.root_docu{ background:none;}
+.ztree li span.button.roots_docu{background-position:-56px 0}
+.ztree li span.button.center_docu{background-position:-56px -18px}
+.ztree li span.button.bottom_docu{background-position:-56px -36px}
+.ztree li span.button.noline_docu{ background:none;}
+
+.ztree li span.button.ico_open{margin-right:2px; background-position:-110px -16px; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.ico_close{margin-right:2px; background-position:-110px 0; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.ico_docu{margin-right:2px; background-position:-110px -32px; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.edit {margin-right:2px; background-position:-110px -48px; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.remove {margin-right:2px; background-position:-110px -64px; vertical-align:top; *vertical-align:middle}
+
+.ztree li span.button.ico_loading{margin-right:2px; background:url(./img/loading.gif) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+
+ul.tmpTargetzTree {background-color:#FFE6B0; opacity:0.8; filter:alpha(opacity=80)}
+
+span.tmpzTreeMove_arrow {width:16px; height:16px; display: inline-block; padding:0; margin:2px 0 0 1px; border:0 none; position:absolute;
+	background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
+	background-position:-110px -80px; background-image:url("./img/zTreeStandard.png"); *background-image:url("./img/zTreeStandard.gif")}
+
+ul.ztree.zTreeDragUL {margin:0; padding:0; position:absolute; width:auto; height:auto;overflow:hidden; background-color:#cfcfcf; border:1px #00B83F dotted; opacity:0.8; filter:alpha(opacity=80)}
+.zTreeMask {z-index:10000; background-color:#cfcfcf; opacity:0.0; filter:alpha(opacity=0); position:absolute}
+</style>
+
+</head>
+<body>
+	<div class="container">
+			<div id="boxLeft" class="leftbox">
+				<div class="zTreeDemoBackground">
+					<ul id="treeDemo" class="aa ztree"></ul>
+				</div>
+			</div>
+			<div id="main">
+				<div id="slidbtn" class="slidLeftBtn" onclick="SlidLeft();"></div>
+				<div id="map" class="mapContainer"></div>
+				<input type="hidden" id="IsHidden" value="0" />
+			</div>
+	</div>
+
+	<script type="text/javascript">
+	var map,num=0;
+	var setting = {
+	       key : { title : "code"},
+			callback: {
+				//onClick: zTreeOnClick
+			}	
+		};
+	function initTree(){
+		$.ajax({
+			async : false,
+			cache:false,
+			type: 'POST',
+			dataType : "json",
+			url: "/tts/sysDept/ztree",//请求的action路径
+			error: function () {//请求失败处理函数
+				alert('请求失败');
+			},
+			success:function(data){ //请求成功后处理函数。  
+				zTree = $.fn.zTree.init($("#treeDemo"), setting,data);  
+			}
+		});
+		
+	}
+	
+	
+	function zTreeOnClick(event, treeId, treeNode) {
+	
+		map.clearOverlays();//清除地图覆盖物
+		map.centerAndZoom(new BMap.Point(treeNode.lat,treeNode.lng), 16);
+	    //alert(treeNode.tId + ", " + treeNode.name+","+treeNode.lat+","+treeNode.lng);
+		addMarker({'lat': treeNode.lat, 'lng': treeNode.lng});   
+		getBoundary(treeNode.name);
+	};
+	
+	$(function() {
+		initTree();
+		//添加百度地图
+		map = new BMap.Map("map"); // 创建地图实例  
+		map.centerAndZoom("呼和浩特市", 15);                 // 初始化地图，设置中心点坐标和地图级别  
+		map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
+		map.addControl(new BMap.ScaleControl()); // 添加比例尺控件
+		map.addControl(new BMap.OverviewMapControl()); //添加缩略地图控件
+		map.enableScrollWheelZoom(); //启用滚轮放大缩小
+		map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+		var mapStyle = {
+			features : [ "road", "building", "water", "land" ],//隐藏地图上的poi
+			style : "road" //设置地图风格为高端黑
+		}
+		map.setMapStyle(mapStyle);
+		getBoundary("呼和浩特市");
+		
+		$.ajax({
+			type : 'get',
+			url : '/tts/case/getCasePositionList',
+			contentType: "application/json; charset=utf-8",  
+			success : function(data) {
+				for(var  i=0;i<data.length;i++){
+					addMarker(data[i]);
+				}
+			}
+		});  
+	});
+	
+	
+	function getBoundary(cityName){       
+		var bdary = new BMap.Boundary();
+		bdary.get(cityName, function(rs){       //获取行政区域
+			//map.clearOverlays();        //清除地图覆盖物       
+			var count = rs.boundaries.length; //行政区域的点有多少个
+			if (count === 0) {
+				alert('未能获取当前输入行政区域');
+				return ;
+			}
+          	var pointArray = [];
+			for (var i = 0; i < count; i++) {
+				var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000"}); //建立多边形覆盖物
+				map.addOverlay(ply);  //添加覆盖物
+				pointArray = pointArray.concat(ply.getPath());
+			}    
+			map.setViewport(pointArray);    //调整视野  
+		});   
+	}
+	
+	function addMarker(item) {
+		var point = new BMap.Point(item.lng,item.lat)
+		var marker = new BMap.Marker(point);
+		map.addOverlay(marker);
+		var opts = {
+			width : 360, // 信息窗口宽度
+			height :150, // 信息窗口高度
+			title : "<span  style='font-size:16px;color:#ffa000'>案件信息</span>", // 信息窗口标题
+			enableMessage : true
+		//设置允许信息窗发送短息
+		}
+		var infoWindow = new BMap.InfoWindow(
+				 "<div  ><table width='360px;margin-top:10px;'><tr style='font-size:15px;'><td  width='70%' align='left'>案件名称："+item.caseName+" </td></tr>"+
+			     "<tr  style='font-size:15px;'><td  width='70%' align='left'>案发地址："+item.caseAddress+"</td></tr>"+
+			     "<tr  style='font-size:15px;'><td  width='70%' align='left'>案件编号："+item.caseNum+"</td></tr>"+
+				 "</table></div>",opts); 
+		marker.addEventListener("click", function() {
+			map.openInfoWindow(infoWindow, point); //开启信息窗口
+		});
+	}
+	
+	//采用Jquery框架显示隐藏左侧列
+	function SlidLeft()
+	{
+	    var flag = $("#IsHidden").val();
+
+	    if( flag == "0" )
+	    {
+	        $("#boxLeft").toggle(500);
+	        $("#main").animate({left:'0px'});
+	        $("#IsHidden").val("1");
+	        $("#slidbtn").toggleClass( "slidRightBtn");
+	    }
+	    if( flag == "1" )
+	    {
+	        $("#boxLeft").toggle(500);
+	        $("#main").animate({left:'263px'});
+	        $("#IsHidden").val("0");
+	        $("#slidbtn").toggleClass( "slidRightBtn");
+	    }
+	}
+	
+	
+	
+</script>
+
+</body>
+</html>

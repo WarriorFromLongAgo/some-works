@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.LeadershipOverseeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.LeadershipOverseeEntity" id="leadershipOverseeMap">
+        <result property="overseeId" column="oversee_id"/>
+        <result property="overseeTitle" column="oversee_title"/>
+        <result property="overseeContent" column="oversee_content"/>
+        <result property="overseeStatus" column="oversee_status"/>
+        <result property="userId" column="user_id"/>
+        <result property="crtTime" column="crt_time"/>
+        <result property="updTime" column="upd_time"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="recordPath" column="record_path"/>
+        <result property="completeTime" column="complete_time"/>
+        <result property="lowerId" column="lower_id"/>
+    </resultMap>
+<!-- 	查询领导督办接收人列表总数 -->
+	<select id="receptionCount" resultMap="leadershipOverseeMap">
+		select * from tb_leadership_oversee lo where 
+		lo.oversee_id in (select oversee_id from tb_oversee_people where user_id = #{params.userId})
+		<if test="params.title != null and params.title != '' ">
+			lo.oversee_title like concat('%',#{params.title},'%')
+		</if>
+	</select>
+<!-- 	查询领导督办接收人分页列表 -->
+	<select id="receptionList" resultMap="leadershipOverseeMap">
+		select * from tb_leadership_oversee lo where 
+		lo.oversee_id in (select oversee_id from tb_oversee_people where user_id = #{params.userId})
+		<if test="params.title != null and params.title != '' ">
+			lo.oversee_title like concat('%',#{params.title},'%')
+		</if>
+		<if test="params.page != null and params.limit != null">
+			limit #{params.page},#{params.limit}
+		</if>
+	</select>
+<!-- 	保存 -->
+	<insert id="save" parameterType="com.orhonit.modules.generator.entity.LeadershipOverseeEntity">
+	 insert INTO tb_leadership_oversee 
+	 (oversee_id,oversee_title,oversee_content,oversee_status,user_id,crt_time,dept_id,record_path,complete_time,lower_id)
+	 values(#{overseeId},#{overseeTitle},#{overseeContent},#{overseeStatus},#{userId},#{crtTime},#{deptId},#{recordPath},#{completeTime},#{lowerId})
+	</insert>
+
+</mapper>

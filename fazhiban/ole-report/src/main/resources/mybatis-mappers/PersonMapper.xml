@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.ReportPersonDao">
+
+	<!--查询所有区域中各执法主体下的专项检查执法数量-->
+	<select id="getAreaDeptCheck" resultType="com.orhonit.ole.report.dto.PersonDTO">
+		SELECT
+			ba.id areaId,
+			ba.NAME areaName,
+			bd.dept_property deptProperty,
+			COUNT( oec.`id` ) COUNT 
+		FROM
+			ole_base_area ba
+			INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+			LEFT JOIN ole_ef_check_person ecp ON bd.`id` = ecp.`dept_id`
+			LEFT JOIN ole_ef_check oec ON oec.`id` = ecp.`check_id` 
+		WHERE
+			ba.`parent_id` IN ( '15', '17' ) 
+			AND ba.`is_effect` = '1' 
+		GROUP BY
+			ba.NAME
+	</select>
+	
+	<!-- 查询各区域日常检查数量-->
+	<select id="getAreaDeptCheckDaily" resultType="com.orhonit.ole.report.dto.PersonDTO">
+		SELECT
+			ba.id areaId,
+			ba.NAME areaName,
+			bd.dept_property deptProperty,
+			COUNT( ecd.`id` ) count 
+		FROM
+			ole_base_area ba
+			INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+			LEFT JOIN ole_ef_check_daily ecd ON ecd.dept_id = bd.id
+		WHERE
+			ba.`parent_id` IN ( '15', '17' ) 
+			AND ba.`is_effect` = '1' 
+		GROUP BY
+			ba.NAME
+	</select>
+	
+	<select id="getAreaDeptCheckByAreaName" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		<!-- SELECT ba.`name` areaName,bd.`dept_property` deptProperty,COUNT(bdp.`name`) count
+		FROM ole_base_area ba
+		LEFT JOIN ole_base_dept bd ON ba.`id` = bd.`area_id`
+		LEFT JOIN ole_base_dept_person bdp ON bd.`parent_id` = bdp.`dept_id`
+		LEFT JOIN ole_ef_check_daily ecd ON bdp.`ID` = ecd.`person_id` 
+		<where>
+			<if test="params.name != null and params.name != ''">
+				ba.`name` = #{params.name}
+			</if>
+			and bd.dept_property != ""
+		</where>
+		GROUP BY bd.`dept_property` -->
+		
+		SELECT
+			osd.enum_desc as 'name',
+			count(ecd.id) as 'value'
+		FROM
+			ole_base_area ba
+			left join ole_base_dept obd on obd.area_id = ba.id
+			LEFT JOIN ole_ef_check_daily ecd ON ecd.dept_id = obd.id
+			left join ole_sys_dict osd on osd.enum_value = obd.dept_property
+		<where>
+			osd.type_value = '1707' 
+			<if test="params.name != null and params.name != ''">
+				and ba.`name` = #{params.name}
+			</if>
+		</where>
+		GROUP BY
+			osd.enum_desc
+	</select>
+	
+</mapper>

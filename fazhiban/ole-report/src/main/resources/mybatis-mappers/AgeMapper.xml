@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.ReportAgeDao">
+
+	<!-- 年龄分布-->
+	<select id="getBirthday" resultType="com.orhonit.ole.report.dto.age.AgeDTO" >
+		  <![CDATA[select * from (select (case when year(birthday)<=2018 and year(birthday)>=2009 then '1-10'
+		 when year(birthday)<=2008 and year(birthday)>=1999 then '11-20'
+		 when year(birthday)<=1998 and year(birthday)>=1989 then '21-30' 
+		 when year(birthday)<=1988 and year(birthday)>=1979 then '31-40' 
+		 when year(birthday)<=1978 and year(birthday)>=1969 then '41-50'
+		 else '>50' end) as age,count(*) as count
+		 from ole_base_dept_person bdp
+		 where   bdp.del_flag='0' AND bdp.if_effect='1'
+		 group by (case when  year(birthday)<=2018 and year(birthday)>=2009 then '1-10'
+		 when year(birthday)<=2008 and year(birthday)>=1999 then '11-20'
+		 when year(birthday)<=1998 and year(birthday)>=1989 then '21-30' 
+		 when year(birthday)<=1988 and year(birthday)>=1979 then '31-40' 
+		 when year(birthday)<=1978 and year(birthday)>=1969 then '41-50'
+		 else '>50' end)
+		 having count(*)>0) a; ]]> 
+	</select>
+	
+	<!-- 学历分布 -->
+	<select id="getArea1" resultType="com.orhonit.ole.report.dto.edu.EduDTO">
+		SELECT ba.name areaName,COUNT(bdp.political) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id 
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY ba.name
+	</select>
+	
+	<select id="getAreaPost" resultType="com.orhonit.ole.report.dto.edu.EduDTO">
+		SELECT bdp.edu, COUNT(bdp.edu) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id 
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY bdp.edu
+	
+	</select>
+	<!-- 政治面貌-->
+	<select id="getArea2" resultType="com.orhonit.ole.report.dto.political.PoliticalDTO">
+		SELECT ba.name areaName,COUNT(bdp.political) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id 
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY ba.name
+	</select>
+	
+	<select id="getAreaPost2" resultType="com.orhonit.ole.report.dto.political.PoliticalDTO">
+		SELECT bdp.political, COUNT(bdp.political) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id 
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY bdp.political
+	
+	</select>
+	
+	<!--职位分布-->
+	<select id="getArea3" resultType="com.orhonit.ole.report.dto.position.PositionDTO">
+		SELECT ba.name areaName,COUNT(bdp.duty) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id 
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY ba.name
+	</select>
+	<select id="getAreaPost3" resultType="com.orhonit.ole.report.dto.position.PositionDTO">
+		SELECT ba.name areaName,bdp.duty duty,COUNT(bdp.duty) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		<where>
+			<if test="params.name != null and params.name != ''">
+				ba.name = #{params.name}
+			</if>
+		</where>
+		GROUP BY bdp.duty
+	</select>
+		<!--民族分布-->
+	<select id="getArea4" resultType="com.orhonit.ole.report.dto.nation.NationDTO">
+		SELECT ba.name areaName,COUNT(bdp.nation) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id 
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		GROUP BY ba.name
+	</select>
+	<select id="getAreaPost4" resultType="com.orhonit.ole.report.dto.nation.NationDTO">
+		SELECT ba.name areaName,bdp.nation nation,COUNT(bdp.nation) count
+		FROM ole_base_area ba
+		INNER JOIN ole_base_dept bd ON ba.id = bd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON bd.parent_id = bdp.dept_id  
+		and  bdp.del_flag='0' AND bdp.if_effect='1'
+		<where>
+			<if test="params.name != null and params.name != ''">
+				ba.name = #{params.name}
+			</if>
+		</where>
+		GROUP BY bdp.nation
+	</select>
+	
+</mapper>

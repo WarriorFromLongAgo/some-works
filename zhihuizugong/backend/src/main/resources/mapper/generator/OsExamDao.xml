@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.OsExamDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.OsExamEntity" id="osExamMap">
+        <result property="examId" column="exam_id"/>
+        <result property="examDesc" column="exam_desc"/>
+        <result property="examTitle" column="exam_title"/>
+        <result property="libraryId" column="library_id"/>
+        <result property="questionNumber" column="question_number"/>
+        <result property="questionScope" column="question_scope"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="realResult" column="real_result"/>
+        <result property="isRandom" column="is_random"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    
+    <insert id="insertOsExamEntity">
+    INSERT INTO os_exam   (
+     exam_id,
+     exam_desc,
+     exam_title,  
+     library_id,  
+     question_number,  
+     question_scope,
+     start_time, 
+     end_time,
+     real_result, 
+     is_random,
+     create_user_id,
+     create_time,
+     update_time,
+     is_del
+     )VALUES(
+      #{examId},
+      #{examDesc}, 
+      #{examTitle},  
+      #{libraryId},
+      #{questionNumber},
+      #{questionScope},
+      #{startTime},
+      #{endTime},
+      #{realResult},  
+      #{isRandom},
+      #{createUserId},
+      #{createTime},
+      #{updateTime},
+      #{isDel}
+      )
+    </insert>
+    
+    <delete id="deleteOsExam">
+       delete from os_exam where exam_id=#{examId}
+    </delete>
+    
+ 
+</mapper>

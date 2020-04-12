@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.orhonit.modules.generator.dao.CoreOpinionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap
+		type="com.orhonit.modules.generator.entity.CoreOpinionEntity"
+		id="coreOpinionMap">
+		<result column="opinion_id" property="opinionId"/>
+		<result column="opinion" property="opinion"/>
+		<result column="user_id" property="userId"/>
+		<result column="user_name" property="userName"/>
+		<result column="creat_time" property="creatTime"/>
+		<result column="add_id" property="addId"/>
+		<result column="add_name" property="addName"/>
+	</resultMap>
+	<delete id="removeByIds" parameterType="java.util.List">
+		DELETE from core_opinion where id in
+		<foreach collection="list" item="id" open="(" close=")"
+			index="index" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+
+	<insert id="insertOpinion" parameterType="com.orhonit.modules.generator.entity.CoreOpinionEntity">
+		insert into core_opinion
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="opinionId != null">
+				opinion_id,
+			</if>
+			<if test="opinion != null">
+				opinion,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="creatTime != null">
+				creat_time,
+			</if>
+			<if test="addId != null">
+				add_id,
+			</if>
+			<if test="addName != null">
+				add_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="opinionId != null">
+				#{opinionId,jdbcType=VARCHAR},
+			</if>
+			<if test="opinion != null">
+				#{opinion,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="creatTime != null">
+				#{creatTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="addId != null">
+				#{addId,jdbcType=BIGINT},
+			</if>
+			<if test="addName != null">
+				#{addName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

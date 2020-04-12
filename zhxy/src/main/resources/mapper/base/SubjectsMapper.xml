@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.base.mapper.SubjectsMapper">
+
+    <insert id="subjectToGrade"  parameterType="java.util.List">
+        insert into base_subjects_grade_relation(subject_id,grade_id) values
+        <foreach collection="list" separator="," item="map">
+            (#{map.subject_id}, #{map.grade_id})
+        </foreach>
+    </insert>
+    <insert id="subjectToPeriod"  parameterType="java.util.List">
+        insert into base_subject_period_relation(subject_id,period_id) values
+        <foreach collection="list" separator="," item="map">
+            (#{map.subject_id}, #{map.period_id})
+        </foreach>
+    </insert>
+</mapper>

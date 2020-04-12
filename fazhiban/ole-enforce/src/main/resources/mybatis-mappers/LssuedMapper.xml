@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.LssuedDao">
+	<sql id="where">
+		<where>
+			<if test="params.personId != null and params.personId != ''">
+				and CHECK_PERSON.personId = #{params.personId}
+			</if>
+			<if test="params.userDeptId != null and params.userDeptId != ''">
+				and FIND_IN_SET   (CHECK_PERSON.deptId,#{params.userDeptId})
+			</if>
+			<if test="params.checkTitle != null and params.checkTitle != ''">
+				and ck.check_title like concat('%', #{params.checkTitle}, '%')
+			</if>
+			<if test="params.checkObject != null and params.checkObject != ''">
+				and ck.check_object like concat('%', #{params.checkObject}, '%')
+			</if>
+			<if test="params.checkNum != null and params.checkNum != ''">
+				and ck.check_num like concat('%', #{params.checkNum}, '%')
+			</if>
+			<if test="params.status != null and params.status !=''">
+				and ck.status = #{params.status} 
+			</if>
+			<if test="params.checkNum != null and params.checkNum != ''">
+				and ck.check_num like concat('%', #{params.checkNum}, '%')
+			</if>
+		</where>
+	</sql>
+
+	<select id="count" resultType="int">
+	SELECT   COUNT(DISTINCT ck.id) FROM ole_ef_check ck
+		LEFT JOIN ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value = '1501'
+		LEFT JOIN 
+		(SELECT ECP.check_id,ECP.person_id as personId,ECP.dept_id deptId,GROUP_CONCAT( BDP.name) PERSONNAME FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON BDP  
+		WHERE FIND_IN_SET(BDP.ID,ECP.person_id)  GROUP BY CHECK_ID, ECP.dept_id ) CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+		LEFT JOIN ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+		<include refid="where" />
+	</select>
+
+	<select id="list" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+	SELECT
+  ck.id AS id,
+  ck.check_title   AS checkTitle,
+  ck.check_object  AS checkObject,
+  dic.enum_desc    AS STATUS,
+  ck.start_date    AS startDate,
+  ck.end_date      AS endDate,
+  ck.check_num     AS checkNum,
+  ck.check_basis   AS checkBasis,
+  ck.check_content AS checkContent,
+  ck.check_way     AS checkWay,
+  ck.create_by     AS createBy,
+  ck.create_name   AS createName,
+  CHECK_PERSON.deptId AS deptId,
+  bd.name AS deptName,
+ ck.check_num AS checkNum,
+ CHECK_PERSON.PERSONNAME AS personName
+FROM ole_ef_check ck
+LEFT JOIN ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value = '1501'
+LEFT JOIN 
+(SELECT ECP.check_id,ECP.dept_id deptId,ECP.person_id as personId,GROUP_CONCAT( BDP.name) PERSONNAME FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON BDP  
+WHERE FIND_IN_SET(BDP.ID,ECP.person_id)  GROUP BY CHECK_ID, ECP.dept_id ) CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+LEFT JOIN ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+		<include refid="where" />
+		order by ck.create_date desc
+        limit #{start}, #{length}
+	</select>
+	
+	<select id="findLssuedList" resultType="com.orhonit.ole.enforce.dto.api.ApiCaseListDTO">
+			SELECT  check_num as caseNum,
+					check_title as caseName,
+					start_date as caseTime,
+				    dic.enum_desc as caseStatus,
+				    re.road_name as caseAddress,
+				    dp.name as caseFzfryname,
+			   		dp1.name as caseZzfryname
+			FROM ole_ef_check ec
+			LEFT JOIN ole_ef_check_person pn ON pn.check_id=ec.id
+			LEFT JOIN ole_sys_dict dic ON ec.status=dic.enum_value AND dic.type_value='1501'
+			LEFT JOIN ole_ef_check_record re ON re.check_id=ec.id
+			LEFT JOIN ole_base_dept_person dp ON dp.id=re.assist_person_id
+			LEFT JOIN ole_base_dept_person dp1 ON dp1.id=pn.person_id
+			<where>
+					pn.dept_id = #{params.deptId}
+					and (pn.person_id = #{params.personId} 
+			  		or re.assist_person_id= #{params.personId})
+				<if test="params.status != null and params.status != ''">
+					AND ec.status = #{params.status}
+				</if>
+				<if test="params.checkTitle != null and params.checkTitle != ''">
+					AND ec.check_title like concat('%', #{params.checkTitle}, '%')
+				</if>
+				<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 1 ">
+					AND  date(ec.create_date) = curdate()
+				</if>
+				<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 2 ">
+					AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ec.create_date)		
+				</if>
+				<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 3 ">
+					AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ec.create_date)			
+				</if>
+				<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 4 ">
+					AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ec.create_date)			
+				</if>
+				<if test="params.queryDate != null and params.queryDate != '' and params.queryDate == 5  ">
+					AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ec.create_date)	
+				</if>
+				ORDER BY ec.create_date DESC	
+				<if test="params.startNo != null and params.endNo != null">
+					LIMIT #{params.startNo},#{params.endNo}
+				</if>
+			</where>
+			;
+	</select>
+	
+	<select id="findCaseInfo" resultType="com.orhonit.ole.enforce.dto.LssuedDetailInfoDTO">
+		SELECT ck.id AS id,ck.check_title AS checkTitle,ck.check_object AS checkObject,ck.start_date AS startDate,ck.end_date AS endDate,
+		dic.enum_desc AS 'status',ck.check_basis AS checkBasis,ck.check_content AS checkContent,ck.check_way AS checkWay,
+		ck.create_by AS createBy,ck.create_name AS createName,pn.dept_id AS deptId,pn.person_id AS personId,per.name AS personName,dt.name AS deptName,ck.check_num AS checkNum,
+		rd.id AS recordId,rd.assist_person_id  AS assistPersonId,per1.name AS assistPersonName,rd.check_mode AS checkMode,rd.check_mode_id AS checkModeId,
+		rd.check_object_type AS checkObjectType,rd.checked_user_name AS checkedUserName,
+		rd.checked_user_id AS checkedUserId, rd.checked_date AS checkedDate,
+		rd.road_name AS roadName, rd.check_situation AS checkSituation,rd.checked_date as checkDate,
+		rd.unit_name AS unitName, rd.regist_num AS registNum,rd.legal_person AS legalPerson,rd.lng as lng,rd.lat as lat
+		FROM ole_ef_check ck
+		LEFT JOIN ole_ef_check_person pn ON pn.check_id=ck.id		
+		LEFT JOIN ole_base_dept_person per ON per.ID= pn.person_id
+		LEFT JOIN ole_base_dept dt ON dt.id= pn.dept_id
+		LEFT JOIN ole_sys_dict dic ON ck.status=dic.enum_value AND dic.type_value='1501'
+		LEFT JOIN ole_ef_check_record rd ON ck.id=rd.check_id
+		LEFT JOIN ole_base_dept_person per1 ON per1.ID= rd.assist_person_id
+			<where>
+					1=1
+				
+			<if test="params.caseNum != null and params.caseNum != ''">
+				AND ck.check_num = #{params.caseNum}
+			</if>	
+					
+			</where>
+			;
+	</select>
+
+	<select id="getByName" resultType="com.orhonit.ole.enforce.entity.DeptPersonEntity">
+		SELECT 
+		*
+		FROM ole_base_dept_person per
+		LEFT JOIN ole_ef_check_person pn ON pn.person_id=per.ID
+		LEFT JOIN ole_ef_check ck ON pn.check_id=ck.id
+		WHERE ck.id=#{params.id};
+	</select>
+	
+	<select id="getById" resultType="com.orhonit.ole.enforce.dto.DeptPersonDTO">
+		SELECT 
+		 ser.id AS id,
+		 ser.nickname AS name,
+		 ser.person_id AS personId,
+		 ser.dept_id AS deptId
+		FROM ole_sys_user ser
+		WHERE ser.person_id IN( 
+		SELECT pn.person_id FROM ole_ef_check ck 
+		LEFT JOIN ole_ef_check_person pn ON pn.check_id = ck.id 
+		WHERE ck.check_num=#{id}
+		)
+	</select>
+	<select id="findOne" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+			SELECT 
+			ck.id AS id,
+			ck.check_title AS checkTitle,
+			ck.check_object AS checkObject,
+			ck.start_date AS startDate,
+			ck.end_date AS endDate,
+			dic.enum_desc AS STATUS,
+			ck.check_basis AS checkBasis,
+			ck.check_content AS checkContent,
+			ck.check_way AS checkWay,
+			ck.create_name AS createName,
+			pn.dept_id AS deptId,
+			pn.person_id AS personId,
+		 	per.name AS personName,
+			dt.name AS deptName,
+			ck.check_num AS checkNum
+		 	FROM ole_ef_check ck
+		LEFT JOIN ole_ef_check_person pn ON pn.check_id=ck.id
+		LEFT JOIN ole_base_dept_person per ON per.ID= pn.person_id
+		LEFT JOIN ole_base_dept dt ON dt.id= pn.dept_id
+		LEFT JOIN ole_sys_dict dic ON ck.status=dic.enum_value AND dic.type_value='1501'
+		WHERE ck.id=#{params.id}
+	</select>
+	
+	
+	<select id="getLssuedDetailInfo" resultType="com.orhonit.ole.enforce.dto.LssuedDetailInfoDTO">
+		SELECT ck.id AS id,ck.check_title AS checkTitle,ck.check_object AS checkObject,ck.start_date AS startDate,ck.end_date AS endDate,
+		dic.enum_desc AS 'status',ck.check_basis AS checkBasis,ck.check_content AS checkContent,ck.check_way AS checkWay,
+		ck.create_by AS createBy,ck.create_name AS createName,pn.dept_id AS deptId,pn.person_id AS personId,per.name AS personName,dt.name AS deptName,ck.check_num AS checkNum,
+		rd.id AS recordId,rd.assist_person_id  AS assistPersonId,xbr.name assistPersonName,rd.check_mode AS checkMode,rd.check_mode_id AS checkModeId,
+		rd.check_object_type AS checkObjectType,rd.checked_user_name AS checkedUserName,
+		rd.checked_user_id AS checkedUserId, rd.checked_date AS checkedDate,
+		rd.road_name AS roadName, rd.check_situation AS checkSituation,
+		rd.unit_name AS unitName, rd.regist_num AS registNum,rd.legal_person AS legalPerson
+		FROM ole_ef_check ck
+		LEFT JOIN ole_ef_check_person pn ON pn.check_id=ck.id
+		LEFT JOIN ole_base_dept_person per ON per.ID= pn.person_id
+		LEFT JOIN ole_base_dept dt ON dt.id= pn.dept_id
+		LEFT JOIN ole_sys_dict dic ON ck.status=dic.enum_value AND dic.type_value='1501'
+		left join ole_ef_check_record rd on ck.id=rd.check_id
+		LEFT JOIN ole_base_dept_person xbr ON rd.assist_person_id= xbr.id
+		WHERE ck.id=#{checkId}
+	</select>
+	
+	<select id="findByCheckNum" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+		SELECT 	ec.id as id,
+				check_title as checkTitle,
+				sd.enum_desc as caseStatus,
+				ec.status as status
+		FROM ole_ef_check  ec
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = ec.status
+		AND sd.type_value = '1501'
+		WHERE check_num=#{checkNum}
+	</select>
+	
+	 <!-- 根据案件id查询案件的文书 -->
+	<select id="findCheckDoc" resultType="com.orhonit.ole.enforce.dto.CheckDocDTO">
+		SELECT ck.id AS checkId, ck.check_title AS checkTitle,
+		edc.id AS docContentId, edt.name AS templateName,edt.id AS templateId ,osd.`enum_desc` AS checkStatus
+		FROM ole_ef_doc_content edc 
+		LEFT JOIN ole_ef_check ck ON edc.case_id = ck.id 
+		LEFT JOIN ole_ef_doc_template edt ON edt.id = edc.template_id 
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value` = edc.`flow_status` AND osd.`type_value` = '1501'
+		WHERE ck.id=#{checkId}  order by  edc.create_date desc
+	</select>
+	
+	 <!-- 根据主体查询当前主体的所有执法人员 -->
+	<select id="personAll" resultType="com.orhonit.ole.enforce.dto.DeptPersonDTO">
+		SELECT bdp.id AS personId, bdp.name AS personName,obd.name AS deptName,obd.id AS deptId
+		FROM ole_sys_user su 	
+		LEFT JOIN ole_base_dept_person AS bdp ON bdp.ID = su.person_id
+		LEFT JOIN ole_base_dept obd ON obd.id = bdp.dept_id
+		WHERE 
+		su.dept_id = #{dept_id}
+		AND su.status = 1 AND su.id IN ( SELECT userid FROM ole_sys_role_user sru WHERE sru.roleId = '26');
+	</select>
+	
+	<select id="getCaseSourceCheck" resultType="com.orhonit.ole.enforce.dto.LssuedDTO">
+		SELECT 
+		ck.id AS id,
+		ck.check_title AS checkTitle 
+	    FROM ole_ef_check  ck
+	    LEFT JOIN ole_ef_check_person pn ON pn.check_id=ck.id
+		<where>
+		    <if test="deptId != null and deptId != ''">
+				and pn.dept_id = #{deptId}
+			</if>
+			<if test="isRelate != null">
+				and ck.is_relate = #{isRelate}
+			</if>
+			
+			<if test="caseAccept != null">
+				and ck.case_accept = #{caseAccept} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="needDealCount" resultType="com.orhonit.ole.enforce.dto.api.ApiCountDTO">
+		SELECT
+			count(*) as count
+		FROM
+			ACT_RU_TASK
+		WHERE
+			ASSIGNEE_ = #{id}
+		AND PROC_DEF_ID_ LIKE 'proCheck%'
+	</select>
+	
+	<select id="caseCountByStatus" resultType="com.orhonit.ole.enforce.dto.api.ApiCountDTO">	
+		SELECT
+			sd.enum_desc as statusName,
+			count(ec.id) as count
+		FROM ole_ef_check ec
+		LEFT JOIN ole_ef_check_person cp on cp.check_id=ec.id
+		LEFT JOIN ole_ef_check_record cr on cr.check_id=ec.id
+		LEFT JOIN ole_sys_dict sd on ec.status = sd.enum_value and sd.type_value = '1501'
+		<where>
+			1=1
+			<if test="params.status != null and params.status != ''">
+				AND ec.status = #{params.status}
+			</if>
+			<if test="params.deptId != null and params.deptId != ''">
+				AND cp.dept_id = #{params.deptId}
+			</if>
+			<if test="params.coordinator != null and params.coordinator != ''">
+				AND cp.person_id = #{params.coordinator}
+			</if>
+			<if test="params.personId != null and params.personId != ''">
+				AND (cp.person_id = #{params.personId} 
+				or cr.assist_person_id = #{params.personId})
+			</if>
+		</where>	
+	</select>
+</mapper>

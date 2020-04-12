@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="com.orhonit.modules.generator.app.dao.AppOsExamDao">
+      <resultMap type="com.orhonit.modules.generator.app.entity.AppOsExamEntity" id="AppOsExamMap">
+      
+      </resultMap>
+    <!-- 根据试卷编号找试卷信息 -->
+    <select id="selectExamOne" resultMap="AppOsExamMap">
+      SELECT 
+			exam_id AS examId,
+			exam_desc AS examDesc,
+			exam_title AS examTitle,
+			library_id AS libraryId,
+			question_number AS questionNumber,
+			question_scope AS questionScope,
+			start_time AS startTime,
+			end_time AS endTime,
+			real_result AS realResult,
+			is_random AS isRandom,
+			create_user_id AS createUserid,
+			create_time AS createTime
+	   FROM os_exam 
+	   <where>
+	      <if test="paperNo !=null and paperNo !=''">
+	         exam_id=#{paperNo}
+	      </if>
+	   </where>
+    </select>
+    <!--  获取当前可以答题的试卷 -->
+    <select id="getExamNow" resultMap="AppOsExamMap">
+		select * from os_exam e where now() BETWEEN e.start_time and e.end_time and e.is_del='0'
+	</select>
+    
+    
+    
+    
+    </mapper>

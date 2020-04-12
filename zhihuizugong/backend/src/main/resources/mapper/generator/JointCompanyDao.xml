@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+   <mapper namespace="com.orhonit.modules.generator.dao.JointCompanyDao">
+   <!--列表-->
+   <select id="joinList" resultType="com.orhonit.modules.generator.vo.JointCompanyVO">
+     SELECT 
+     a.id,a.sharing_unit,a.fillin_user_id,a.mobile_phone,a.email,a.bonus_points,a.company,a.telephone,a.level,a.post,a.level_time,
+     a.Illegality,a.handle,a.disciplinary_sanctions,a.Impact_period,a.processing,a.situation,a.content,a.question_categories,
+     a.subcategories_of_issues,a.title,a.document_number,a.url,a.wfwg,a.create_time,a.reminder,a.is_del,a.update_time,org.org_name,a.user_id,
+	 ser.user_true_name as fillinName,er.user_true_name as userName 
+      FROM se_joint_company a
+      LEFT JOIN tb_user_org org on a.sharing_unit = org.org_id
+      LEFT JOIN sys_user ser on a.fillin_user_id = ser.user_id
+	  LEFT JOIN sys_user er on a.user_id= er.user_id
+     WHERE 1=1
+       <if test="params.sharingUnit>0">
+        AND a.sharing_unit=#{params.sharingUnit}
+       </if>
+       <if test="params.orgName !=null and params.orgName !=''">
+       AND org.org_name like concat('%',#{params.orgName},'%')
+       </if>
+       <!-- 违纪违法受理情况统计-->
+       <if test="params.Illegal==0">
+       AND a.subcategories_of_issues <![CDATA[ <> ]]> 9
+       </if>
+       <!-- 经济责任设计统计 -->
+       <if test="params.Economics==9">
+       AND a.subcategories_of_issues=#{params.Economics}
+       </if>
+       AND is_del=0
+       ORDER By create_time DESC
+       <if test="params.beginLimit != null and params.limit != null">
+		limit #{params.beginLimit},#{params.limit}
+	   </if>
+   </select>
+   
+   <!-- 单条信息 -->
+   <select id="getOneJoint" resultType="com.orhonit.modules.generator.vo.JointCompanyVO">
+     SELECT 
+     a.id,a.sharing_unit,a.fillin_user_id,a.mobile_phone,a.email,a.bonus_points,a.company,a.telephone,a.level,a.post,a.level_time,
+     a.Illegality,a.handle,a.disciplinary_sanctions,a.Impact_period,a.processing,a.situation,a.content,a.question_categories,
+     a.subcategories_of_issues,a.title,a.document_number,a.url,a.wfwg,a.create_time,a.reminder,a.is_del,a.update_time,org.org_name,a.user_id,
+	 ser.user_true_name as fillinName,er.user_true_name as userName 
+      FROM se_joint_company a
+      LEFT JOIN tb_user_org org on a.sharing_unit = org.org_id
+      LEFT JOIN sys_user ser on a.fillin_user_id = ser.user_id
+	  LEFT JOIN sys_user er on a.user_id= er.user_id
+     WHERE 
+       a.id=#{id}
+       AND is_del=0
+   </select>
+   
+   </mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.nation.mapper.NationCadreMapper">
+	
+
+	<!-- 查询所有民族干部 -->
+	<select id="selectNationCadreAll"  resultType="com.orhonit.modules.nation.entity.NationCadre">
+		select id,name,sex,nation,native_place nativePlace,
+			id_card idCard,politics_status politicsStatus,phone,unit,duty,
+			join_work_time joinWorkTime,take_office_time takeOfficeTime,
+			educational_information educationalInformation,resume,recognition,create_user createUser,
+			create_time createTime 
+		from nation_cadre
+	</select>
+	
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.CoreOpinionReplyDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.CoreOpinionReplyEntity" id="coreOpinionReplyMap">
+        <result property="replyId" column="reply_id"/>
+        <result property="opinionId" column="opinion_id"/>
+        <result property="replyContent" column="reply_content"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="addId" column="add_id"/>
+        <result property="addName" column="add_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+</mapper>

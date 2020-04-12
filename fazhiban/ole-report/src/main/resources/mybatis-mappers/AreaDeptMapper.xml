@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.area.ReportAreaCaseDao">
+
+	<!-- 查询各区域某一年内的案件数量-->
+	<select id="findAreaCaseCount"  resultType="com.orhonit.ole.report.dto.area.ReportAreaDTO">
+		SELECT oba.`name` , COUNT(ec.case_name) COUNT
+		FROM ole_base_area oba
+		LEFT JOIN ole_base_dept obd ON oba.id = obd.area_id 
+		LEFT JOIN ole_ef_case ec ON ec.`dept_id` = obd.`id`
+		WHERE 
+		<if test="params.year != null and params.year != ''">
+				YEAR(ec.case_time) = #{params.year} 
+		</if>
+		and oba.`parent_id` IN ('15','17') AND oba.`is_effect` = '1'
+		GROUP BY oba.`name` 
+	</select>
+	
+	<select id="findAreaLowPersonCount" resultType="com.orhonit.ole.report.dto.area.ReportAreaDTO">
+		SELECT
+			ole_base_area.`name`,
+			COUNT(
+				ole_base_dept_person.`name` 
+			) count
+		FROM
+			ole_base_area
+		LEFT JOIN ole_base_dept  ON ole_base_area.id = ole_base_dept.area_id 
+		LEFT JOIN ole_base_dept_person dp ON ole_base_dept.parent_id = dp.dept_id   and dp.
+		<where>
+			<if test="params.year != null and params.year != ''">
+				YEAR (
+					ole_base_dept_person.create_date
+				) =  #{params.year} 
+			</if>		
+		</where>
+		GROUP BY
+			ole_base_area.`name`
+	</select>
+	
+	<select id="findReconsiderationCount" resultType="com.orhonit.ole.report.dto.area.ReportAreaDTO">
+		SELECT
+			oba.`name`,
+			COUNT(oecd.case_id) count
+		FROM
+			ole_base_area oba
+		LEFT JOIN ole_base_dept obd ON oba.id = obd.area_id
+		LEFT JOIN ole_base_dept_person bdp ON obd.parent_id = bdp.dept_id
+		LEFT JOIN ole_ef_case oec ON oec.case_fzfryid = bdp.ID
+		LEFT JOIN ole_ef_case_deal oecd ON oec.id = oecd.case_id
+		WHERE
+			oba.parent_id IN ('15', '17') AND oba.`is_effect` = '1'
+		<if test="params.year != null and params.year != ''">
+			AND YEAR (oec.case_time) =  #{params.year} 
+		</if>
+		AND oecd.deal_mode = 21
+		GROUP BY
+			oba.`name`
+	</select>
+	
+	
+	<select id="findCaseCountByAreaName" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+		SELECT MONTH(oec.`case_time`) as 'name',COUNT(oec.`case_time`) as 'value'
+		FROM ole_base_area oba
+		LEFT JOIN ole_base_dept obd ON oba.`id` = obd.`area_id`
+		LEFT JOIN ole_ef_case oec ON obd.`id` = oec.`dept_id`
+		WHERE oba.`parent_id` IN ('15','17') AND oba.`is_effect` = '1'
+		<if test="areaName != null and areaName != ''">
+			AND oba.`name` = #{areaName}
+		</if>
+		 <if test="year != null and year != ''">
+		 	AND YEAR(oec.`case_time`) = #{year}
+		 </if>
+		 AND oec.`case_time` != ''
+		GROUP BY MONTH(oec.`case_time`)
+	</select>
+</mapper>

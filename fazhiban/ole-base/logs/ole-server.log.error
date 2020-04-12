@@ -1,0 +1,135 @@
+2017-11-12 11:09:13,350 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ols.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ols.sys.service.SysLogService' in your configuration.
+
+2017-11-12 11:23:40,394 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ols.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ols.sys.service.SysLogService' in your configuration.
+
+2017-11-12 11:24:09,454 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ols.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ols.sys.service.SysLogService' in your configuration.
+
+2017-11-12 11:31:33,426 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ols.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ols.sys.service.SysLogService' in your configuration.
+
+2017-11-12 11:37:10,238 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ole.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ole.sys.service.SysLogService' in your configuration.
+
+2017-11-12 11:38:08,125 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ole.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ole.sys.service.SysLogService' in your configuration.
+
+2017-11-12 12:10:55,622 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ole.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ole.sys.service.SysLogService' in your configuration.
+
+2017-11-12 12:31:54,340 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ole.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ole.sys.service.SysLogService' in your configuration.
+
+2017-11-12 12:35:41,994 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -[LoggingFailureAnalysisReporter.java:42]- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field logService in com.orhonit.ole.server.advice.LogAdvice required a bean of type 'com.orhonit.ole.sys.service.SysLogService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.orhonit.ole.sys.service.SysLogService' in your configuration.
+

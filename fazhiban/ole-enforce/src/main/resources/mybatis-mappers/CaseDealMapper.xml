@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.CaseDealDao">
+	<select id="getCaseDealByCaseId" resultType="com.orhonit.ole.enforce.entity.CaseDealEntity">	
+		SELECT case_status AS caseStatus,GROUP_CONCAT(deal_content ORDER BY create_date DESC SEPARATOR '@#$') AS dealContent ,
+			case_id AS caseId,
+			case_num AS caseNum,
+			deal_mode AS dealMode,
+			create_name AS createName,
+			create_date AS createDate
+			FROM ole_ef_case_deal WHERE case_id = #{caseId} GROUP BY case_status
+	</select>
+</mapper>

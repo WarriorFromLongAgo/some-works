@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		
+			<div class="form-group">
+				
+				<label class="col-md-2 control-label">案件编号<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="id" disabled="disabled" id="id">
+				</div>
+				
+				<label class="col-md-2 control-label">案件名称<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" placeholder="请输入案件名称" type="text" name="caseName" id="caseName"
+						data-bv-notempty="true"
+						data-bv-notempty-message="案件名称为空">
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<label class="col-md-2 control-label">案源<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<select class="form-control" id="caseSource" name="caseSource" onchange="changeCaseSource(this,false)"
+						data-bv-notempty="true"
+						data-bv-notempty-message="案源不能为空">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				
+				<label class="col-md-2 control-label">检查标题<span class="btx">*</span></label>
+					<div class="col-md-4">
+						<select class="form-control" id="checkId" name="checkId" >
+							<option value="">请选择</option>
+						</select>
+					</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">案发地址<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" placeholder="请输入案发地址" type="text" name="caseAddress" id="caseAddress"
+						data-bv-notempty="true"
+						data-bv-notempty-message="案发地址不能为空"/>
+				</div>
+				
+				<label class="col-md-2 control-label">收件时间<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" placeholder="请输入收件时间" type="text" name="caseApplyDate" id="caseApplyDate">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">简要案件内容<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<textarea class="form-control" rows="" cols="" name="briefCaseContent" id="briefCaseContent" placeholder="请输入简要案件内容"
+						data-bv-notempty="true"
+						data-bv-notempty-message="简要案件内容不能为空"></textarea>
+				</div>
+				
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">经办人<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" placeholder="请输入经办人" type="text" name="caseHandler" id="caseHandler" 
+						data-bv-notempty="true"
+						data-bv-notempty-message="经办人不能为空"/>
+				</div>
+				
+				<label class="col-md-2 control-label">执法类别<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<select class="form-control required" id="caseType" name="caseType" id="caseType"
+						data-bv-notempty="true"
+						data-bv-notempty-message="执法类别不能为空">
+						<option value="">请选择</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">指派人<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="caseZpr" id="caseZpr" readonly="readonly"
+						data-bv-notempty="true"
+						data-bv-notempty-message="指派人不能为空"/>
+				</div>
+				
+				<label class="col-md-2 control-label">指派时间<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" placeholder="请输入指派时间" type="text" name="caseTime" id="caseTime">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">主执法人员姓名<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<select class="form-control" id="caseZzfryid" 
+								name="caseZzfryid" onchange="zftySelect(this)">
+						  
+					</select>
+				</div>
+				
+				<label class="col-md-2 control-label">副执法人员姓名<span class="btx">*</span></label>
+				<div class="col-md-4">
+					
+					<select class="form-control" id="caseFzfryid" 
+								name="caseFzfryid" onchange="zftySelect(this)">
+						  
+					</select>
+					<input type="hidden" id="caseStatus" name="caseStatus" value=""/>
+					<input type="hidden" id="caseZzfryname" name="caseZzfryname" value="" />
+					<input type="hidden" id="caseFzfryname" name="caseFzfryname" value="" />
+				</div>
+			</div>
+			
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+					<button class="btn btn-primary" type="submit" onclick="add(11)">
+							<i class="fa fa-save"></i> 暂存
+						</button>
+						<button class="btn btn-primary" type="submit" onclick="add(12)">
+							<i class="fa fa-save"></i> 提交
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>
+	<script src="../../js/moment-with-locales.min.js"></script>  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+    	var checkId;
+    	layui.use(['layer'], function(){
+		    var layer = layui.layer;
+		});
+    	
+    	//设置案源字典列表
+    	getDictList(dict.caseSource,"caseSource");
+	    //执法类别
+    	getDictList(dict.caseType,"caseType");
+	    
+    	$('#caseZzfryid').select2({
+    	  placeholder: '请选择主执法人',
+    	  language: "zh-CN",
+    	});
+    	$('#caseFzfryid').select2({
+      	  placeholder: '请选择副执法人',
+      	  language: "zh-CN",
+      	});
+    	
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			data : $("#form").serialize(),
+			success : function(data) {
+				$("#caseZpr").val(data.nickname);
+			}
+		});
+	    
+	    function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+		}
+	    var id = getQuery('caseId');
+	    
+	    if ( id == null || id == '' ) {
+	    	alert('参数异常.');
+	    	window.location.href = 'caseList.html';
+	    }
+	    
+	    var currentCheckOption = '';
+	    var currentCaseSource = '';
+	    var zzfyData;
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/case/deptPerson',
+			success : function(data) {
+				//console.log(data.data);
+				zzfyData = data.data;
+				$("#caseZzfryid").html(data.data);
+				$("#caseFzfryid").html(data.data);
+				$.ajax({
+					type : 'get',
+					url : '/enforce/case/getCase/' + id,
+					contentType: "application/json; charset=utf-8",  
+					async : false,
+					success : function(data) {
+						if(data.code==-1){
+							alert("请求被拒绝");
+						}else if(data.code==0){
+							data=data.data;
+							console.log(data);
+							$('#id').val(data.id);
+							$('#caseName').val(data.caseName);
+							$('#caseSource').val(data.caseSource);
+							currentCaseSource = data.caseSource;
+							$('#caseAddress').val(data.caseAddress);
+							$('#caseApplyDate').val(data.caseApplyDate);
+							$('#briefCaseContent').val(data.briefCaseContent);
+							$('#caseHandler').val(data.caseHandler);
+							$('#caseType').val(data.caseType);
+							$('#caseTime').val(data.caseTime);
+							$('#caseZzfryid').val(data.caseZzfryid);
+							$('#caseZzfryid').trigger('change');
+							$('#caseFzfryid').val(data.caseFzfryid);
+							$('#caseFzfryid').trigger('change');
+							checkId=data.checkId;
+							changeCaseSource($('#caseSource'), true);
+						}
+							if(!(data.checkId==null||data.checkId=="")){
+								$.ajax({
+									type : 'get',
+									url  : '/enforce/case/findCheckTitle?caseSource='+data.caseSource+'&checkId='+data.checkId,
+									success : function(checkdata) {
+										$('#checkId').val(checkdata.checkTitle);
+										
+										var checkOption = '';
+										checkOption += '<option selected="selected" value = "' + checkId + '">' + checkdata.checkTitle + '</option>';
+										$('#checkId').append(checkOption);
+										currentCheckOption = checkOption;
+									}
+								});
+							}
+					}
+				});
+			}
+		});
+       $('#caseApplyDate').datetimepicker({  
+            format: 'YYYY-MM-DD HH:mm:ss',  
+            locale: moment.locale('zh-cn')  
+        }); 
+        
+        $('#caseTime').datetimepicker({  
+            format: 'YYYY-MM-DD HH:mm:ss',  
+            locale: moment.locale('zh-cn')  
+        }); 
+        
+        $('#form').bootstrapValidator();
+        
+        function add(tmpFlag) {
+        	
+        	$('#tempBtn').removeAttr("disabled");
+        	$('#submitBtn').removeAttr("disabled");
+        	$('#submitBtn').attr("disabled",false); 
+        	
+        	if ($('#caseTime').val() == '') {
+        		alert('案发时间不能为空');
+        		return;
+        	}
+        	
+        	if ($('#caseApplyDate').val() == '') {
+        		alert('收件时间不能为空');
+        		return;
+        	}
+        	
+        	if ($('#caseZzfryid').val() == '') {
+        		alert('请选择主执法人员.');
+        		return;
+        	}
+        	
+        	if ($('#caseFzfryid').val() == '') {
+        		alert('请选择副执法人员.');
+        		return;
+        	}
+        	
+        	
+        	$('#caseStatus').val(tmpFlag);
+        	$('#caseZzfryname').val($("#caseZzfryid").find("option:selected").text());
+		    $('#caseFzfryname').val($("#caseFzfryid").find("option:selected").text());
+        	
+        	var formdata = $("#form").serializeObject();
+        	formdata.id=$('#id').val();
+        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    if ( $('#caseStatus').val() == caseStatus.AJZC) {
+		    	$.ajax({
+    				type : 'post',
+    				url : '/enforce/case/update',
+    				contentType: "application/json; charset=utf-8",  
+    				data : JSON.stringify(formdata),
+    				success : function(data) {
+    					layer.msg("操作成功", {shift: -1, time: 1000}, function(){
+    						window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+	                    });
+    				}
+    			});
+		    } else {
+		    	openInputCommentDialog();
+		    }
+			
+		}
+         // 设置批注信息
+        function openInputCommentDialog()
+        {
+        	
+        	$.confirm({
+        	    title: '案件提交',
+        	    content: '' +
+        	    '<form action="" class="formName">' +
+        	    '<div class="form-group">' +
+        	    '<label>处理意见</label>' +
+        	    '<input type="text" placeholder="请输入处理意见" class="name form-control" required />' +
+        	    '</div>' +
+        	    '</form>',
+        	    buttons: {
+        	        formSubmit: {
+        	            text: '提交',
+        	            btnClass: 'btn-blue',
+        	            action: function () {
+        	                var name = this.$content.find('.name').val();
+        	                
+        	                if(!name){
+        	                	layer.msg('处理意见不能为空.',{anim:6});
+        	                	/* $.alert({
+        					        title: '操作失败.',
+        					        content: '处理意见不能为空.',
+        					        icon: 'fa fa-remove',
+        					        animation: 'zoom',
+        					        closeAnimation: 'zoom',
+        					        buttons: {
+        					            okay: {
+        					                text: '确认',
+        					                btnClass: 'btn-blue',
+        					                action: function(){
+        					    			}
+        					            }
+        					        }
+        						}); */
+        	                    return false;
+        	                }
+        	                
+        	                $('#comment').val(name);
+        	                var formdata = $("#form").serializeObject();
+        	                formdata.comment = name;
+        	                formdata.id=$('#id').val();
+        	                $.ajax({
+        	    				type : 'post',
+        	    				url : '/enforce/case/save',
+        	    				contentType: "application/json; charset=utf-8",  
+        	    				data : JSON.stringify(formdata),
+        	    				success : function(data) {
+        	    					layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+        	    						window.parent.example.ajax.reload();
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);
+				                    });
+        	    				}
+        	    			});
+        	            }
+        	        },
+        	        cancel: {
+        	        	text : '取消'
+        	            //close
+        	        },
+        	    },
+        	    onContentReady: function () {
+        	        var jc = this;
+        	        this.$content.find('form').on('submit', function (e) {
+        	            e.preventDefault();
+        	            jc.$$formSubmit.trigger('click'); // reference the button and click it
+        	        });
+        	    }
+        	});
+        }
+         
+         //////////ywh
+         
+         
+         function zftySelect(obj) {
+			var zzfryid = $('#caseZzfryid').val();
+			var fzfryid = $('#caseFzfryid').val();
+			if (zzfryid == fzfryid) {
+				layer.msg('主执法人员和副执法人员不能选同一个人.', {anim:6});
+				$(obj).val('');
+				$(obj).attr("title", "");
+				$(obj).empty();
+				$(obj).html(zzfyData);
+				
+			}
+			
+		}
+         
+         
+         
+         /////////
+         
+        function changeCaseSource(obj, isInit) {
+        	
+        	if (isInit) {
+        		if ( $(obj).val() == '5' || $(obj).val() == '6') {
+    				$.ajax({
+    					type : 'get',
+    					url : '/enforce/case/getCheckIdsByType/' + $(obj).val(),
+    					success : function(data) {
+    						console.data;
+    						var checkData = data.data;
+    						if ( checkData != null && checkData != '' && checkData.length > 0 ) {
+    							$('#checkId').removeAttr("disabled");
+    							var checkOption = '';
+    							checkOption += '<option value = "">请选择</option>';
+    							for( var i = 0 ; i < checkData.length ; i ++ ) {
+    								checkOption += '<option value = "' + checkData[i].id + '">' + checkData[i].checkTitle + '</option>';
+    							}
+    							$('#checkId').html(checkOption);
+    						}
+    					}
+    				});
+    			} else {
+    				$('#checkId').attr("disabled","disabled");
+    				$('#checkId').val('');
+    			}
+        	} else {
+        		if ( $(obj).val() == '5' || $(obj).val() == '6') {
+    				$.ajax({
+    					type : 'get',
+    					url : '/enforce/case/getCheckIdsByType/' + $(obj).val(),
+    					success : function(data) {
+    						console.data;
+    						var checkData = data.data;
+    						if ( checkData != null && checkData != '' && checkData.length > 0 ) {
+    							$('#checkId').removeAttr("disabled");
+    							var checkOption = '';
+    							checkOption += '<option value = "">请选择</option>';
+    							for( var i = 0 ; i < checkData.length ; i ++ ) {
+    								checkOption += '<option value = "' + checkData[i].id + '">' + checkData[i].checkTitle + '</option>';
+    							}
+    							if ( currentCaseSource == $(obj).val()) {
+    								checkOption += currentCheckOption;
+    							}
+    							$('#checkId').html(checkOption);
+    						}
+    					}
+    				});
+    			} else {
+    				$('#checkId').attr("disabled","disabled");
+    				$('#checkId').val('');
+    			}
+        	}
+        	
+			
+		}
+        
+        
+    </script>
+</body>
+</html>

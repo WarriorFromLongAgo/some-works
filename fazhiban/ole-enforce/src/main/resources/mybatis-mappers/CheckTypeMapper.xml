@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.CheckTypeDao">
+	<!--检查类型列表 -->
+	<select id="getCheckTypeList" resultType="com.orhonit.ole.enforce.entity.CheckTypeEntity">
+		select t.id,t.title,t.sort,t.create_name as createName,
+		sd.enum_desc as isEffect,t.create_date as createData,d.name as deptName 
+		from ole_ef_check_type t
+		left join ole_base_dept d on d.id = t.dept_id
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = t.is_effect and sd.type_value = '1709' 
+		<where>
+			t.del_flag='0'
+			<if test="params.title != null and params.title != ''">
+				and t.title like concat('%', #{params.title}, '%')
+			</if>
+			<if test="params.deptId != null and params.deptId != ''">
+				and FIND_IN_SET(d.id,getBaseDeptByParentId(#{params.deptId}))
+			</if>
+		</where>
+		order by t.sort asc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length}
+		</if>
+		;
+	</select>
+	
+	<!-- 检查类型查询总数-->
+	<select id="getCheckTypeCount" resultType="int">
+		SELECT  count(*) 
+		FROM ole_ef_check_type 
+		<where>
+			del_flag='0'
+			<if test="params.title != null and params.title != ''">
+				and title like concat('%', #{params.title}, '%')
+			</if>
+			<if test="params.deptId != null and params.deptId != ''">
+				and  FIND_IN_SET(dept_id,getBaseDeptByParentId(#{params.deptId}))
+			</if>
+		</where>
+		;	
+	</select>
+	
+	<!-- 修改检查类型 -->
+	<update id="update">
+		update ole_ef_check_type
+		<set>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="sort != null">
+				sort = #{sort},
+			</if>
+			<if test="deptId != null">
+				dept_id = #{deptId},
+			</if>
+			<if test="isEffect != null">
+				is_effect = #{isEffect},
+			</if>
+			update_name = #{updateName},
+			update_by = #{updateBy},
+			update_date = #{updateDate}
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!-- 删除检查类型 -->
+	<update id="delete">
+		update ole_ef_check_type
+		<set>			
+			del_flag = '1',	
+			update_name = #{updateName},
+			update_by = #{updateBy},
+			update_date = #{updateDate}
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!-- 根据ID查询 -->
+	<select id="finCheckTypeById" resultType="com.orhonit.ole.enforce.entity.CheckTypeEntity">
+		select t.id,t.title,t.sort,t.create_name as createName,t.create_date as createData,t.dept_id as deptId,
+		d.name as deptName,t.is_effect as isEffect
+		from ole_ef_check_type t
+		left join ole_base_dept d on d.id = t.dept_id
+		where t.del_flag = '0' 
+			  and t.id=#{id}
+	</select>
+	
+	<select id="checkTypeByDeotIdEntity" resultType="com.orhonit.ole.enforce.entity.CheckTypeEntity">
+	
+		SELECT
+			oect.id id,
+			oect.title title,
+			oect.sort sort,
+			oect.dept_id deptId,
+			d.name deptName
+		FROM
+			ole_ef_check_type oect
+			left join ole_base_dept d on d.id = oect.dept_id
+		WHERE
+			oect.del_flag = '0' 
+			and oect.is_effect='1'
+			and oect.dept_id=#{deptID} 
+	
+	</select>
+	
+</mapper>

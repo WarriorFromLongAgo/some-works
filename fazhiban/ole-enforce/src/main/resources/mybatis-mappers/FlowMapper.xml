@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.FlowDao">
+
+	<select id="getUserTask" resultType="com.orhonit.ole.enforce.dto.TaskDTO">
+		SELECT 
+			RES.ID_ taskId, 
+			res.PROC_DEF_ID_ procDefId, 
+			res.NAME_ taskName, 
+			res.PROC_INST_ID_ procInstId, 
+			re.BUSINESS_KEY_ businessId, 
+			res.ASSIGNEE_ currentUser, 
+			res.TASK_DEF_KEY_ currentTaskKey, 
+			res.CREATE_TIME_ taskCreateTime
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+		WHERE RES.ASSIGNEE_ = #{assignee}
+		ORDER BY RES.CREATE_TIME_ DESC 
+		<if test="start != null and length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	<select id="getUserTaskat" resultType="com.orhonit.ole.enforce.dto.TaskDTO">
+		SELECT
+			RES.ID_ taskId,
+			res.PROC_DEF_ID_ procDefId,
+			res.NAME_ taskName,
+			res.PROC_INST_ID_ procInstId,
+			re.BUSINESS_KEY_ businessId,
+			res.ASSIGNEE_ currentUser,
+			res.TASK_DEF_KEY_ currentTaskKey,
+			res.CREATE_TIME_ taskCreateTime
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+		WHERE RES.ASSIGNEE_ = #{assignee}
+		<if test="type != null and type == 'check' ">
+			AND NOT res.PROC_DEF_ID_ LIKE "case%"
+		</if>
+		<if test="type != null and type == 'case' ">
+			AND res.PROC_DEF_ID_ LIKE "case%"
+		</if>
+		ORDER BY RES.CREATE_TIME_ DESC
+		<if test="start != null and length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+
+	<select id="getCaseTask" resultType="com.orhonit.ole.enforce.dto.api.ApiCaseTaskDTO">
+		SELECT 
+			ec.id id,
+			ec.case_name caseName,
+			sd.enum_desc as caseSource,
+			ec.case_time caseTime,
+			res.NAME_ caseStatus, 
+			ec.case_address caseAddress,
+			re.BUSINESS_KEY_ caseNum ,
+			sd2.enum_desc AS flowType,
+			ec.case_zzfryname caseZzfryname,
+			ec.case_fzfryname caseFzfryname
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+			LEFT JOIN ole_ef_case ec ON re.BUSINESS_KEY_ =ec.case_num
+			LEFT JOIN  ole_sys_dict sd on ec.case_source=sd.enum_value and sd.type_value='1002'
+			LEFT JOIN ole_sys_dict sd2 on ec.flow_type=sd2.enum_value and sd2.type_value="1802"
+		WHERE RES.ASSIGNEE_ = #{params.userId}
+		AND res.PROC_DEF_ID_ like 'case%'
+		<if test="params.caseStatus != null and params.caseStatus != ''">
+			and res.NAME_ = #{params.caseStatus}
+		</if>	
+		<if test="params.flowType != null and params.flowType != ''">
+			and ec.flow_type = #{params.flowType}
+		</if>
+		<if test="params.caseName != null and params.caseName != ''">
+			and ec.case_name like concat('%', #{params.caseName}, '%')
+		</if>
+		<if test="params.queryDate == 1 ">
+			AND  date(ec.create_date) = curdate()
+		</if>
+		<if test="params.queryDate == 2 ">
+			AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ec.create_date)		
+		</if>
+		<if test="params.queryDate == 3 ">
+			AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ec.create_date)			
+		</if>
+		<if test="params.queryDate == 4 ">
+			AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ec.create_date)			
+		</if>
+		<if test="params.queryDate == 5 ">
+			AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ec.create_date)	
+		</if>
+		order by ec.create_date desc
+		<if test="start != null and length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<select id="getCheckTask" resultType="com.orhonit.ole.enforce.dto.api.ApiCheckTaskDTO">
+		SELECT 
+			ec.id id,
+			ec.check_title checkTitle,
+			ec.start_date checkData,
+			res.NAME_ checkStatus, 
+			re.BUSINESS_KEY_ checkNum,
+			dp.name assistPerson,
+			dp1.name person,
+			cr.road_name roadName
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+			LEFT JOIN ole_ef_check ec ON re.BUSINESS_KEY_ =ec.check_num
+			LEFT JOIN ole_ef_check_record cr ON cr.check_id=ec.id
+			LEFT JOIN ole_ef_check_person cp ON cp.check_id=ec.id
+			LEFT JOIN ole_base_dept_person dp on dp.id=cr.assist_person_id
+			LEFT JOIN ole_base_dept_person dp1 on dp1.id=cp.person_id
+		WHERE RES.ASSIGNEE_ = #{params.userId}
+		AND res.PROC_DEF_ID_ like 'proCheck%'
+		<if test="params.checkTitle != null and params.checkTitle != ''">
+			and ec.check_title like concat('%', #{params.checkTitle}, '%')
+		</if>
+		<if test="params.checkStatus != null and params.checkStatus != ''">
+			and res.NAME_ like concat('%',#{params.checkStatus}, '%')
+		</if>
+		<if test="params.queryDate == 1 ">
+			AND  date(ec.create_date) = curdate()
+		</if>
+		<if test="params.queryDate == 2 ">
+			AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ec.create_date)		
+		</if>
+		<if test="params.queryDate == 3 ">
+			AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ec.create_date)			
+		</if>
+		<if test="params.queryDate == 4 ">
+			AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ec.create_date)			
+		</if>
+		<if test="params.queryDate == 5 ">
+			AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ec.create_date)	
+		</if>
+		order by ec.create_date desc
+		<if test="start != null and length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<select id="getCheckDailyTask" resultType="com.orhonit.ole.enforce.dto.api.ApiCheckTaskDTO">
+		SELECT 
+			ec.id id,
+			ec.check_title checkTitle,
+			ec.checked_date checkData,
+			res.NAME_ checkStatus, 
+			re.BUSINESS_KEY_ checkNum,
+			ec.road_name roadName,
+			dp.name person,
+			dp1.name assistPerson
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+			LEFT JOIN ole_ef_check_daily ec ON re.BUSINESS_KEY_ =ec.check_num
+			LEFT JOIN ole_base_dept_person dp ON dp.id=ec.person_id 
+			LEFT JOIN ole_base_dept_person dp1 ON dp1.id=ec.assist_person_id
+		WHERE RES.ASSIGNEE_ = #{params.userId}
+		AND res.PROC_DEF_ID_ like 'dayCheck%'
+		<if test="params.checkTitle != null and params.checkTitle != ''">
+			and ec.check_title like concat('%', #{params.checkTitle}, '%')
+		</if>
+		<if test="params.checkStatus != null and params.checkStatus != ''">
+			and res.NAME_ like concat('%',#{params.checkStatus}, '%')
+		</if>
+		<if test="params.queryDate == 1 ">
+			AND  date(ec.create_date) = curdate()
+		</if>
+		<if test="params.queryDate == 2 ">
+			AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ec.create_date)		
+		</if>
+		<if test="params.queryDate == 3 ">
+			AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ec.create_date)			
+		</if>
+		<if test="params.queryDate == 4 ">
+			AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ec.create_date)			
+		</if>
+		<if test="params.queryDate == 5 ">
+			AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ec.create_date)	
+		</if>
+		order by ec.create_date desc
+		<if test="start != null and length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<select id="getHaveRoleOpinionByDeptId" resultType="com.orhonit.ole.enforce.dto.NextOpinionDTO">
+		SELECT 
+			su.id AS userId, 
+			su.username AS userName, 
+			su.nickname AS nickName 
+		FROM ole_sys_user su 
+		WHERE su.dept_id = #{deptId} 
+		<if test="roleId != null">
+			AND su.id  IN ( SELECT sru.userId FROM ole_sys_role_user sru WHERE sru.roleId = #{roleId}  )
+		</if>
+			
+	</select>
+	
+	<select id="getHaveRoleOpinionByDeptIdForFZB" resultType="com.orhonit.ole.enforce.dto.NextOpinionDTO">
+		SELECT 
+			su.id AS userId, 
+			su.username AS userName, 
+			su.nickname AS nickName 
+		FROM ole_sys_user su 
+		WHERE su.dept_id IN (
+			SELECT id FROM ole_base_dept WHERE area_id IN (
+				SELECT area_id FROM ole_base_dept WHERE id = #{deptId}) 
+			AND law_type = '2' AND dept_property = '3') 
+		<if test="roleId != null">
+			AND su.id  IN ( SELECT sru.userId FROM ole_sys_role_user sru WHERE sru.roleId = #{roleId}  )
+		</if>
+			
+	</select>
+
+	<select id="findTaskIdBycaseNum" resultType="String">
+		SELECT 
+			MAX(ID_) AS taskid 
+		FROM act_hi_taskinst  
+		WHERE PROC_INST_ID_ = 
+			(SELECT PROC_INST_ID_ 
+			FROM act_hi_procinst 
+			WHERE BUSINESS_KEY_ = #{caseNum})
+	</select>
+	
+	<select id="getCommentByBusikeyAndTaskName" resultType="com.orhonit.ole.enforce.dto.FlowCommentDTO">
+		SELECT hc.USER_ID_ user, hc.TASK_ID_ taskId, hc.MESSAGE_ message, hc.TIME_ time   FROM act_hi_comment hc
+			LEFT JOIN act_hi_procinst hp ON hp.PROC_INST_ID_ = hc.PROC_INST_ID_
+			LEFT JOIN act_hi_taskinst ht ON ht.PROC_INST_ID_ = hc.PROC_INST_ID_
+		WHERE hp.BUSINESS_KEY_ = #{busikey} AND hc.TASK_ID_ = ht.ID_
+		AND ht.NAME_ = #{taskName} 
+		ORDER BY hc.time_ DESC;
+	</select>
+	
+	<select id="getHisCommentByProcInstId" resultType="com.orhonit.ole.enforce.dto.FlowTaskCommentDTO">
+		SELECT IFNULL(SU.nickname,IF(ISNULL(EPI.name),EPI.unit_name,epi.name)) user, hc.TIME_ time, hc.MESSAGE_ msg , ht.NAME_ taskName
+		FROM act_hi_comment hc 
+			LEFT JOIN act_hi_taskinst ht ON hc.PROC_INST_ID_ = hc.PROC_INST_ID_ AND hc.USER_ID_ = ht.ASSIGNEE_ AND hc.TASK_ID_ = ht.ID_
+			LEFT JOIN OLE_SYS_USER SU ON SU.id = HC.USER_ID_
+			LEFT JOIN OLE_EF_PARTY_INFO EPI ON EPI.ID = HC.USER_ID_
+		WHERE hc.PROC_INST_ID_ = #{pid} ORDER BY hc.TIME_ DESC;
+	</select>
+	
+	<select id="getPcCheckTask" resultType="com.orhonit.ole.enforce.entity.LssuedEntity">
+		SELECT 
+			ec.id as id,
+			ec.check_title as checkTitle,
+			res.NAME_ as status, 
+			re.BUSINESS_KEY_ as checkNum,
+			ec.check_basis as checkBasis,
+			ec.check_object as checkObject,
+			ec.start_date as startDate,
+			ec.end_date as endDate,
+			d.name as deptName,
+			dp.name as personName
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+			LEFT JOIN ole_ef_check ec ON re.BUSINESS_KEY_ =ec.check_num
+			LEFT JOIN ole_ef_check_person cp on cp.check_id=ec.id
+			LEFT JOIN ole_base_dept d on d.id=cp.dept_id
+			LEFT JOIN ole_base_dept_person dp on dp.id=cp.person_id
+		<where>
+			RES.ASSIGNEE_ = #{params.userId}
+			AND res.PROC_DEF_ID_ like 'proCheck%'
+			<if test="params.status != null and params.status != ''">
+				and res.NAME_ like concat('%', #{params.status}, '%')
+			</if>
+			<if test="params.checkTitle != null and params.checkTitle != ''">
+				and ec.check_title like concat('%', #{params.checkTitle}, '%')
+			</if>
+			<if test="params.checkObject != null and params.checkObject != ''">
+				and ec.check_object like concat('%', #{params.checkObject}, '%')
+			</if>
+			<if test="params.checkNum != null and params.checkNum != ''">
+				and ec.check_num like concat('%', #{params.checkNum}, '%')
+			</if>
+			order by ec.create_date desc
+			<if test="start != null and length !=null">
+				limit #{start}, #{length};
+			</if>
+		</where> 	
+	</select>
+	
+	<select id="getPcCheckcount" resultType="int">
+		SELECT 
+			 COUNT(DISTINCT ec.id)
+		FROM ACT_RU_TASK RES
+			LEFT JOIN act_ru_execution re ON re.ID_ = RES.PROC_INST_ID_
+			LEFT JOIN ole_ef_check ec ON re.BUSINESS_KEY_ =ec.check_num
+			LEFT JOIN ole_ef_check_person cp on cp.check_id=ec.id
+			LEFT JOIN ole_base_dept d on d.id=cp.dept_id
+			LEFT JOIN ole_base_dept_person dp on dp.id=cp.person_id
+		<where>
+			RES.ASSIGNEE_ = #{params.userId}
+			AND res.PROC_DEF_ID_ like 'proCheck%'
+			<if test="params.status != null and params.status != ''">
+				and res.NAME_ like concat('%', #{params.status}, '%')
+			</if>
+			<if test="params.checkTitle != null and params.checkTitle != ''">
+				and ec.check_title like concat('%', #{params.checkTitle}, '%')
+			</if>
+			<if test="params.checkObject != null and params.checkObject != ''">
+				and ec.check_object like concat('%', #{params.checkObject}, '%')
+			</if>
+			<if test="params.checkNum != null and params.checkNum != ''">
+				and ec.check_num like concat('%', #{params.checkNum}, '%')
+			</if>
+		</where> 
+		
+	</select>
+	
+	<select id="getPersonByDeptId" resultType="com.orhonit.ole.enforce.dto.api.ApiCaseDealDTO">
+		SELECT id as id,
+		name as userName
+		FROM ole_base_dept_person WHERE dept_id=#{deptId};
+	</select>
+</mapper>

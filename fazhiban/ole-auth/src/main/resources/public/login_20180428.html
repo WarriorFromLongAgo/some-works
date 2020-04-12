@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>呼和浩特市行政执法监督平台</title>
+<link href="css/style_ole.css" rel="stylesheet" type="text/css" />
+<!-- Basic Styles -->
+<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body onkeydown="_key()"> 
+    <div class="login-warp">
+        <!--动画-->
+        <div class="pulse pulse-1"></div>  
+        <div class="pulse pulse-2"></div>
+        <div class="pulse pulse-3"></div>
+        <div class="pulse pulse-4"></div>
+        <div class="pulse pulse-5"></div>
+        <div class="pulse pulse-6"></div>
+        <div class="pulse pulse-7"></div>
+        <div class="pulse pulse-8"></div>
+        <div class="pulse pulse-9"></div>
+        <!--登陆内容-->
+                                    
+     <form id="login-form"   method="post" onsubmit="return false;">
+        <div class="login-content">
+            <img src="img/login/login-heading.png" width="600" height="120" />
+            <div class="login-info">
+                <div class="input-field">
+                    <input type="text" name="username"  id="username"  placeholder="请输入用户名" class="input-login f-l" />
+                    <input type="password" name="password"  id="password"   placeholder="请输入密码" class="input-login password-img f-l" />
+                    <div class="input-group">
+	                    <input type="text"  id="verifyCode" name="verifyCode" class="input-login f-l"  placeholder="验证码" />
+	                    <span class="input-group-btn">
+	                        <img  src="/auth/captcha" style="width:120px;height:40px; margin-bottom: 15px; margin-left: 5px;" title="如果看不清楚,请单击图片刷新!"   id="kaptcha" onclick="refreshCode()" />
+	                    </span>
+               	 	</div>
+                </div>
+                <button class="btn-1 f-r" type="button" id="submitBtn"  onclick="login(this)">登 录</button>
+            </div>
+        </div>
+        </form>
+        <div class="banner"><img src="img/login/login-banner.png" width="307" height="385" /></div>
+    </div>
+    <!--底部-->
+    <div class="footer">
+		<div class="col-md-12 column">
+			<div id="footer">
+				<div class="footerNav">
+					 <a rel="nofollow" href="#">关于我们</a> | <a rel="nofollow" href="#">服务条款</a> | <a rel="nofollow" href="#">免责声明</a> | <a rel="nofollow" href="#">联系我们</a>
+				</div>
+				<div class="copyRight">
+					Copyright ©2010-2017  呼和浩特市法制办 版权所有
+				</div>
+			</div>
+		</div>
+	</div></div> 
+	
+</body>
+ <script src="js/libs/jquery-2.1.1.min.js"></script>
+ <script src="js/bootstrap/bootstrap.min.js"></script>
+<script src="js/common.js"></script>
+<script type="text/javascript">
+		    $("#kaptcha").trigger('click');
+			
+			function refreshCode() {
+				var src = '/auth/captcha?datetime=' + new Date().getTime();
+				$("#kaptcha").attr("src", src);
+			}
+
+	       /*  if(top != self) {
+	        	parent.location.href='/auth/login.html';
+	        } */
+            /* var user = loginInfo();
+            if(user != ""){
+                location.href='/auth/';
+            } */
+            function login(obj){
+                $(obj).attr("disabled",true);
+                var verifyCode = $.trim($('#verifyCode').val());
+                if ( verifyCode == "" ) {
+                	alert('验证码不能为空');
+                	$(obj).attr("disabled",false);
+                	return;
+                }
+                var username = $.trim($('#username').val());
+                var password = $.trim($('#password').val());
+                if (username == "" || password == "") {
+                    alert('用户名或者密码不能为空');
+                    $(obj).attr("disabled",false);
+                } else {
+                    $.ajax({
+                        type : 'post',
+                        url : '/auth/sys/login',
+                        data:$("#login-form").serialize(),
+                        success : function(){
+                            location.href='/auth/portal.html';
+                        },
+                        error: function(xhr,textStatus,errorThrown){
+                            var msg = xhr.responseText;
+                            var response = JSON.parse(msg);
+                            alert(response.message);
+                            $("#info").html(response.message);
+                            $(obj).attr("disabled",false);
+                            refreshCode();
+                        }
+                    });
+                }
+            }
+            
+            function clickEnter(){
+           		$('#submitBtn').click();
+           	} 
+            
+           	function _key() { 
+            	if(event.keyCode ==13) {
+            		clickEnter(); 
+            	}
+           	} 
+        </script>
+</html>

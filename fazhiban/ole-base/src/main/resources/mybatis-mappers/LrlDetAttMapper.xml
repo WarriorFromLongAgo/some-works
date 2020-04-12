@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.server.dao.LrlDetAttDao">
+
+	<resultMap id="BaseResultMap" type="LrlDetAtt">
+		<id column="id" property="id" />
+		<result column="id" property="id" />
+		<result column="item_code" property="item_code" />
+		<result column="law_id" property="law_id" />
+		<result column="parent_id" property="parent_id" />
+		<result column="item_content" property="item_content" />
+		<result column="item_name" property="item_name" />
+		<result column="item_des" property="item_des" />
+		<result column="item_explain" property="item_explain" />
+		<result column="remarks" property="remarks" />
+		<result column="del_flag" property="del_flag" />
+		<result column="version" property="version" />
+		<result column="publish_date" property="publish_date" />
+		<result column="effect_date" property="effect_date" />
+		<result column="use_times" property="use_times" />
+		<result column="create_by" property="create_by" />
+		<result column="create_date" property="create_date" />
+		<result column="update_by" property="update_by" />
+		<result column="update_date" property="update_date" />
+		<result column="create_name" property="create_name" />
+		<result column="update_name" property="update_name" />
+		<result column="mgl_item_name" property="mgl_item_name" />
+		<result column="mgl_item_content" property="mgl_item_content" />
+		<result column="mgl_item_des" property="mgl_item_des" />
+		<result column="mgl_item_explain" property="mgl_item_explain" />
+		<result column="mgl_remarks" property="mgl_remarks" />
+		<result column="mgl_create_name" property="mgl_create_name" />
+		<result column="mgl_update_name" property="mgl_update_name" />
+		<association property="lrlAtt" javaType="LrlAtt">
+			<result property="name" column="name" />
+		</association>
+	</resultMap>
+
+	<sql id="where">
+		<where>
+			<if test="params.id != null and params.id != ''">
+				and t.law_id = #{params.id}
+			</if>
+		</where>
+	</sql>
+
+	<select id="count" resultType="int">
+		select count(1) from ole_base_law_item t left join ole_base_law_category
+		u on
+		u.id = t.law_id
+		<include refid="where" />
+	</select>
+
+	<select id="list" resultMap="BaseResultMap">
+		select t.*, u.name from ole_base_law_item t left join ole_base_law_category
+		u on
+		u.id = t.law_id
+		<include refid="where" />
+		${params.orderBy}
+		<if test="start != null and start >= 0 and length != null and length >= 0">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+</mapper>
+

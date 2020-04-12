@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset style="margin-top:20px;">
+			<div class="form-group">
+				<label class="col-md-2 control-label">星级</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" name="star" id="star" readonly="readonly"/>
+				</div>
+				<label class="col-md-2 control-label">案件/检查名称</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" name="recordTitle" id="recordTitle">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">预警类型</label>
+				<div class="col-md-4" >
+					<input class="form-control" type="text" readonly="readonly" id="warnType" />
+				</div>	
+				<label class="col-md-2 control-label">预警指标</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" readonly="readonly" id="type" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">预警级别</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="level">
+				</div>
+				<label class="col-md-2 control-label">创建时间</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="createDate">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">定时任务编号</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="taskId">
+				</div>
+				<label class="col-md-2 control-label">记录编号</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" name="recordCode" id="recordCode">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">预警内容</label>
+				<div class="col-md-10">
+					<textarea  class="form-control"  style="overflow-x:hidden"  rows="3"   cols="" readonly="readonly" id="content" >
+					
+					</textarea>
+				</div>
+				
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">处理情况</label>
+				<div class="layui-tab layui-tab-card col-md-10">
+				  <ul class="layui-tab-title" id='personName'>
+				  </ul>
+				  <div class="layui-tab-content"  id='personOther' style="height: 100%;">
+				    
+				  </div>
+				</div>
+				
+			</div>
+			
+		</fieldset>
+		<div class="form-actions">
+			<div class="row" align="center">
+				<div class="col-md-12">
+					<button class="btn btn-primary" type="submit" onclick="backToList();">
+						<i class="fa fa-save"></i> 返回
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.all.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+
+    	var caseNum = '';
+	    var warnId = getQuery('warnId');
+
+	    //根据id获取信息
+	    $.ajax({
+			type : 'get',
+			url : '/tts/warn/query/' + warnId,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if ( data.code == '0') {
+					var warnInfo = data.data;
+					$('#star').val(new Array( parseInt(warnInfo.star) + 1 ).join( '★' ));
+					$('#level').val(warnInfo.level);
+					$('#content').val(warnInfo.content);
+					$('#createDate').val(warnInfo.createDate);
+                    $('#type').val(warnInfo.type);
+					$('#recordCode').val(warnInfo.recordCode);
+					$('#recordTitle').val(warnInfo.recordTitle);
+					$('#warnType').val(warnInfo.warnType);
+					$('#taskId').val(warnInfo.taskId);
+				}
+			}
+		});
+	    
+	  	//根据id获取信息
+	    $.ajax({
+			type : 'get',
+			url : '/tts/warn/query/person/' + warnId,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if ( data.code == '0') {
+					data = data.data;
+					for(var i=0;i<data.length;i++){
+						if(data[i].isDeal == '已处理'){
+							color = 'style="color:green;"';
+						}else if(data[i].isDeal == '未处理'){
+							color = 'style="color:red;"';
+						}
+						//<span class="layui-badge-dot"></span>
+						var d = '<span class="layui-badge-dot"></span>';
+						if(data[i].isRead != '1'){
+							d = '';
+						}
+						if(i==0){
+							$('#personName').append('<li onclick="isRead($(this),\''+data[i].personId+'\')" '+color+' class="layui-this">'+data[i].personName+d+'</li>');
+							$('#personOther').append('<div class="layui-tab-item layui-show">'+
+					    	'<p><label>部门：</label><label>'+data[i].deptName+'</label>'+
+					    	'<label style="margin-left:20px;">是否处理：</label><label '+color+'>'+data[i].isDeal+'</label></p>'+
+					    	'<label>处理结果：</label><span>'+(typeof(data[i].dealResult)=='undefined' ? "" : data[i].dealResult)+'</span></div>');
+							continue;
+						}
+						$('#personName').append('<li onclick="isRead($(this),\''+data[i].personId+'\')" '+color+'>'+data[i].personName+d+'</li>');
+						$('#personOther').append('<div class="layui-tab-item">'+
+				    	'<p><label>部门：</label><label>'+data[i].deptName+'</label>'+
+				    	'<label style="margin-left:20px;">是否处理：</label><label '+color+'>'+data[i].isDeal+'</label></p>'+
+				    	'<label>处理结果：</label><span>'+(typeof(data[i].dealResult)=='undefined' ? "" : data[i].dealResult)+'</span></div>');
+					}
+				}
+			}
+		});
+
+        function backToList() {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+        
+        function isRead(qdom,personId){
+        	if(qdom.find('span').length != 0){
+        		//设置为已读
+        	    $.ajax({
+        			type : 'get',
+        			url : '/tts/warn/isRead/' + warnId +'/'+personId,
+        			contentType: "application/json; charset=utf-8",  
+        			async : false,
+        			success : function(data) {
+        				if ( data.code == '0') {
+        					qdom.find('span').remove();
+        				}
+        			}
+        		});
+        	}
+        }
+	</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.SmsDao">
+
+	<!-- 主体列表查询-->
+	<select id="getSmsByCertNum"  resultType="com.orhonit.ole.enforce.entity.SmsEntity">
+		SELECT  
+		    db.id as id,
+			db.tel_num AS telNum, 
+			db.content AS content,
+			db.status AS status,
+			db.send_time AS sendTime,
+			db.create_Date AS createDate,
+			db.create_name AS createName,
+			db.create_by AS createBy,
+			db.cert_num AS certNum,
+			db.code AS code
+			FROM ole_ef_sms_info db 
+		<where>
+			<if test="params.certNum != null and params.certNum != ''">
+				db.cert_num = #{params.certNum}
+			</if>
+			order by create_date desc  limit 1
+		</where>
+	</select>
+	
+</mapper>

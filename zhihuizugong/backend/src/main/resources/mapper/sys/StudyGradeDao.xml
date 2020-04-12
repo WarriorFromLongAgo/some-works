@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.sys.dao.StudyGradeDao">
+	<select id="getSumGrade" resultType="java.util.HashMap">
+		SELECT
+		sum(case when classify_id = 1 then xgrade else 0 end ) as xianshang,
+		sum(case
+		when classify_id = 2 then xgrade else 0 end ) as xianxia
+		FROM
+		study_grade
+		<where>
+			1=1
+
+			and user_id = #{userId}
+			and data like '%${data}%'
+			<!-- <if test="classId !=null and classId !=''"> and class_id = #{classId} 
+				</if> -->
+
+			<!-- <if test="classifyId!=null and classifyId!=''"> and classify_id = 
+				#{classifyId} </if> -->
+		</where>
+	</select>
+
+	<select id="getCountGrade"
+		resultType="java.util.HashMap">
+		SELECT
+		count(case when classify_id = 1 then classify_id else null end ) as xianshang,
+		count(case when classify_id = 2 then classify_id else null end ) as xianxia
+		FROM
+		study_grade
+		WHERE
+		1 = 1
+		AND user_id = #{userId}
+		AND DATA LIKE '%${data}%'
+	</select>
+
+	<select id="topten"
+		resultType="com.orhonit.modules.sys.entity.StudyUserEntity">
+		SELECT *,assessid as assessId from study_user ORDER BY
+		upgrade+nextgrade
+		DESC LIMIT 10
+	</select>
+
+	<select id="getGradeList"
+		resultType="com.orhonit.modules.sys.entity.StudyGradeEntity">
+		SELECT
+		a.id,
+		a.user_id as userId,
+		a.data,
+		a.class_id as classId,
+		b.classname as classifyId,
+		sum( a.grade ) AS grade,
+		SUM( a.xgrade ) AS xgrade
+		FROM
+		study_grade a,
+		study_classify b
+		WHERE
+		a.class_id = b.id
+		and a.classify_id = b.classify
+		and a.user_id = #{userId}
+		AND a.DATA LIKE '%${data}%'
+		GROUP BY
+		a.class_id
+
+	</select>
+
+</mapper>

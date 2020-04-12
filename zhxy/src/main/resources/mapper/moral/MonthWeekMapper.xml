@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.moral.mapper.MonthWeekMapper">
+    <select id="start_time" resultType = "string">
+		SELECT
+		start_time
+		FROM
+		moral_week
+		WHERE
+		id = #{week_id}
+	</select>
+	<select id="end_time" resultType = "string">
+		SELECT
+		end_time
+		FROM
+		moral_week
+		WHERE
+		id = #{week_id}
+	</select>
+</mapper>

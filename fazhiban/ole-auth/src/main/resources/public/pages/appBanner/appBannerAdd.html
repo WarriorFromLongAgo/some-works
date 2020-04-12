@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<form class="form-horizontal" onsubmit="return false" enctype="multipart/form-data" style="padding-top:5%;" id="form">
+			<fieldset>
+
+				<div class="form-group">
+
+					<label class="col-md-2 control-label">选择图片<span class="btx">*</span></label>
+					<div class="col-md-10">
+						<input class="form-control not-null" type="file" name="file" id="file" iname="banner图文件">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">角色<span class="btx">*</span></label>			
+					<div class="col-md-4">
+						<select class="form-control input-sm" id="roleId">
+							<option value="">请选择</option>
+						</select>
+					</div>
+					<label class="col-md-2 control-label">描述</label>
+					<div class="col-md-4">
+						<input class="form-control not-null" placeholder="请输入描述" type="text" id="content" name="content" iname="描述">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">显示顺序</label>
+					<div class="col-md-4">
+						<input class="form-control" name="sort" id="sort" type="number" value="0"
+                        	data-bv-notempty="true"
+                        	data-bv-notempty-message="排显示顺序 不能为空">
+					</div> 
+					<label class="col-md-2 control-label">是否启用<span class="btx">*</span></label>
+					<div class="col-md-4">
+						<select name="ifShow" class="form-control input-sm" id="ifShow">
+						 	  <option value="">请选择</option>
+						</select>
+					</div> 
+				</div>
+
+				<div class="form-actions">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="button" id="submitBtn"
+								onclick="add()">
+								<i class="fa fa-save"></i> 提交
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script src="../../js/moment-with-locales.min.js"></script>
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- 实例化编辑器 -->
+	<script type="text/javascript">
+		layui.use([ 'layer', 'laydate' ], function() {
+			var layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem : '#birthday'
+			});
+		});
+		
+		$.ajax({
+			type : 'get',
+			url : '/auth/roles/all',
+			async : false,
+			success : function(data) {
+				var content='';
+				for (var i = 0; i < data.length; i++) {
+					content +="<option value=\""+ data[i].id + "\">"+ data[i].name + "</option>";
+				}
+				$('#roleId').append(content)
+			}
+		});
+		
+		$.ajax({
+			type : 'get',
+			url : '/auth/dict/list/1709',
+			contentType: "application/json; charset=utf-8", 
+			async: false,
+			success : function(data) {
+				if ( data.code == 0 ) {
+					var dicts= '';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						dicts += '<option value = "' + data.data[i].enumValue + '">' + data.data[i].enumDesc + '</option>';
+					}
+					$('#ifShow').append(dicts);
+				}	
+			}
+		});
+		
+		function add() {
+			var roleId = $("#roleId").val();
+			var content = $("#content").val();
+			var sort = $("#sort").val();
+			var ifShow = $("#ifShow").val();
+			var formData = new FormData();
+			formData.append('file', $('#file')[0].files[0]);
+			if($('#file')[0].files[0] == null){
+				layer.msg("文件必须上传", {anim : 6});
+				return;
+			}
+			
+			if(roleId == ''){
+				layer.msg("角色不能为空", {anim : 6});
+				return;
+			}
+			
+			if(content == ''){
+				layer.msg("描述不能为空", {anim : 6});
+				return;
+			}
+			
+			if(ifShow == ''){
+				layer.msg("是否启用不能为空", {anim : 6});
+				return;
+			}
+			
+			if(sort == ''){
+				layer.msg("排序不能为空", {anim : 6});
+				return;
+			}
+			
+			$('#submitBtn').removeAttr("disabled");
+		    $('#submitBtn').attr("disabled",true); 
+			
+			$.ajax({
+				url : '/auth/appBanner/save?roleId='+roleId + '&content='+content + '&sort='+sort + '&ifShow='+ifShow,
+			    type: 'POST',
+			    cache: false,
+			    data:formData,
+			    processData: false,
+			    contentType: false,
+			    success : function(data) {
+			    	if(data.code == 0){
+			    		layer.msg("添加成功！", {shift : -1,time : 1000},function() {
+							window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+			    	}else{
+			    		layer.msg("添加失败！", {anim : 6});
+			    	}
+					
+				}
+			})
+		}
+		
+	</script>
+</body>
+</html>

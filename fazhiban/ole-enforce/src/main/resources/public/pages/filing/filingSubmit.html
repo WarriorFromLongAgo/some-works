@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		<!-- <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
+			<input class="form-control" type="hidden" name="id" disabled="disabled" id="id">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处理方式</label>
+			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+				<select class="form-control" id="status" name="status" disabled="disabled" 
+					data-bv-notempty="true"
+					data-bv-notempty-message="处理方式不能为空">
+					<option value="14" selected = "selected">立案审核</option>
+				</select>
+			</div>
+		</div> -->
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"   style="margin-top:20px;">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">权责事项<span class="btx">*</span></label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="easyui-combotree" id="righ" type="text" style="width:100%" name=""/>
+				</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法依据<span class="btx">*</span></label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="easyui-combotree" id="zfyj" type="text" style="width:100%" name=""/>
+				</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处罚依据<span class="btx">*</span></label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="easyui-combotree" id="cfyj" type="text" style="width:100%" name=""/>
+				</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">时限类型<span class="btx">*</span></label>
+			<div class="col-xs-4 col-sm-4 col-md-4col-lg-4">
+				<select class="form-control not-null" iname="时限类型" id="limitType" name="limitType">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">时限值<span class="btx">*</span></label>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<input type="text" class="form-control not-null" id="limitValue" iname="时限值" name="limitValue" onkeyup="this.value=this.value.replace(/\D/g,'')"
+				onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+			</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">案由<span class="btx">*</span></label>
+			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+				<input type="text" class="form-control not-null" iname="案由" id="caseReason" name="caseReason">
+			</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+			<input class="form-control" type="hidden" name="id" disabled="disabled" id="id">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处理方式<span class="btx">*</span></label>
+			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			<select class="form-control not-null" id="handleMode" name="handleMode" iname="处理方式" onchange="changeHandleMode()">
+					<option value="">请选择</option>
+					<option value="92">立案审核</option>
+					<option value="91">调查取证</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"  id="appDiv"   style="display: none;">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">审核人<span class="btx">*</span></label>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<select class="form-control not-null" id="nextOpinionDom" name="nextOpinion" iname="审核人">
+				</select>
+			</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"  id="opinionDiv"   style="display: none;">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处理人员<span class="btx">*</span></label>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				<select class="form-control  not-null" id="nextOpinionDom1" name="nextOpinion1" iname="处理人员">
+				</select>
+			</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">承办人意见<span class="btx">*</span></label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<textarea class="form-control not-null" rows="5" cols="" name="content" id="content" placeholder="请输入承办人意见" iname="承办人意见"></textarea>
+				</div>
+		</div>
+		<div class="form-actions">
+			<div class="row" align="center">
+					<button class="btn btn-primary" type="submit" id="submitBtn" onclick="submitFiling()">
+						<i class="fa fa-save"></i> 提交
+					</button>
+				</div>
+		</div>
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>  
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+  <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+	    layui.use(['layer'], function(){
+		    var layer = layui.layer;
+		});
+ 
+	    //修改处理方式
+	   function  changeHandleMode(){
+		   var handleMode=$("#handleMode").val();
+		   if(handleMode=='91'||handleMode==''){
+			   $("#appDiv").hide();
+			   $("#opinionDiv").show();
+		   }else if(handleMode=='92'){
+			   $("#appDiv").show();
+			   $("#opinionDiv").hide();
+		   }
+	    }
+	
+  		//设置案源字典列表
+    	getDictList(dict.limitType,"limitType");
+    	
+	 	var dept_id;
+	    var pontenceId;
+	    var potence_law_mapId;
+	    var userId;
+	    var uId;
+	    $.ajax({
+		type : 'get',
+		url : '/enforce/users/current',
+		userdata :[],
+		success : function(userdata) {
+		dept_id=userdata.dept_id;
+		userI=userdata.username;
+		userId=userdata.id;
+		$("#righ").combotree({
+			method:'get',		
+			url : '/enforce/filing/right/'+dept_id,	
+			required: false, 
+			onChange:function(newV,oldV){
+				$("#cfyj").combotree("setValue","");
+				$("#zfyj").combotree({
+					method:'get',		
+				    url : '/enforce/filing/zfyj/'+newV,	
+					required: false,
+					multiple:true,
+					onChange:function(newV,oldV){
+						$("#cfyj").combotree({
+							method:'get',			
+			  				url : '/enforce/filing/cfyj/'+newV,	
+							required: false,
+							multiple:true,
+							onLoadSuccess:function(node,data){
+								var pontence = [];
+								var potence_law_map = [];
+								for(var i=0;i<data.length;i++){
+									pontence.push(data[i].id);
+									potence_law_map.push(data[i].right_duty_id);
+								}
+								$("#cfyj").combotree("setValues",pontence);
+								pontenceId=potence_law_map;
+								potence_law_mapId=pontence;
+							}
+						});
+					}
+				});
+			}
+		});
+				}
+			});
+    	//设置案件处理字典列表
+    	var userNickName;
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			userdata : $("#form").serialize(),
+			success : function(userdata) {
+				userNickName = userdata.id;
+			}
+		});
+    	
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/flow/getHaveRoleOpinionByDeptId',
+			success : function(data) {
+				if ( data.code == "0") {
+					var users = data.data;
+					var nextOpinionDom = '<option value=\"\">请选择审核人</option> ';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						nextOpinionDom += '<option value = "' + users[i].userId + '">' + users[i].nickName + '</option>';
+					}
+					$('#nextOpinionDom').html(nextOpinionDom);
+				}
+			}
+		});
+    	
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/flow/getHaveZfrRoleOpinionByDeptId',
+			success : function(data) {
+				if ( data.code == "0") {
+					var users = data.data;
+					var nextOpinionDom = '<option value=\"\">请选择执法人</option> ';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						nextOpinionDom += '<option value = "' + users[i].userId + '">' + users[i].nickName + '</option>';
+					}
+					$('#nextOpinionDom1').html(nextOpinionDom);
+					$('#nextOpinionDom1').val(userId);
+				}
+			}
+		});
+    	      
+        function submitFiling() {
+        	var righ = $("#righ").val();
+        	if(righ=="" || $.trim(righ).length == 0){
+        		layer.msg('请选择权责事项！',{anim:6});
+        		return false;
+        	}
+        	
+        	var zfyj = $("#zfyj").val();
+        	if(zfyj=="" || $.trim(zfyj).length == 0){
+        		layer.msg('请选择执法依据！',{anim:6});
+        		return false;
+        	}
+        	
+        	var cfyj = $("#cfyj").val();
+        	if(cfyj=="" || $.trim(cfyj).length == 0){
+        		layer.msg('请选择处罚依据！',{anim:6});
+        		return false;
+        	}
+        	var handleMode = $("#handleMode").val();
+        	if(handleMode=="" || $.trim(handleMode).length == 0){
+        		layer.msg('请选择处理方式！',{anim:6});
+        		return false;
+        	}
+        	if (!dataCheck()) {
+				return;
+			}
+        	$("#submitBtn").attr("disabled", true);
+        	var formdata = $("#form").serializeObject();
+       	    caseId = getUrlParam("caseId");
+       	    uId	= getUrlParam("uId");
+        	formdata.id=uId;
+        	formdata.potenceId=pontenceId.toString();
+     		formdata.potenceLawMapId=potence_law_mapId.toString();
+      		formdata.dealType = handleMode;
+      		if(handleMode=='92'){
+      			formdata.nextAssignee = $("#nextOpinionDom").find("option:selected").val();
+			}else{
+				formdata.nextAssignee = $("#nextOpinionDom1").find("option:selected").val();;
+			}
+      		$.ajax({
+				type : 'post',
+				url : '/enforce/case/updatePotence',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data){
+					var status = $("#status").val();
+				    var content = $("#content").val();	
+				    var nextAssignee;
+					if(handleMode=='92'){
+				    	nextAssignee = $("#nextOpinionDom").find("option:selected").val();
+					}else{
+						nextAssignee = $("#nextOpinionDom1").find("option:selected").val();;
+					}
+				    var formdata = new Object();
+		            formdata.assignee = userNickName;
+		            formdata.businessId = caseId;
+		            formdata.nextAssignee = nextAssignee;
+		            formdata.flowKey = 'case';
+		            formdata.comment = content;
+		            formdata.handleMode =handleMode;
+					    $.ajax({
+	    				type : 'post',
+	    				url : '/enforce/flow/taskComplate',
+	    				contentType: "application/json; charset=utf-8",  
+	    				data : JSON.stringify(formdata),
+	    				success : function(data) {
+		    				layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+		    				$("#submitBtn").attr("disabled", false);
+	    					window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+		                  	 });
+	    				}
+	    			});
+				}
+			});
+		}
+    </script>
+</body>
+</html>

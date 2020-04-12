@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		<div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" style="margin-top:20px;">
+			<input class="form-control" type="hidden" name="id" disabled="disabled" id="id">
+			<label class="col-xs-2 col-sm-4 col-md-4 col-lg-4 control-label">处理方式<span class="btx">*</span></label>
+			<div class="col-xs-10 col-sm-8 col-md-8 col-lg-8">
+				<select class="form-control not-null" id="status" name="status" onchange="changeFieldSet()" iname="处理方式">
+					<option value="4" >给予警告</option>
+					<option value="5"  selected="selected">给予处罚</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6" style="margin-top:20px;">
+			<label class="col-xs-2 col-sm-4 col-md-4 col-lg-4 control-label">案由<span class="btx">*</span></label>
+			<div class="col-xs-10 col-sm-8 col-md-8 col-lg-8">
+				<input class="form-control not-null" id="caseReason" type="text" style="width:100%" name="caseReason" iname="案由"/>
+			</div>
+		</div>
+		<div class="form-group"></div>
+		<div id="fg">
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">权责事项</label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="easyui-combotree" id="righ" type="text" style="width:100%" name="righ"/>
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法依据</label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="easyui-combotree" id="zfyj" type="text" style="width:100%" name="zfyj"/>
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">处罚依据</label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="easyui-combotree" id="cfyj" type="text" style="width:100%" name="cfyj"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">备注<span class="btx">*</span></label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<textarea class="form-control not-null" rows="5" cols="" name="content" id="content" placeholder="请输入备注" iname="备注"></textarea>
+				</div>
+		</div>
+		
+		<!-- <fieldset style="display: none" id="qz" > -->
+		
+		
+		</fieldset>
+			<div class="form-actions">
+				<div class="row" align="center">
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="submitLocale()">
+							<i class="fa fa-save"></i> 提交
+						</button>
+					</div>
+				</div>
+			</div>
+
+	<!-- </fieldset> -->	
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>  
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>   
+
+  <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+	    layui.use(['layer'], function(){
+		    var layer = layui.layer;
+		});
+    
+    	var userNickName;
+    	var userId;
+	  	var dept_id;
+	    var pontenceId;
+	    var potence_law_mapId;
+	    var uId;
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			userdata :$("#form").serialize(),
+			success : function(userdata) {
+				dept_id=userdata.dept_id;
+				userNickName = userdata.nickname;
+				userI=userdata.username;
+				userId = userdata.id;
+				$("#righ").combotree({
+					method:'get',		
+					url : '/enforce/filing/right/'+dept_id,	
+					required: false, 
+					onChange:function(newV,oldV){
+						$("#cfyj").combotree("setValue","");
+						$("#zfyj").combotree({
+							method:'get',		
+						    url : '/enforce/filing/zfyj/'+newV,	
+							required: false,
+							multiple:true,
+							onChange:function(newV,oldV){
+								$("#cfyj").combotree({
+									method:'get',			
+					  				url : '/enforce/filing/cfyj/'+newV,	
+									required: false,
+									multiple:true,
+									onLoadSuccess:function(node,data){
+										var pontence = [];
+										var potence_law_map = [];
+										for(var i=0;i<data.length;i++){
+											pontence.push(data[i].id);
+											potence_law_map.push(data[i].right_duty_id);
+										}
+										$("#cfyj").combotree("setValues",pontence);
+										pontenceId=potence_law_map;
+										potence_law_mapId=pontence;
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+	  
+	   function changeFieldSet(){
+	    	var type = $('#status').val();
+		    if ( type == '5'){
+	    		 $('#fg').show();
+	    	} else{
+	    		 $('#fg').hide();
+	    	}
+	    }
+	   
+        function submitLocale() {
+        	//数据格式校验
+        	if (!dataCheck()) {
+        		return;
+        	}
+        	$('#form').bootstrapValidator();
+        	var formdata = $("#form").serializeObject();
+		    caseId = getUrlParam("caseId");
+		    uId= getUrlParam("uId");
+		    status = $("#status").val();
+		    var content = $("#content").val();
+		    if(status==5){
+	        	 formdata.id=uId;
+	      		 formdata.potenceId=pontenceId.toString();
+	      		 formdata.potenceLawMapId=potence_law_mapId.toString();
+	      		 formdata.CaseReason = $('#caseReason').val();
+	      		 $.ajax({
+				  	type : 'post',
+					url : '/enforce/case/updatePotence',
+					contentType: "application/json; charset=utf-8",  
+					data : JSON.stringify(formdata),
+					success : function(data) {
+			        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+						bootstrapValidator.validate();
+					    if(!bootstrapValidator.isValid()){
+						   return;
+					    }
+					    
+					    var formdata = new Object();
+			            formdata.assignee = userId;
+			            formdata.businessId = caseId;
+			            formdata.nextAssignee = userId;
+			            formdata.flowKey = 'case';
+			            formdata.comment = content;
+			            formdata.handleMode = $('#status').val();
+					    
+				    	$.ajax({
+							type : 'post',
+							url : '/enforce/flow/taskComplate',
+							contentType: "application/json; charset=utf-8",  
+							data : JSON.stringify(formdata),
+							success : function(data) {
+								layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+									window.parent.example.ajax.reload();
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
+				                });
+							}
+						});
+					}
+				});
+		    }else{
+		    	var formdata = new Object();
+	            formdata.assignee = userId;
+	            formdata.businessId = caseId;
+	            formdata.nextAssignee = userId;
+	            formdata.flowKey = 'case';
+	            formdata.comment = content;
+	            formdata.handleMode = $('#status').val();
+			    
+		    	$.ajax({
+					type : 'post',
+					url : '/enforce/flow/taskComplate',
+					contentType: "application/json; charset=utf-8",  
+					data : JSON.stringify(formdata),
+					success : function(data) {
+						layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+							window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+		                });
+					}
+				});
+		    }
+		    
+		}
+
+    </script>
+</body>
+</html>

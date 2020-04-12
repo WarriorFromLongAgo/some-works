@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>附件预览页面</title>
+		<link href="../../js/videoJs/video-js.css" rel="stylesheet">	
+		<style>
+		body{background-color: #191919}
+		.m{ width: 740px; height: 400px; margin-left: auto; margin-right: auto; margin-top: 100px; }
+		video{
+			z-index: inherit;
+		}
+	</style>
+	</head>
+	<body>
+		<video id="video" width="100%" height="" controls autoplay>
+			您的浏览器不支持在线播放视屏，请更换最新版的<br>
+			Internet Explorer 9+, Firefox, Opera, Chrome , Safari等浏览器
+		</video> 
+	
+	</body>
+</html>
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/videoJs/video.min.js"></script>
+<script>
+function getQuery( name ) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null) return  unescape(r[2]); return null;
+}
+var id = getQuery('id');
+var fileType = getQuery('fileType');
+$.ajax({
+	type : 'get',
+	url : '/tts/attachFile/show?id='+id,
+	success : function(data) {
+		
+		if(data.code == 0){
+			if(fileType == "mp4" || fileType == "mp3"){
+				var v = document.getElementById("video");
+				v.src=data.data;
+			}else{
+				window.location = data.data;
+			}
+		}else{
+			alert("在线预览错误");
+		}
+	}
+});
+</script>

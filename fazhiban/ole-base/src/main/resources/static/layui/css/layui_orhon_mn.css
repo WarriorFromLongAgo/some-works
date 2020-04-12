@@ -1,0 +1,443 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'OrhonChaganTig';
+    src: local("OrhonChaganTig"),url('../font/OrhonChaganTig.eot');
+    src: local("OrhonChaganTig"),url('../font/OrhonChaganTig.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonChaganTig.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonChaganTig-H';
+    src: local("OrhonChaganTig-H"),url('../font/OrhonChaganTig-H.eot');
+    src: local("OrhonChaganTig-H"),url('../font/OrhonChaganTig-H.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonChaganTig-H.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonChaganTig-RTL';
+    src: local("OrhonChaganTig-RTL"),url('../font/OrhonChaganTig-RTL.eot');
+    src: local("OrhonChaganTig-RTL"),url('../font/OrhonChaganTig-RTL.eot?#iefix') format('embedded-opentype'),
+   	url('../font/OrhonChaganTig-RTL.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonChaganTig-V';
+    src: local("OrhonChaganTig-V"),url('../font/OrhonChaganTig-V.eot');
+    src: local("OrhonChaganTig-V"),url('../font/OrhonChaganTig-V.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonChaganTig-V.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonGarchagTig';
+    src: local("OrhonGarchagTig"),url('../font/OrhonGarchagTig.eot');
+    src: local("OrhonGarchagTig"),url('../font/OrhonGarchagTig.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonGarchagTig.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonGarchagTig-H';
+    src: local("OrhonGarchagTig-H"),url('../font/OrhonGarchagTig-H.eot');
+    src: local("OrhonGarchagTig-H"),url('../font/OrhonGarchagTig-H.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonGarchagTig-H.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonGarchagTig-RTL';
+    src: local("OrhonGarchagTig-H"),url('../font/OrhonGarchagTig-RTL.eot');
+    src: local("OrhonGarchagTig-H"),url('../font/OrhonGarchagTig-RTL.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonGarchagTig-RTL.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OrhonGarchagTig-V';
+    src: local("OrhonGarchagTig-H"),url('../font/OrhonGarchagTig-V.eot');
+    src: local("OrhonGarchagTig-H"),url('../font/OrhonGarchagTig-V.eot?#iefix') format('embedded-opentype'),
+    url('../font/OrhonGarchagTig-V.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+html[lang="mn"] body,
+[lang="mn"] h1,[lang="mn"]  h2,[lang="mn"]  h3,[lang="mn"]  h4,[lang="mn"]  h5,[lang="mn"]  h6,[lang="mn"]  .h1,[lang="mn"]  .h2,[lang="mn"]  .h3,[lang="mn"]  .h4,[lang="mn"]  .h5,[lang="mn"]  .h6 {
+    font-family: "OrhonChaganTig";
+}
+
+[lang="mn"] input[type="text"],
+[lang="mn"] input[type="password"],
+[lang="mn"] input[type="number"],
+[lang="mn"] input[type="file"],
+[lang="mn"] textarea,
+[lang="mn"] button{
+    display: table-cell !important;
+    /*height: 100% !important;*/
+    box-sizing:border-box;
+}
+
+
+[lang="mn"] a.logo span,
+._MnMenu .layui-nav-item a cite,
+.wrapper._mn .small-box p,
+[lang="mn"] .admin-header-user span,
+[lang="mn"] .layui-anim-upbit,
+[lang="mn"] .admin-nav-card .layui-tab-title cite,
+.wrapper._mn .box-header.with-border .box-title,
+[lang="mn"] .layui-btn-small,
+[lang="mn"] .centent,
+[lang="mn"] .Larconnlawlist,
+[lang="mn"] li.layui-this cite,
+.wrapper._mn .small-box>.inner p,
+[lang="mn"] .list_mgl th span,
+[lang="mn"] .pages_header,
+[lang="mn"] .lilt_mgls
+{
+    writing-mode: vertical-lr;
+    -webkit-writing-mode: vertical-lr;
+    -o-writing-mode: vertical-lr;
+    -ms-writing-mode: tb-lr;
+    -moz-writing-mode: vertical-lr;
+    font-family: "OrhonChaganTig";
+    unicode-bidi: embed;
+    text-orientation: sideways-right;
+    -webkit-text-orientation: sideways-right;
+    -mz-text-orientation: sideways-right;
+    -o-text-orientation: sideways-right;
+    -ms-text-orientation: sideways-right;
+    text-align: left;
+    font-size: 20px;
+
+}
+[lang="mn"] .wrapper._mn .small-box>.inner {
+    padding: 10px;
+    text-align: left;
+    height: 90px;
+}
+[lang="mn"] .logo img {
+    float: left;
+}
+[lang="mn"] a.logo span {
+    font-size: 16px;
+    height: 40px;
+    display: inline;
+    padding-bottom: 10px;
+    float: left;
+}
+
+[lang="mn"] .layui-nav-tree,
+._MnMenu .layui-nav-item a {
+    white-space: initial;
+}
+._MnMenu .layui-nav-item {
+    margin-bottom: 20px;   
+}
+._MnMenu .layui-nav-item a  {
+    text-overflow: ellipsis;
+    overflow: initial;
+    white-space: initial;
+    width: 100%;
+    height: 36px;
+    padding: 0px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: inline-block;
+}
+._MnMenu .layui-nav-item a cite {
+    height: 45px;
+}
+.wrapper._mn .small-box>.inner {
+    padding: 10px;
+    text-align: left;
+    height: 90px;
+}
+.wrapper._mn .small-box h3,.wrapper._mn .small-box p {
+    float: left;
+}
+[lang="mn"] .layui-tab-title {
+   height: 70px;
+}
+[lang="mn"] .admin-nav-card .layui-tab-title cite {
+    height: 50px;
+}
+.wrapper._mn h3.box-title {
+    height: 52px;
+}
+[lang="mn"] .form-inline .form-control {
+    width: auto;
+    width: 32px;
+    height: 200px;  
+    padding: 0px 12px; 
+}
+[lang="mn"] .form-inline .time {
+    height: 98px;   
+}
+[lang="mn"] .control{
+    height: 150px;   
+}
+[lang="mn"] .form-control {
+    width: 32px;
+    height: 120px;
+    text-align: left;
+    display: table-cell;
+}
+[lang="mn"] .pages_header {
+    height: 80%;
+}
+[lang="mn"] .layui-btn-small {
+    height: auto;
+    padding: 5px;
+    line-height: 20px;
+    margin-left: -20px;
+    height: 80px;
+}
+
+
+[lang="mn"] .centent,
+.form-horizontal,
+fieldset{
+	width: auto;
+	height: 530px;
+	padding: 5px 15px 0px 0px;
+}
+[lang="mn"] .centent .form-horizontal .form-group label{
+    margin-left: 30px;
+	font-size: 27px;
+    padding-right: 8px;
+    text-orientation: mixed;
+}
+[lang="mn"] .centent .form-horizontal .form-group textarea
+{
+	min-width: 160px;
+    height: 100%;
+}
+[lang="mn"] .centent .form-horizontal .form-group input
+{
+	width: 38px;
+	height: 100%;
+}
+[lang="mn"] .centent .form-horizontal .form-group select
+{
+	display:table-cell;
+}
+[lang="mn"] .centent .form-horizontal .form-actions button
+{
+	margin-left: 66px;
+    margin-top: 15px;
+}
+/*[lang="mn"] .widget-body table tr th,
+[lang="mn"] .widget-body table tr td{
+	height:300px;
+}*/
+[lang="mn"] li.layui-this cite{
+	line-height: 20px;
+	padding-top: 5px;s
+}
+
+[lang="mn"] li.layui-this i.fa {
+    float: left;
+    line-height: 60px;
+}
+._MnMenu .layui-nav-tree .layui-nav-item a{
+	white-space: inherit;
+}
+._MnMenu .layui-nav-item a cite{
+	line-height: 22px;
+}
+[lang="mn"] .layui-layout-admin .layui-side{
+	top: 65px;
+    padding-top: 20px;
+}
+[lang="mn"] .table>thead>tr>th{
+	vertical-align: top;
+}
+[lang="mn"] .list_mgl_right {
+    float: left;
+    width: 80%;
+    writing-mode: vertical-lr;
+}
+[lang="mn"] .pages_header{
+	float: left;
+	padding: 40px 20px 0 0;
+	height: 439px;
+}
+[lang="mn"] .form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+    padding-right: 20px;
+}
+[lang="mn"] .centent .form-horizontal .layui-btn {
+    height: 122px;
+    line-height: 10px;
+}
+.layui-btn-mini {
+    margin-top: 3px;
+}
+
+.layui-btn-mini:first-child{ 
+	margin-left: 10px;
+}
+
+[lang="mn"] #mn_establish{
+    -moz-writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+    -webkit-writing-mode: vertical-lr;
+    -o-writing-mode: vertical-lr;
+    -ms-writing-mode: tb-lr;
+    unicode-bidi: embed;
+    text-orientation: sideways-right;
+    -webkit-text-orientation: sideways-right;
+    -mz-text-orientation: sideways-right;
+    -o-text-orientation: sideways-right;
+    -ms-text-orientation: sideways-right;
+    font-family: 'OrhonChaganTig' !important;
+    word-spacing: normal;
+    word-wrap: normal; 
+     /*word-break: break-word;*/
+    display: block;
+    width: 100%;
+    line-height: 12px;
+    text-orientation: mixed;
+}
+
+
+/*select2 插件适应*/
+.select2-container--default .select2-results>.select2-results__options{
+    max-width: 200px;
+}
+
+.form-group .radio label, .form-group .checkbox label {
+    height: 100%;
+}
+.form-group  .radio input[type="radio"],.form-group  .radio-inline input[type="radio"],.form-group  .checkbox input[type="checkbox"],.form-group  .checkbox-inline input[type="checkbox"] {
+    margin-left: 0;
+    position: relative;
+}
+
+.select2-container {
+    writing-mode: vertical-lr;
+    -webkit-writing-mode: vertical-lr;
+    -ms-writing-mode: tb-lr;
+    -o-writing-mode: vertical-lr;
+    -moz-writing-mode: vertical-lr;
+    text-orientation: sideways-right;
+    -webkit-text-orientation: sideways-right;
+    -ms-text-orientation: sideways-right;
+    -o-text-orientation: sideways-right;
+    -moz-text-orientation: sideways-right;
+    unicode-bidi: embed;
+    word-spacing: normal;
+    word-wrap: normal;
+    word-break: keep-all;
+    position: initial;
+  }
+  
+  .select2-container.select2.select2-container--default {
+    width: auto !important;
+    height: auto !important;
+  }
+  
+  .select2-container .select2-selection--single {
+    height: auto !important;
+      position: relative;
+  }
+  
+  .select2-container .select2-selection--single .select2-selection__rendered {
+    padding: 8px 0px 20px 0px !important;
+    display: inline-block !important;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: unset !important;
+	}
+  .select2-container--default .select2-search--dropdown .select2-search__field {
+    display: table-cell  !important;
+    height:100% !important;
+}
+  
+  .select2-container .select2-selection--single .select2-selection__arrow {
+    height: 20px;
+    position: absolute;
+    top: auto;
+    bottom: 1px;
+    right: 1px;
+    width: 26px;
+  }
+  
+  .select2-container.select2-container--open .select2-dropdown {
+    width: auto !important;
+    max-width: 400px;
+    overflow-x: auto;
+  }
+
+  ul.dropdown-menu {
+    top: auto;
+    left: auto;
+    font-size: 12pt;
+}
+.panel.combo-p.panel-htop {
+    width: 400px !important;
+}
+.combo-panel.panel-body.panel-body-noheader ul.tree {
+    writing-mode: vertical-lr;
+}
+.combo-panel.panel-body.panel-body-noheader {
+    width: 400px !important;
+}
+
+
+.layui-this cite{
+	font-family: 'OrhonChaganTig';
+}
+div.dataTables_wrapper div.dataTables_info {
+    margin-left: 15px;
+}
+
+.form-inline{
+	padding-right: 10px;
+    height: 400px;
+}
+[lang="mn"] .dt-toolbar-footer{
+	margin-top: 40px;
+}
+
+[lang="mn"] .layui-layer-dialog .layui-layer-content {
+    line-height: 25px;
+    writing-mode: vertical-lr;
+    height: 78px;
+}
+[lang="mn"] table.dataTable {
+    writing-mode: vertical-lr;
+}
+
+[lang="mn"] input::-webkit-input-placeholder {
+	text-orientation: mixed;
+}
+[lang="mn"] .layui-layer-title {
+    padding: 3px 247px 0 12px;
+    height: 70px;
+    width: 100%; 
+    word-wrap: break-word;
+    text-overflow: clip;
+    white-space: pre-wrap;
+    unicode-bidi: bidi-override;
+    flex: 0 0 20px;
+    writing-mode: vertical-lr;
+    text-align: center;
+}
+
+
+

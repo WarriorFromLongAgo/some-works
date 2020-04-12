@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+	<head>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+		
+		<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+		<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+		<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+		<script type="text/javascript">
+		       orhonIMEinit = {
+		           element: "",
+		           ele_except: "",
+		           editor: {
+		               IME_Mount: true,
+		               tinymce: "",
+		               ueditor: "",
+		           },
+		           IME_cssurl: "",
+		           IME_theme: "",
+		           Output_Unicode: true,
+		       };
+		       Iframe_init = {
+		           iframes: "",
+		           ifr_except: "",
+		           element: "",
+		           ele_except: "",
+		       };
+		</script>
+	</head>
+
+	<body>
+		<div class="centent">
+			<form class="form-horizontal" onsubmit="return false" id="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="control-label">ᠳᠡᠭᠡᠳᠦ ᠱᠠᠲᠤᠨ ᠤ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ</label>
+							<input class="easyui-combotree" id="parentId" type="text"name="parentId"/>
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠨᠡᠷᠡᠶᠢᠳᠦᠯ</label>
+						<input class="form-control" type="text" name="name" id="name" data-bv-notempty="true" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠠᠩᠭ᠍ᠯᠢ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ</label>
+						<input class="form-control" name="nameEn" id="nameEn" data-bv-notempty="true" data-bv-notempty="true">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ</label>
+						<input class="form-control" placeholder="0" name="sort" id="sort" data-bv-notempty="true" type="number" data-bv-notempty="true">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠡᠬᠢᠯᠡᠵᠦ ᠬᠡᠷᠡᠭᠯᠡᠬᠦ ᠡᠰᠡᠬᠦ</label>
+						<select name="ifEffect" class="form-control input-sm" id="ifEffect">
+
+						</select>
+					</div>
+					
+					<div class="form-actions col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:10%">
+						<div class="row" align="center">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<button class="btn btn-primary" id="submitBtn" type="submit" onclick="add()"style="margin-left:10px">
+							<i class="fa fa-save"></i> ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ
+						</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+		<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../../js/jq.js"></script>
+		<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+		<script type="text/javascript" src="../../js/common.js"></script>
+		<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+		<script src="../../js/select2/js/select2.full.js"></script>
+		<script type="text/javascript">
+			
+			$(function () {
+			    console.log("ready");
+			    console.log($("select"));
+			    $('select').select2();
+			    $(document)
+			        .on('click', '.select2.select2-container', function () {
+			            var self = $(this);
+			            setTimeout(function () {
+			                $('.select2-container--open').height(self.height()).width(self.width());
+			                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+			            }, 100);
+			        })
+			        // .on("DOMNodeInserted", function (e) {
+			        //     $('select').select2();
+			        //
+			        // })
+		
+			})
+		
+			layui.use('layer', function() {
+				var layer = layui.layer;
+			});
+
+			$('#parentId').combotree({
+				method: 'get',
+				url: '/base/LawLevel/parents/',
+				required: false,
+				onChange: function(newV, oldV) {}
+			});
+
+			getDictList("2066", "ifEffect");
+
+			function add() {
+
+				if($('#name').val() == '') {
+					layer.msg("ᠨᠡᠷ᠎ᠡ  ᠶᠢ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ ᠦᠯᠡᠳᠡᠬᠡᠵᠦ ᠪᠤᠯᠬᠤ ᠦᠬᠡᠢ  ", {
+						anim: 6
+					});
+					return;
+				}
+
+				if($('#sort').val() == '') {
+					layer.msg("ᠲᠡᠰ ᠲᠠᠷᠠᠭ᠎ᠠ ᠶᠢ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ ᠦᠯᠡᠳᠡᠬᠡᠵᠦ ᠪᠤᠯᠬᠤ ᠦᠬᠡᠢ", {
+						anim: 6
+					});
+					return;
+				}
+
+				if($('#parentId').val() == '') {
+					layer.msg("ᠲᠡᠬᠡᠳᠦ ᠲᠡᠰ ᠢ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ ᠦᠯᠡᠳᠡᠬᠡᠵᠦ ᠪᠤᠯᠬᠤ ᠦᠬᠡᠢ", {
+						anim: 6
+					});
+					return;
+				}
+
+				if($('#ifEffect').val() == '') {
+					layer.msg("ᠬᠡᠷᠡᠭᠯᠡᠬᠦ ᠡᠰᠡᠬᠦ ᠶᠢ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ ᠦᠯᠡᠳᠡᠬᠡᠵᠦ ᠪᠤᠯᠬᠤ ", {
+						anim: 6
+					});
+					return;
+				}
+				if($('#nameEn').val() == '') {
+					layer.msg("ᠠᠩᠭ᠍ᠯᠢ ᠨᠡᠷ᠎ᠡ  ᠶᠢ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ ᠦᠯᠡᠳᠡᠬᠡᠵᠦ ᠪᠤᠯᠬᠤ ᠦᠬᠡᠢ", {
+						anim: 6
+					});
+					return;
+				}
+				$('#submitBtn').removeAttr("disabled");
+				$('#submitBtn').attr("disabled", true);
+				var formdata = $("#form").serializeObject();
+				$.ajax({
+					type: 'post',
+					url: '/base/LawLevel',
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(formdata),
+					success: function(data) {
+						layer.msg("ᠨᠡᠮᠡᠵᠦ ᠤᠷᠤᠭᠤᠯᠪᠠ ", {
+							shift: -1,
+							time: 1000
+						}, function() {
+							window.parent.location.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

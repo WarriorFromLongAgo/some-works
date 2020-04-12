@@ -1,0 +1,59 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.3.100:3306/ole_test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false 
+    username: ole_test
+    password: ole_test_2018
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  http:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  mvc:
+    servlet:
+      load-on-startup: 1
+  redis:
+    host: localhost
+    port: 6379
+mybatis:
+  type-aliases-package: com.orhonit.ole.sys.model
+  mapper-locations: classpath*:/mybatis-mappers/*
+files:
+  path: ${file-path:D:/ole-upload/person}
+  versionPath: ${file-path:D:/ole-upload/appVerson}
+  bannerPath: ${file-path:D:/ole-upload/appBanner}
+  potencePath: ${file-path:D:/ole-upload/potence}
+logging:
+  config: classpath:logback-admin.xml
+log:
+  level:
+    root: info
+    my: debug
+  file: logs/warn-server.log
+  maxsize: 30MB
+token:
+  expire:
+    seconds: 86400
+server:
+  port: 8083
+  context-path: /warn
+upload:
+  serverUrl: http://localhost/
+  #serverUrl: http://111.235.156.244:8085/

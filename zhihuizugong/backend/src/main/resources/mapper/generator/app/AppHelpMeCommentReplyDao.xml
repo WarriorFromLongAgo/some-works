@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.orhonit.modules.generator.app.dao.AppHelpMeCommentReplyDao">
+    
+    <!-- 根据评论ID查询所有回复 -->
+    <select id="selectReplyList" resultType="com.orhonit.modules.generator.app.entity.AppHelpMeCommentReplyEntity">
+        SELECT 
+			reply.reply_id,
+			reply.content,
+			reply.user_id,
+			reply.reply_user_id,
+			reply.create_time,
+			reply.update_time,
+			er.user_true_name AS replyUserTrueName
+		FROM please_help_comment_reply reply
+			LEFT JOIN sys_user er ON reply.reply_user_id = er.user_id
+			WHERE reply.reply_id = #{replyId}
+			ORDER BY reply.create_time
+			LIMIT #{beginLimit},#{limit}
+    </select>
+    
+  </mapper>

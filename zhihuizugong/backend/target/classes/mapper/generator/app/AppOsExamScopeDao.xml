@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppOsExamScopeDao">
+   <resultMap type="com.orhonit.modules.generator.app.entity.AppOsExamScopeEntity" id="AppOsExamScopeMap">
+   
+   </resultMap>
+   
+   <!-- 在线考试查找是否有成绩 -->
+	<select id="selectOnlyOnlieExamScope" resultMap="AppOsExamScopeMap">
+		select * from
+		os_exam_scope s where s.user_id = #{userId} and s.paper_no = #{examId} and s.is_del='0'
+		and s.type = '2';
+	</select>
+	
+	<!-- // 个人排行榜 -->
+	<select id="selectPersonRank" resultType="com.orhonit.modules.generator.app.vo.AppPersonRrankVO">
+		SELECT
+			e.user_true_name AS name,
+			count(paper_no) AS 'answerCount',
+			ROUND(AVG(use_time),2) AS 'avgTime',
+			sum(yes) AS 'yesCount',
+			sum(error) AS 'errorCount',
+			sum(yes) / sum(yes) + sum(error) AS 'correctRate',
+			max(answer_time) AS 'answerTime',
+			now() AS 'updateTime',
+			sum(o.paper_score) as 'sumScore'
+		FROM
+		    os_exam_scope o
+		LEFT JOIN sys_user e on o.user_id = e.user_id
+		WHERE
+		    e.user_id != '' and o.is_del='0'
+		GROUP BY
+		    o.user_id,`name`
+		ORDER BY yesCount desc,name DESC
+		LIMIT #{beginLimit},#{limit}
+	</select>
+	
+	<insert id="insertExamScope">
+	  INSERT INTO os_exam_scope 
+			(
+			id,
+			paper_no,
+			user_id,
+			paper_score,
+			yes,
+			error,
+			answer_time,
+			use_time,
+			type,
+			create_time,
+			update_time
+			)VALUES(
+			#{id},
+			#{paperNo},
+			#{userId},
+			#{paperScore},
+			#{yes},
+			#{error},
+			#{answerTime},
+			#{useTime},
+			#{type},
+			#{createTime},
+			#{updateTime}
+			)
+	</insert>
+   
+</mapper>

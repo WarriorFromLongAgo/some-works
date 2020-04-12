@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.EjSchedulingDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.EjSchedulingEntity" id="ejSchedulingMap">
+        <result property="id" column="id"/>
+        <result property="schedulingTitle" column="scheduling_title"/>
+        <result property="schedulingContent" column="scheduling_content"/>
+        <result property="satrtTime" column="satrt_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="compere" column="compere"/>
+        <result property="schedulingType" column="scheduling_type"/>
+        <result property="createUser" column="create_user"/>
+    </resultMap>
+    <select id="save" parameterType="com.orhonit.modules.generator.entity.EjSchedulingEntity">
+        insert ej_scheduling(id,scheduling_title,scheduling_content,satrt_time,compere,scheduling_type,create_user,create_time,compere_name)
+        value (#{id},#{schedulingTitle},#{schedulingContent},#{satrtTime},#{compere},#{schedulingType},#{createUser},#{createTime},#{compereName})
+    </select>
+
+</mapper>

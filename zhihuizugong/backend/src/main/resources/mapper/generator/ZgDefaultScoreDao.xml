@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgDefaultScoreDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgDefaultScoreEntity" id="zgDefaultScoreMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="studyDefault" column="study_default"/>
+        <result property="thinkDefault" column="think_default"/>
+        <result property="executeDefault" column="execute_default"/>
+        <result property="innovateDefault" column="innovate_default"/>
+        <result property="synergyDefault" column="synergy_default"/>
+        <result property="serveDefault" column="serve_default"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="lowerId" column="lower_id"/>
+        <result property="lowerName" column="lower_name"/>
+    </resultMap>
+
+    <select id="findList" resultType="com.orhonit.modules.generator.entity.ZgDefaultScoreEntity">
+        select
+        *
+        from zg_default_score
+        where user_id = #{userId}
+    </select>
+
+    <select id="findUserInfo" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+        select
+        *
+        from sys_user
+        where user_id = #{userId}
+    </select>
+
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgDefaultScoreEntity">
+        INSERT INTO zg_default_score ( id, user_id,user_name, study_default, think_default, execute_default, innovate_default,
+         synergy_default, serve_default, update_time, lower_id, lower_name )
+        VALUES
+	    (
+        #{id},#{userId},(SELECT user_true_name FROM sys_user WHERE user_id = #{userId} ),#{studyDefault},#{thinkDefault},#{executeDefault},#{innovateDefault},#{synergyDefault},
+        #{serveDefault},#{updateTime},(SELECT lower_id FROM sys_user WHERE user_id = #{userId}),(SELECT lower_name FROM sys_user WHERE user_id = #{userId}))
+    </insert>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.systemctl.mapper.WidgetsMapper">
+     <!-- 组建筛选 -->
+     <select id="WidgetsList" parameterType="Map" resultType="com.orhon.smartcampus.modules.systemctl.entity.Widgets">
+     SELECT
+		id,title,NAME,apis,type,menu_id,module_id,
+		meta,clients,status,created_at,
+		updated_at,deleted_at 
+	 FROM
+		systemctl_widgets
+		<where>
+		
+		 <!--  <if test="title !=null and title !=''">
+		   json_extract(title,'$.en') like '%${title}%'
+		  </if> -->
+		  <if test="_parameter.containsKey('en')">
+		  json_extract(title,'$.en') like '%${en}%'
+		  </if>
+		   <if test="_parameter.containsKey('mn')">
+		  json_extract(title,'$.mn') like '%${mn}%'
+		  </if>
+		   <if test="_parameter.containsKey('zh')">
+		  json_extract(title,'$.zh') like '%${zh}%'
+		  </if>
+		  <if test="_parameter.containsKey('apis')">
+		  AND apis= #{apis}
+		  </if>
+		  <if test="type !=null and type !=''">
+		  AND type=#{type}
+		  </if>
+		  <if test="menuId >0">
+		  AND menu_id=#{menuId}
+		  </if>
+		  <if test="status>0">
+		  AND status=#{status}
+		  </if>
+		  <if test="moduleId > 0">
+		  AND module_id=#{moduleId}
+		  </if>
+		  <if test="clients!=null and clients !=''">
+		  AND clients=#{clients}
+		  </if>
+		</where>
+     </select>
+
+<select id="getList" resultType="java.util.HashMap">
+select * from systemctl_widgets
+</select>
+</mapper>

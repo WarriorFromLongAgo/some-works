@@ -1,0 +1,517 @@
+"日期标量"
+scalar Date
+
+"""
+普通返回信息
+"""
+type NormalResponse{
+    code:Int
+    msg:String
+}
+
+"""
+分页标准
+"""
+type Pagenation {
+    total:Int
+    current:Int
+    limit:Int
+}
+
+
+"状态枚举标量"
+enum Status {
+    PUBLISH
+    PENDING
+    DRAFT
+}
+
+"多语言类型"
+type Lang {
+    en:String
+    mn:String
+    zh:String
+}
+input LangInput{
+    zh:String
+    mn:String
+    en:String
+}
+
+"""
+地区类(完)
+"""
+type Region{
+    id:ID
+    "地区别名"
+    slug:String
+    "父级地区"
+    parent:Region
+    "地区等级"
+    level:Int
+    "显示顺序"
+    order:Int
+    "地区名称"
+    name:Lang
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+}
+"""
+地区输入项
+"""
+input RegionInput{
+    id:ID
+    "地区别名"
+    slug:String
+    "地区名称"
+    name:LangInput
+    "父级地区"
+    parent: Int
+    "地区等级"
+    level:Int
+    "显示顺序"
+    order:Int
+}
+"""
+地区维护返回
+"""
+type RegionResponse{
+    code:Int
+    msg:String
+    data:[Region]
+    pagenation:Pagenation
+}
+
+"""
+学校类
+"""
+type School {
+    "学校id"
+    id: ID
+    "学校名称"
+    name: Lang
+    "学校顺序"
+    school_order: Int
+    "学校编码"
+    school_number: String
+    "简介json"
+    introduction: Lang
+    "图标"
+    icon: String
+    "省市自治区id"
+    province_id: Region
+    "盟市id"
+    city_id: Region
+    "旗县id"
+    district_id: Region
+    "区域id"
+    region_id: Region
+    "学校头部图片"
+    header_img: String
+    "学校主题色"
+    main_color: String
+    "学校编码"
+    mark: String
+    "学校类型"
+    school_type: Dictionary
+    "校园云开通状态"
+    cloud_status: Int
+    "orhonedu对应学校客户key"
+    client_key:String
+    "orhonedu对应学校客户秘钥"
+    client_secret:String
+    "orhonedu地址"
+    orhonedu_base:String
+    "经度"
+    lng: String
+    "维度"
+    lat: String
+    "学校详细地址"
+    address: String
+    "父级学校id"
+    parent_id: School
+
+    "学校配置"
+    settings: SchoolSettings
+    "学校的模块"
+    modules: Modules
+    "学校用户"
+    users: User
+    "学校的学生"
+    students: Student
+    "学校的老师"
+    teachers: Teacher
+}
+"""
+学校维护
+"""
+input SchoolInput{
+    "学校id"
+    id: ID
+    "学校名称"
+    school_name: LangInput
+    "学校顺序"
+    school_order: Int
+    "学校编码"
+    school_number: String
+    "简介json"
+    introduction: LangInput
+    "图标"
+    icon: String
+    "省市自治区id"
+    province_id: String
+    "盟市id"
+    city_id: Int
+    "旗县id"
+    district_id: Int
+    "区域id"
+    region_id: Int
+    "学校头部图片"
+    header_img: String
+    "学校主题色"
+    main_color: String
+    "学校编码"
+    mark: String
+    "学校类型"
+    school_type: String
+    "校园云开通状态"
+    cloud_status: Int
+    "orhonedu对应学校客户key"
+    client_key:String
+    "orhonedu对应学校客户秘钥"
+    client_secret:String
+    "orhonedu地址"
+    orhonedu_base:String
+    "经度"
+    lng: String
+    "维度"
+    lat: String
+    "学校详细地址"
+    address: String
+    "父级学校id"
+    parent_id: Int
+}
+"""
+学校维护返回信息
+"""
+type SchoolResponse{
+    code:Int
+    msg:String
+    data:[School]
+    pagenation:Pagenation
+}
+
+
+"""
+学段类
+"""
+type Period {
+    id:ID
+    slug:String
+    number:String
+    name:Lang
+    order:Int
+    "学段别名"
+    period_slug:String
+    "学段编号"
+    period_number:String
+    "学段名称json"
+    period_name:Lang
+    "学段顺序"
+    period_order:Int
+    "学段编码"
+    mark:String
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+}
+"""
+学段维护内容
+"""
+input PeriodInput{
+    id:ID
+    "学段别名"
+    period_slug:String
+    "学段编号"
+    period_number:String
+    "学段名称json"
+    period_name:LangInput
+    "学段顺序"
+    period_order:Int
+    "学段编码"
+    mark:String
+}
+"""
+学段维护返回格式
+"""
+type PeriodResponse{
+    code:Int
+    msg:String
+    data:[Period]
+    pagenation:Pagenation
+}
+
+"""
+年级类
+"""
+type Grades {
+    id:ID
+    "年级别名"
+    slug:String
+    "年级名称"
+    name:Lang
+    "年级序号"
+    number:String
+    "年级排序"
+    order:Int
+    "编辑编码"
+    mark:String
+    "学段"
+    period:Period
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+}
+"""
+年级输入内容
+"""
+input GradesInput{
+    id:ID
+    "年级别名"
+    slug:String
+    "年级名称"
+    name: LangInput
+    "年级序号"
+    number:String
+    "年级排序"
+    order:Int
+    "编辑编码"
+    mark:String
+    "学段"
+    period: Int
+}
+"""
+年级维护返回
+"""
+type GradesRespnse{
+    code:Int
+    msg:String
+    data:[Grades]
+    pagenation:Pagenation
+}
+
+
+
+"""
+学科类型
+"""
+enum SubjectType{
+    "single普通学科"
+    single
+    "complex 综合学科"
+    complex
+}
+"""
+学科类
+"""
+type Subject {
+    "学科id"
+    id:ID
+    "学科名称"
+    subject_name:Lang
+    "学科别名"
+    subject_slug:String
+    "学科编号"
+    subject_number:String
+    "学科顺序"
+    subject_order:Int
+    "学科标识"
+    mark:String
+    "学科类型"
+    type: SubjectType
+    "关联学段"
+    period:Period
+    "关联年级"
+    grade:Grades
+}
+"""
+学科信息表单内容
+"""
+input SubjectInput {
+    "学科id"
+    id:ID
+    "学科名称"
+    subject_name:LangInput
+    "学科别名"
+    subject_slug:String
+    "学科编号"
+    subject_number:String
+    "学科顺序"
+    subject_order:Int
+    "学科标识"
+    mark:String
+    "学科类型"
+    type: String
+    "关联学段"
+    period: [Int]
+    "关联年级"
+    grade: [Int]
+}
+"""
+学科信息维护返回类型
+"""
+type SubjectResponse{
+    code:Int
+    msg:String
+    data:[Subject]
+    pagenation:Pagenation
+}
+
+
+"""
+学生届信息
+"""
+type Arrives {
+    "届id"
+    id:ID
+    "届名称"
+    name:Lang
+    "届标识"
+    mark:String
+    "年级"
+    grade:Grades
+    "学段"
+    period:Period
+    "显示顺序"
+    order:Int
+    "入学年份"
+    begin_year:String
+    "毕业年份"
+    graduate_year:String
+    "学校"
+    school:School
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+}
+"""
+届输入项
+"""
+input ArrivesInput{
+    "届id"
+    id:ID
+    "届名称"
+    name: LangInput
+    "届标识"
+    mark:String
+    "年级"
+    grade: Int
+    "学段"
+    period: Int
+    "显示顺序"
+    order:Int
+    "入学年份"
+    begin_year:String
+    "毕业年份"
+    graduate_year:String
+    "学校"
+    school: Int
+    "毕业状态"
+    garduate_status:Int
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+}
+
+"""
+届维护返回数据格式
+"""
+type ArrivesResponse{
+    code:Int
+    msg:String
+    data:[Arrives]
+    pagenation:Pagenation
+}
+
+
+
+
+"""
+数据字典
+"""
+type Dictionary {
+    "字典名称 dictionary_name"
+    name: Lang
+    "字典值 value_code"
+    value: String
+    "数据字典编码"
+    dictionary_code: String
+    "字典描述 dictionary_description"
+    description: Lang
+    "字典类型 option/category"
+    type: String
+    "字典父级id"
+    parent_id: Int
+    "字典分类名称"
+    alias: String
+    "字典状态"
+    status: Int
+    "字典扩展信息"
+    meta: String
+    "字典id"
+    id: ID
+}
+"数字字典输入标准"
+input  DictionaryInput {
+    "字典名称 dictionary_name"
+    name: LangInput!
+    "字典值 value_code"
+    value: String!
+    "数据字典编码"
+    dictionary_code: String!
+    "字典描述 dictionary_description"
+    description: String
+    "字典类型 option/category"
+    type: String!
+    "字典父级id"
+    parent_id: Int
+    "字典分类名称"
+    alias: String
+    "字典状态"
+    status: Int
+    "字典扩展信息"
+    meta: String
+    "字典id"
+    id: ID
+}
+"数字字典查询参数"
+input DictionaryCondition{
+    "字典id"
+    id: ID
+    "字典联合标识值"
+    dictionary_value: String
+    "字典名称 dictionary_name"
+    name:String
+    "字典值 value_code"
+    value: String
+    "数据字典编码"
+    dictionary_code: String
+    "字典类型 option/category"
+    type: String
+    "字典父级id"
+    parent_id: Int
+    "字典分类名称"
+    alias: String
+    "字典状态"
+    status: Int
+}
+"""
+数据字典维护返回类型
+"""
+type DictionaryResponse{
+    code:Int
+    msg:String
+    data:[Dictionary]
+    pagenation:Pagenation
+}

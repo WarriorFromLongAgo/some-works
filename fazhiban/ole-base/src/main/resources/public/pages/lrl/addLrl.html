@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>法律添加</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset>
+		
+		     <div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">发布部门<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					 <input class="form-control not-null" iname="发布部门" id="pub_dept" type="text"  style="width:100%" name="pub_dept"/>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">编码</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control"  placeholder="编码" type="text" name="code" id="code"
+						data-bv-notempty="true"
+						data-bv-notempty-message="编码" readonly="readonly">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">名称<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="名称" placeholder="名称" type="text" name="name" id="name"
+						data-bv-notempty="true"
+						data-bv-notempty-message="名称">
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">英文名</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="英文名" name="name_en" id="name_en"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">实施日期<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="实施日期" placeholder="实施日期" type="text" name="act_date" id="act_date">
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">有效日期<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control not-null" iname="有效日期" placeholder="有效日期" name="effect_date" id="effect_date"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">法律分类<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="effect_level_id" type="text" name="effect_level_id" style="width:100%"/>
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否有效</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="is_effect" class="form-control input-sm" id="is_effect">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">法规类别<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select class="form-control not-null " iname="法规类别" id="item_type" name="item_type"  >
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">原网站ID</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="原网站ID" name="source_href" id="source_href" />
+				</div>
+			</div>
+
+			<div class="form-actions" style="margin-top:30px">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" onclick="custom_close()">重置</button>
+						<button class="btn btn-primary" type="submit" onclick="add()" id="submitBtn" style="margin-left:10px">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use(['layer','laydate'], function(){
+	        var layer = layui.layer;
+	        var laydate = layui.laydate;
+	        laydate.render({
+	           elem: '#act_date'
+	        });
+	        laydate.render({
+		       elem:'#effect_date'
+		    });
+	    });
+		
+	  	//设置法规类别字典列表
+    	getDictList(dict.statute_type,"item_type");
+	  
+		getDictList(dict.if_effect,"is_effect");
+		
+		//法律分类下拉树
+		$("#effect_level_id").combotree({
+			method:'get',		//请求方式	
+			url : '/base/lrltionws/effectLevel',	//请求的URL
+			required: false,
+			cascadeCheck:false,
+			onLoadSuccess: function (node, data) {
+				if(null!=data&&data.length>0){
+					//$("#parent_id").combotree('setValue',data[0].text)
+				}
+				
+		    }, 
+			onChange:function(newV,oldV){
+				
+			}
+		});
+		
+		setCode();
+		function setCode(){
+			
+			$.ajax({
+				url:"/base/lrltionws/getSerialNum",
+				type:"GET",
+				success:function(data){
+					$('#code').val(data);
+				}
+			});
+			//var timestamp = (new Date()).getTime();
+			
+		}
+		
+		function custom_close(){
+			$('#pub_dept').val("");
+			$('#is_effect').val("");
+			$('#item_type').val("");
+			$('#name').val("");
+			$('#name_en').val("");
+			$('#effect_level_id').val("");
+		}
+		
+		//$("#pub_dept").combotree({
+			//method:'get',		//请求方式	
+		//	url : '/base/LtcAtts/ltcs',	//请求的URL
+		//	required: false, 
+		//	cascadeCheck:false,
+		//	onLoadSuccess: function (node, data) {
+		//		if(null!=data&&data.length>0){
+		//			$("#pub_dept").combotree('setValue',data[0].text)
+		//		}
+		//    }, 
+		//	onChange:function(newV,oldV){
+		//	}
+	//	});
+		
+		function add() {
+			//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+			
+			 $('#submitBtn').removeAttr("disabled");
+	         $('#submitBtn').attr("disabled",false); 
+		    
+		    
+		    var formdata = $("#form").serializeObject();
+		    formdata.effect_level=$("#effect_level_id").combotree('getText');
+			$.ajax({
+				type : 'post',
+				url : '/base/lrltionws',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+						 window.parent.location.reload();
+						 var index = parent.layer.getFrameIndex(window.name);
+						 parent.layer.close(index);
+                  });
+				}
+			});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+"教室 房间"
+type Room {
+    id:ID
+    "楼层"
+    floor:Floor
+    "面积"
+    area:Float
+    "房间编号"
+    code:String
+    "使用分类（通用分类）"
+    type:Int
+    "钥匙数量"
+    kye_num:Int
+    "房间状态"
+    status:Int
+    school:School
+    "房间负责人"
+    manager:Lang
+    "钥匙负责人"
+    keys_user_name:Lang
+    "房间名称"
+    name:Lang
+    "备注"
+    remarks:Lang
+}
+input RoomInput {
+    id:ID
+    "楼层"
+    floor_id:Int
+    "面积"
+    area:Float
+    "房间编号"
+    code:String
+    "使用分类（通用分类）"
+    type:Int
+    "钥匙数量"
+    kye_num:Int
+    "房间状态"
+    status:Int
+    school_id:Int
+    "房间负责人"
+    manager:LangInput
+    "钥匙负责人"
+    keys_user_name:LangInput
+    "房间名称"
+    name:LangInput
+    "备注"
+    remarks:LangInput
+}
+input RoomCondition{
+    id:ID
+    "楼层"
+    floor_id:Int
+    "面积"
+    area:Float
+    "房间编号"
+    code:String
+    "使用分类（通用分类）"
+    type:Int
+    "钥匙数量"
+    kye_num:Int
+    "房间状态"
+    status:Int
+    school_id:Int
+}
+type RoomResponse {
+    code:Int
+    error:String
+    data:[Room]
+    pagenation:Pagenation
+}
+
+"楼层"
+type Floor {
+    id:ID
+    "单元"
+    unit:Unit
+    "学校"
+    school:School
+    "楼层编号"
+    code:String
+    "楼层电话"
+    tel:String
+    "楼层负责人"
+    manager:Lang
+    "楼层名"
+    name:Lang
+}
+input FloorInput {
+    id:ID
+    "单元"
+    unit_id:Int
+    "学校"
+    school_id:Int
+    "楼层编号"
+    code:String
+    "楼层电话"
+    tel:String
+    "楼层负责人"
+    manager:LangInput
+    "楼层名"
+    name:LangInput
+}
+input FloorCondition {
+    id:ID
+    "单元"
+    unit_id:Int
+    "学校"
+    school_id:Int
+    "楼层编号"
+    code:String
+    "楼层电话"
+    tel:String
+}
+type FloorResponse {
+    code:Int
+    error:String
+    data:[Floor]
+    pagenation:Pagenation
+}
+
+
+"单元"
+type Unit{
+    "楼宇"
+    building:Building
+    "单元编号"
+    code:String
+    "单元电话"
+    tel:String
+    "楼层总数"
+    floor_num:Int
+    "学校"
+    school:School
+    "单元名称"
+    name:Lang
+    "单元负责人"
+    manager:Lang
+}
+input UnitInput{
+    "楼宇"
+    building_id:Int
+    "单元编号"
+    code:String
+    "单元电话"
+    tel:String
+    "楼层总数"
+    floor_num:Int
+    "学校"
+    school_id:Int
+    "单元名称"
+    name:LangInput
+    "单元负责人"
+    manager:LangInput
+}
+input UnitCondition{
+    "楼宇"
+    building_id:Int
+    "单元编号"
+    code:String
+    "单元电话"
+    tel:String
+    "楼层总数"
+    floor_num:Int
+    "学校"
+    school_id:Int
+}
+type UnitResponse {
+    code:Int
+    error:String
+    data:[Unit]
+    pagenation:Pagenation
+}
+
+"楼宇信息"
+type Building {
+    id:ID
+    "楼宇编号"
+    code:String
+    "校区"
+    campus:Campus
+    "场地"
+    site:Site
+    school:School
+    "总单元数"
+    unit_num:Int
+    "楼层数"
+    floor_num:Int
+    "房屋状态"
+    status:Int
+    "楼建立时间"
+    build_at:Date
+    "使用年限"
+    years:Int
+    "楼管电话"
+    tel:String
+    "建筑用途"
+    purpose:String
+    "建筑费用（选填）"
+    cost:Float
+    "楼宇面积"
+    area:Float
+    "占用面积"
+    occupied_area:Float
+    "建筑名称"
+    name:Lang
+    "财产所有权（学校或其他单位）"
+    property:Lang
+    "建筑类型（教学楼、生活等）"
+    material:Lang
+    "介绍"
+    intro:Lang
+}
+input BuildingInput {
+    id:ID
+    "楼宇编号"
+    code:String
+    "校区"
+    campus_id:Int
+    "场地"
+    site_id:Int
+    "学校"
+    school_id:Int
+    "总单元数"
+    unit_num:Int
+    "楼层数"
+    floor_num:Int
+    "房屋状态"
+    status:Int
+    "楼建立时间"
+    build_at:Date
+    "使用年限"
+    years:Int
+    "楼管电话"
+    tel:String
+    "建筑用途"
+    purpose:String
+    "建筑费用（选填）"
+    cost:Float
+    "楼宇面积"
+    area:Float
+    "占用面积"
+    occupied_area:Float
+    "建筑名称"
+    name:LangInput
+    "财产所有权（学校或其他单位）"
+    property:LangInput
+    "建筑类型（教学楼、生活等）"
+    material:LangInput
+    "介绍"
+    intro:LangInput
+}
+input BuildingCondition{
+    id:Int
+    code:String
+    "校区"
+    campus_id:Int
+    "场地"
+    site_id:Int
+    "学校"
+    school_id:Int
+    "总单元数"
+    unit_num:Int
+    "楼层数"
+    floor_num:Int
+    "房屋状态"
+    status:Int
+}
+type BuildingResponse{
+    code:Int
+    error:String
+    data:[Building]
+    pagenation:Pagenation
+}
+"场地"
+type Site {
+    id:ID
+    campus:Campus
+    "场地用途（选择）"
+    site_use:Int
+    "场地面积"
+    area:Float
+    "场地使用权（1.学校2外借）"
+    right_of_use:Int
+    "场地联系方式"
+    tel:String
+    "学校"
+    school:School
+    "名称"
+    name:Lang
+    "负责人"
+    manager:Lang
+}
+input SiteInput {
+    id:ID
+    "校区"
+    campus_id:Int
+    "场地用途（选择）"
+    site_use:Int
+    "场地面积"
+    area:Float
+    "场地使用权（1.学校2外借）"
+    right_of_use:Int
+    "场地联系方式"
+    tel:String
+    "学校"
+    school_id:Int
+    "名称"
+    name:LangInput
+    "负责人"
+    manager:LangInput
+}
+input SiteCondition{
+    id:ID
+    "校区"
+    campus_id:Int
+    "场地用途（选择）"
+    site_use:Int
+    "场地使用权（1.学校2外借）"
+    right_of_use:Int
+    "学校"
+    school_id:Int
+}
+type SiteResponse{
+    code:Int
+    error:String
+    data:[Site]
+    pagenation:Pagenation
+}
+"校区"
+type Campus {
+    id:ID
+    school:School
+    "校区占用面积"
+    area:String
+    "校区联系电话"
+    tel:String
+    "校区名称"
+    name:Lang
+    "校区管理人"
+    manager:Lang
+    "校区位置信息"
+    position:Lang
+}
+input CampusInput {
+    id:ID
+    "学校"
+    school_id:Int
+    "校区占用面积"
+    area:String
+    "校区联系电话"
+    tel:String
+    "校区名称"
+    name:LangInput
+    "校区管理人"
+    manager:LangInput
+    "校区位置信息"
+    position:LangInput
+}
+input CampusCondition{
+    id:ID
+    "学校"
+    school_id:Int
+}
+type CampusResponse{
+    code:Int
+    error:String
+    data:[Campus]
+    pagenation:Pagenation
+}

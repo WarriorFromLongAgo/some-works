@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.orhonit.modules.generator.dao.SubmittingDao">
+   
+   
+   
+   
+   <!-- 报送单位 列表 -->
+   <select id="getSubmittingList"  resultType="com.orhonit.modules.generator.vo.SubmittingVO">
+      SELECT
+			unit.id,
+			unit.org_id,
+			unit.telephone,
+			unit.ld_number,
+			unit.administration_number,
+			unit.cause_number,
+			unit.workmanship_number,
+			unit.hire_number,
+			unit.trainee_number,
+			unit.temporary_worker_number,
+			unit.retirees_number,
+			unit.score_ranking,
+			unit.work_task,
+			unit.user_id,
+			unit.create_time,
+			unit.cadres_number,
+			unit.update_time,
+			unit.is_del,
+			unit.auditor_id,
+			unit.tianbao_user_id,
+			ser.user_true_name AS auditorName,
+			org.org_name AS orgName,
+			er.user_true_name AS tianbaoName 
+		FROM
+		se_submitting_unit unit
+		LEFT JOIN sys_user ser ON unit.auditor_id = ser.user_id
+		LEFT JOIN tb_user_org org ON unit.org_id = org.org_id
+		LEFT JOIN sys_user er ON unit.tianbao_user_id = er.user_id
+		WHERE
+		1=1
+		<if test="params.orgName !=null and params.orgName !=''">
+		  AND  org.org_name like concat(concat('%',#{params.orgName}),'%')
+		</if>
+		AND unit.is_del='0'
+		ORDER BY unit.update_time desc
+		LIMIT #{params.beginLimit},#{params.limit}
+   </select>
+   <!-- 报送单位详情 -->
+   <select id="getOneSubmitt"  resultType="com.orhonit.modules.generator.vo.SubmittingVO">
+       SELECT
+			unit.id,
+			unit.org_id,
+			unit.telephone,
+			unit.ld_number,
+			unit.administration_number,
+			unit.cause_number,
+			unit.workmanship_number,
+			unit.hire_number,
+			unit.trainee_number,
+			unit.temporary_worker_number,
+			unit.retirees_number,
+			unit.score_ranking,
+			unit.work_task,
+			unit.user_id,
+			unit.create_time,
+			unit.cadres_number,
+			unit.update_time,
+			unit.is_del,
+			unit.auditor_id,
+			unit.tianbao_user_id,
+			ser.user_true_name AS auditorName,
+			org.org_name AS orgName,
+			er.user_true_name AS tianbaoName 
+		FROM
+		se_submitting_unit unit
+		LEFT JOIN sys_user ser ON unit.auditor_id = ser.user_id
+		LEFT JOIN tb_user_org org ON unit.org_id = org.org_id
+		LEFT JOIN sys_user er ON unit.tianbao_user_id = er.user_id
+		WHERE
+		unit.id=#{id}
+   </select>
+   
+   
+   </mapper>

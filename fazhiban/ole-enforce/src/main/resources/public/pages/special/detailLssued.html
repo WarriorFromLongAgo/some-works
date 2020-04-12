@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		<input type="hidden" id="id" name="id" value=""/>
+			<div class="form-group">
+				<label class="col-md-2 control-label">案件编号<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<input class="form-control" type="text" name="checkNum" disabled="disabled" id="checkNum">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查标题<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname="检查标题" placeholder="请输入检查标题" type="text" id="checkTitle" name="checkTitle">
+				</div>
+				<label class="col-md-2 control-label">检查对象<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname="检查对象"" placeholder="请输入检查对象" type="text" id="checkObject" name="checkObject">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查开始时间<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input placeholder="请输入检查开始时间 " class="form-control not-null" iname="检查开始时间" type="text" name="startDate"
+						id="startDate">
+				</div>
+				
+				<label class="col-md-2 control-label">检查结束时间<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input placeholder="请输入检查结束时间" class="form-control not-null" iname="检查结束时间" type="text" name="endDate"
+						id="endDate">
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查部门<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="easyui-combotree" id="dept" type="text" style="width:100%" name="deptid"/>
+				</div>
+				
+				<label class="col-md-2 control-label">执法人员<span class="btx">*</span></label>
+				<div class="col-md-4">
+				<input class="easyui-combotree" id="person" type="text" style="width:100%" name="personid"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查依据<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null"  placeholder="请输入检查依据" iname="检查依据" id="checkBasis" type="text" name="checkBasis">
+				</div>
+				<label class="col-md-2 control-label">检查方式<span class="btx">*</span></label>
+				<div class="col-md-4">
+				<select class="form-control not-null" id="checkWay"  iname="检查方式" name="checkWay"
+						data-bv-notempty="true">
+						<option value="2">专项检查</option>
+				</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查内容<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<textarea class="form-control not-null" rows="" cols="" iname="检查内容" id="checkContent" name="checkContent" placeholder="请输入检查内容"
+						></textarea>
+				</div>
+			</div>
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<div class="col-md-12">
+						<button class="btn btn-primary" type="submit"  id="tempBtn" onclick="save()">
+							<i class="fa fa-save"></i> 暂存
+						</button>
+						
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add(1)">
+							<i class="fa fa-save"></i> 提交
+						</button>
+					</div>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>  
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+    var deptN,personN;
+    var personName;
+    var userId; 
+	     layui.use(['layer','laydate'], function(){
+		    var layer = layui.layer;
+		    var laydate = layui.laydate;
+		    laydate.render({
+	           elem: '#birthday'
+	        });
+		});
+  		
+  		 $.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			data : $("#form").serialize(),
+			success : function(data) {
+				userId=data.id;
+			}
+		});
+		
+        $('#endDate').datetimepicker({  
+            format: 'YYYY-MM-DD HH:mm:ss',  
+            locale: moment.locale('zh-cn')  
+        }); 
+        
+        $('#startDate').datetimepicker({  
+            format: 'YYYY-MM-DD HH:mm:ss',  
+            locale: moment.locale('zh-cn')  
+        }); 
+        
+    	
+        var deptId;
+        var personId;
+         $.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			data : $("#form").serialize(),
+			success : function(data) {
+				deptId=data.dept_id;
+				//当前主体以及下属主体数据请求
+				$("#dept").combotree({
+					type : 'get',
+					url : '/enforce/lssued/dept/'+deptId,
+					async : false,
+					onChange:function(newV,oldV){
+						  $('#person').contents().remove();
+						  $("#person").combotree({
+					 		 	type : 'get',
+								url : '/enforce/lssued/persons/'+newV,
+								multiple: true,
+								async : false,
+								onChange:function(newV,oldV){
+								}
+						  });
+					}
+				});
+			},
+		 onExpand:function() {
+			$('#dept').combo('setText' , deptN);
+			}
+		});
+        
+        
+	  function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+		}
+	    var id = getQuery('checkId');
+	    if ( id == null || id == '' ) {
+	    	alert('参数异常.');
+	    	window.location.href = 'specialLssuedList.html';
+	    }
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/case/deptPerson',
+			success : function(data) {
+				$.ajax({
+					type : 'get',
+					url : '/enforce/lssued/getCheck/' + id,
+					contentType: "application/json; charset=utf-8",  
+					async : false,
+					success : function(data) {
+						$('#id').val(data.id);
+						$('#checkNum').val(data.checkNum);
+						$('#checkTitle').val(data.checkTitle);
+						$('#checkObject').val(data.checkObject);
+						$('#startDate').val(data.startDate);
+						$('#endDate').val(data.endDate);
+						personId=data.personId;
+						$('#dept').combotree('setValue', data.deptId); 
+						$('#person').combotree('setValues', personId.split(',')); 
+						$('#checkBasis').val(data.checkBasis);
+						$('#checkWay').val(data.checkWay);
+						$('#checkContent').val(data.checkContent);
+					}
+				});
+			}
+		});	
+
+        function add(tmpFlag) {
+
+        	//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+        	if($('#dept').val()==""){
+        		layer.msg("检查部门为空.", {anim:6});
+        		return;
+        	}
+        	if($('#person').val()==""){
+        		layer.msg("执法人员为空.", {anim:6});
+        		return;
+        	}
+			$('#submitBtn').attr("disabled",true); 
+			$('#tempBtn').attr("disabled",true); 
+        	var formdata = $("#form").serializeObject();
+        	formdata.deptId = $("#dept").val();
+        	var options=$("#person option:selected");
+        	formdata.personName=options.text();
+        	formdata.personId = $("#person").val();
+        	formdata.status=$("#checkWay").val();
+        	//if(tmpFlag==0){
+        	//	formdata.status=tmpFlag;
+        	//}
+        	if($('#id').val()!=null||$('#id').val()!=""){
+        		formdata.id=$('#id').val();
+        	}
+        	formdata.checkNum=$('#checkNum').val();
+		    openInputCommentDialog(formdata);
+		    
+		   
+		}	
+    	 // 设置检查意见信息
+        function openInputCommentDialog(formdata)
+        {
+        	$.confirm({
+        	    title: '检查信息',
+        	    content: '' +
+        	    '<form action="" class="formName">' +
+        	    '<div class="form-group">' +
+        	    '<label>批注</label>' +
+        	    '<input type="text" placeholder="请输入检查意见信息" class="name form-control" required />' +
+        	    '</div>' +
+        	    '</form>',
+        	    buttons: {
+        	        formSubmit: {
+        	            text: '提交',
+        	            btnClass: 'btn-blue',
+        	            action: function () {
+        	                var name = this.$content.find('.name').val();
+        	                if(!name){
+        	                	$.alert({
+        					        title: '操作失败.',
+        					        content: '检查意见不能为空.',
+        					        icon: 'fa fa-remove',
+        					        animation: 'zoom',
+        					        closeAnimation: 'zoom',
+        					        buttons: {
+        					            okay: {
+        					                text: '确认',
+        					                btnClass: 'btn-blue',
+        					                action: function(){
+        					    			}
+        					            }
+        					        }
+        						});
+        	                    return false;
+        	                }else{
+        	                	$('#comment').val(name);
+	        	                formdata.comment =name;
+	        	                console.log(formdata);
+	        	               $.ajax({
+					    				type : 'post',	
+					    				url : '/enforce/lssued/save',
+					    				contentType: "application/json; charset=utf-8",  
+					    				data : JSON.stringify(formdata),
+					    				success : function(data) {
+					    					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+					    						window.parent.example.ajax.reload();
+												var index = parent.layer.getFrameIndex(window.name);
+												parent.layer.close(index);
+						                    });
+					    				}
+					    			});
+	        	                }
+        	            }
+        	        },
+        	        cancel: {
+        	        	text : '取消'
+        	        },
+        	    },
+        	    onContentReady: function () {
+        	        var jc = this;
+        	        this.$content.find('form').on('submit', function (e) {
+        	            e.preventDefault();
+        	            jc.$$formSubmit.trigger('click'); // reference the button and click it
+        	        });
+        	    }
+        	});
+        }
+        function save()
+        {
+        	if($('#dept').val()==""){
+        		layer.msg("检查部门为空.", {anim:6});
+        		return;
+        	}
+        	
+        	if($('#person').val()==""){
+        		layer.msg("执法人员为空.", {anim:6});
+        		return;
+        	}
+        	
+        	//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+
+			$('#submitBtn').attr("disabled",true); 
+			$('#tempBtn').attr("disabled",true);
+        	
+			var formdata = $("#form").serializeObject();
+        	formdata.deptId = $("#dept").val();
+        	formdata.personName=personName;
+        	formdata.personId = $("#person").val();
+        	formdata.status='0';
+        	
+        	$.ajax({
+    				type : 'post',	
+    				url : '/enforce/lssued/temsave',
+    				contentType: "application/json; charset=utf-8",  
+    				data : JSON.stringify(formdata),
+    				success : function(data) {
+    					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+    						window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+	                    });
+    				}
+    			}); 
+        }
+    </script>
+</body>
+</html>

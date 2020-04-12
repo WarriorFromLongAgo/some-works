@@ -1,0 +1,123 @@
+﻿@charset "utf-8";
+
+.layui-layout-admin .header-demo {
+    /*border-bottom: 5px solid #2d6689;*/
+    background-color: #0f4cb7!important;
+}
+
+.header-demo .layui-nav .layui-nav-item a {
+    color: #ffffff!important;
+}
+
+.admin-login-box {
+    width: 100%;
+    height: 60px;
+}
+
+.header-demo .logo {
+    left: 0;
+}
+
+a.logo {
+    color: #fff;
+}
+
+.logo {
+    top: 15px;
+}
+
+.logo img {
+    width: 34px;
+    height: 36px;
+    margin-top: -10px;
+    margin-right: 8px;
+}
+
+.admin-header-user .layui-nav-more {
+    top: 30px;
+}
+
+.admin-side-toggle {
+    background-color: rgba(0, 0, 0, .0);
+    color: rgba(255, 255, 255, .7);
+    left: 200px;
+}
+
+.admin-side-toggle:hover {
+    /*background-color: #0f4cb7;*/
+    color: #fff;
+}
+
+.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-this > a:hover {
+    background: #5b8bff;
+    color:#fff !important;
+    /*border-left-color: #3c8dbc;*/
+}
+
+.admin-nav-card > .layui-tab-title .layui-this {
+    background-color: #5b8bff;
+}
+
+.admin-nav-card > .layui-tab-title {
+    border-bottom: 1px solid #dcdcdc;
+    background: #f2f2f2;
+}
+
+.layui-tab-title li {
+    border-right: 1px solid #dcdcdc;
+}
+
+.layui-tab-title li .layui-tab-close:hover {
+    background-color: #6eaeff;
+}
+
+.layui-nav {
+    background-color: #222d32;
+    border-radius: 0;
+}
+
+.layui-nav-tree .layui-nav-item a:hover {
+    background: #0f4cb7 !important;
+    color: #ffffff!important;
+    /*border-left-color: #3c8dbc;*/
+}
+
+.layui-nav-itemed .layui-nav-child {
+    background-color: #5b8bff !important;
+}
+
+.layui-bg-black {
+    background-color: #ffffff !important;
+}
+
+/*.layui-nav .layui-nav-item a{*/
+/*border-left: 3px solid transparent;*/
+/*}*/
+.layui-nav .layui-nav-item a, .layui-nav-tree .layui-nav-child a {
+    opacity: 1;
+}
+.layui-nav-itemed>a, .layui-nav-tree .layui-nav-title a, .layui-nav-tree .layui-nav-title a:hover {
+    color: #858080 !important;
+}
+#sub-frame-error {
+    background-color: #f2f2f2;
+}
+
+.layui-nav-child {
+    background-color: #597688;
+    border: 1px solid #47606f;
+    border-radius: 0;
+}
+
+.layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this {
+    background-color: #5b8bff;
+}
+
+.layui-nav .layui-nav-child a:hover {
+    background-color: #3c8dbc;
+    color: #3c8dbc;
+}
+
+.header-demo .layui-nav .layui-nav-item a:hover {
+    color: #fff;
+}

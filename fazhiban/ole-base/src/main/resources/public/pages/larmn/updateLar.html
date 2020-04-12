@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+		<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+		<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+		<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+		<script type="text/javascript">
+		       orhonIMEinit = {
+		           element: "",
+		           ele_except: "",
+		           editor: {
+		               IME_Mount: true,
+		               tinymce: "",
+		               ueditor: "",
+		           },
+		           IME_cssurl: "",
+		           IME_theme: "",
+		           Output_Unicode: true,
+		       };
+		       Iframe_init = {
+		           iframes: "",
+		           ifr_except: "",
+		           element: "",
+		           ele_except: "",
+		       };
+		</script>
+	</head>
+
+	<body>
+
+		<div class="centent">
+			<form class="form-horizontal" onsubmit="return false" id="form">
+				<fieldset>
+					<input type="hidden" id="id" name="id">
+					<div class="form-group" style="margin-top:10px">
+						<label class="control-label">ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠳ᠋ᠤᠭᠠᠷ</label>
+						<input class="form-control" type="text" name="code" id="code" readonly="readonly">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠳᠡᠭᠡᠳᠦ ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ</label>
+						<input class="easyui-combotree" id="parent_id" type="text" name="parent_id" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ</label>
+						<input class="form-control not-null" iname="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠢᠢᠳᠦᠯ" placeholder="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠢᠢᠳᠦᠯ" type="text" name="name" id="name" data-bv-notempty="true" data-bv-notempty-message="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠢᠢᠳᠦᠯ">
+					</div>
+					<div class="form-group">
+					<label class="control-label">ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠠᠭᠤᠯᠭ᠎ᠠ</label>
+					<input class="form-control not-null" iname="ᠬᠠᠷᠢᠭᠤᠴᠠᠬᠤ ᠤᠴᠢᠷ" placeholder="ᠬᠠᠷᠢᠭᠤᠴᠠᠬᠤ ᠤᠴᠢᠷ" name="duty" id="duty" />
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠳᠠᠰ</label>
+			<select name="level" class="form-control input-sm not-null" iname="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠳᠡᠰ" id="level">
+				<option value="0">ᠰᠤᠩᠭᠤᠬᠤ</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠦᠨᠳᠦᠰᠦᠯᠡᠯ</label>
+			<input class="form-control not-null" iname="ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠦᠨᠳᠦᠰᠦ ᠪᠠᠷᠢᠮᠲᠠ " placeholder="ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠦᠨᠳᠦᠰᠦ ᠪᠠᠷᠢᠮᠲᠠ " name="duty_ref" id="duty_ref" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label">ᠬᠢᠨᠠᠨ ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠬᠦ ᠴᠢᠬᠤᠯᠠ ᠨᠥᠬᠥᠴᠡᠯ</label>
+			<textarea class="form-control not-null" iname="ᠬᠢᠨᠠᠨ ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠬᠦ ᠪᠢᠴᠢᠭ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ" placeholder="ᠬᠢᠨᠠᠨ ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠬᠦ ᠪᠢᠴᠢᠭ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ" name="approval_req" id="approval_req"></textarea>
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠦᠨᠳᠦᠰᠦ ᠪᠠᠷᠢᠮᠲᠠ</label>
+			<textarea class="form-control not-null" iname="ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠨᠡᠬᠡᠮᠵᠢᠯᠡᠬᠦ ᠦᠨᠳᠦᠰᠦ ᠪᠠᠷᠢᠮᠲᠠ " placeholder="ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠨᠡᠬᠡᠮᠵᠢᠯᠡᠬᠦ ᠦᠨᠳᠦᠰᠦ ᠪᠠᠷᠢᠮᠲᠠ " name="acc_basis" id="acc_basis"></textarea>
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠵᠦᠢᠯ ᠦᠨ ᠲᠥᠷᠥᠯ ᠢᠯᠭᠠᠯ</label>
+			<select name="pro_type" class="form-control input-sm not-null" iname="ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠶᠠᠪᠤᠳᠠᠯ ᠦᠨ ᠳᠡᠰ" id="pro_type">
+				<option value="0">ᠰᠤᠩᠭᠤᠬᠤ</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠦᠢᠯᠡᠳᠦᠯ ᠭᠠᠷᠬᠤ ᠡᠰᠡᠬᠦ</label>
+			<select name="is_effect" class="form-control input-sm" id="is_effect">
+			</select>
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠭᠦᠢᠴᠡᠳᠬᠡᠬᠦ ᠴᠠᠭ  ᠤᠨ ᠬᠢᠵᠠᠭᠠᠷ</label>
+			<input class="form-control not-null" iname="ᠭᠦᠢᠴᠡᠳᠬᠡᠬᠦ ᠴᠠᠭ ᠦᠨ ᠬᠢᠵᠠᠭᠠᠷ" placeholder="ᠭᠦᠢᠴᠡᠳᠬᠡᠬᠦ ᠴᠠᠭ ᠦᠨ ᠬᠢᠵᠠᠭᠠᠷ" name="limit_time" id="limit_time" />
+
+		</div>
+		<div class="form-group">
+			<label class="control-label">ᠲᠠᠶᠢᠯᠪᠤᠷᠢ</label>
+			<textarea class="form-control" placeholder="ᠲᠤᠳᠤᠷᠬᠠᠢᠢᠯᠠᠯᠳᠠ" name="remarks" id="remarks"></textarea>
+		</div>
+		<div class="form-actions">
+			<div class="row" align="center">
+				<div class="col-md-12">
+					<button class="btn btn-primary" type="submit" id="submitBtn" onclick="update()" style="margin-left:10px">
+									<i class="fa fa-save"></i> ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ
+								</button>
+				</div>
+			</div>
+		</div>
+		</fieldset>
+		</form>
+		</div>
+
+		<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../../js/jq.js"></script>
+		<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+		<script type="text/javascript" src="../../js/common.js"></script>
+		<script type="text/javascript" src="../../js/constans.js"></script>
+		<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+		<script src="../../js/select2/js/select2.full.js"></script>
+		<script type="text/javascript">
+			
+			$(function () {
+			    console.log("ready");
+			    console.log($("select"));
+			    $('select').select2();
+			    $(document)
+			        .on('click', '.select2.select2-container', function () {
+			            var self = $(this);
+			            setTimeout(function () {
+			                $('.select2-container--open').height(self.height()).width(self.width());
+			                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+			            }, 100);
+			        })
+			        // .on("DOMNodeInserted", function (e) {
+			        //     $('select').select2();
+			        //
+			        // })
+		
+			})
+		
+		
+		
+		
+			layui.use('layer', function() {
+				var layer = layui.layer;
+			});
+
+			getDictList("1072", "is_effect");
+			getDictList("2070", "level");
+			getDictList("2071", "pro_type");
+
+			$("#parent_id").combotree({
+				method: 'get', //请求方式	
+				url: '/base/LarLists/lars', //请求的URL
+				required: false,
+				cascadeCheck: false,
+				onLoadSuccess: function(node, data) {
+					initData();
+				},
+				onChange: function(newV, oldV) {}
+			});
+
+			function initData() {
+				var id = getUrlParam("id");
+				if(id != "") {
+					$.ajax({
+						type: 'get',
+						url: '/base/lartions/' + id,
+						async: false,
+						success: function(data) {
+							$("#id").val(data.id);
+							$("#code").val(data.code);
+							$('#parent_id').combotree('setValue', {
+								id: data.parent_id,
+								text: data.parent_id
+							});
+							$("#name").val(data.name);
+							$("#duty").val(data.duty);
+							$("#is_effect").val(data.is_effect);
+							$("#limit_time").val(data.limit_time);
+							$("#pro_type").val(data.pro_type);
+
+							$("#level").val(data.level);
+							$("#duty_ref").val(data.duty_ref);
+							$("#approval_req").val(data.approval_req);
+							$("#acc_basis").val(data.acc_basis);
+							$("#remarks").val(data.remarks);
+
+						}
+					});
+
+				}
+			}
+
+			function selectCss() {
+				layer.open({
+					type: 2,
+					title: "鏍峰紡",
+					area: ['800px', '400px'],
+					shadeClose: true,
+					content: ['icon.html']
+				});
+			}
+
+			function update() {
+				//$('#form').bootstrapValidator();
+				//var bootstrapValidator = $("#form").data('bootstrapValidator');
+				//bootstrapValidator.validate();
+				// if(!bootstrapValidator.isValid()){
+				//   return;
+				//  }
+				if($('#parent_id').val() == null || $('#parent_id').val() == '') {
+					layer.msg("ᠳᠡᠭᠡᠳᠦ ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ", {
+						anim: 6
+					});
+					return;
+				}
+				if($('#code').val() == null || $('#code').val() == '') {
+					layer.msg(" ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢᠨ ᠤᠷᠤᠯᠠᠬᠤ ᠲᠡᠮᠳᠡᠭ ᠨᠢ ᠬᠤᠭᠤᠰᠤᠨ ", {
+						anim: 6
+					});
+					return;
+				}
+				if($('#parent_id').val() == $("#id").val()) {
+					layer.msg("ᠲᠡᠬᠡᠳᠦ ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠨᠢ ᠤᠳᠤᠬᠢ ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ  ᠶᠢ ᠰᠤᠩᠭᠤᠵᠤ ᠪᠤᠯᠬᠤ ᠦᠬᠡᠢ ", {
+						anim: 6
+					});
+					return;
+				}
+				//数据格式校验
+				if(!dataCheck_mn()) {
+					return;
+				}
+
+				$('#submitBtn').removeAttr("disabled");
+				$('#submitBtn').attr("disabled", false);
+
+				var formdata = $("#form").serializeObject();
+
+				$.ajax({
+					type: 'put',
+					url: '/base/lartions/',
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(formdata),
+					success: function(data) {
+						layer.msg(" ᠰᠢᠨᠡᠴᠢᠯᠡᠪᠡ ", {
+							shift: -1,
+							time: 1000
+						}, function() {
+							window.parent.location.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

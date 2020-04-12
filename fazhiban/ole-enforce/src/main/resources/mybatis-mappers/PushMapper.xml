@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.MessagePushDao">
+	<select id="getOfflinePush"
+		resultType="com.orhonit.ole.enforce.entity.MessagePushEntity">
+		SELECT *
+		FROM ole_message_push t
+		WHERE t.push_person = #{push_person}
+		and t.push_success=1
+	</select>
+	
+	<select id="getPcOfflinePush"
+		resultType="com.orhonit.ole.enforce.entity.MessagePushEntity">
+		SELECT *
+		FROM ole_message_push t
+		WHERE t.push_person = #{pc_push_person}
+		and t.pc_push_success=1
+	</select>
+</mapper>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<style>
+.textbox{border-radius:0;}
+</style>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset>
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">行政区域</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="area" type="text" style="width:100%;height:30px;" name="area_id"/>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="dept" type="text" style="width:100%;height:30px;" name="dept_id"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">人员</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select onchange="setPerson2Form()" id="person" class="form-control input-sm" name="person_id">
+					</select>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">角色</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+				<input class="easyui-combotree" id="roles" type="text" style="width:100%;height:30px;"/>
+				</div>
+			</div>
+			<input type="hidden" id="id" name="id">
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">登陆账号<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control"  readonly="readonly"  placeholder="请输入登录账号" type="text" name="username"
+						id="username"
+						data-bv-notempty="true"
+						data-bv-notempty-message="登录账号不能为空">
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">用户名<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control"   placeholder="请输入用户名" type="text" name="nickname" id="nickname">
+				</div>
+			</div>
+			
+          <div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">联系电话</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" placeholder="请输入联系电话" type="text" maxlength="20" name="telephone" id="telephone">
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">性别</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select class="form-control input-sm" name="sex" id="sex">
+						<option value="1">男</option>
+						<option value="2">女</option>
+					</select>
+				</div>
+			</div>
+			
+			 <div class="form-group">
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">用户状态</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select class="form-control input-sm" name="status" id="status">
+						<option value="1">正常</option>
+						<option value="2">锁定</option>
+						<option value="0">无效</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-actions col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="row" align="center">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<button class="btn btn-primary" type="submit" onclick="update()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>	
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+	
+	$("#area").combotree({
+		method:'get',		//请求方式	
+		url : '/auth/permissions/area',	//请求的URL
+		required: false, 
+		onChange:function(newV,oldV){
+			$("#dept").combotree('clear');
+			$("#dept").combotree('reload','/auth/permissions/dept?id='+newV);
+			$("#person option").remove();			
+		},
+		onLoadSuccess:function(){
+			initData();
+		}
+	});
+	
+	layui.use(['layer','laydate'], function(){
+	    var layer = layui.layer;
+	    var laydate = layui.laydate;
+	    laydate.render({
+           elem: '#birthday'
+        });
+	});
+	
+	initRoles();
+	
+	function initData(){
+		var id = getUrlParam("id");
+		
+		if(id != ""){
+			$.ajax({
+				type : 'get',
+				url : '/auth/users/'+id,
+				success : function(data) {
+					console.log(data);
+					$("#id").val(data.id);
+					$("#username").val(data.username);
+					$("#nickname").val(data.nickname);
+					$("#phone").val(data.phone);
+					$("#telephone").val(data.telephone);
+					$("#email").val(data.email);
+					$("#birthday").val(data.birthday);
+					$("#sex").val(data.sex);
+					$("#status").val(data.status);
+					$("#area").combotree("setValue",data.area_id);
+					/**
+					 * 区划-主体数据请求
+					 */
+					$("#dept").combotree({
+						method:'get',		//请求方法	
+						url : '/auth/permissions/dept?id='+data.area_id,	//请求的URL
+						required: false,
+						onChange:function(newV,oldV){
+							$("#person option").remove();
+							getPersonList(newV);
+						},
+						onLoadSuccess:function(){
+							$("#dept").combotree("setValue",data.dept_id);
+							getPersonList(data.dept_id,data.person_id);
+						}
+					});
+					$("#person").val();
+				}
+			});
+			initRoleDatas(id);
+		}
+	}
+		$('#form').bootstrapValidator();
+		
+		function update() {
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = $("#form").serializeObject();
+		    formdata.roleIds = getCheckedRoleIds();
+		    
+			$.ajax({
+				type : 'put',
+				url : '/auth/users',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+                         //window.parent.location.reload();
+                         window.parent.example.draw(false);
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+                    });
+				}
+			});
+		}
+		
+		/**
+		 * 行政区划数据请求
+		 * @returns {} 
+		 */
+		function clearForm(){
+			//鍙栨秷鎺т欢鐨勪笉鍙紪杈戠姸鎬�
+			$("#nickname").removeAttr("readonly");
+			$("#username").removeAttr("readonly");
+			$("#telephone").removeAttr("readonly");
+			$("#birthday").removeAttr("disabled");
+			$("#sex").removeAttr("readonly");
+		}
+		
+		/**
+		 * 浜哄憳淇℃伅濉厖鍏ヨ〃鍗�
+		 * @returns {} 
+		 */
+		function setPerson2Form(){
+			var id = $("#person").val();
+			if(id==""){
+				clearForm();
+			}else{
+				$.ajax({
+					type : 'get',
+					url : '/auth/permissions/person?id='+id,
+					contentType: "application/json; charset=utf-8",  
+					success : function(data) {
+						//濉厖鍊�
+						$("#nickname").val(data.name);
+						$("#username").val(data.cert_num);
+						$("#telephone").val(data.tel);
+						$("#birthday").val(data.birthday);
+						$("#sex").val(data.sex);
+						//璁剧疆涓哄彧璇�
+						$("#nickname").attr("readonly","readonly");
+						$("#username").attr("readonly","readonly");
+						$("#telephone").attr("readonly","readonly");
+						$("#birthday").attr("disabled","disabled");
+						$("#sex").attr("readonly","readonly");
+					}
+				});
+			}
+		}
+		
+		/**
+		 * 涓讳綋-浜哄憳鏁版嵁璇锋眰
+		 * @param {} dept_id
+		 * @returns {} 
+		 */
+		function getPersonList(dept_id,person_id){
+			$.ajax({
+				type : 'get',
+				url : '/auth/permissions/persons?dept_id='+dept_id,
+				contentType: "application/json; charset=utf-8",  
+				success : function(data) {
+					setSelectOptions(data,"person","id","name",person_id);
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.CaseDao">
+
+	<select id="findCase" resultType="com.orhonit.ole.report.dto.CaseDetailDTO">
+		SELECT 
+			ec.id AS caseId, 
+			ec.case_name AS caseName, 
+			edc.id AS docContentId, 
+			edt.name AS templateName , 
+			edt.id AS templateId, 
+			epi.id AS partyId, 
+			epi.name AS partyName 
+		FROM ole_ef_case ec   
+			LEFT JOIN ole_ef_doc_content edc ON edc.case_id = ec.id 
+			LEFT JOIN ole_ef_doc_template edt ON edt.id = edc.template_id 
+			LEFT JOIN ole_ef_party_info epi ON ec.id = epi.case_id 
+		WHERE ec.id = #{id};
+			
+	</select>
+
+	
+</mapper>

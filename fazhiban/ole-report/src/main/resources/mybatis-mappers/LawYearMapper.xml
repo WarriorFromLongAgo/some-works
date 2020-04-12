@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.LawYearDao">
+<!-- 新增法律法规年度统计 -->
+<select id="selectLaw" resultType="com.orhonit.ole.report.dto.LawYearDTO">
+	<![CDATA[select a.publishDate,a.effectLevel ,count(*)  lawCount from (
+		select 
+				oblc.effect_level effectLevel,
+				oblc.effect_level_id effectLevelId,
+				DATE_FORMAT(oblc.publish_date,'%Y') publishDate
+			from
+				ole_base_law_category oblc
+			where  oblc.is_effect='1' AND oblc.del_flag='0' and oblc.effect_level<>'') a 
+	GROUP BY a.publishDate,a.effectLevel]]>
+</select>
+
+</mapper>

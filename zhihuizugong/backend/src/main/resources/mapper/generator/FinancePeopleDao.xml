@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.FinancePeopleDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.FinancePeopleEntity" id="financePeopleMap">
+        <result property="id" column="id"/>
+        <result property="peopleName" column="people_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="lowerId" column="lower_id"/>
+        <result property="lowerName" column="lower_name"/>
+        <result property="userDept" column="user_dept"/>
+        <result property="financeId" column="finance_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+	
+	<select id="allList" resultMap="financePeopleMap">
+		select * from tb_finance_people where finance_id = #{financeId}
+	</select>
+	
+	<select id="lowerList" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+		select 
+			user_id userId,username,user_true_name userTrueName,mobile,user_dept userDept,
+			is_party_member isPartyMember,lower_id lowerId,lower_name lowerName,
+			is_leadership isLeadership,is_head isHead
+		 from sys_user where lower_id = #{lowerId}
+	</select>
+
+</mapper>

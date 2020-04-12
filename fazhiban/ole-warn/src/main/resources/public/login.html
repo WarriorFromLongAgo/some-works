@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>监督预警系统</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        
+        <!-- #CSS Links -->
+        <!-- Basic Styles -->
+        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+
+        <!-- Styles : Caution! DO NOT change the order -->
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+
+        <!-- RTL Support -->
+
+        <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        
+        <!-- Startup image for web apps -->
+        <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+        <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+        <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+    </head>
+    
+    <body class="animated fadeInDown">
+
+        <header id="header">
+
+            <div id="logo-group">
+                <span id="logo">
+                                            监督预警系统
+                </span>
+            </div>
+        </header>
+
+        <div id="main" role="main">
+
+            <!-- MAIN CONTENT -->
+            <div id="content" class="container">
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
+                        <h1 class="txt-color-red login-header-big">admin</h1>
+                        <div class="hero">
+
+                            <div class="pull-left login-desc-box-l">
+                                <h4 class="paragraph-header">监督预警系统</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+                        <div class="well no-padding">
+                            <form id="login-form" class="smart-form client-form" method="post" onsubmit="return false;">
+                                <header>登录</header>
+
+                                <fieldset>
+                                    <section>
+                                        <label class="label">用户名</label>
+                                        <label class="input"> <i class="icon-append fa fa-user"></i>
+                                            <input type="text" name="username" id="username" placeholder="请输入用户名">
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 请输入您的用户名</b></label>
+                                    </section>
+                                    <section>
+                                        <label class="label">Password</label>
+                                        <label class="input"> <i class="icon-append fa fa-lock"></i>
+                                            <input type="password" name="password" id="password" placeholder="请输入密码">
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入您的密码</b> </label>
+                                    </section>
+                                    
+                                    <span id="info" style="color: red"></span>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" onclick="login(this)">登录</button>
+                                </footer>
+                            </form>
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <script src="js/libs/jquery-2.1.1.min.js"></script>
+
+        <!-- BOOTSTRAP JS -->       
+        <script src="js/bootstrap/bootstrap.min.js"></script>
+        
+        <script src="js/common.js"></script>
+        <script type="text/javascript">
+	        if(top != self) {
+	        	parent.location.href='/login.html';
+	        }
+	        
+            var user = loginInfo();
+            if(user != ""){
+                location.href='/';
+            }
+            
+            function login(obj){
+                $(obj).attr("disabled",true);
+                
+                var username = $.trim($('#username').val());
+                var password = $.trim($('#password').val());
+                if (username == "" || password == "") {
+                    alert('用户名或者密码不能为空');
+                    $(obj).attr("disabled",false);
+                } else {
+                    $.ajax({
+                        type : 'post',
+                        url : '/warn/sys/login',
+                        // url : '/enforce/sys/login/restful',
+                        data:$("#login-form").serialize(),
+                        success : function(){
+                            location.href='/warn/index.html' ;
+                        },
+                        error: function(xhr,textStatus,errorThrown){
+                            var msg = xhr.responseText;
+                            var response = JSON.parse(msg);
+                            console.log(response);
+                            $("#info").html(response.message);
+                            $(obj).attr("disabled",false);
+                        }
+                    });
+                     
+                }
+            }
+        </script>
+    </body>
+</html>

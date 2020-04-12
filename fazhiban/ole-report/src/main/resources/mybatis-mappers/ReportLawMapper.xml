@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.law.ReportLawDao">
+
+	<select id="getLawItemCount" resultType="com.orhonit.ole.report.dto.check.ReportLawDTO">
+		SELECT
+			count(*) count,
+			a.effect_level enumDesc
+		FROM
+			ole_base_law_category a
+		WHERE
+			a.effect_level != ''
+			and a.is_effect='1' AND a.del_flag='0'
+			GROUP BY
+			a.effect_level
+	</select>
+
+	<select id="getCount" resultType="com.orhonit.ole.report.dto.check.ReportLawDTO">
+		SELECT COUNT(*) count FROM
+		ole_base_law_category a
+		where  a.is_effect='1' AND a.del_flag='0'
+	</select>
+</mapper>

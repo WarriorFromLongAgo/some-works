@@ -1,0 +1,212 @@
+type Query {
+
+    query:Query
+    hello(a:SubjectType):String
+    # 平台基础信息查询
+    "届列表接口"
+    arrives(page:Int , limit:Int):ArrivesResponse
+    arrive(id:Int!):Arrives
+    "年级列表接口"
+    grades(page:Int , limit:Int):GradesRespnse
+    grade(id:Int!):Grades
+    "学段列表接口"
+    periods(page:Int , limit:Int):PeriodResponse
+    period(id:Int!):Period
+    "学科列表接口"
+    subjects(page:Int , limit:Int):SubjectResponse
+    subject(id:Int!):Subject
+    "地区列表接口"
+    regions(page:Int , limit:Int):RegionResponse
+    region(id:Int!):Region
+    "学校信息管理接口"
+    schools(page:Int , limit:Int):SchoolResponse
+    school(id:Int!):School
+    "数据字典"
+    Dictionarys(page:Int , limit:Int, condition: DictionaryCondition):DictionaryResponse
+    Dictionary(id:Int!):Dictionary
+
+
+    # 用户及教师相关查询
+    "获取用户列表接口"
+    users(page: Int , limit: Int):[User]
+    user(id:Int!):User
+    "获取老师列表接口"
+    teachers(page:Int , limit:Int):TeacherResponse
+    teacher(id:Int!):Teacher
+    "教师办公室列表"
+    TeacherOffices(page:Int , limit:Int):TeacherOfficeResponse
+    TeacherOffice(id:Int!):TeacherOffice
+
+    ### 学生相关查询
+    "获取学生列表接口 "
+    students(page: Int , limit: Int, condition:StudentsCondition):StudentResponse
+    student(id:Int!):Student
+    "班级"
+    Eclasses(page:Int , limit:Int, condition: EclassCondition):EclassResponse
+    Eclass(id:Int!):Eclass
+    "班主任列表"
+    HeadTeachers(page:Int , limit:Int, condition: HeadTeacherCondition):HeadTeacherResponse
+    HeadTeacher(id:Int!):HeadTeacher
+
+    ### 学校基础信息相关查询
+    "房间管理"
+    Rooms(page:Int , limit:Int, condition: RoomCondition):RoomResponse
+    Room(id:Int!):Room
+    "楼层"
+    Floors(page:Int , limit:Int, condition: FloorCondition):FloorResponse
+    Floor(id:Int!):Floor
+    "单元"
+    Units(page:Int , limit:Int, condition: UnitCondition):UnitResponse
+    Unit(id:Int!):Unit
+    "建筑"
+    Buildings(page:Int , limit:Int, condition: BuildingCondition):BuildingResponse
+    Building(id:Int!):Building
+    "场地"
+    Sites(page:Int , limit:Int, condition: SiteCondition):SiteResponse
+    Site(id:Int!):Site
+    "校区"
+    Campuses(page:Int , limit:Int, condition: CampusCondition):CampusResponse
+    Campus(id:Int!):Campus
+    "学校配置"
+    SchoolSettings(page:Int , limit:Int, condition: SchoolSettingsCondition):SchoolSettingsResponse
+    SchoolSetting(id:Int!):SchoolSettings
+    "职务管理"
+    Duties(page:Int , limit:Int, condition: DutyCondition):DutyResponse
+    Duty(id:Int!):Duty
+
+}
+
+input MessageInput{
+    hello:String
+}
+
+type Mutation {
+    upvotePost (
+        postId: Int!
+    ): String
+    ## 教师模块
+    "新增/修改老师信息 《完成》"
+    addTeacher(inputData:TeacherInput):TeacherResponse
+    "删除老师信息 《完成》"
+    deleteTeacher(id:[Int]!):NormalResponse
+    "教师办公室维护 《完成》"
+    addTeacherOffice(inputData:TeacherOfficeInput):TeacherOfficeResponse
+    "删除教师办公室维护 《完成》"
+    deleteTeacherOffice(id:[Int]!):NormalResponse
+    "新增/修改分配办公室信息 《完成》  给教师分配办公室 tb: teacher_office_arrange_user"
+    addOfficeArrangeUser(inputData:arrangeTeacherOfficeInput):arrangeTeacherOfficeResponse
+    "删除分配办公室信息 《完成》"
+    deleteOfficeArrangeUser(id:[Int]!):NormalResponse
+
+
+    ## 学生模块
+    "新增/修改学生信息 《完成》"
+    addStudent(inputData:StudentInput):StudentResponse
+    "删除学生"
+    deleteStudent(id:[Int]!):NormalResponse
+    "新增/修改学生学籍基本信息 《完成》"
+    addLearninfo(inputData:StudentLearnInfoInput):StudentLearnInfoResponse
+    "删除学生学籍基本信息 《完成》"
+    deleteLearninfo(id:[Int]!):NormalResponse
+    "新增/修改班级信息 《完成》"
+    addEclass(inputData:EclassInput):EclassResponse
+    "删除班级信息 《完成》"
+    deleteEclass(id:[Int]!):NormalResponse
+    "设置班主任"
+    setEclassHeadTeacher(inputData:HeadTeacherInput):HeadTeacherResponse
+    "删除班主任信息"
+    deleteEclassHeadTeacher(id:[Int]!):NormalResponse
+
+    ## 基础信息模块
+    "新增/修改数据字典 《完成》"
+    addDictionary(inputData:DictionaryInput): DictionaryResponse
+    "数据字典删除 《完成》"
+    deleteDictionary(id:[Int]!):NormalResponse
+    "新增/修改学科信息 《完成》"
+    addSubject(inputData:SubjectInput): SubjectResponse
+    "学科信息删除 《完成》"
+    deleteSubject(id:[Int]!):NormalResponse
+    "新增/修改届信息 《完成》"
+    addArrives(inputData:ArrivesInput): ArrivesResponse
+    "届信息删除 《完成》"
+    deleteArrives(id:[Int]!):NormalResponse
+    "新增/修改学段信息 《完成》"
+    addPeriod(inputData:PeriodInput): PeriodResponse
+    "学段信息删除 《完成》"
+    deletePeriod(id:[Int]!):NormalResponse
+    "新增/修改学校信息 《完成》"
+    addSchool(inputData:SchoolInput): SchoolResponse
+    "学校信息删除 《完成》"
+    deleteSchool(id:[Int]!):NormalResponse
+    "新增/修改地区信息 《完成》"
+    addRegion(inputData:RegionInput): RegionResponse
+    "地区信息删除 《完成》"
+    deleteRegion(id:[Int]!):NormalResponse
+
+
+    ## 系统维护模块
+    "新增/修改模块信息 《完成》"
+    addModules(inputData:ModulesInput): ModulesResponse
+    "模块信息删除 《完成》"
+    deleteModules(id:[Int]!):NormalResponse
+    "新增/修改菜单信息 《完成》"
+    addMenus(inputData:MenusInput): MenusResponse
+    "菜单信息删除 《完成》"
+    deleteMenus(id:[Int]!):NormalResponse
+    "新增/修改页面组件 《完成》"
+    addWidgets(inputData:WidgetsInput): WidgetsResponse
+    "页面组件删除 《完成》"
+    deleteWidgets(id:[Int]!):NormalResponse
+    "新增/修改操作权限 《完成》"
+    addOperation(inputData:OperationInput): OperationResponse
+    "操作权限删除 《完成》"
+    deleteOperation(id:[Int]!):NormalResponse
+    "职务的维护"
+    addDuty(inputData:DutyInput): DutyResponse
+    "职务删除"
+    deleteDuty(id:[Int]!):NormalResponse
+
+
+    ## 学校基础信息-物资基础信息
+    "房间管理"
+    addRoom(inputData:RoomInput): RoomResponse
+    "房间管删除"
+    deleteRoom(id:[Int]!):NormalResponse
+    "楼层管理"
+    addFloor(inputData:FloorInput): FloorResponse
+    "楼层管删除"
+    deleteFloor(id:[Int]!):NormalResponse
+    "单元管理"
+    addUnit(inputData:UnitInput): UnitResponse
+    "单元管删除"
+    deleteUnit(id:[Int]!):NormalResponse
+    "建筑管理"
+    addBuilding(inputData:BuildingInput): BuildingResponse
+    "建筑管删除"
+    deleteBuilding(id:[Int]!):NormalResponse
+    "场地管理"
+    addSite(inputData:SiteInput): SiteResponse
+    "场地管删除"
+    deleteSite(id:[Int]!):NormalResponse
+    "校区管理"
+    addCampus(inputData:CampusInput): CampusResponse
+    "校区管删除"
+    deleteCampus(id:[Int]!):NormalResponse
+
+    ## 学校基础信息维护
+    "新增/修改学校设定信息 《完成》"
+    addSchoolSettings(inputData:SchoolSettingsInput): SchoolSettingsResponse
+    "学校设定信息删除 《完成》"
+    deleteSchoolSettings(id:[Int]!):NormalResponse
+    "新增/修改部门添加 《完成》"
+    addDepartment(inputData:DepartmentInput): DepartmentResponse
+    "部门删除 《完成》"
+    deleteDepartment(id:[Int]!):NormalResponse
+
+
+}
+
+
+
+
+

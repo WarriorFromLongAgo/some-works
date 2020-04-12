@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.dept.ReportDeptPersonDao">
+
+	<!-- 查询部门列表 -->
+	<select id="findDeptList" resultType="com.orhonit.ole.report.dto.dept.DeptPersonAvgDTO">
+		SELECT DISTINCT obd.`name`
+		FROM ole_base_dept obd
+		<where>
+			<if test="areaId != null and areaId != ''">
+				obd.`area_id` = #{areaId}
+			</if>
+		</where>
+	</select>
+	<!--  查询各部门人员数量-->
+	<select id="findDeptPersonCount" resultType="com.orhonit.ole.report.dto.dept.DeptPersonAvgDTO">
+		SELECT obd.`name`,COUNT(DISTINCT(obdp.`name`)) value
+		FROM ole_base_dept obd
+		LEFT JOIN ole_base_dept_person obdp ON obd.`id` = obdp.`dept_id`  and obdp.del_flag='0' AND obdp.if_effect='1'
+		<where>
+			<if test="areaId != null and areaId != ''">
+				obd.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY obd.`name`
+	</select>
+	
+	<!-- 查询各部门执行案件数量 -->
+	<select id="findDeptCaseCount" resultType="com.orhonit.ole.report.dto.dept.DeptPersonAvgDTO">
+		SELECT obd.`name`,COUNT(oec.`case_name`) value
+		FROM ole_base_dept obd
+		LEFT JOIN ole_ef_case oec ON oec.`dept_id` = obd.`id`
+		WHERE oec.`case_type` = '1'
+		<if test="year != null and year !=''">
+			AND YEAR(oec.`case_time`) = #{year}
+		</if>
+		<if test="areaId != null and areaId != ''">
+			AND obd.`area_id` = #{areaId}
+		</if>
+		GROUP BY obd.`name`
+	</select>
+	
+	<!-- //查询部门人员分布（执法或监督数量） -->
+	<select id="findDeptPersonByLawType" resultType="com.orhonit.ole.report.dto.dept.DeptPersonDistDTO">
+		SELECT obd.`name`,COUNT(obdp.`id`) value
+		FROM ole_base_dept obd
+		LEFT JOIN ole_base_dept_person obdp ON obd.`id` = obdp.`dept_id`  
+		<where>
+			<if test="lawType != null and lawType !=''">
+				obdp.`law_type` = #{lawType}
+			</if>
+			AND obd.`id` != ''
+			and  obdp.del_flag='0' AND obdp.if_effect='1'
+		</where>
+		GROUP BY obd.`name`
+	</select>
+
+	<select id="findPersonLawType" resultType="com.orhonit.ole.report.dto.charts.BaseChartDTO">
+	SELECT osd.`enum_desc` as 'name',COUNT(bdp.`ID`) as 'value'
+	FROM ole_base_dept_person bdp
+	LEFT JOIN ole_sys_dict osd ON osd.`enum_value` = bdp.`law_type`
+	WHERE osd.`type_value` = '1708'
+	and  bdp.del_flag='0' AND bdp.if_effect='1' 
+	GROUP BY bdp.`law_type`
+	</select>
+</mapper>

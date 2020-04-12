@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<form class="form-horizontal" onsubmit="return false"
+			style="padding: 10px;" id="form">
+			<fieldset>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">案件编号</label>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+						<input class="form-control" type="text" name="recordCode" id="recordCode" disabled="disabled">
+						<input class="form-control" type="hidden" name="recordId" id="recordId">
+						<input class="form-control" type="hidden" name="recordTitle" id="recordTitle">
+						<input class="form-control" type="hidden" name="recordStatus" id="recordStatus">
+						<input class="form-control" type="hidden" name="flowType" id="flowType">
+						<input class="form-control" type="hidden" name="deptId" id="deptId">
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">预警级别</label>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+						<select class="form-control" id="level" name="level" disabled="disabled">
+							<option value="3" selected="selected">红</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">预警人员</label>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+						<input class="easyui-combotree not-null" style="width:100%;" type="text" name="personIds" id="personIds" iname="预警人员">
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">预警类型</label>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+						<select class="form-control" id="type" name="type" disabled="disabled">
+							<option value="3" selected="selected">实时预警</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">实时预警内容</label>
+					<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+						<textarea class="form-control not-null" rows="7" cols=""
+							maxlength="480" name="content" placeholder="请输入实时预警内容"
+							iname="实时预警内容"></textarea>
+					</div>
+				</div>
+
+				<div class="form-actions">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="submit" id="submitBtn"
+								onclick="add(this)">
+								<i class="fa fa-save"></i> 提交
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript"
+		src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+
+	<!-- 实例化编辑器 -->
+	<script type="text/javascript">
+		layui.use([ 'layer'], function() {
+			var layer = layui.layer;
+		});
+		
+		$.ajax({
+			type : 'get',
+			url : '/tts/sys/login',
+			data : $("#form").serialize(),
+			success : function(data) {
+			}
+		});
+		var typeValue =0;
+		var caseNum = getQuery('caseNum');
+		var type = getQuery('type');
+		$("#recordCode").val(caseNum);
+		var caseurl = '';
+		if(type != null){
+			caseurl = '/tts/realTime/caseByNum?caseNum='+caseNum;
+			typeValue=9004;
+		}else if(caseNum.indexOf("RC") == 0){
+			caseurl = '/tts/realTime/checkDailyByNum?checkNum='+caseNum;
+			typeValue=9002;
+		}else if(caseNum.indexOf("ZXJC") == 0){
+			caseurl = '/tts/realTime/checkByNum?checkNum='+caseNum;
+			typeValue=9003;
+		}else if(caseNum.indexOf("CF") == 0){
+			caseurl = '/tts/realTime/caseByNum?caseNum='+caseNum;
+			typeValue=9001;
+		}
+		$.ajax({
+			type : 'get',
+			url : caseurl,
+			success : function(data) {
+				if(data.code == 0){
+					var caseInfo = data.data;
+					if(caseNum.indexOf("RC") == 0){
+						$("#deptId").val(caseInfo.deptId);
+						$("#recordId").val(caseInfo.checkId);
+						$("#recordTitle").val(caseInfo.checkTitle);
+						$("#recordStatus").val(caseInfo.status);
+						$("#flowType").val("5");
+					}else if(caseNum.indexOf("ZXJC") == 0){
+						$("#deptId").val(caseInfo.deptId);
+						$("#recordId").val(caseInfo.checkId);
+						$("#recordTitle").val(caseInfo.checkTitle);
+						$("#recordStatus").val(caseInfo.status);
+						$("#flowType").val("4");
+					}else if(caseNum.indexOf("CF") == 0){
+						$("#deptId").val(caseInfo.deptId);
+						$("#recordId").val(caseInfo.id);
+						$("#recordTitle").val(caseInfo.caseName);
+						$("#recordStatus").val(caseInfo.caseStatus);
+						$("#flowType").val(caseInfo.flowType);
+					}
+					$("#personIds").combotree({
+						method:'get',
+						url:'/tts/flow/getPerson?deptId='+caseInfo.deptId,
+						required: false,
+						multiple:true,
+						cascadeCheck:false,
+						onLoadSuccess:function(){
+						}
+					});
+				}else{
+					console.log("获取案件信息失败");
+				}
+			}
+		});
+		
+		function add(btn) {
+			$(btn).attr("disabled","disabled");
+			//数据格式校验
+			if (!dataCheck()) {
+				$(btn).removeAttr("disabled");
+				return;
+			}
+			if($("#personIds").val() == "" || $("#personIds").val() == null){
+				layer.msg("预警人员必须选择", {anim:6});
+				return;
+			}
+			var formdata = $("#form").serializeObject();
+			formdata.warnType = $("#type").val();
+			formdata.type = typeValue;
+			formdata.recordId = $("#recordId").val();
+			formdata.recordCode = $("#recordCode").val();
+			formdata.level = $("#level").val();
+			if(typeof(formdata.personIds) == "string"){
+				var personIds = [];
+				personIds[0] = formdata.personIds;
+				formdata.personIds = personIds;
+			}
+			$.ajax({
+				type : 'post',
+				url : '/tts/realTime/warnAdd',
+				contentType : "application/json; charset=utf-8",
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					if(data.code == 0){
+						layer.msg("添加实时预警成功", {
+							shift : -1,
+							time : 1000
+						},
+						function() {
+							window.parent.location.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+					}else{
+						layer.msg(data.msg);
+						$(btn).removeAttr("disabled");
+					}
+					
+				}
+			});
+		}
+	</script>
+</body>
+</html>

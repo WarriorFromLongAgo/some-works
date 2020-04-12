@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.ApphelpMeDao">
+   <resultMap type="com.orhonit.modules.generator.app.vo.AppHelpMeVO" id="AppHelpMeVOMap">
+   </resultMap>
+   
+   <!-- 列表 -->
+   <select id="selectListAndUserName" parameterType="com.orhonit.modules.generator.app.vo.AppHelpMeVO" resultMap="AppHelpMeVOMap">
+      SELECT 
+      me.help_me_id AS helpMeId,me.help_title AS helpTitle,me.help_content AS helpContent,me.help_create_time AS helpCreateTime,
+      me.help_update_time AS helpUpdateTime,me.help_user_id AS helpUserId,me.help_picture AS helpPicture,user.user_true_name AS userTrueName
+      FROM please_help_me me
+      LEFT JOIN sys_user user ON me.help_user_id = user.user_id
+     <!--  <choose> -->
+     <where>
+     1=1
+         <if test="helpTitle !='null'">
+            and me.help_title like concat(concat('%',#{helpTitle}),'%')
+         </if>
+         <if test="helpMeId>0">
+            and me.help_me_id=#{helpMeId}
+         </if>
+      <!--    <otherwise>
+             
+         </otherwise> -->
+     <!--  </choose> -->
+     </where>
+        ORDER BY helpUpdateTime DESC
+		LIMIT #{beginLimit},#{limit}
+   </select>
+   <!-- 修改 -->
+   <update id="updateHelpMe" parameterType="com.orhonit.modules.generator.app.entity.ApphelpMeEntity">
+       UPDATE please_help_me 
+        <set>
+          <if test="helpTitle!=null">help_title=#{helpTitle},</if>
+          <if test="helpContent!=null">help_content=#{helpContent},</if>
+          <if test="helpUpdateTime!=null">help_update_time=#{helpUpdateTime},</if>
+          <if test="helpPicture!=null">help_picture=#{helpPicture}</if>
+        </set> 
+		WHERE help_me_id=#{helpMeId} 
+   </update>
+  
+</mapper>

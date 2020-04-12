@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+        namespace="com.orhon.smartcampus.modules.teacher.mapper.TInformationMapper">
+    <sql id="school">
+		    , school.id                 as  sch_id
+            , school.school_slug        as  sch_school_slug
+            , school.school_number      as  sch_school_number
+            , school.school_order       as  sch_school_order
+            , school.created_at         as  sch_created_at
+            , school.updated_at         as  sch_updated_at
+            , school.parent_id          as  sch_parent_id
+            , school.school_type     as  sch_school_type
+            , school.region_id          as  sch_region_id
+            , school.school_client_key  as  sch_school_client_key
+            , school.client_secret      as  sch_client_secret
+            , school.orhonedu_base      as  sch_orhonedu_base
+            , school.deleted_at         as  sch_deleted_at
+            , school.school_name        as  sch_school_name
+            , school.introduction       as  sch_introduction
+	</sql>
+
+    <!-- <sql id="student">
+
+    </sql> -->
+
+    <sql id="user">
+	        , users.id   as  use_id
+            , users.email as  use_email
+            , users.username as  use_username
+            , users.password as  use_password
+            , users.status as  use_status
+            , users.school_id as  use_school_id
+            , users.idcard  as use_idcard
+            , users.last_login_ip as  use_last_login_ip
+            , users.last_login_time as  use_last_login_time
+            , users.remember_token as  use_remember_token
+            , users.api_token as  use_api_token
+            , users.created_at as  use_created_at
+            , users.updated_at as  use_updated_at
+            , users.deleted_at as  use_deleted_at
+            , users.user_type as use_user_type
+            , users.system_lang as  use_system_lang
+            , users.mobile as use_mobile
+            , users.equipment_id as  use_equipment_id
+            , users.unionid as  use_unionid
+	</sql>
+    <select id="PageListTeacher" resultType="java.util.HashMap">
+        select teacher.*
+        <if test="maps.withUser">
+            <include refid="user"></include>
+        </if>
+        <if test="maps.withSchool">
+            <include refid="school"></include>
+        </if>
+        from teacher_information as teacher
+        <if test="maps.withUser">
+            left join user_users as users on teacher.user_id = users.id
+        </if>
+        <if test="maps.withSchool">
+            left join base_schools as school on teacher.school_id = school.id
+        </if>
+        <if test="maps.page != null">
+            LIMIT #{maps.page},#{maps.limit}
+        </if>
+        <where>
+            and teacher.deleted_at is NULL
+        </where>
+
+    </select>
+
+    <select id="teacherDetails" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        select teacher.*
+        <if test="maps.withUser">
+            <include refid="user"></include>
+        </if>
+        <if test="maps.withSchool">
+            <include refid="school"></include>
+        </if>
+        from teacher_information as teacher
+        <if test="maps.withUser">
+            left join user_users as users on teacher.user_id = users.id
+        </if>
+        <if test="maps.withSchool">
+            left join base_schools as school on teacher.school_id = school.id
+        </if>
+        where id = #{id}
+    </select>
+
+    <select id="selectTeacherInfoById"
+            parameterType="java.lang.Long" resultType="java.util.HashMap">
+		select * from teacher_information where user_id = #{teacherId}
+	</select>
+    <select id="getTeacherInfomation"
+            resultType="com.orhon.smartcampus.modules.teacher.entity.TInformation"
+            parameterType="java.util.HashMap">
+
+        SELECT
+        *
+        FROM
+        teacher_information
+        <where>
+            1=1
+            <if test="maps.school_id!=null and maps.school_id!=''">
+                and school_id = #{maps.school_id}
+            </if>
+            <if test="maps.workstatus!=null and maps.workstatus!=''">
+                and workstatus = #{maps.workstatus}
+            </if>
+            <if test="map !=null ">
+                <foreach item="value" index="key"
+                         collection="map.entrySet()">
+                    and teacher_name -> '$.${key}' LIKE '%${value}%'
+                </foreach>
+            </if>
+            and deleted_at is NULL
+        </where>
+    </select>
+    <select id="getTeacherInfomationpage"
+            resultType="com.orhon.smartcampus.modules.teacher.entity.TInformation"
+            parameterType="java.util.HashMap">
+
+        SELECT
+        *
+        FROM
+        teacher_information
+        <where>
+            1=1
+            <if test="maps.school_id!=null and maps.school_id!=''">
+                and school_id = #{maps.school_id}
+            </if>
+            <if test="maps.workstatus!=null and maps.workstatus!=''">
+                and workstatus = #{maps.workstatus}
+            </if>
+            <if test="map !=null ">
+                <foreach item="value" index="key"
+                         collection="map.entrySet()">
+                    and teacher_name -> '$.${key}' LIKE '%${value}%'
+                </foreach>
+            </if>
+            and deleted_at is NULL
+        </where>
+        LIMIT #{dto.start},#{dto.limit}
+    </select>
+
+    <select id="getEclassIds"
+            resultType="java.util.HashMap">
+
+		SELECT
+		id,eclass_name
+		FROM
+		student_eclass
+		WHERE
+		id IN (
+		SELECT
+		eclass_id
+		FROM
+		student_eclass_headteacher
+		WHERE
+		teacher_id = ( SELECT id FROM teacher_information WHERE user_id = #{user_id} )
+		GROUP BY
+		eclass_id
+		)
+	</select>
+
+    <select id="getSexCount"
+            resultType="java.util.HashMap">
+
+		SELECT
+	count( * ) AS sum,
+	count( CASE WHEN sex = '1' THEN sex END ) AS male,
+	count( CASE WHEN sex = '2' THEN sex END ) AS female
+	
+FROM
+	student_information 
+WHERE
+	id IN ( SELECT student_id FROM student_eclass_records WHERE go_eclass = #{id} AND STATUS = 'normal' ) 
+	</select>
+
+    <select id="getNationCount"
+            resultType="java.util.HashMap">
+
+	SELECT
+	nation,count( * ) as count  
+FROM
+	student_information 
+WHERE
+	id IN ( SELECT student_id FROM student_eclass_records WHERE go_eclass = #{id} AND STATUS = 'normal' ) GROUP BY nation
+	</select>
+    <select id="getTeacherName" resultType="java.lang.String">
+        select teacher_name from teacher_information where user_id = #{user_id}
+    </select>
+</mapper>

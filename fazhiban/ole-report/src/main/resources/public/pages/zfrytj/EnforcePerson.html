@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>执法人员分析</title>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+ <link rel="stylesheet" type="text/css" media="screen" href="../../css/css.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<section class="content">
+			<div class="row" style="height: 650px;">
+				<div class="col-md-5 col-sm-5">
+					<div class="personnel" id="aeraChart" style="height:450px;"></div>
+					<div class="personnel" style="height: 200px;color:#6681a1;padding: 20px;">
+					<h5>统计执法人员情况，主要展示本市执法人员基本情况统计。</h5>
+					<ul >
+						<li>各区域执法人员数量：统计全市执法人员数量</li>
+						<li>年龄分布：统计全市执法人员表中的各年龄段的人员数量</li>
+						<li>职位分布：统计全市执法人员表中的各类职位的人员数量</li>
+						<li>民族统计：统计全市人员表中的各民族的人员数量</li>
+						<li>政治面貌：统计全市执法人员表中的各种政治面貌的人员数量</li>
+						<li>学历统计：统计全市人员表中的各学历的人员数量</li>
+					</ul>
+						
+					</div>
+				</div>
+				<div class="col-md-7 col-sm-7">
+					<div class="row">
+						<div class="col-sm-6 personnel" style="height:325px;">
+							<div id="ageChart" style="height:325px;"></div>
+						</div>
+						<div class="col-sm-6 personnel" style="height:325px;">
+							<div id="positionChart" style="height:325px;"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 personnel" style="height:325px;">
+							<div id="eduChart" style="height:300px;"></div>
+						</div>
+						<div class="col-sm-4 personnel" style="height:325px;">
+							<div id="nationChart" style="height:300px;"></div>
+						</div>
+						<div class="col-sm-4 personnel" style="height:325px;">
+						<div id="outlookChart" style="height:300px;"></div>
+						</div>
+					</div>
+					<!-- <div id="positionChart" style="height:300px;"></div>
+					<div id="ageChart" style="height:300px;"></div> -->
+				</div>
+				<!-- <div class="col-md-4">
+					<div id="eduChart" style="height:300px;"></div>
+					<div id="nationChart" style="height:300px;"></div>
+					<div id="outlookChart" style="height:300px;"></div>
+				</div> -->
+			</div>
+		</section>
+	</div>
+</body>
+<script type="text/javascript" src="../../js/jquery-2.1.1.min.js"></script>
+<!--   <script type="text/javascript" src="../../js/echarts.min.js"></script>
+  <script type="text/javascript" src="../../js/echartstheme.js"></script> -->
+  <script type="text/javascript" src="../../js/echarts.min.3.8.2.js"></script>
+  <script type="text/javascript" src="../../js/echartstheme.js"></script>
+<script type="text/javascript" src="EnforcePerson.js"></script>
+</html>

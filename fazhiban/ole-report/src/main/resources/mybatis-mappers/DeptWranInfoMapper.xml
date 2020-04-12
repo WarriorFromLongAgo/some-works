@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.cases.ReportWranInfoDao">
+
+	<!--各部门红黄蓝总和-->
+	<select id="findDeptWranCount"  resultType="com.orhonit.ole.report.dto.cases.DeptWranDTO">
+		SELECT 
+			obd.name AS 'name',
+			COUNT(DISTINCT owp.id) AS 'value'
+		FROM   ole_warn_person owp 
+		LEFT JOIN ole_base_dept obd ON obd.id = owp.dept_id
+		<where>
+			<if test="deptIds != null and deptIds != ''">
+				 FIND_IN_SET(owp.dept_id,#{params.deptIds})
+			</if>
+		</where>
+		GROUP BY obd.name
+	</select>
+
+	<!--全市各部门预警总和-->
+	<select id="findAreaWranCount" resultType="com.orhonit.ole.report.dto.cases.DeptWranDTO">
+		SELECT oba.`name` , COUNT(owi.`id`) AS value
+		FROM ole_base_area oba
+		LEFT JOIN ole_base_dept obd ON oba.`id` = obd.`area_id`
+		LEFT JOIN ole_warn_info owi ON obd.`id` = owi.`dept_id`
+		WHERE oba.`name` = '呼和浩特市'
+	</select>
+	
+	<!--全市各部门预警总和-->
+	<select id="findBaseWranCount" resultType="HashMap">
+		SELECT COUNT(TYPE) AS value,sd.enum_desc AS name 
+			FROM ole_warn_info owi
+			LEFT JOIN ole_sys_dict sd ON owi.type = sd.enum_value AND sd.type_value = 2020
+		WHERE 
+			owi.warn_type = 4 GROUP BY owi.type;
+	</select>
+	
+	<!--基础信息预警详情-->
+	<select id="findBaseWranDetail" resultType="HashMap">
+		SELECT
+			otsj.remark AS name,
+			COUNT(*) AS value
+		FROM ole_warn_info owi
+			LEFT JOIN ole_tts_schedule_job otsj ON owi.task_id = otsj.job_id
+			WHERE FIND_IN_SET(owi.task_id,#{taskList})
+		GROUP BY owi.task_id
+	</select>
+
+</mapper>

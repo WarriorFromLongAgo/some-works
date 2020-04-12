@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+   <mapper namespace="com.orhonit.modules.generator.dao.JointCompanyDao">
+   <!--监督  联席单位 列表 -->
+   <select id="joinList" resultType="com.orhonit.modules.generator.entity.JointCompanyEntity">
+     SELECT * FROM se_joint_company 
+     WHERE 1=1
+       <if test="params.sharingUnit>0">
+        AND sharing_unit=#{params.sharingUnit}
+       </if>
+       ORDER By create_time DESC
+       	<if test="params.beginLimit != null and params.limit != null">
+			limit #{params.beginLimit},#{params.limit}
+		</if>
+     
+   </select>
+   
+   
+   
+   </mapper>

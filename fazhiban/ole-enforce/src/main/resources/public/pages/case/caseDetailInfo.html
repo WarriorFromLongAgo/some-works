@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/font-awesome/css1/font-awesome.css" media="all">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+    <style type="text/css">
+        .conter * {
+            margin: 0;
+            padding: 0;
+            /*border-style: solid;*/
+        }
+
+        .conter {
+            position: relative;
+            width: 100%;
+        }
+
+        .ul {
+
+        }
+
+        .ulline {
+            float: left;
+            height: 125px;
+            overflow: hidden;
+        }
+
+        .li {
+            width: 100px;
+            float: left;
+            list-style: none;
+            border: 0px;
+        }
+
+        .img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .marquee {
+            height: 20px;
+            line-height: 20px;
+            width: 95%;
+            overflow: hidden;
+        }
+
+        .openclose {
+            width: 100px;
+            height: 100px;
+            float: left;
+        }
+
+        .showp1 {
+            background: #000;
+            font-size: 150%;
+            color: white;
+            opacity: 0.7;
+            position: absolute;
+            margin-top: -125px;
+            width: 100px;
+            z-index: 100;
+            text-align: center;
+            font-weight: 900;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .showp1:hover {
+            color: red;
+        }
+
+        .download:hover {
+            color: red;
+        }
+
+        .download {
+            background: #000;
+            font-size: 150%;
+            position: absolute;
+            margin-top: -58px;
+            width: 100px;
+            z-index: 100;
+            opacity: 0.7;
+            color: white;
+            text-align: center;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .control-label {
+            text-align: left !important;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-horizontal {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+            color: #858080;
+            border: 1px solid #dce3f7!important;
+            text-align: left;
+        }
+        .table>tbody>tr>th{
+            background-color: #e9eef9;
+        }
+        .table>tbody>tr>td{
+            background-color: #f8fafd;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="layui-tab layui-tab-card" style="width: 98%;margin: 10px auto;position:relative;top:50px;">
+    <ul class="layui-tab-title"  style="position: fixed;top:0;z-index:1;width:100%;">
+        <li class="layui-this">案件详情</li>
+        <li>附件列表</li>
+        <li>文书列表</li>
+        <li>预警信息记录</li>
+        <li>流程审批记录</li>
+    </ul>
+    <div class="layui-tab-content" style="height: 100%;">
+        <div class="layui-tab-item layui-show" >
+            <form class="form-horizontal" onsubmit="return false" id="form">
+                <fieldset>
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">案件内部编号:</label>
+                            <label class="col-md-6 control-label">案件编号:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" readonly="readonly" id="caseId"/>
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" readonly="readonly" id="caseNum"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">案件名称:</label>
+                            <label class="col-md-6 control-label">案源:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="caseName">
+                            </div>
+                            <div class="col-md-6" id="caseSource">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">案发地址:</label>
+                            <label class="col-md-6 control-label">收件时间:</label>
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="caseAddress"/>
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="caseApplyDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">处罚依据:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                            <textarea class="form-control" style="overflow-x:hidden;padding:10px;line-height:30px;" rows="3" cols=""
+                                      readonly="readonly"
+                                      id="fzContent"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">简要案件内容:</label>
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="col-md-12">
+                        <textarea class="form-control" style="overflow-x:hidden" rows="3" cols="" readonly="readonly"
+                                  id="briefCaseContent">
+
+                        </textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">经办人:</label>
+
+                            <label class="col-md-6 control-label">执法类别:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="caseHandler"
+                                       id="caseHandler"/>
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="caseType"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">指派人:</label>
+                            <label class="col-md-6 control-label">指派时间:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" name="caseZpr" id="caseZpr" readonly="readonly"
+                                       data-bv-notempty="true"
+                                       data-bv-notempty-message="指派人不能为空"/>
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="caseTime"
+                                       id="caseTime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">主执法人员姓名:</label>
+
+                            <label class="col-md-6 control-label">副执法人员姓名:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="caseZzfryname"
+                                       id="caseZzfryname">
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="caseFzfryname"
+                                       id="caseFzfryname">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">案件状态:</label>
+                            <label class="col-md-6 control-label">案由:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="caseStatus"
+                                       id="caseStatus">
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="caseStatus"
+                                       id="caseReason">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">处罚类别:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="punishTypeName"
+                                       id="punishTypeName"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="punishBill" style="display:none">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">处罚金额(元):</label>
+                            <label class="col-md-6 control-label">缴费凭证:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="punishCash"
+                                       id="punishCash"/>
+                            </div>
+                            <div class="col-md-6 row-md2">
+                                <div id="punishImg" style="float:left;margin-left:40px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset style="display: none" id="person">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">当事人类型:</label>
+                            <label class="col-md-6 control-label">当事人姓名:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="type">
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">当事人年龄:</label>
+                            <label class="col-md-6 control-label">当事人性别:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="age">
+                            </div>
+
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="sex">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">当事人电话:</label>
+                            <label class="col-md-6 control-label">当事人身份证号:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="tel">
+                            </div>
+
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="idCard">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">当事人邮编:</label>
+                            <label class="col-md-6 control-label">当事人住址:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="postCode">
+                            </div>
+
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" id="address">
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset id="company" style="display: none">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">当事人单位名称:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <input class="form-control" readonly="readonly" type="text" name="unitName"
+                                       id="unitName"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">组织机构代码证:</label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <input class="form-control" readonly="readonly" type="text" name="orgCode"
+                                       id="orgCode"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="col-md-6 control-label">法定代表人:</label>
+
+                            <label class="col-md-6 control-label">法人代表身份证号:</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="legalName"
+                                       id="legalName"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input class="form-control" readonly="readonly" type="text" name="orgIdCard"
+                                       id="orgIdCard"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset id="noPartyType" style="display: none">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">还未填写当事人信息</label>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form class="form-horizontal" onsubmit="return false" id="form1">
+                <fieldset>
+                    <div class="form-group">
+                        <!--<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('fileDom',this)">附件列表<a-->
+                                <!--id="filesNum" style="color:green;">(0)</a><i class="fa fa-angle-double-up"></i></label>-->
+                        <div class="col-md-12" id="fileDom" style="text-align: center;">
+
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form class="form-horizontal" onsubmit="return false" id="form2">
+                <fieldset>
+                    <div class="form-group">
+                        <!--<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('docDom',this)">文书列表<a-->
+                                <!--id="docsNum" style="color:green;">(0)</a><i class="fa fa-angle-double-up"></i></label>-->
+                        <div class="col-md-12" id="docDom" style="text-align: center;">
+
+                        </div>
+                    </div>
+                </fieldset>
+
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form class="form-horizontal" onsubmit="return false" id="form3">
+                <fieldset>
+                    <div class="form-group">
+                        <!--<label class="col-md-2 control-label" style="cursor:pointer"-->
+                               <!--onclick="showHide('warnInfoDom',this)">预警信息记录<i-->
+                                <!--class="fa fa-angle-double-up"></i></label>-->
+                        <div class="col-md-12" id="warnInfoDom" style="text-align: center;">
+
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form class="form-horizontal" onsubmit="return false" id="form4">
+                <fieldset>
+                    <div class="form-group">
+                        <!--<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('flowDom',this)">流程审批记录<i-->
+                                <!--class="fa fa-angle-double-up"></i></label>-->
+                        <div class="col-md-12" id="flowDom" style="text-align: center;">
+
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <div class="row" align="center">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" type="submit" onclick="caseArchiveDown();" id="caseArchive">
+                                <i class="fa fa-save"></i> 生成卷宗
+                            </button>
+                            <!-- <button class="btn btn-primary" type="submit" onclick="caseSearchBtn();" id="caseSearch">
+                                <i class="fa fa-save"></i> 案卷评查
+                            </button> -->
+                            <!-- <button class="btn btn-primary" type="submit" onclick="backToList();">
+                                <i class="fa fa-save"></i> 返回 -->
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var pers = checkPermission();
+
+    layui.use(['layer'], function () {
+        var layer = layui.layer;
+    });
+    
+    var caseNum = '';
+
+    function getQuery(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var id = getQuery('caseId');
+    var checkId;
+
+    if (id == null || id == '') {
+        alert('参数异常.');
+        window.location.href = 'caseList.html';
+    }
+    var href = '';
+    $.ajax({
+        type: 'get',
+        url: '/enforce/case/query/' + id,
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (data) {
+            if (data.code == '0') {
+                var caseInfo = data.data;
+                $('#caseId').val(caseInfo.caseId);
+                $('#caseNum').val(caseInfo.caseNum);
+                caseNum = caseInfo.caseNum;
+                checkId = caseInfo.checkId;
+                $('#caseName').val(caseInfo.caseName);
+                if (caseInfo.caseSource.indexOf("日常检查") > -1) {
+                    href = '<a  style="color:#009688;line-height:31.99px;" href="javascript:;" onclick="showDailyInfo(\'' + checkId + '\' )">' + caseInfo.caseSource + '</a>';
+                    $('#caseSource').append(href);
+                } else if (caseInfo.caseSource.indexOf("专项检查") > -1) {
+                    href = '<a  style="color:#009688;line-height:31.99px;" href="javascript:;" onclick="showCheckInfo(\'' + checkId + '\' )">' + caseInfo.caseSource + '</a>';
+                    $('#caseSource').append(href);
+                } else {
+                    href = '<input class="form-control" readonly="readonly" type="text" id="source">';
+                    $('#caseSource').append(href);
+                    $('#source').val(caseInfo.caseSource);
+                }
+                $('#caseReason').val(caseInfo.caseReason);
+                $('#fzContent').val(caseInfo.fzContent);
+                $('#caseAddress').val(caseInfo.caseAddress);
+                $('#caseApplyDate').val(caseInfo.caseApplyDate);
+                $('#briefCaseContent').html(caseInfo.briefCaseContent);
+                $('#caseHandler').val(caseInfo.caseHandler);
+                $('#caseType').val(caseInfo.caseType);
+                $('#caseZpr').val(caseInfo.caseZpr);
+                $('#caseTime').val(caseInfo.caseTime);
+                $('#caseZzfryname').val(caseInfo.caseZzfryname);
+                $('#caseFzfryname').val(caseInfo.caseFzfryname);
+                $('#caseStatus').val(caseInfo.caseStatus);
+                $("#punishTypeName").val(caseInfo.punishTypeName);
+
+                if (caseInfo.punishType != '' && caseInfo.punishType == '2') {
+                    $("#punishBill").show();
+                    var a = "<a target='_blank' href='" + caseInfo.punishBillUrl + "'><img src='" + caseInfo.punishBillUrl + "' width='160px' height='80px'></img></a>";
+                    $("#punishImg").html(a);
+                    $("#punishCash").val(caseInfo.punishCash);
+                }
+
+                var partyInfo = data.data;
+                if (partyInfo.type == '公民') {
+                    $("#person").css('display', 'block');
+                } else if (partyInfo.type == '法人或其他组织') {
+                    $("#company").css('display', 'block');
+                } else {
+                    $('#noPartyType').css('display', 'block');
+                }
+                $('#type').val(partyInfo.type);
+                $('#name').val(partyInfo.name);
+                $('#age').val(partyInfo.age);
+                $('#sex').val(partyInfo.sex);
+                $('#tel').val(partyInfo.tel);
+                $('#idCard').val(partyInfo.idCard);
+                $('#sex').val(partyInfo.sex);
+                $('#address').val(partyInfo.address);
+                $('#postCode').val(partyInfo.postCode);
+                $('#legalName').val(partyInfo.legalName);
+                $('#orgIdCard').val(partyInfo.orgIdCard);
+                $('#orgCode').val(partyInfo.orgCode);
+                $('#unitName').val(partyInfo.unitName);
+            }
+        }
+    });
+    /**
+     * 获取案件的文件列表
+     */
+    $.ajax({
+        type: 'get',
+        url: "/enforce/attachFile/caseFileList/" + id,
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (data) {
+            if (data.code == '0') {
+                $('#filesNum').html('(' + data.data.length + ')');
+                var imgs = ['jpg', 'jpeg', 'png', 'bmp', 'gif'];
+                var fileComments = data.data;
+                var fileDomContent = '';
+                if (fileComments != null && fileComments.length > 0) {
+                    fileDomContent = '<div class="conter"><ul class="ul">';
+                    for (var i = 0; i < fileComments.length; i++) {
+                        var imgsrc = '../../images/' + fileComments[i].fileType + '.png';
+                        if (imgs.indexOf(fileComments[i].fileType) != -1) {
+                            imgsrc = fileComments[i].url;
+                        }
+                        fileDomContent += '<li class="li">';
+                        fileDomContent += '<img id="img' + fileComments[i].id + '" class="img" src="' + imgsrc + '"/>';
+                        fileDomContent += '<marquee class="marquee" scrolldelay="200"><p>' + fileComments[i].fileName + '</p></marquee>';
+                        fileDomContent += '<p1 class="showp1" style="display: none;"  onclick="showFile(\'' + fileComments[i].id + '\',\'' + fileComments[i].caseId + '\')">查看</p1>';
+                        fileDomContent += '<p1 class="download" style="display: none;" onclick="downloadFile(\'' + fileComments[i].id + '\')">下载</p1></li>';
+                    }
+                    fileDomContent += '</ul><img class="openclose" src="../../images/collapse.png" /><div style="clear: both;"></div></div>';
+                    $('#fileDom').html(fileDomContent);
+                } else {
+                    $('#fileDom').html('该案件没有上传任何文件');
+                }
+
+            } else {
+                $('#fileDom').html("查询文件信息失败！");
+            }
+        }
+    });
+    $.ajax({
+        type: 'get',
+        url: '/enforce/case/query/docContent/' + id,
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (data) {
+            if (data.code == '0') {
+                $('#docsNum').html('(' + data.data.length + ')');
+                var docs = data.data;
+                var docDomContent = '';
+                var hasDoc = "0";
+                if (docs != null && docs.length > 0) {
+                    hasDoc = "1";
+                    for (var i = 0; i < docs.length; i++) {
+                        if (!(docs[i].templateName == null)) {
+                            docDomContent = '<table class="table"><tr><th>案件状态</th><th>文书模板</th></tr>';
+                            for (var i = 0; i < docs.length; i++) {
+                                docDomContent += '<tr>';
+
+                                if (docs[i].caseStatus == '检查') {
+                                    var href = '/enforce/pages/docContent/docContentDetail.html?templateId=' + docs[i].templateId + '&checkId=' + checkId + '&contentId=' + docs[i].docContentId;
+                                    docDomContent += '<td>' + docs[i].caseStatus + '</td><td><a href="javascript:;" onclick="window.open(\'' + href + '\')">' + docs[i].templateName + '</a></td>';
+                                } else {
+                                    var href = '/enforce/pages/docContent/docContentDetail.html?templateId=' + docs[i].templateId + '&caseId=' + id + '&contentId=' + docs[i].docContentId;
+                                    docDomContent += '<td>' + docs[i].caseStatus + '</td><td><a href="javascript:;" onclick="window.open(\'' + href + '\')">' + docs[i].templateName + '</a></td>';
+                                }
+                                docDomContent += '</tr>';
+
+                            }
+                            docDomContent += '</table>';
+
+                        }
+                    }
+                }
+                if (hasDoc == "0") {
+                    $('#docDom').html('该案件暂无文书信息。');
+                } else {
+                    $('#docDom').html(docDomContent);
+                }
+            }
+        }
+    });
+    // 流程审批记录
+    if ($('#caseStatus').val() != '案件暂存') {
+        $.ajax({
+            type: 'get',
+            url: '/enforce/case/flow/comment/' + caseNum + '/' + 'case',
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            success: function (data) {
+                if (data.code == '0') {
+                    var flowComments = data.data;
+                    var flowDomContent = '';
+                    if (flowComments != null && flowComments.length > 0) {
+                        flowDomContent = '<table class="table"><tr><th>责任人</th><th>任务名称</th><th>时间</th><th>批注</th></tr>';
+                        for (var i = 0; i < flowComments.length; i++) {
+                            flowDomContent += '<tr>';
+                            flowDomContent += '<td>' + flowComments[i].user + '</td><td>' + flowComments[i].taskName + '</td><td>' + flowComments[i].time + '</td><td>' + flowComments[i].msg + '</td>';
+                            flowDomContent += '</tr>';
+                        }
+                        flowDomContent += '</table>';
+                    }
+                    $('#flowDom').html(flowDomContent);
+                }
+            }
+        });
+    }
+    /*  <!-- 案卷评查记录 -->
+     caseComment();
+     function caseComment(){
+         $.ajax({
+             type : 'get',
+             url : '/enforce/caseComment/list?caseId=' + id ,
+             contentType: "application/json; charset=utf-8",
+             async : false,
+             success : function(data) {
+                 if (data.code == '0') {
+                     var caseComments = data.data;
+                     var caseDomContent = '';
+                     if ( caseComments != null && caseComments.length > 0 ) {
+                         caseDomContent = '<table class="table"><tr><th style="width:10%">评查人</th><th style="width:70%">评查结果</th><th  style="width:20%">评查时间</th></tr>';
+                         for ( var i = 0 ; i < caseComments.length ; i++) {
+                             caseDomContent += '<tr>';
+                             caseDomContent += '<td>' +caseComments[i].createName+ '</td><td>'+caseComments[i].comment+'</td><td>'+caseComments[i].createDate+'</td>';
+                             caseDomContent += '</tr>';
+                         }
+                         caseDomContent += '</table>';
+                     }else{
+                         caseDomContent = '该案卷暂无评查信息。';
+                     }
+                     $('#caseCommentDom').html(caseDomContent);
+                 }
+             }
+         });
+     } */
+
+    <!-- 预警信息记录 -->
+    warnInfo();
+
+    function warnInfo() {
+        $.ajax({
+            type: 'get',
+            url: '/enforce/yuj/warnList?caseId=' + id,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            success: function (data) {
+                if (data.code == '0') {
+                    var warnInfos = data.data;
+                    var warnInfo = '';
+                    if (warnInfos != null && warnInfos.length > 0) {
+                        warnInfo = '<table class="table"><tr><th style="width:10%">发送人</th><th style="width:10%">预警级别</th><th style="width:60%">预警内容</th><th  style="width:10%">预警类型</th></tr>';
+                        for (var i = 0; i < warnInfos.length; i++) {
+
+                            warnInfo += '<tr>';
+                            warnInfo += '<td>' + warnInfos[i].createName + '</td><td>' + warnInfos[i].level + '</td><td class="ellipsis"><a  style="color:#009688;line-height:31.99px;" href="javascript:;" onclick="showYujInfo(\'' + warnInfos[i].id + '\' )">' + warnInfos[i].content + '</a></td><td>' + warnInfos[i].warnType + '</td>';
+                            warnInfo += '</tr>';
+                        }
+                        warnInfo += '</table>';
+                    } else {
+                        warnInfo = '该案件暂无预警信息。';
+                    }
+                    $('#warnInfoDom').html(warnInfo);
+                }
+            }
+        });
+    }
+
+    function showYujInfo(yujId) {
+        var type = 1;
+        parent.layer.open({
+            type: 2,
+            title:[ '预警详情页面','background-color:#5b8bff'],
+            shade: [0],
+            area: ['73%', '60%'],
+            shift: 2,
+            content: '/enforce/pages/warn/warnInfo.html?yujId=' + yujId + '&type=' + type
+        });
+    }
+
+    function showCheckInfo(checkId) {
+        parent.layer.open({
+            type: 2,
+            title: ['专项检查详情页面','background-color:#5b8bff'],
+            shade: [0],
+            area: ['90%', '70%'],
+            shift: 2,
+            content: '/enforce/pages/special/lssuedInfo.html?checkId=' + checkId
+        });
+    }
+
+    function showDailyInfo(checkId) {
+        parent.layer.open({
+            type: 2,
+            title: ['日常检查详情页面','background-color:#5b8bff'],
+            shade: [0],
+            area: ['90%', '90%'],
+            shift: 2,
+            content: '/enforce/pages/checkDaily/checkDailyInfo.html?checkId=' + checkId
+        });
+    }
+
+    function backToList() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    function caseArchiveDown() {
+        var layerIndex = layer.msg("案件归档需要一段时间，请耐心等待", {
+            icon: 16,
+            time: false
+        });
+        $.ajax({
+            type: 'get',
+            url: '/enforce/case/downLoadCaseCata?caseId=' + $("#caseId").val(),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.code == 0) {
+                    var download = document.createElement("a");
+                    download.href = data.data;
+                    download.click();
+                } else {
+                    layer.msg("生成卷宗目录失败！请查看案件是否有效。", {anim: 5});
+                }
+                layer.close(layerIndex);
+            }
+        });
+    }
+
+
+    var toggleFlowFlag = 0;
+    var toggleFileFlag = 0;
+    var toggleDocFlag = 0;
+
+    function showHide(id, dom) {
+        var $dom = $(dom);//转换成dom对象
+        $("#" + id).toggle(1000);
+
+        if (id == "flowDom") {
+            if (!toggleFlowFlag) {
+                $dom.find("i").attr({class: "fa fa-angle-double-down"});
+                toggleFlowFlag = 1;
+            } else {
+                $dom.find("i").attr({class: "fa fa-angle-double-up"});
+                toggleFlowFlag = 0;
+            }
+        } else if (id == "fileDom") {
+            if (!toggleFileFlag) {
+                $dom.find("i").attr({class: "fa fa-angle-double-down"});
+                toggleFileFlag = 1;
+            } else {
+                $dom.find("i").attr({class: "fa fa-angle-double-up"});
+                toggleFileFlag = 0;
+            }
+        } else if (id == "docDom") {
+            if (!toggleDocFlag) {
+                $dom.find("i").attr({class: "fa fa-angle-double-down"});
+                toggleDocFlag = 1;
+            } else {
+                $dom.find("i").attr({class: "fa fa-angle-double-up"});
+                toggleDocFlag = 0;
+            }
+        } else if (id == "caseCommentDom") {
+            if (!toggleDocFlag) {
+                $dom.find("i").attr({class: "fa fa-angle-double-down"});
+                toggleDocFlag = 1;
+            } else {
+                $dom.find("i").attr({class: "fa fa-angle-double-up"});
+                toggleDocFlag = 0;
+            }
+        } else if (id = "warnInfoDom") {
+            if (!toggleDocFlag) {
+                $dom.find("i").attr({class: "fa fa-angle-double-down"});
+                toggleDocFlag = 1;
+            } else {
+                $dom.find("i").attr({class: "fa fa-angle-double-up"});
+                toggleDocFlag = 0;
+            }
+        }
+    }
+
+    function showFile(id, caseId) {
+        parent.layer.open({
+            type: 2,
+            title:['在线预览','background-color:#5b8bff'],
+            shade: [0],
+            area: ['80%', '90%'],
+            maxmin: true,
+            shift: 2,
+            content: '/enforce/pages/attachFile/fileShow.html?id=' + id + '&caseId=' + caseId,
+            success: function (layero) {
+                setTimeout(function () {
+                    $(layero).removeClass("layer-anim-02");
+                }, 0);
+            }
+        });
+    }
+
+    function downloadFile(id) {
+        var download = document.createElement("a");
+        download.href = '/enforce/attachFile/download?id=' + id;
+        download.click();
+    }
+
+    //验证是否有下载案件归档文件权限
+    if (!($.inArray("enforce:case:archive", pers) > 0 && $("#caseStatus").val() == "案件归档")) {
+        $("#caseArchive").remove();
+        $("#caseSearch").remove();
+    }
+    /* function caseSearchBtn() {
+        window.layer.open({
+            type: 2,
+            title: '案卷评查',
+            shade: [0],
+            area: ['300px', '250px'],
+            maxmin: true,
+            shift: 2,
+            content: 'addCaseComment.html?id='+id,
+        });
+     } */
+    var oc = true;
+    $('.openclose').click(function () {
+        //获取基本信息
+        var linum = $('.ul .li').length;
+        var liwidth = $('.ul .li').width();
+        var parwidth = $('.ul').parent().width();
+        oc = !oc;
+        if ((linum + 1) * liwidth >= parwidth) {
+            //改变文件列表显示
+            if (oc) {
+                $('.ul').removeClass('ulline');
+                $('.ul').removeAttr('style');
+            } else {
+                $('.ul').addClass('ulline');
+                $('.ul').width((parseInt(parwidth / 100) - 1) * 100);
+            }
+        }
+
+        //改变按钮图片
+        if (!oc) {
+            $('.openclose').attr('src', '../../images/expand.png');
+        } else {
+            $('.openclose').attr('src', '../../images/collapse.png');
+        }
+    });
+    $('.li').mouseover(function () {
+        $(this).children("p1").attr('style', 'display: block;');
+    });
+    $('.li').mouseout(function () {
+        $(this).children("p1").hide();
+    });
+</script>
+</body>
+</html>

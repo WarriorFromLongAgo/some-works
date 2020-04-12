@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.WywNoteDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.WywNoteEntity" id="wywNoteMap">
+        <result property="noteId" column="note_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="content" column="content"/>
+        <result property="noteTitle" column="note_title"/>
+    </resultMap>
+    
+    
+    <select id="wywlist" resultType="com.orhonit.modules.generator.entity.WywNoteEntity">
+      SELECT 
+         note_id,note_title,create_time,content,create_userid,is_del,update_time 
+      FROM wyw_note 
+      WHERE  
+      1=1
+      <if test="params.noteTitle !=null and params.noteTitle !=''">
+         and note_title like concat(concat('%',#{params.noteTitle}),'%')
+      </if>
+      AND is_del='0'
+      ORDER BY create_time DESC
+	  LIMIT #{params.beginLimit},#{params.limit}
+    </select>
+
+
+</mapper>

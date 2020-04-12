@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢ ᠨᠡᠮᠡᠬᠦ </title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+		<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+		<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+		<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+<script type="text/javascript">
+       orhonIMEinit = {
+           element: "",
+           ele_except: "",
+           editor: {
+               IME_Mount: true,
+               tinymce: "",
+               ueditor: "",
+           },
+           IME_cssurl: "",
+           IME_theme: "",
+           Output_Unicode: true,
+       };
+       Iframe_init = {
+           iframes: "",
+           ifr_except: "",
+           element: "",
+           ele_except: "",
+       };
+</script>
+	</head>
+
+	<body>
+		<div class="centent">
+			<form class="form-horizontal" onsubmit="return false" id="form">
+				<fieldset>
+					<div class="form-group">
+						<label class="control-label">ᠬᠠᠷᠢᠶ᠎ᠠ ᠣᠷᠣᠨ </label>
+						<input class="easyui-combotree" id="area_id" type="text" name="area_id" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠳᠡᠭᠡᠳᠦ ᠱᠠᠲᠤᠨ ᠤ ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ </label>
+						<input class="easyui-combotree" id="parent_id" type="text" name="parent_id"/>
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠺᠣᠳ᠋</label>
+						<input class="form-control" placeholder="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠺᠣᠳ᠋" type="text" name="code" id="code" data-bv-notempty="true" data-bv-notempty-message="主体名称不能为空" readonly="readonly">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ  </label>
+						<input class="form-control not-null" iname="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ  " placeholder="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ  " type="text" name="mgl_name" id="mgl_name" data-bv-notempty="true" data-bv-notempty-message="主体名称不能为空">
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label" style:"text-orientation: mixed">主体名称</label>
+						<input class="form-control" placeholder="主体名称" 
+							name="name" id="name" data-bv-notempty="true"
+							data-bv-notempty-message="主体名称不能为空">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠪᠦᠬᠦᠯᠢ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </label>
+						<input class="form-control not-null" iname="ᠪᠦᠬᠦᠯᠢ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ" placeholder="ᠪᠦᠬᠦᠯᠢ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ"  name="name_spell" id="name_spell" data-bv-notempty="true" data-bv-notempty-message="名称全拼音不能为空">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠬᠠᠤᠯᠢ ᠪᠠᠷ ᠲᠣᠭᠲᠠᠭᠠᠭᠰᠠᠨ ᠲᠥᠯᠥᠭᠡᠯᠡᠭᠴᠢ </label>
+						<input class="form-control" iname="ᠬᠠᠤᠯᠢ ᠪᠠᠷ ᠲᠣᠭᠲᠠᠭᠠᠭᠰᠠᠨ ᠲᠥᠯᠥᠭᠡᠯᠡᠭᠴᠢ" type="text" placeholder="ᠬᠠᠤᠯᠢ ᠪᠠᠷ ᠲᠣᠭᠲᠠᠭᠠᠭᠰᠠᠨ ᠲᠥᠯᠥᠭᠡᠯᠡᠭᠴᠢ" name="mgl_legal_person" id="mgl_legal_person" />
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">法定代表人</label>
+						<input class="form-control " iname="法定代表人" placeholder="法定代表人"
+								name="legal_person" id="legal_person" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠬᠠᠶ᠋ᠢᠭ </label>
+						<input class="form-control" iname="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠬᠠᠶ᠋ᠢᠭ " type="text" placeholder="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠬᠠᠶ᠋ᠢᠭ " name="mgl_address" id="mgl_address" />
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体地址</label>
+						<input class="form-control" iname="主体地址" placeholder="主体地址" name="address"
+							id="address" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠤᠳᠠᠰᠤ </label>
+						<input class="form-control" iname="ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠤᠳᠠᠰᠤ " placeholder="ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠤᠳᠠᠰᠤ " name="tel" id="tel" />
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠳᠥᠭᠦᠮ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </label>
+						<input class="form-control not-null" type="text"  iname="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠳᠥᠭᠦᠮ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ" placeholder="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠳᠥᠭᠦᠮ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ" name="mgl_short_name" id="mgl_short_name" />
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">主体名称简称</label>
+						<input class="form-control not-null" iname="主体名称简称" placeholder="主体名称简称" name="short_name" id="short_name"/>
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠣᠷᠣᠨ ᠪᠦᠰᠡ </label>
+						<input class="form-control not-null" type="text"  iname="ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠣᠷᠣᠨ ᠪᠦᠰᠡ" placeholder="ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠣᠷᠣᠨ ᠪᠦᠰᠡ" name="mgl_lawarea" id="mgl_lawarea" />
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法区域</label>
+						<input class="form-control not-null" iname="执法区域" placeholder="执法区域" name="lawarea" id="lawarea"/>
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ </label>
+						<select name="dept_property" iname="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ " class="form-control input-sm not-null" id="dept_property">
+							<option value="">ᠰᠣᠩᠭᠤᠭᠠᠷᠠᠢ </option>
+						</select>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠳᠡᠰ </label>
+						<select name="level" class="form-control input-sm not-null" iname="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠳᠡᠰ" id="level">
+							<option value="">ᠰᠣᠩᠭᠤᠭᠠᠷᠠᠢ </option>
+						</select>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label">ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ </label>
+						<select name="law_type" class="form-control input-sm not-null" iname="ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ " id="law_type">
+								<option value="">ᠰᠣᠩᠭᠤᠭᠠᠷᠠᠢ </option>
+							</select>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label">ᠵᠠᠷᠯᠠᠨ ᠨᠡᠶᠢᠳᠡᠯᠡᠬᠦ  ᠡᠰᠡᠬᠦ </label>
+						<select name="is_ps" class="form-control input-sm not-null" iname="ᠵᠠᠷᠯᠠᠨ ᠨᠡᠶᠢᠳᠡᠯᠡᠬᠦ  ᠡᠰᠡᠬᠦ " id="is_ps">
+							<option value="">ᠰᠣᠩᠭᠤᠭᠠᠷᠠᠢ </option>
+						</select>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label">ᠡᠬᠢᠯᠡᠵᠦ ᠬᠡᠷᠡᠭᠯᠡᠬᠦ  ᠡᠰᠡᠬᠦ </label>
+						<select name="if_effect" class="form-control input-sm" id="if_effect">
+
+						</select>
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ</label>
+						<input class="form-control" placeholder="ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ" name="sort" id="sort" type="number" value="100" data-bv-notempty="true" data-bv-notempty-message="排序">
+					</div>
+					<div class="form-actions">
+						<div class="row" align="center">
+							<div class="col-md-12">
+								<button class="btn btn-primary " style="margin-left:10px" onclick="custom_close()">ᠲᠡᠬᠢᠠ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ </button>
+								<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add()" style="margin-left:10px">
+									<i class="fa fa-save"></i> ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ 
+								</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+		<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../../js/jq.js"></script>
+		<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+		<script type="text/javascript" src="../../js/common.js"></script>
+		<script type="text/javascript" src="../../js/constans.js"></script>
+		<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+		<script src="../../js/select2/js/select2.full.js"></script>
+		<script type="text/javascript">
+		$(function () {
+		    console.log("ready");
+		    console.log($("select"));
+		    $('select').select2();
+		    $(document)
+		        .on('click', '.select2.select2-container', function () {
+		            var self = $(this);
+		            setTimeout(function () {
+		                $('.select2-container--open').height(self.height()).width(self.width());
+		                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+		            }, 100);
+		        })
+		        // .on("DOMNodeInserted", function (e) {
+		        //     $('select').select2();
+		        //
+		        // })
+
+		})
+			layui.use('layer', function() {
+				var layer = layui.layer;
+			});
+
+	
+			getDictList("2070", "level");//主体等级
+			getDictList("2069", "dept_property");//主体类型
+			getDictList("2065", "law_type");
+			getDictList("2066", "if_effect");
+			getDictList("2066", "is_ps");
+
+			setCode();
+
+			function setCode() {
+
+				$.ajax({
+					url: "/base/ltctions/getSerialNum",
+					type: "GET",
+					success: function(data) {
+						$('#code').val(data);
+					}
+				});
+				/* var timestamp = (new Date()).getTime(); */
+
+			}
+
+			$("#area_id").combotree({
+				method: 'get', //请求方式	
+				url: '/base/sections/areamgl', //请求的URL
+				required: false,
+				cascadeCheck: false,
+				onLoadSuccess: function(node, data) {
+					if(null != data && data.length > 0) {
+						//$("#area_id").combotree('setValue',data[0].text)
+					}
+				},
+				onChange: function(newV, oldV) {}
+			});
+
+			$("#parent_id").combotree({
+				method: 'get', //请求方式	
+				url: '/base/LtcAtts/ltcsmgl', //请求的URL
+				required: false,
+				cascadeCheck: false,
+				onLoadSuccess: function(node, data) {
+					if(null != data && data.length > 0) {
+						//$("#parent_id").combotree('setValue',data[0].text)
+					}
+				},
+				onChange: function(newV, oldV) {}
+			});
+
+			function add() {
+				if($('#area_id').val() == null || $('#area_id').val() == '') {
+					layer.msg("ᠬᠠᠷᠢᠶ᠎ᠠ ᠣᠷᠣᠨ ᠨᠢ ᠬᠣᠭᠣᠰᠣᠨ", {
+						anim: 6
+					});
+					/* alert("所属区域为空"); */
+					return;
+				}
+				/* if($('#parent_id').val()==null||$('#parent_id').val()==''){
+					layer.msg("上级主体为空",{anim:6});
+					return;
+				} */
+				//数据格式校验
+				if(!dataCheck_mn()) {
+					return;
+				}
+
+				$('#submitBtn').removeAttr("disabled");
+				$('#submitBtn').attr("disabled", false);
+				var formdata = $("#form").serializeObject();
+				$.ajax({
+					type: 'post',
+					url: '/base/ltctions',
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(formdata),
+					success: function(data) {
+						layer.msg("ᠨᠡᠮᠡᠪᠠ", {
+							shift: -1,
+							time: 1000
+						}, function() {
+							window.parent.location.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+					}
+				});
+			}
+
+			function custom_close() {
+				$('#parent_id').val("");
+				$('#name').val("");
+				$('#name_spell').val("");
+				$('#legal_person').val("");
+				$('#address').val("");
+				$('#tel').val("");
+				$('#dept_property').val("1");
+				$('#level').val("1");
+				$('#law_type').val("0");
+				$('#sort').val("100");
+			}
+		</script>
+	</body>
+
+</html>

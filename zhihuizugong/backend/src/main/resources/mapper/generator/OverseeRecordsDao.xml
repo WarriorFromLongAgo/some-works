@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.OverseeRecordsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.OverseeRecordsEntity" id="overseeRecordsMap">
+        <result property="recordId" column="record_id"/>
+        <result property="overseeId" column="oversee_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="recordsContent" column="records_content"/>
+        <result property="createDeptId" column="create_dept_id"/>
+        <result property="crtTime" column="crt_time"/>
+        <result property="lowerId" column="lower_id"/>
+        <result property="recordType" column="record_type"/>
+        <result property="workHarder" column="work_harder"/>
+        <result property="workEfficiency" column="work_efficiency"/>
+        <result property="workPerformance" column="work_performance"/>
+        <result property="createName" column="create_name"/>
+    </resultMap>
+<!--     领导批示列表 -->
+	<select id="instructionsList" resultMap="overseeRecordsMap">
+		select * from tb_oversee_records where record_type = 1 and oversee_id = #{overseeId} 
+		order by crt_time
+	</select>
+	<!--     完成进度列表 -->
+	<select id="scheduleList" resultMap="overseeRecordsMap">
+		select * from tb_oversee_records where record_type = 2 and oversee_id = #{overseeId} 
+		order by crt_time
+	</select>
+	<!--     领导点评列表 -->
+	<select id="reviewList" resultMap="overseeRecordsMap">
+		select * from tb_oversee_records where record_type = 3 and oversee_id = #{overseeId} 
+		order by crt_time
+	</select>
+
+</mapper>

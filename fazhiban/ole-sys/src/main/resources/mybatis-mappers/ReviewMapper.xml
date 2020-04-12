@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.sys.dao.ReviewDao">
+
+<select id="getList" resultType="com.orhonit.ole.sys.model.ReviewItemEntity">
+		SELECT 
+			ri.id as id, 
+			ri.name as name,
+			ri.content as content,
+			ri.parent_id as parentId,
+			ri.parent_name as parentName,
+			ri.sort as sort,
+			ri.score as score,
+			sd2.enum_desc as ifEffect,
+			ri.create_by as createBy,
+			ri.create_name as createName,
+			ri.create_date as createDate,
+			ri.update_by as updateBy,
+			ri.update_name as updateName,
+			ri.update_date as updateDate
+		FROM ole_ef_review_item ri 
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = ri.if_effect AND sd2.type_value = '1709' 
+	<where>
+		ri.del_flag='0'
+		<if test="params.name != null and params.name != ''">
+			and ri.name like concat('%', #{params.name}, '%')
+		</if>
+		<if test="params.parentId != null and params.parentId != ''">
+			and ri.parent_name = #{params.parentId}
+		</if>
+		<if test="params.delFlag != null and params.delFlag != ''">
+			and ri.if_effect='1'
+		</if>
+		<!-- APP按parentId查询 -->
+		<if test="params.parent != null">
+			and ri.parent_id = #{params.parent}
+		</if>
+		
+	</where>
+		order by ri.sort desc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>   
+</select>
+
+
+<select id="getCount" resultType="int">
+		SELECT 
+			 count(*) 
+		FROM ole_ef_review_item ri 
+	<where>
+		ri.del_flag='0'
+		<if test="params.name != null and params.name != ''">
+			and ri.name like concat('%', #{params.name}, '%')
+		</if>
+		<if test="params.parentId != null and params.parentId != ''">
+			and ri.parent_name = #{params.parentId}
+		</if>
+	</where>
+</select>
+
+<select id="getAllReviewItem" resultType="com.orhonit.ole.sys.model.ReviewItemEntity">
+		SELECT 
+			id as id, 
+			name as name,
+			parent_id as parentId
+		FROM ole_ef_review_item  
+		where if_effect='1'
+			and del_flag='0'
+			and parent_id=0
+</select>
+<select id="getReviewRecordCount" resultType="int">
+		SELECT 
+			 count(*) 
+		FROM ole_ef_review_record rr
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = rr.status AND sd2.type_value = '2061' 
+		LEFT JOIN ole_ef_case ec ON rr.case_id=ec.id
+	<where>
+		 1=1
+		<if test="params.caseName != null and params.caseName != ''">
+			and ec.case_name like concat('%', #{params.caseName}, '%')
+		</if>
+		<if test="params.caseNum!= null and params.caseNum != ''">
+			and ec.case_num like concat('%', #{params.caseNum}, '%')
+		</if>
+		<if test="params.status!= null and params.status != ''">
+			and FIND_IN_SET(  rr.status ,#{params.status})
+		</if>
+		<if test="params.areaId!= null and params.areaId != ''">
+			and ec.dept_id IN (SELECT id FROM ole_base_dept WHERE area_id =#{params.areaId}) 
+		</if>
+		<if test="params.deptId!= null and params.deptId != ''">
+			and ec.dept_id =#{params.deptId}
+		</if>
+	</where>
+</select>
+
+
+<select id="getReviewRecordList" resultType="com.orhonit.ole.sys.model.ReviewRecordEntity">
+		SELECT 
+			rr.id as id, 
+			rr.case_id as caseId,
+			rr.batch,
+			rr.status,
+			sd2.enum_desc as statusName,
+			rr.score as score,
+			rr.create_by as createBy,
+			rr.create_name as createName,
+			rr.create_date as createDate,
+			ec.case_name as  caseName,
+			ec.case_num as caseNum
+		FROM ole_ef_review_record rr
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = rr.status AND sd2.type_value = '2061' 
+		LEFT JOIN ole_ef_case ec ON rr.case_id=ec.id
+	<where>
+		 1=1
+		<if test="params.caseName != null and params.caseName != ''">
+			and ec.case_name like concat('%', #{params.caseName}, '%')
+		</if>
+		<if test="params.caseNum!= null and params.caseNum != ''">
+			and ec.case_num like concat('%', #{params.caseNum}, '%')
+		</if>
+		<if test="params.status!= null and params.status != ''">
+			and FIND_IN_SET(  rr.status ,#{params.status})
+		</if>
+		<if test="params.areaId!= null and params.areaId != ''">
+			and ec.dept_id IN (SELECT id FROM ole_base_dept WHERE area_id =#{params.areaId}) 
+		</if>
+		<if test="params.deptId!= null and params.deptId != ''">
+			and ec.dept_id =#{params.deptId}
+		</if>
+	</where>
+		order by rr.create_date desc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>   
+</select>
+</mapper>

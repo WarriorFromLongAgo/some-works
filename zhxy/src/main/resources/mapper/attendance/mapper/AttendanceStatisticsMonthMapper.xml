@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.attendance.mapper.AttendanceStatisticsMonthMapper">
+    <select id="getAttendanceData"
+            resultType="com.orhon.smartcampus.modules.attendance.entity.AttendanceStatisticsMonth">
+                select * from attendance_statistics_month where user_id = #{user_id} and month = #{month}
+    </select>
+</mapper>

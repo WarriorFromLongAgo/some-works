@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.DocFlowDao">
+	<select id="getDocFlows" resultType="com.orhonit.ole.enforce.dto.DocFlowDTO">	
+		SELECT
+			template.id AS id,
+			template.`name` AS NAME,
+			template.`code` AS code,
+			flow.need_add As needAdd
+		FROM
+			ole_ef_doc_flow flow
+		LEFT JOIN ole_ef_doc_template template ON flow.`code` = template.`code`
+		WHERE
+			flow.flow_node = #{paramMap.flowNode}
+		AND flow.flow_type = #{paramMap.flowType}
+		AND flow.is_effect = "1"
+	</select>
+	
+	<select id="getApiDocFlows" resultType="com.orhonit.ole.enforce.dto.shareapi.ApiDocFlowDTO">	
+		SELECT
+			template.id AS id,
+			template.`name` AS NAME,
+			template.`code` AS code,
+			flow.need_add As needAdd,
+			template.content as content
+		FROM
+			ole_ef_doc_flow flow
+		LEFT JOIN ole_ef_doc_template template ON flow.`code` = template.`code`
+		WHERE
+			flow.flow_node = #{paramMap.flowNode}
+		AND flow.flow_type = #{paramMap.flowType}
+		AND flow.is_effect = "1"
+	</select>
+	
+	
+	
+	<select id="getListTemplate" resultType="java.util.HashMap">	
+		select name,`code` from ole_ef_doc_template 
+	</select>
+	
+	<!-- 文书配置列表查询-->
+	<select id="docFlowList" resultType="com.orhonit.ole.enforce.dto.DocFlowListDTO">
+		SELECT 
+			temp.id,
+			temp.code,
+			temp.codeName,
+			temp.flowType,
+			temp.flowNode,
+			temp.needAdd,
+			temp.isEffect,
+			temp.updateName,
+			temp.updateDate
+		FROM
+		(
+			SELECT DISTINCT
+				edf.id AS id,
+				edf.`code` AS `code`,
+				edt.`name` AS codeName,
+				sd.enum_desc AS flowType,
+				sd1.enum_desc AS flowNode,
+				sd2.enum_desc AS needAdd,
+				sd3.enum_desc AS isEffect,
+				edf.update_name AS updateName,
+				edf.update_date AS updateDate,
+				edf.create_date AS createDate
+			FROM
+				ole_ef_doc_flow edf
+			LEFT JOIN ole_ef_doc_template edt ON edf.`code` = edt.`code`
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = edf.flow_type
+			AND sd.type_value = '1802'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = edf.need_add
+			AND sd2.type_value = '1801'
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = edf.is_effect
+			AND sd3.type_value = '1713'
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = edf.flow_node
+			WHERE   sd1.type_value = '1500'
+			AND edf.flow_type in ('1','2','3')
+		UNION ALL
+			SELECT DISTINCT
+				edf.id AS id,
+				edf.`code` AS `code`,
+				edt.`name` AS codeName,
+				sd.enum_desc AS flowType,
+				sd1.enum_desc AS flowNode,
+				sd2.enum_desc AS needAdd,
+				sd3.enum_desc AS isEffect,
+				edf.update_name AS updateName,
+				edf.update_date AS updateDate,
+				edf.create_date AS createDate
+			FROM
+				ole_ef_doc_flow edf
+			LEFT JOIN ole_ef_doc_template edt ON edf.`code` = edt.`code`
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = edf.flow_type
+			AND sd.type_value = '1802'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = edf.need_add
+			AND sd2.type_value = '1801'
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = edf.is_effect
+			AND sd3.type_value = '1713'
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = edf.flow_node
+			WHERE sd1.type_value = '1501'
+				  AND edf.flow_type = '4'		
+		UNION ALL
+			SELECT DISTINCT
+				edf.id AS id,
+				edf.`code` AS `code`,
+				edt.`name` AS codeName,
+				sd.enum_desc AS flowType,
+				sd1.enum_desc AS flowNode,
+				sd2.enum_desc AS needAdd,
+				sd3.enum_desc AS isEffect,
+				edf.update_name AS updateName,
+				edf.update_date AS updateDate,
+				edf.create_date AS createDate
+			FROM
+				ole_ef_doc_flow edf
+			LEFT JOIN ole_ef_doc_template edt ON edf.`code` = edt.`code`
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = edf.flow_type
+			AND sd.type_value = '1802'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = edf.need_add
+			AND sd2.type_value = '1801'
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = edf.is_effect
+			AND sd3.type_value = '1713'
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = edf.flow_node
+			WHERE sd1.type_value = '1502'
+			AND edf.flow_type = '5'
+				
+		) temp
+		<where>
+			<if test="params.code != null and params.code != ''">
+				and temp.codeName LIKE concat('%', #{params.code}, '%')
+			</if>
+			<if test="params.flowType != null and params.flowType != ''">
+				and temp.flowType LIKE concat('%', #{params.flowType}, '%')
+			</if>
+			<if test="params.flowNode != null and params.flowNode != ''">
+				and temp.flowNode LIKE concat('%', #{params.flowNode}, '%')
+			</if>
+		</where>
+		order by temp.createDate desc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<!-- 文书配置列表总数查询-->
+	<select id="count" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM
+		(
+			SELECT DISTINCT
+				edf.id AS id,
+				edf.`code` AS `code`,
+				edt.`name` AS codeName,
+				sd.enum_desc AS flowType,
+				sd1.enum_desc AS flowNode,
+				sd2.enum_desc AS needAdd,
+				sd3.enum_desc AS isEffect,
+				edf.update_name AS updateName,
+				edf.update_date AS updateDate,
+				edf.create_date AS createDate
+			FROM
+				ole_ef_doc_flow edf
+			LEFT JOIN ole_ef_doc_template edt ON edf.`code` = edt.`code`
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = edf.flow_type
+			AND sd.type_value = '1802'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = edf.need_add
+			AND sd2.type_value = '1801'
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = edf.is_effect
+			AND sd3.type_value = '1713'
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = edf.flow_node
+			WHERE sd1.type_value = '1500'
+			AND edf.flow_type in ('1','2','3')
+		UNION ALL
+			SELECT DISTINCT
+				edf.id AS id,
+				edf.`code` AS `code`,
+				edt.`name` AS codeName,
+				sd.enum_desc AS flowType,
+				sd1.enum_desc AS flowNode,
+				sd2.enum_desc AS needAdd,
+				sd3.enum_desc AS isEffect,
+				edf.update_name AS updateName,
+				edf.update_date AS updateDate,
+				edf.create_date AS createDate
+			FROM
+				ole_ef_doc_flow edf
+			LEFT JOIN ole_ef_doc_template edt ON edf.`code` = edt.`code`
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = edf.flow_type
+			AND sd.type_value = '1802'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = edf.need_add
+			AND sd2.type_value = '1801'
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = edf.is_effect
+			AND sd3.type_value = '1713'
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = edf.flow_node
+			WHERE sd1.type_value = '1501'
+			AND edf.flow_type = '4'
+		UNION ALL
+			SELECT DISTINCT
+				edf.id AS id,
+				edf.`code` AS `code`,
+				edt.`name` AS codeName,
+				sd.enum_desc AS flowType,
+				sd1.enum_desc AS flowNode,
+				sd2.enum_desc AS needAdd,
+				sd3.enum_desc AS isEffect,
+				edf.update_name AS updateName,
+				edf.update_date AS updateDate,
+				edf.create_date AS createDate
+			FROM
+				ole_ef_doc_flow edf
+			LEFT JOIN ole_ef_doc_template edt ON edf.`code` = edt.`code`
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = edf.flow_type
+			AND sd.type_value = '1802'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = edf.need_add
+			AND sd2.type_value = '1801'
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = edf.is_effect
+			AND sd3.type_value = '1713'
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = edf.flow_node
+			WHERE sd1.type_value = '1502'
+			AND edf.flow_type = '5'
+		) temp
+		<where>
+			<if test="params.code != null and params.code != ''">
+				and temp.codeName LIKE concat('%', #{params.code}, '%')
+			</if>
+			<if test="params.flowType != null and params.flowType != ''">
+				and temp.flowType LIKE concat('%', #{params.flowType}, '%')
+			</if>
+			<if test="params.flowNode != null and params.flowNode != ''">
+				and temp.flowNode LIKE concat('%', #{params.flowNode}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>

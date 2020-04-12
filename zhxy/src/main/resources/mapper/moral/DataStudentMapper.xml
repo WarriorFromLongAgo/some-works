@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.moral.mapper.DataStudentMapper">
+    <select id="getStudent" resultType="java.util.HashMap"
+            parameterType="java.util.HashMap">
+        SELECT
+        a.*,
+        b.student_name
+        FROM
+        moral_data_student as a
+        LEFT JOIN student_information AS b ON b.user_id = a.user_id
+        <where>
+        and a.moral_column_id = #{moral_column_id}
+        </where>
+    </select>
+    <insert id="inserts">
+		INSERT INTO moral_data_student(moral_column_id,user_id) VALUES (#{moral_column_id},#{student})
+	</insert>
+    <delete id="deletes">
+		delete from moral_data_student
+		where
+		moral_column_id=#{id}
+	</delete>
+</mapper>

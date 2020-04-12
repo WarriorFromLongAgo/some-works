@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgMeetInformDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgMeetInformEntity" id="zgMeetInformMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="meetTitle" column="meet_title"/>
+        <result property="meetHost" column="meet_host"/>
+        <result property="meetReport" column="meet_report"/>
+        <result property="meetSite" column="meet_site"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+<insert id="save" parameterType= "com.orhonit.modules.generator.entity.ZgMeetInformEntity">
+		INSERT INTO zg_meet_inform(id,user_id,meet_title,meet_host,meet_report,meet_site,start_time,end_time,create_time,remark)
+		VALUES(#{id},#{userId},#{meetTitle},#{meetHost},#{meetReport},#{meetSite},#{startTime},#{endTime},#{createTime},#{remark})
+</insert>
+
+<select id="findAll" resultMap= "zgMeetInformMap">
+		SELECT 
+		*
+		FROM zg_meet_inform
+		WHERE
+		1=1
+		<if test="params.meetTitle != null and params.meetTitle != '' ">
+		AND meet_title LIKE CONCAT('%','${params.meetTitle}','%' )
+		</if>
+		<if test ="params.startTime != null and params.startTime != '' ">
+		AND DATE_FORMAT( start_time, '%Y-%m-%d' ) = #{params.startTime} 
+		</if>
+		<if test="params.meetSite != null and params.meetSite != '' ">
+		AND meet_site LIKE CONCAT('%','${params.meetSite}','%' )
+		</if>
+		<if test="params.page != null and params.page != '' and params.limit != null and params.limit != '' ">
+		LIMIT #{params.page},#{params.limit}
+		</if>
+</select>
+
+<select id="findAllCount" resultMap= "zgMeetInformMap">
+		SELECT 
+		*
+		FROM zg_meet_inform
+		WHERE
+		1=1
+		<if test="params.meetTitle != null and params.meetTitle != '' ">
+		AND meet_title LIKE CONCAT('%','${params.meetTitle}','%' )
+		</if>
+		<if test ="params.startTime != null and params.startTime != '' ">
+		AND DATE_FORMAT( start_time, '%Y-%m-%d' ) = #{params.startTime} 
+		</if>
+		<if test="params.meetSite != null and params.meetSite != '' ">
+		AND meet_site LIKE CONCAT('%','${params.meetSite}','%' )
+		</if>
+</select>
+
+<select id="findAllUser" resultType = "java.util.Map">
+		SELECT
+		user_id AS userId,
+		username,
+		user_true_name AS userTrueName,
+		user_nickname AS userNickname,
+		mobile,
+		user_head_picture AS userHeadPicture,
+		lower_id AS lowerId,
+		lower_name AS lowerName,
+		position
+		FROM sys_user
+		<!-- WHERE lower_id = (SELECT lower_id FROM sys_user WHERE user_id = #{userId}) -->
+</select>
+<select id="findMeetList" resultType = "java.util.Map">
+		SELECT
+		id,
+		meet_title AS meetTitle
+		FROM
+		zg_meet_inform
+</select>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.tts.dao.ComplainDao">
+    <!-- 投诉列表查询-->
+	<select id="list" resultType="com.orhonit.ole.tts.dto.ComplainDTO">
+		SELECT
+		  id,
+		  name,
+		  tel,
+		  email,
+		  address,
+		  content,
+		  create_name AS createName,
+		  create_date AS createDate,
+		  create_by AS createBy,
+		  update_name AS updateName,
+		  update_date AS updateDate,
+		  update_by AS updateBy
+		FROM ole_warn_complain
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and name like concat('%', #{params.name} , '%')
+			</if>
+			<if test="params.tel != null and params.tel != ''">
+				and tel like concat('%', #{params.tel} , '%')
+			</if>
+			<if test="params.createName != null and params.createName != ''">
+				and create_name like concat('%', #{params.createName} , '%')
+			</if>
+			<if test="params.lang != null and params.lang != ''">
+				and lang= #{params.lang}
+			</if>
+		</where>
+		order by create_date desc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<!-- 列表查询总数-->
+	<select id="listCount" resultType="int">
+		SELECT count(*) FROM ole_warn_complain
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and name like concat('%', #{params.name} , '%')
+			</if>
+			<if test="params.tel != null and params.tel != ''">
+				and tel like concat('%', #{params.tel} , '%')
+			</if>
+			<if test="params.createName != null and params.createName != ''">
+				and create_name like concat('%', #{params.createName} , '%')
+			</if>
+			<if test="params.lang != null and params.lang != ''">
+				and lang= #{params.lang}
+			</if>
+		</where>
+		;
+	</select>
+	
+	<!-- 投诉详情 -->
+	<select id="getComplain" resultType="com.orhonit.ole.tts.dto.ComplainDTO">
+		SELECT
+			  id,
+			  name,
+			  tel,
+			  email,
+			  address,
+			  content,
+			  create_name AS createName,
+			  create_date AS createDate,
+			  create_by AS createBy,
+			  update_name AS updateName,
+			  update_date AS updateDate,
+			  update_by AS updateBy
+			FROM ole_warn_complain
+		WHERE id=#{id}
+	</select>
+</mapper>

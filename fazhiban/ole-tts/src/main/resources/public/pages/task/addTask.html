@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		
+			<div class="form-group">
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">bean名称</label>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+					<input class="form-control" placeholder="请输入bean名称" type="text" name="beanName"
+						data-bv-notempty="true"
+						data-bv-notempty-message="bean名称为空">
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">方法名称</label>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+					<input class="form-control" placeholder="请输入方法名称" type="text" name="methodName"
+						data-bv-notempty="true"
+						data-bv-notempty-message="方法名称为空">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">参数</label>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+					<input class="form-control" placeholder="请输入参数(规则Id|任务Id)" type="text" name="params" data-bv-notempty="true"
+						data-bv-notempty-message="参数为空">
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">cron表达式</label>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+					<input class="form-control" placeholder="请输入cron表达式" type="text" name="cronExpression"
+						data-bv-notempty="true"
+						data-bv-notempty-message="cron表达式为空">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">备注</label>
+				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+					<input class="form-control" placeholder="请输入备注" type="text" name="remark">
+				</div>
+				
+			</div>
+			
+			
+			<div class="form-actions" style="margin-top:40px;">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add(12)">
+							<i class="fa fa-save"></i> 提交
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>  
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+    
+	    layui.use(['layer','laydate'], function(){
+		    var layer = layui.layer;
+		    var laydate = layui.laydate;
+		    laydate.render({
+	           elem: '#birthday'
+	        });
+		});
+    
+        $('#form').bootstrapValidator();
+        
+        function add(tmpFlag) {
+        	
+        	$('#tempBtn').removeAttr("disabled");
+        	$('#submitBtn').removeAttr("disabled");
+        	$('#submitBtn').attr("disabled",false); 
+        	
+        	var formdata = $("#form").serializeObject();
+        	
+        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    $.ajax({
+				type : 'post',
+				url : '/tts/task/save',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+                        window.parent.location.reload();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+                    });
+				}
+			});
+			
+		}
+        
+
+    </script>
+</body>
+</html>

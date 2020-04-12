@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.server.dao.LawLevelDao">
+	
+	<select id="count" resultType="int">
+		select count(DISTINCT id) as num from ole_base_law_level
+		<where>
+			del_flag='0'	
+			<if test="params.name != null and params.name != ''">
+				and name like concat('%', #{params.name}, '%')
+			</if>
+		</where>
+	</select>
+
+	<select id="list" resultType="com.orhonit.ole.server.model.LawLevel">
+		select 
+			l.id as id,
+			l.name as name,
+			l.mgl_name as mglName,
+			l.sort as sort,
+			l.parent_id as parentId,
+			l.name_en as nameEn,
+			l.create_name as createName,
+			l.create_by as createBy,
+			l.create_date as createDate,
+			sd.enum_desc as ifEffect,
+			sd.mgl_enum_desc as mglIsEffect
+		from ole_base_law_level l
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value=l.if_effect and sd.type_value = '1709'
+		<where>
+			l.del_flag='0'	
+			<if test="params.name != null and params.name != ''">
+				and l.name like concat('%', #{params.name}, '%')
+			</if>
+			order by l.sort asc
+			<if test="start != null and start >= 0 and length != null and length >= 0">
+				limit #{start}, #{length}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getNameById" resultType="String">
+		select name from ole_base_law_level 
+		where id=#{id}
+	</select>
+	
+	<select id="getMglNameById" resultType="String">
+		select mgl_name as mglName from ole_base_law_level 
+		where id=#{id}
+	</select>
+	
+
+	<select id="getAllLawLevel" resultType="com.orhonit.ole.server.model.LawLevel">
+		select 
+			id,
+			name,
+			mgl_name as mglName,
+			parent_id as parentId 
+		from 
+			ole_base_law_level 
+		where if_effect='1'
+			and del_flag='0'
+	</select>
+	
+	<select id="getInfoById" resultType="com.orhonit.ole.server.model.LawLevel">
+		select 
+			id,
+			name,
+			name_en as nameEn,
+			sort,
+			if_effect as ifEffect,
+			parent_id as parentId 
+		from 
+			ole_base_law_level 
+		where id = #{id}
+	</select>
+</mapper>

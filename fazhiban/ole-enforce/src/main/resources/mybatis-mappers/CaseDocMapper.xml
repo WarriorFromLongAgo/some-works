@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.CaseDao">
+	<select id="findDocInfo" resultType="com.orhonit.ole.enforce.dto.api.ApiCaseDocDTO">	
+		SELECT 
+		ec.case_num as caseNum,
+		edt.code as code,
+		edt.name as name,
+		edc.value as value
+		FROM ole_ef_case ec
+		LEFT JOIN ole_ef_doc_content edc  ON ec.id=edc.case_id 
+		LEFT JOIN ole_ef_doc_template edt ON edt.id=edc.template_id 
+		where edt.code=#{params.code}
+		AND ec.case_num=#{params.caseNum}
+	</select>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.EjSchedulingRecordDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.EjSchedulingRecordEntity" id="ejSchedulingRecordMap">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="schedulingId" column="scheduling_id"/>
+        <result property="schedule" column="schedule"/>
+        <result property="createTime" column="create_time"/>
+        <result property="type" column="type"/>
+        <result property="coordinatesX" column="coordinates_x"/>
+        <result property="coordinatesY" column="coordinates_y"/>
+        <result property="peopleId" column="people_id"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+
+</mapper>

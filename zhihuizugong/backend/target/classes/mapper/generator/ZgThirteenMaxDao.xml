@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgThirteenMaxDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgThirteenMaxEntity" id="zgThirteenMaxMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="answer" column="answer_max"/>
+        <result property="workIdea" column="work_idea_max"/>
+        <result property="share" column="share_max"/>
+        <result property="orgLive" column="org_live_max"/>
+        <result property="help" column="help_max"/>
+        <result property="volunteer" column="volunteer_max"/>
+        <result property="donate" column="donate_max"/>
+        <result property="resumption" column="resumption_max"/>
+        <result property="lightspot" column="lightspot_max"/>
+        <result property="feature" column="feature_max"/>
+        <result property="study" column="study_max"/>
+        <result property="thinkNote" column="think_note_max"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgThirteenMaxEntity">
+        INSERT INTO zg_thirteen_max (
+        id,
+        user_id,
+        user_name,
+        answer,
+        work_idea,
+        share,
+        org_live,
+        help,
+        volunteer,
+        donate,
+        resumption,
+        lightspot,
+        feature,
+        study,
+        think_note,
+        update_time
+        )
+        VALUES
+	    (
+        #{id},#{userId},#{userName},#{answer},#{workIdea},#{share},#{orgLive},#{help},
+        #{volunteer},#{donate},#{resumption},#{lightspot},#{feature},#{study},#{thinkNote},#{updateTime})
+    </insert>
+
+    <select id="findThMaxList" resultType="com.orhonit.modules.generator.entity.ZgThirteenMaxEntity">
+        select * from zg_thirteen_max
+    </select>
+
+</mapper>

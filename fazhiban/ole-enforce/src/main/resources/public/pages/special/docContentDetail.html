@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文书详细内容</title>
+<style>
+	@page{margin:0;margin-top:55px;}
+	table,table tr th, table tr td { border:1px solid #000000; }
+	td{font-size:14px;font-family:"宋体";}
+    table { width:  min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse;} 
+    @media print {
+                .no-print { display: none; }
+                .page-break { page-break-after: always; }
+            }
+</style>
+</head>
+<!-- 
+<body style="width: 756px;  text-align:center;margin:0 auto" >
+--> 
+<p><button type="button" onclick="doPrint()">打印</button></p>
+<!--startprint-->
+<body style="width: 756px;margin:0 auto;">
+
+<!--
+<div id="content"  style="width: 756px;  text-align:center;margin:0 auto" >
+--> 
+<div id="content"   style="margin-left:45px;margin-right:45px;margin-bottom:55px;">
+
+</div >
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript">
+	
+		function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+		}
+	    var templateId = getQuery('templateId');
+	    var checkId = getQuery('checkId');
+	    var contentId = getQuery('contentId');
+	    
+        $.ajax({
+			type : 'get',
+			url : '/enforce/docContent/detail?templateId=' + templateId + '&caseId=' + checkId + '&contentId=' + contentId,
+			contentType: "application/json; charset=utf-8",  
+			success : function(data) {
+				$('#content').html(data.data.htmlContent);
+			}
+		});
+        
+    </script>
+</body>
+<!--endprint-->
+<script type="text/javascript">
+    function doPrint(){
+    	bdhtml=window.document.body.innerHTML;    
+        sprnstr="<!--startprint-->"; // 打印开始标识   
+        eprnstr="<!--endprint-->";   //打印结束标识 
+        prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);    
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); 
+        window.document.body.innerHTML=prnhtml; 
+        window.print();    
+	}   
+</script> 
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.server.dao.LepDao">
+
+	<resultMap id="BaseResultMap" type="Lepeson">
+		<id column="id" property="id" />
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="code" property="code" />
+		<result column="sex" property="sex" />
+		<result column="nation" property="nation" />
+		<result column="tel" property="tel" />
+		<result column="political" property="political" />
+		<result column="birthday" property="birthday" />
+		<result column="edu" property="edu" />
+		<result column="card_num" property="card_num" />
+		<result column="picture" property="picture" />
+		<result column="duty" property="duty" />
+		<result column="dept_id" property="dept_id" />
+		<result column="cert_num" property="cert_num" />
+		<result column="lawarea" property="lawarea" />
+		<result column="cert_type" property="cert_type" />
+		<result column="cert_auth" property="cert_auth" />
+		<result column="cert_time" property="cert_time" />
+		<result column="cert_term" property="cert_term" />
+		<result column="law_type" property="law_type" />
+		<result column="if_effect" property="if_effect" />
+		<result column="del_flag" property="del_flag" />
+		<result column="create_by" property="create_by" />
+		<result column="create_name" property="create_name" />
+		<result column="create_date" property="create_date" />
+		<result column="update_by" property="update_by" />
+		<result column="update_name" property="update_name" />
+		<result column="update_date" property="update_date" />
+		<result column="mgl_name" property="mgl_name" />
+		<result column="mgl_create_name" property="mgl_create_name" />
+		<result column="mgl_update_name" property="mgl_update_name" />
+		<result column="mgl_dept" property="mgl_dept" />
+		<result column="mgl_duty" property="mgl_duty" />
+		<association property="ltcAtt" javaType="LtcAtt">
+			<result property="name" column="name" />
+		</association>
+		
+	</resultMap>
+
+	<sql id="where">
+		<where>
+			t.del_flag = 0
+			<if test="params.name != null and params.name != ''">
+				and t.name like concat('%', #{params.name}, '%')
+			</if>
+			<if test="params.mgl_name != null and params.mgl_name != ''">
+				and t.name like concat('%', #{params.mgl_name}, '%')
+			</if>
+			<if test="params.card_num != null and params.card_num != ''">
+				and t.card_num like concat('%', #{params.card_num}, '%')
+			</if>
+			<if test="params.job_type != null and params.job_type != ''">
+				and t.duty = #{params.job_type} 
+			</if>
+			<if test="params.dept_name != null and params.dept_name != ''">
+				and u.name like concat('%', #{params.dept_name}, '%')
+			</if>
+			<if test="params.mgl_dept_name != null and params.mgl_dept_name!= ''">
+				and u.mgl_name like concat('%', #{params.mgl_dept_name}, '%')
+			</if>
+			<if test="params.law_type != null and params.law_type != ''">
+				and t.law_type = #{params.law_type}
+			</if>
+			<if test="params.lx_type != null and 1 == params.lx_type">
+				and t.dept_id IN(
+					SELECT id FROM ole_base_dept WHERE area_id IN (
+					SELECT area_id FROM ole_base_dept WHERE id = #{params.dept_id}))
+			</if>
+			<if test="params.lx_type != null and 2 == params.lx_type">
+				and FIND_IN_SET(t.dept_id,#{params.deptIds})
+			</if>
+		</where>
+	</sql>
+
+	<select id="count" resultType="int">
+		select count(1) from ole_base_dept_person t left join ole_base_dept
+		u on
+		u.id = t.dept_id
+		<include refid="where" />
+	</select>
+
+	<select id="list" resultMap="BaseResultMap">
+		select 
+			u.name as dept_id,
+			u.mgl_name as mgl_dept,
+			t.id,
+			t.name,
+			t.mgl_name,
+			t.card_num,
+			sd.enum_desc as duty,
+			sd.mgl_enum_desc as mgl_duty,
+			t.cert_num
+		from ole_base_dept_person t 
+		left join ole_base_dept u on u.id = t.dept_id
+		left join ole_sys_dict sd on sd.enum_value = t.duty and sd.type_value = '1706'
+		<include refid="where" />
+		ORDER BY t.create_date DESC 
+		<if test="start != null and start >= 0 and length != null and length >= 0">
+			limit #{start}, #{length}
+		</if>
+	</select>
+	
+	<select id="execFunction" resultType="java.lang.String">
+		SELECT superviseGetBaseDeptByParentId(#{deptId})
+	</select>
+
+</mapper>

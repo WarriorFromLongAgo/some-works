@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>模板详细信息</title>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+	<div id="docContent">
+	</div>
+
+	<form class="form-horizontal" onsubmit="return false" id="form">
+	
+		
+		<fieldset>
+		
+			<div class="form-group">
+				<label class="col-md-2 control-label">模板名称</label>
+				<div class="col-md-10">
+					<input class="form-control" placeholder="请输入模板名称" type="text" name="name"
+						data-bv-notempty="true" id="name"
+						data-bv-notempty-message="模板名称不能为空">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">模板代码</label>
+				<div class="col-md-10">
+					<input class="form-control" placeholder="请输入模板代码" type="text" name="code"
+						data-bv-notempty="true" id="code"
+						data-bv-notempty-message="模板代码不能为空">
+					<input type="hidden" id="id" name="id" value="" />
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<!-- 加载编辑器的容器 -->
+				    <script id="container" name="content" type="text/plain" style="width: 100%;">
+        				这里写你的初始化内容
+    				</script>
+			</div>
+			
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+					    <button class="btn btn-primary" onclick="location.href='docTemplateList.html'">返回</button>
+						<button class="btn btn-primary" type="submit" onclick="add()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+    
+    	function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+    	}
+        var id = getQuery('docTemplateId');
+	    
+        if ( id == null || id == '' ) {
+        	alert('参数异常.');
+        	window.location.href = 'docTemplateList.html';
+        }
+        
+        var ue = UE.getEditor('container');
+        
+        layui.use(['layer','laydate'], function(){
+		    var layer = layui.layer;
+		    var laydate = layui.laydate;
+		    laydate.render({
+	           elem: '#birthday'
+	        });
+		});
+        
+        $.ajax({
+			type : 'get',
+			url : '/enforce/docTemplate/getContent/' + id,
+			contentType: "application/json; charset=utf-8",  
+			success : function(data) {
+				ue.setContent(data.content);
+				$('#id').val(data.id);
+				$('#name').val(data.name);
+				$('#code').val(data.code);
+			}
+		});
+        
+        $('#form').bootstrapValidator();
+        
+        function add() {
+        	var formdata = $("#form").serializeObject();
+        	
+        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+
+			$.ajax({
+				type : 'post',
+				url : '/enforce/docTemplate/update',
+				data : formdata,
+				success : function(data) {
+					alert('操作成功.');
+					window.location.href = 'docTemplateList.html';
+				}
+			});
+		}
+    </script>
+</body>
+</html>

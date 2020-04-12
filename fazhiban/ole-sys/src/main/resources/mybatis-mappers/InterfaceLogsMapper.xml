@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.sys.dao.InterfaceLogsDao">
+
+	<resultMap id="BaseResultMap" type="InterfaceLogs">
+		<id column="id" property="id" />
+		<result property="username" column="username" />
+		<result column="url" property="url" />
+		<result column="httpMethod" property="httpMethod" />
+		<result column="isSuccess" property="isSuccess" />
+		<result column="startTime" property="startTime" />
+		<result column="endTime" property="endTime" />
+		<result column="execTime" property="execTime" />
+		<result column="userAgent" property="userAgent" />
+		<result column="params" property="params" />
+		<result column="result" property="result" typeHandler="com.orhonit.ole.sys.utils.MySqlLongBlolConverter" />
+	</resultMap>
+
+	<sql id="where">
+		<where>
+			1=1
+			<if test="params.isSuccess != null and params.isSuccess != ''">
+				and t.is_success = #{params.isSuccess}
+			</if>
+			<if test="params.nickname != null and params.nickname != ''">
+				and u.nickname like concat('%', #{params.nickname}, '%')
+			</if>
+			<if test="params.httpMethod != null and params.httpMethod != ''">
+                and t.http_method = #{params.httpMethod}
+            </if>
+           	<if test="params.httpUrl != null and params.httpUrl != ''">
+                and t.url like concat('%', #{params.httpUrl}, '%') 
+            </if>
+		</where>
+	</sql>
+
+	<select id="InterfaceLogcount" resultType="int">
+		select count(*) from ole_ef_app_log t left join ole_sys_user
+		u on
+		u.person_id = t.user_id
+		<include refid="where" />
+	</select>
+
+	<select id="InterfaceLoglist" resultMap="BaseResultMap">
+		select 
+		t.log_id id, u.nickname username,t.url,t.http_method httpMethod,t.is_success isSuccess,
+		t.start_time startTime,t.end_time as endTime,t.exec_time execTime  
+		from ole_ef_app_log t left join ole_sys_user u on u.person_id = t.user_id
+		<include refid="where" />
+		${params.orderBy}
+		<if test="start != null and start >= 0 and length != null and length >= 0">
+			limit #{start}, #{length}
+		</if>
+	</select>
+	
+	<select id="InterfaceLogInfo" resultMap="BaseResultMap">
+		select t.log_id id, u.NAME username,t.url,t.http_method httpMethod,t.is_success isSuccess,
+		t.start_time startTime,t.end_time as endTime,t.exec_time execTime,t.params params,t.result result,t.user_agent userAgent  
+		from ole_ef_app_log t 
+		left join OLE_BASE_DEPT_PERSON u on
+		u.id = t.user_id
+		where t.log_id = #{logId}
+		
+	</select>
+
+</mapper>

@@ -1,0 +1,36 @@
+ "用户类"
+  type User {
+    id: ID
+    email: String
+    username: String
+    password: String
+    status: Int
+    school: School
+    "身份证号码"
+    idcard: String
+    "上次登录ip"
+    last_login_ip:String
+    "上次登录时间"
+    last_login_time:Date
+    remember_token:String
+    api_token:String
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+    "用户类型 枚举 admin/teacher/student/other/parent"
+    user_type:UserType
+    system_lang:String
+    mobile:String
+    equipment:String
+    union_id:String
+  }
+
+ "用户类型"
+ enum UserType {
+   teacher
+   student
+   admin
+   parent
+   other
+ }
+

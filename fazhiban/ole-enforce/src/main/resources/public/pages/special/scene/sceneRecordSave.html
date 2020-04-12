@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../../css/bootstrap.min.css">
+<link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="../../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		
+			<div class="form-group">
+				<input class="form-control" type="hidden" name="id" id="id">
+				<label class="col-md-2 control-label">协办人<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control" placeholder="请选择协办人" style="width:100%" type="text" name="assistPersonId" id="assistPersonId">
+				</div>
+				
+				<label class="col-md-2 control-label">检查类型<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="easyui-combotree" id="checkModeId" type="text" name="checkModeId" style="width:100%"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查时间<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname="检查时间" placeholder="请输入检查时间" type="text" id="checkedDate" name="checkedDate">
+				</div>
+				<label class="col-md-2 control-label">检查对象类型<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<select class="form-control not-null" iname="检查对象类型" onchange="showHide(this.options[this.options.selectedIndex].value)" id="checkObjectType" name="checkObjectType">
+						<option value="">请选择</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label gr">姓名<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control gr not-null cn" iname="姓名" placeholder="请输入姓名" type="text" name="checkedUserName" id="checkedUserName">
+				</div>
+				<label class="col-md-2 control-label gr gs">单位名称<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control gr gs not-null" iname="单位名称" placeholder="请输入单位名称" type="text" name="unitName" id="unitName">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label gs">注册号</label>
+				<div class="col-md-4">
+					<input class="form-control gs " iname="注册号" placeholder="请输入注册号" type="text" name="registNum" id="registNum">
+				</div>
+				<label class="col-md-2 control-label gs">法人</label>
+				<div class="col-md-4">
+					<input class="form-control gs cn" iname="法人" placeholder="请输入法人" type="text" name="legalPerson" id="legalPerson">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label gr gs">身份证号</label>
+				<div class="col-md-4">
+					<input class="form-control gr gs  id-num" iname="身份证号" placeholder="请输入身份证号" type="text" name="checkedUserId" id="checkedUserId">
+				</div>
+				<label class="col-md-2 control-label gr gs">道路名称</label>
+				<div class="col-md-4">
+					<input class="form-control gr gs" iname="道路名称" placeholder="请输入道路名称" type="text" name="roadName" id="roadName">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label gr gs">巡查情况</label>
+				<div class="col-md-10">
+					<textarea class="form-control gr gs " iname="巡查情况" rows="" cols="" maxlength="480" name="checkSituation" id="checkSituation" placeholder="请输入巡查情况"
+						></textarea>
+				</div>
+				
+			</div>
+			
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="save()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../../js/jq.js"></script>
+	<script type="text/javascript" src="../../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../../js/common.js"></script>
+	<script type="text/javascript" src="../../../js/constans.js"></script>
+	<script type="text/javascript" src="../../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../../layui/layui.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../../js/ueditor.all.min.js"></script>
+    <script src="../../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+	
+	<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+	    // 接收url传来的参数
+	    var checkIdAndNum = getQuery('caseId');
+	    var checkId = checkIdAndNum.split(",")[1];
+	    var checkNum = checkIdAndNum.split(",")[0];
+	    var zzfr;
+	    layui.use(['layer','laydate'], function(){
+		    var layer = layui.layer;
+		    var laydate = layui.laydate;
+		    laydate.render({
+	           elem: '#birthday'
+	        });
+		});
+	    
+	    // 初始化时间选择器
+	    $('#checkedDate').datetimepicker({  
+            format: 'YYYY-MM-DD HH:mm:ss',  
+            locale: moment.locale('zh-cn')  
+        }); 
+        
+        // 获取当前登录人的信息
+        $.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			userdata : $("#form").serialize(),	
+			success : function(userdata) {
+				/**
+				 * 树数据请求
+				 */
+				$("#assistPersonId").combotree({
+					method:'get',		//请求方式
+					url : '/enforce/lssued/persons/'+userdata.dept_id,	//请求的URL
+					required: false,
+					onLoadSuccess:function(node,data){
+						init();
+					}
+				});
+			}
+		});
+      //检查类型列表
+      var deptId='';
+  	  $.ajax({
+					type : 'get',
+					url : '/enforce/users/current',
+					success : function(data) {
+						deptId=data.dept_id;
+						$("#checkModeId").combotree({
+				  			method:'get',		//请求方式	
+				  			url : '/enforce/checkType/deptId/'+deptId,	//请求的URL
+				  		   	multiple: true,//当为true时，为多选，false为单选
+				  			required: false,
+				  		  	checkbox: true,
+				  			cascadeCheck:false,
+				  			onLoadSuccess: function (node, data) {
+				 
+				  		    }, 
+				  			onChange:function(newV,oldV){
+				  				
+				  			}
+				  		});
+					}
+					
+				});
+        
+        //根据ID获取案件详情
+        $.ajax({
+			type : 'get',
+			url : '/enforce/lssued/getCheck/' + checkId,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+			  zzfr=data.personId;
+			}
+		});
+        
+        // 初始化下拉列表
+        getDictList(dict.checkMode,"checkMode");
+        getDictList(dict.partyTtype,"checkObjectType");
+        
+        // 初始默认隐藏部分内容
+        $(".gs").hide();
+        $(".gr").hide();
+        
+        function init(){
+        	$.ajax({
+				type : 'get',
+				url : '/enforce/scenc/getRecord?checkId=' + checkId,
+				contentType: "application/json; charset=utf-8",  
+				success : function(data) {
+					if(data.code == 0){
+						data = data.data;
+						if(data.checkObjectType == 2){
+							$(".gs").show();
+						}else if(data.checkObjectType == 1){
+					        $(".gr").show();
+						}
+						$("#assistPersonId").combotree("setValue",data.assistPersonId);
+						var treeData=[];
+						for (var i = 0; i < data.checkMode.split(',').length; i++) {
+							var d = data.checkMode.split(',')[i];
+							var e = data.checkModeId.split(',')[i];
+							treeData[i]={id:e,text:d};
+						}
+						$("#checkModeId").combotree("setValues",treeData);
+						$("#checkObjectType").val(data.checkObjectType);
+						$("#checkSituation").val(data.checkSituation);
+						$("#checkedDate").val(data.checkedDate);
+						$("#checkedUserId").val(data.checkedUserId);
+						$("#checkedUserName").val(data.checkedUserName);
+						$("#id").val(data.id);
+						$("#legalPerson").val(data.legalPerson);
+						$("#registNum").val(data.registNum);
+						$("#roadName").val(data.roadName);
+						$("#unitName").val(data.unitName);
+					}else{
+						console.log(data.msg);
+					}
+					
+				}
+			});
+        }
+			
+        // 被检查人类型改变时触发
+        function showHide(value){
+        	if(value == null || value == ""){
+        		$(".gs").hide();
+        		$(".gr").hide();
+        	}else if(value == 1){
+        		$(".gs").hide();
+        		$(".gr").show();
+        	}else if(value == 2){
+        		$(".gr").hide();
+        		$(".gs").show();
+        	}
+        }
+        
+		function save(){
+			
+			//数据校验
+			if(!dataCheck()){
+				return;
+			}
+			
+			if(zzfr==$("#assistPersonId").val()){
+				layer.msg('协办人与执法人相同.', {anim:6});
+				//alert("协办人与执法人相同");
+				return;
+			}
+			
+			if ($('#assistPersonId').val() == '') {
+				layer.msg("协办人不能为空", {
+					anim : 6
+				});
+				return;
+			}
+			
+			if ($('#checkModeId').val() == '') {
+				layer.msg("检查类型不能为空", {
+					anim : 6
+				});
+				return;
+			}
+			
+			$('#submitBtn').removeAttr("disabled");
+			$('#submitBtn').attr("disabled",false); 
+			
+			var formdata = $("#form").serializeObject();
+			formdata.checkId = checkId;
+			formdata.checkMode=$("#checkModeId").combotree('getText');
+			if(formdata.checkModeId instanceof Array){
+				formdata.checkModeId=formdata.checkModeId.join(',');
+			}else{
+				formdata.checkModeId=formdata.checkModeId;	
+			}	
+			$.ajax({
+				type : 'post',
+				url : '/enforce/scenc/recordSave',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("保存成功", {shift: -1, time: 1000}, function(){
+						window.parent.example.ajax.reload();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+                    });
+				}
+			});
+		}
+    </script>
+</body>
+</html>

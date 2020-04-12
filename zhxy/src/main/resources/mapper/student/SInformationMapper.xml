@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.student.mapper.SInformationMapper">
+	<sql id="school">
+		    , school.id                 as     sch_id
+            , school.school_slug        as  sch_school_slug 
+            , school.school_number      as  sch_school_number
+            , school.school_order       as  sch_school_order
+            , school.created_at         as  sch_created_at
+            , school.updated_at         as  sch_updated_at 
+            , school.parent_id          as  sch_parent_id
+            , school.school_type        as  sch_school_type
+            , school.region_id          as  sch_region_id
+            , school.school_client_key  as sch_school_client_key
+            , school.client_secret      as  sch_client_secret
+            , school.orhonedu_base      as  sch_orhonedu_base
+            , school.deleted_at         as  sch_deleted_at
+            , school.school_name        as  sch_school_name
+            , school.introduction       as  sch_introduction
+	</sql> 
+	
+	<!-- <sql id="student">
+	
+	</sql> -->
+	
+	<sql id="user">
+	        , users.id                                 as  use_id
+            , users.email as  use_email
+            , users.username as  use_username
+            , users.password as  use_password
+            , users.status as  use_status
+            , users.school_id as  use_school_id
+            , users.idcard  as use_idcard
+            , users.last_login_ip as  use_last_login_ip
+            , users.last_login_time as  use_last_login_time
+            , users.remember_token as  use_remember_token
+            , users.api_token as  use_api_token
+            , users.created_at as  use_created_at
+            , users.updated_at as  use_updated_at
+            , users.deleted_at as  use_deleted_at
+            , users.user_type as use_user_type
+            , users.system_lang as  use_system_lang
+            , users.mobile as use_mobile
+            , users.equipment_id as  use_equipment_id
+            , users.unionid as  use_unionid
+	</sql>
+
+	<select id="PageListStudent" resultType="java.util.HashMap">
+	   select  student.*
+	    <if test="maps.withUser">
+	     <include refid="user"></include>
+	    </if>
+	    <if test="maps.withSchool">
+	     <include refid="school"></include>
+	    </if>
+	   from student_information as student  
+            <if test="maps.withUser">
+                 left join user_users as users on student.school_id = users.id 
+            </if>
+            
+            <if test="maps.withSchool">
+                 left join base_schools as school on student.school_id = school.id 
+            </if>
+            <where>
+                1=1 and student.deleted_at is null
+            </where>
+        <if test="maps.page != null">
+         LIMIT #{maps.page},#{maps.limit}
+        </if>     
+	</select>
+	
+	<select id="StudentCount" resultType="java.lang.Integer">
+	   select  count(1)
+	    <if test="maps.withUser">
+	     <include refid="user"></include>
+	    </if>
+	    <if test="maps.withSchool">
+	     <include refid="school"></include>
+	    </if>
+	   from student_information as student  
+            <if test="maps.withUser">
+                 left join user_users as users on student.school_id = users.id 
+            </if>
+            
+            <if test="maps.withSchool">
+                 left join base_schools as school on student.school_id = school.id 
+            </if>
+	</select>
+	
+	
+	
+
+	<select id="getManagementTj" resultType="java.util.HashMap">
+		SELECT
+		count(*) as sl,
+		substring(trim(both '"' from
+		cast(JSON_EXTRACT(c.name,'$.zh') as char)), 1, 2) as jie
+		FROM
+		( SELECT
+		t.go_eclass,t.student_id FROM ( SELECT * FROM
+		student_eclass_records
+		ORDER BY id DESC LIMIT 10000 ) AS t GROUP BY
+		t.student_id ) a,
+		student_eclass b,
+		student_arrives c,
+		student_information d
+		<where>
+			a.go_eclass = b.id
+			AND arrives_id = c.id
+			AND c.school_id =
+			#{school_id}
+			AND
+			a.student_id = d.id
+			AND d.deleted_at is null
+		</where>
+		GROUP BY c.period_id
+	</select>
+
+	<select id="getManagementjTj" resultType="java.util.HashMap">
+		SELECT
+		count(*) as zsl,
+		count(case when d.sex='13' then sex end) as
+		nan,count(case when d.sex='14' then
+		sex end) as nv,
+		trim(both '"' from
+		cast(JSON_EXTRACT(c.name,'$.zh') as char)) as nianji
+		FROM
+		( SELECT
+		t.go_eclass,t.student_id FROM ( SELECT * FROM
+		student_eclass_records
+		ORDER BY id DESC LIMIT 10000 ) AS t GROUP BY
+		t.student_id ) a,
+		student_eclass b,
+		student_arrives c,
+		student_information d
+		<where>
+			a.go_eclass = b.id
+			AND arrives_id = c.id
+			AND c.school_id =
+			#{school_id}
+			AND
+			a.student_id = d.id
+			AND d.deleted_at is null
+		</where>
+		GROUP BY c.id
+	</select>
+
+
+	<select id="getManagementrxTj" parameterType="String"
+		resultType="java.util.HashMap">
+
+		SELECT
+		count( CASE WHEN a.sex = '13' THEN a.sex END ) AS nan,
+		count( CASE WHEN a.sex = '14' THEN a.sex END ) AS nv,
+		count( * ) AS zsl,
+		b.start_year AS nianfen
+		FROM
+		student_information a,
+		student_learninfo b
+		WHERE
+		a.id = b.student_id
+		and b.start_year &gt; #{string}
+		and a.school_id = #{school_id}
+		GROUP BY
+		b.start_year
+	</select>
+
+	<!-- 蒙古族男女比例 -->
+	<select id="getManagementmgznvTj" parameterType="String"
+		resultType="java.util.HashMap">
+		
+		SELECT
+		count( CASE WHEN a.sex = '13' THEN a.sex END ) AS nan,
+		count( CASE WHEN a.sex = '14' THEN a.sex END ) AS nv,
+		count( * ) AS zsl,
+		b.start_year AS nianfen
+		FROM
+		student_information a,
+		student_learninfo b
+		WHERE
+		a.id = b.student_id
+		and a.nation = '139'
+		and b.start_year &gt; #{string}
+		and a.school_id = #{school_id}
+		GROUP BY
+		b.start_year
+		
+	</select>
+
+
+	<select id="getManagementnvTj" resultType="java.util.HashMap">
+		SELECT
+		CONCAT(ROUND(count( CASE WHEN sex = '13' THEN sex END )/count( *
+		)*100,2),'%') as nan,
+		CONCAT(ROUND(count( CASE WHEN sex = '14' THEN sex
+		END )/count( *
+		)*100,2),'%') as nv,
+		count( * ) AS zsl
+		FROM
+		student_information
+		<where>
+			1=1
+			and school_id = #{school_id}
+		</where>
+	</select>
+
+	<select id="getManagementnldTj" resultType="java.util.HashMap">
+		SELECT t.age_range as
+		nld,COUNT(1) as ls FROM (SELECT CASE
+		WHEN ROUND(DATEDIFF(CURDATE(),
+		birthday)/365.2422) &gt; 0 AND
+		ROUND(DATEDIFF(CURDATE(),
+		birthday)/365.2422) &lt; 15 THEN '15岁以下'
+		WHEN ROUND(DATEDIFF(CURDATE(),
+		birthday)/365.2422) &gt;= 15 AND
+		ROUND(DATEDIFF(CURDATE(),
+		birthday)/365.2422) &lt; 20 THEN '15-20岁'
+		WHEN
+		ROUND(DATEDIFF(CURDATE(), birthday)/365.2422) &gt;= 20 THEN
+		'20以上' ELSE
+		'其他' END as age_range FROM student_information where
+		school_id=#{school_id})
+		as t
+		GROUP BY
+		t.age_range;
+
+	</select>
+
+	<select id="getManagementmzTj" resultType="java.util.HashMap">
+		SELECT
+		CONCAT(ROUND(count( CASE WHEN ehnic_id = '139' THEN ehnic_id END
+		)/count( * )*100,2),'%')
+		as mgz,
+		CONCAT(ROUND(count( CASE WHEN ehnic_id
+		= '138' THEN ehnic_id END )/count( * )*100,2),'%')
+		as hz,
+		CONCAT(ROUND(count( CASE WHEN ehnic_id != '139' and ehnic_id != '138'
+		THEN ehnic_id END
+		)/count( * )*100,2),'%') as qt
+		FROM
+		student_information
+		<where>
+			1=1
+			and school_id = #{school_id}
+		</where>
+
+	</select>
+
+	<select id="getStudentByLearninfo"
+		resultType="com.orhon.smartcampus.modules.student.entity.SInformation"
+		parameterType="java.util.HashMap">
+
+		SELECT
+		b.*
+		FROM
+		student_information b
+		LEFT JOIN
+		student_learninfo a
+		on
+		a.student_id = b.id
+
+		<where>
+			1=1
+			<if test="maps.school_id!=null and maps.school_id!=''">
+				and a.school_id = #{maps.school_id}
+			</if>
+
+			<if test="maps.arrive_id!=null and maps.arrive_id!=''">
+				and a.arrive_id = #{maps.arrive_id}
+			</if>
+
+			<if test="maps.at_school!=null and maps.at_school!=''">
+				and a.at_school = #{maps.at_school}
+			</if>
+
+			<if test="maps.way_to_study!=null and maps.way_to_study!=''">
+				and a.way_to_study = #{maps.way_to_study}
+			</if>
+
+			<if
+				test="maps.transaction_type!=null and maps.transaction_type!=''">
+				and a.transaction_type = #{maps.transaction_type}
+			</if>
+
+			<if test="map !=null ">
+				<foreach item="value" index="key"
+					collection="map.entrySet()">
+					and b.student_name -> '$.${key}' LIKE '%${value}%'
+				</foreach>
+			</if>
+
+			<if test="maps.pinyin_name!=null and maps.pinyin_name!=''">
+				and b.pinyin_name like "%"#{maps.pinyin_name}"%"
+			</if>
+
+			<if test="maps.idcard!=null and maps.idcard!=''">
+				and b.idcard like "%"#{maps.idcard}"%"
+			</if>
+
+			<if test="maps.student_number!=null and maps.student_number!=''">
+				and b.student_number like "%"#{maps.student_number}"%"
+			</if>
+			and a.deleted_at is NULL
+		</where>
+	</select>
+
+	<select id="getStudentByLearninfopage"
+		resultType="com.orhon.smartcampus.modules.student.entity.SInformation"
+		parameterType="java.util.HashMap">
+
+		SELECT
+		b.*
+		FROM
+		student_information b
+		LEFT JOIN
+		student_learninfo a
+		on
+		a.student_id = b.id
+
+		<where>
+			1=1
+			<if test="maps.school_id!=null and maps.school_id!=''">
+				and a.school_id = #{maps.school_id}
+			</if>
+
+			<if test="maps.arrive_id!=null and maps.arrive_id!=''">
+				and a.arrive_id = #{maps.arrive_id}
+			</if>
+
+			<if test="maps.at_school!=null and maps.at_school!=''">
+				and a.at_school = #{maps.at_school}
+			</if>
+			<if test="maps.way_to_study!=null and maps.way_to_study!=''">
+				and a.way_to_study = #{maps.way_to_study}
+			</if>
+
+			<if
+				test="maps.transaction_type!=null and maps.transaction_type!=''">
+				and a.transaction_type = #{maps.transaction_type}
+			</if>
+
+			<if test="map !=null ">
+				<foreach item="value" index="key"
+					collection="map.entrySet()">
+					and b.student_name -> '$.${key}' LIKE '%${value}%'
+				</foreach>
+			</if>
+
+			<if test="maps.pinyin_name!=null and maps.pinyin_name!=''">
+				and b.pinyin_name like "%"#{maps.pinyin_name}"%"
+			</if>
+
+			<if test="maps.idcard!=null and maps.idcard!=''">
+				and b.idcard like "%"#{maps.idcard}"%"
+			</if>
+
+			<if test="maps.student_number!=null and maps.student_number!=''">
+				and b.student_number like "%"#{maps.student_number}"%"
+			</if>
+
+
+			and a.deleted_at is NULL
+		</where>
+		LIMIT #{dto.start},#{dto.limit}
+	</select>
+
+	<select id="getEclassByStudent"
+		resultType="com.orhon.smartcampus.modules.student.entity.SInformation"
+		parameterType="java.util.HashMap">
+
+		SELECT
+		*
+		FROM
+		student_information b
+		<where>
+			id IN (
+			SELECT
+			a.student_id
+			FROM
+			student_eclass_records a
+			WHERE
+			a.STATUS =
+			'normal'
+			AND a.go_eclass = #{maps.go_eclass})
+			<if test="maps.student_name !=null and maps.student_name !='' ">
+				<foreach item="value" index="key"
+					collection="map.entrySet()">
+					and b.student_name -> '$.${key}' LIKE '%${value}%'
+				</foreach>
+			</if>
+			<if test="maps.pinyin_name !=null and maps.pinyin_name !='' ">
+				and b.pinyin_name like "%"#{maps.pinyin_name}"%"
+			</if>
+			<if test="maps.idcard !=null and maps.idcard !='' ">
+				and b.idcard like "%"#{maps.idcard}"%"
+			</if>
+		</where>
+
+	</select>
+</mapper>

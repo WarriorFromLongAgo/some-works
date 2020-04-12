@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.MeetPeopleDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.MeetPeopleEntity" id="meetPeopleMap">
+        <result property="peopleId" column="people_id"/>
+        <result property="meetId" column="meet_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="peopleNeedMeet" column="people_need_meet"/>
+        <result property="peopleIsRead" column="people_is_read"/>
+        <result property="peopleIsSignin" column="people_is_signin"/>
+        <result property="peopleJoin" column="people_join"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="mobilePhone" column="mobile_phone"/>
+        <result property="userName" column="user_name"/>
+        <result property="stationId" column="station_id"/>
+        <result property="peopleLveMsg" column="people_lve_msg"/>
+    </resultMap>
+
+
+</mapper>

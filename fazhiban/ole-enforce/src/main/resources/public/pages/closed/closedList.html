@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>简易案件结案列表</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<style>
+#dt-table td a{display:block;width:57px !important;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+#dt-table td.ellipsis{max-width:60px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+</style>
+<body>
+    <div id="moreTemplate">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 100%">
+                    <div align="left">
+	                    <table style="width: 100%">
+	                   		<tr>
+	                   			<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											案件编号：
+											<input id="id" type="text" class="form-control" placeholder="请输入案件编号">
+											案件名称：
+											<input id="caseName" type="text" class="form-control" placeholder="请输入案件名称">
+											<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+										</div>
+									</form>
+								</td>
+								<td align="right" id="docflow">
+	                   				<button class="layui-btn layui-btn-small" onclick="addClosed()">
+                                      <i class="layui-icon">&#xe608;</i> 结案
+                                    </button>
+	                   			</td>
+	                   		</tr> 
+	                    </table>
+					</div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr>
+                                	<th>选择</th>
+                                    <th>案件名称</th>
+                                    <th>案件编号</th>
+                                    <th>执法主体</th>
+                                    <th>案源</th>
+                                    <th>案件状态</th>
+                                    <th>案发地址</th>
+                                    <th>案发时间</th>
+                                    <th>收件时间</th>
+                                    <th>指派时间</th>
+                                    <th>收件人</th>
+                                    <th>主执法人员</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+<script type="text/javascript" src="../../js/constans.js"></script>
+<script type="text/javascript">
+layui.use(['layer'], function(){
+    var layer = layui.layer;
+});
+
+var pers = checkPermission();
+var userI;
+var example;
+
+function init(){
+
+	//获取流程节点
+	var flowNode =caseStatus.ANJA;
+    //获取流程类型
+    var flowtype=flowType.SIMPLE_CASE;
+    //获取流程文书
+	getDocFlow(flowNode,flowtype);
+    //添加附件管理
+    addFileManageBtn(flowNode);
+	example = 
+	$('#dt-table').DataTable({
+		"language":lang,
+    	"searching": false,
+    	"processing": false,"ordering": false,
+    	"serverSide" : true,
+    	"bLengthChange": false,
+    	"ajax": {
+    		"url" : "/enforce/closed/list",
+    		"type":"get",
+    		"data":function(d){
+				d.id = $('#id').val();
+				d.caseName = $('#caseName').val();
+				d.userId=userI;
+			}
+    	},
+    	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",
+	    "columns": [
+			{ "data": "id", "defaultContent": ""},
+	        { "data": "caseName", "defaultContent": ""},
+	        { "data": "caseNum", "defaultContent": ""},
+	        { "data": "deptName", "defaultContent": ""},
+	        { "data": "caseSource", "defaultContent": ""},
+	        { "data": "caseStatus", "defaultContent": ""},
+	        { "data": "caseAddress", "defaultContent": ""},
+	        { "data": "caseTime", "defaultContent": ""},
+	        { "data": "caseApplyDate", "defaultContent": ""},
+	        { "data": "caseZpDate", "defaultContent": ""},
+	        { "data": "caseHandler", "defaultContent": ""},
+	        { "data": "zzfryName", "defaultContent": ""},
+	    ],
+	    "columnDefs": [
+			{
+				"targets": 0 ,
+				"sClass": "text-center",
+				"data": "id",//行单选框
+				"render": function (data, type, row) {
+					return '<input class="checkchild" type="checkbox"  value="' + row.caseNum + ','+row.id+'" />';
+				},
+				"bSortable": false
+			},
+	        { "name": "caseName", "targets": 1 ,"sClass": "ellipsis",},
+	        { 
+            	"targets": 2,
+            	"render": function (data, type, row) {
+            		var caseNum = row['caseNum'];
+            		var href = '<a  style="color:#009688" href="javascript:;" onclick="showDetailCase(\''+row['id']+'\' )">' + caseNum + '</a>';
+            		return href;
+                }
+            },
+	        //{ "name": "caseNum", "targets": 2 },
+	        { "name": "deptName", "targets": 3,"sClass": "ellipsis", },
+	        { "name": "caseSource", "targets": 4 },
+	        { "name": "caseStatus", "targets": 5 },
+	        { "name": "caseAddress", "targets": 6 ,"sClass": "ellipsis",},
+	        { "name": "caseTime", "targets": 7 },
+	        { "name": "caseApplyDate", "targets": 8 },
+	        { "name": "caseZpDate", "targets": 9 },
+	        { "name": "caseHandler", "targets": 10 },
+	        { "name": "zzfryName", "targets": 11 },
+	      ],
+	    "order": [[ 0, "desc" ],[1, "asc"]]
+	});
+}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+function getQuery( name ) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null) return  unescape(r[2]); return null;
+}
+
+var businessId = getQuery('businessId');
+if ( businessId ) {
+	$('#id').val(businessId);
+}
+
+function addCase(){
+	layer.open({
+		type: 2,
+        title: '添加案件受理',
+        shade: [0],
+        area: ['90%', '70%'],
+        shift: 2,
+        content: 'addCase.html'
+    });
+}
+
+function toUpdatePage(href){
+	layer.open({
+		type: 2,
+        title: '编辑案件受理',
+        shade: [0],
+        area: ['90%', '70%'],
+        shift: 2,
+        content: href
+    });
+}
+
+$.ajax({
+	type : 'get',
+	url : '/enforce/users/current',
+	userdata :[],
+	success : function(userdata) {
+	userI=userdata.username;
+	
+	}
+});
+
+init();
+
+function addClosed() {
+		
+		if ($(".checkchild:checked").length == 0) {
+			layer.msg("请先勾选需要提交的记录.", {anim:6});
+			return;           
+		}
+		
+		if ($(".checkchild:checked").length > 1) {
+			layer.msg("一次只能提交一条记录.", {anim:6});
+			return;           
+		}
+		
+	    var caseId = $(".checkchild:checked").val();
+	    caseId=caseId.split(",")[0];
+	    
+	    //文书是否必填判断
+	    if(docNeedAdd()==-1){
+	    	return;
+	    }
+	    
+		layer.open({
+			type: 2,
+	        title: '提交',
+	        shade: [0],
+	        area: ['680px', '500px'],
+	        shift: 2,
+	        content: 'addClosed.html?caseId='+caseId
+	    });
+	}
+	
+	function showDetailCase(caseId) {
+	layer.open({
+		type: 2,
+        title: '案件详情页面',
+        shade: [0.8, '#393D49'],
+        shift: 2,
+        maxmin: true,
+        area: ['90%', '90%'],
+        content: '../case/caseDetailInfo.html?caseId=' + caseId
+    });
+}
+</script>

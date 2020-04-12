@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgInformationDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgInformationEntity" id="zgInformationMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="createTime" column="create_time"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="chiefEditor" column="chief_editor"/>
+        <result property="managingEditor" column="managing_editor"/>
+        <result property="dutyEditor" column="duty_editor"/>
+        <result property="cover" column="cover"/>
+    </resultMap>
+
+    <select id="findList" resultType="com.orhonit.modules.generator.entity.ZgInformationEntity">
+        select * from zg_information order by create_time DESC
+    </select>
+
+</mapper>

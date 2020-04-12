@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+<style type="text/css">
+	.fan{
+		writing-mode: vertical-lr;
+		padding-left: 93px;	
+	}
+	.input-mn{
+	    display: table-cell !important;
+	    text-orientation: mixed;
+	    font-family: "OrhonChaganTig";
+		
+	}
+	.form-control {
+	   width: 35px;
+	   height: 200px;
+	}
+	input::-webkit-input-placeholder {
+		text-orientation: mixed;
+	}
+	label{
+		height:100px;
+		text-align: left;
+		font-family: "OrhonChaganTig";
+		font-size: 20px;
+	}
+	.form-horizontal .control-label {
+	    text-align: left;
+        padding-left: 8px;
+   		display: inline-table;
+	}
+	.form-horizontal .form-group {
+	   	padding: 0px;
+	   	margin: 0px;
+	   	margin-left: 25px;
+	}
+	
+	select.input-sm {
+	 	height:40px; 
+	    line-height: 30px;
+	}
+	.select_mn{
+		margin-left: 25px;
+		width: 55px;
+		height:35px;
+	}
+	.form-actions{
+		margin-left: 50px;
+   		margin-top: 20px;
+	}
+</style>
+
+</head>
+<body>
+<div class="fan col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+			<input type="hidden" id="id" name="id">
+			<div class="form-group">
+				<label class="control-label">ᠳᠠᠩᠰᠠᠯᠠᠭᠰᠠᠨ ᠨᠡᠷ᠎ᠡ</label>
+				<input class="input-mn form-control" placeholder="ᠳᠠᠩᠰᠠᠯᠠᠭᠰᠠᠨ ᠨᠡᠷ᠎ᠡ" type="text" name="username" id="username" readonly="readonly">
+			</div>
+            <div class="form-group">
+                <label class="control-label">ᠤᠪᠤᠭ ᠨᠡᠷ᠎ᠡ</label>
+                <input class="input-mn form-control" placeholder="ᠤᠪᠤᠭ ᠨᠡᠷ᠎ᠡ" type="text"  readonly="readonly"   name="nickname" id="nickname"
+					data-bv-notempty="true"
+					data-bv-notempty-message="ᠤᠪᠤᠭ ᠨᠡᠷ᠎ᠡ ᠶᠢ ᠬᠤᠭᠤᠰᠤᠨ ᠪᠠᠶᠢᠯᠭᠠᠵᠤ ᠪᠣᠯᠬᠤ ᠦᠭᠡᠢ">
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">ᠰᠠᠯᠠᠭ᠎ᠠ ᠮᠥᠴᠢᠷ</label>
+               	<input class="input-mn form-control" type="text"  readonly="readonly"   name="deptName" id="deptName">
+            </div>
+            <div class="form-group">
+                <label class="control-label">ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠤᠲᠠᠰᠤ</label>
+                <input class="input-mn form-control" placeholder="ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠤᠲᠠᠰᠤ" type="text" maxlength="20" name="phone" id="phone">
+            </div>
+            <div class="form-group">
+                <label class="control-label">ᠴᠢᠨᠠᠷ ᠤᠨ ᠢᠯᠭᠠᠯ </label>
+                 <select class="input-mn select_mn form-control input-sm" name="sex" id="sex">
+                     <option value="1">ᠡᠷᠡᠭᠲᠡᠢ</option>
+                     <option value="0">ᠡᠮᠡᠭᠲᠡᠢ </option>
+                 </select>
+            </div>
+
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary input-mn" type="submit" onclick="update()">
+							<i class="fa fa-save"></i> ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ
+						</button>
+						<button class="btn btn-primary input-mn">
+							<a style="color:#fff" href="updateMyself.html">ᠬᠢᠲᠠᠳ ᠬᠡᠯᠡ ᠳᠦ ᠤᠷᠪᠠᠭᠤᠯᠬᠤ</a>
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script src="../../js/select2/js/select2.full.js"></script>
+	<script type="text/javascript">
+	$(function () {
+	    console.log("ready");
+	    console.log($("select"));
+	    $('select').select2();
+	    $(document)
+	        .on('click', '.select2.select2-container', function () {
+	            var self = $(this);
+	            setTimeout(function () {
+	                $('.select2-container--open').height(self.height()).width(self.width());
+	                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+	            }, 100);
+	        })
+	        // .on("DOMNodeInserted", function (e) {
+	        //     $('select').select2();
+	        //
+	        // })
+
+	})
+	
+	initData();
+	
+	function initData(){
+		$.ajax({
+			type : 'get',
+			url : '/base/users/current',
+			async : false,
+			success : function(data) {
+				$("#id").val(data.id);
+				$("#username").val(data.username);
+				$("#nickname").val(data.nickname);
+				$("#phone").val(data.phone);
+				$("#deptName").val(data.deptName);
+				$("#sex").val(data.sex);
+			}
+		});
+	}
+	
+		$('#form').bootstrapValidator();
+		
+		layui.use(['layer','laydate'], function(){
+            var layer = layui.layer;
+            var laydate = layui.laydate;
+            laydate.render({
+              elem: '#birthday'
+            });
+        });
+		
+		function update() {
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = $("#form").serializeObject();
+
+			$.ajax({
+				type : 'put',
+				url : '/base/users',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("修改成功", {shift: -1, time: 1000}, function(){
+                        deleteCurrentTab();
+                    });
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

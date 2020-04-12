@@ -1,0 +1,297 @@
+enum clients{
+    pc_cn
+    app_cn
+    pc_mn
+    app_mn
+}
+"""
+系统模块
+"""
+type Modules{
+    "ID"
+    id:ID
+    "模块名称"
+    module_name:Lang
+    "模块分类"
+    category:String
+    "所属菜id"
+    module_order:Int
+    "模块主页"
+    home:Menus
+    "模块标识"
+    mark:String
+    "模块图标"
+    icon:String
+    "客户端pc_cn,app_cn,pc_mn,app_mn"
+    clients:[String]
+    "扩展信息"
+    meta:String
+    "启用状态"
+    status:String
+    "创建时间"
+    created_at:String
+    "更新时间"
+    updated_at:String
+    "删除时间"
+    deleted_at:String
+    "模块下菜单"
+    menus:Menus
+    "模块下页面组件"
+    wedgets:Widgets
+    "开通模块的学校"
+    schools:School
+    "模块下权限"
+    oprations: Operation
+
+}
+
+input ModulesInput{
+    "ID"
+    id:ID
+    "模块名称"
+    module_name:LangInput
+    "模块分类"
+    category:String
+    "所属菜id"
+    module_order:Int
+    "模块主页"
+    home_id:Int
+    "模块标识"
+    mark:String
+    "模块图标"
+    icon:String
+    "客户端pc_cn,app_cn,pc_mn,app_mn"
+    clients:[String]
+    "扩展信息"
+    meta:String
+    "启用状态"
+    status:Int
+}
+"""
+模块维护返回数据
+"""
+type ModulesResponse{
+    code:Int
+    msg:String
+    data:[Modules]
+    pagenation:Pagenation
+}
+
+
+
+"""
+系统菜单
+"""
+type Menus{
+    "ID"
+    id: ID
+    "菜单标题"
+    title: Lang
+    "路由标识名"
+    name: Lang
+    "路由地址"
+    path: String
+    "路由组件"
+    component: String
+    "id"
+    module: Modules
+    "菜单分类menu_category"
+    category: Dictionary
+    "菜单类型:路由或外部链接"
+    type: Dictionary
+    "父级菜单d"
+    parent: Menus
+    "层级"
+    level: Int
+    "扩展信息JSON"
+    meta: String
+    "客户端JSON数组"
+    clients: [String]
+    "图标"
+    icon: String
+    "顺序"
+    ordered: Int
+    "启用状态"
+    status: Int
+    "创建时间"
+    created_at: Date
+    "修改时间"
+    updated_at: Date
+    "删除时间"
+    deleted_at: Date
+
+
+
+}
+"""
+系统菜单维护数据
+"""
+input MenusInput{
+    "ID"
+    id: ID
+    "菜单标题"
+    title: LangInput
+    "路由标识名"
+    name: String
+    "路由地址"
+    path: String
+    "路由组件"
+    component: String
+    "id"
+    module_id: Int
+    "partmentwork]"
+    category: String
+    "outer_link"
+    type: String
+    "父级菜单d"
+    parent: Int
+    "层级"
+    level: Int
+    "扩展信息JSON"
+    meta: String
+    "客户端JSON数组"
+    clients: [String]
+    "图标"
+    icon: String
+    "顺序"
+    ordered: Int
+    "启用状态"
+    status: Int
+}
+"""
+系统菜单返回数据
+"""
+type MenusResponse{
+    code:Int
+    msg:String
+    data:[Menus]
+    pagenation:Pagenation
+}
+
+
+
+
+
+
+
+"""
+组件类型
+"""
+enum WidgetsType{
+    modulecard
+    pie
+    statics
+}
+
+"""
+页面组件
+"""
+type Widgets{
+    "ID"
+    id:ID
+    "组件标题"
+    title:Lang
+    "组件标识名"
+    name:String
+    "组件类型"
+    type:WidgetsType
+    "所API"
+    apis:[String]
+    "所属菜id"
+    menu: Menus
+    "所属模"
+    module: Modules
+    "客户端pc_cn,app_cn,pc_mn,app_mn"
+    clients:[String]
+    "扩展信息"
+    meta:String
+    "启用状态"
+    status:String
+    "创建时间"
+    created_at:String
+    "更新时间"
+    updated_at:String
+    "删除时间"
+    deleted_at:String
+}
+"""
+页面组件维护输入项
+"""
+input WidgetsInput{
+    "ID"
+    id: ID
+    "组件标题"
+    title:LangInput
+    "组件标识名"
+    name:String
+    "所API"
+    apis:[String]
+    "菜单类型"
+    type:String
+    "所属菜id"
+    menu_id:Int
+    "所属模"
+    module_id:Int
+    "客户端pc_cn,app_cn,pc_mn,app_mn"
+    clients:[String]
+    "扩展信息"
+    meta:String
+    "启用状态"
+    status:Int
+}
+"""
+页面组件维护返回数据
+"""
+type WidgetsResponse{
+    code:Int
+    msg:String
+    data:[Widgets]
+    pagenation:Pagenation
+}
+
+"""
+权限操作
+"""
+type Operation{
+    "权限id"
+    id:ID
+    "权限 名称"
+    title:Lang
+    "权限对用的API"
+    apis:[String]
+    "权限对应的页面组件"
+    menus:[String]
+    "权限对应的页面组件"
+    widgets:[String]
+    "权限所属模块"
+    module_id:String
+
+    created_at:String
+
+    updated_at:String
+
+    deleted_at:String
+}
+"""
+权限操作维护输入项
+"""
+input OperationInput{
+    "权限id"
+    id:ID
+    "权限 名称"
+    title: LangInput
+    "权限对用的API"
+    apis:[String]
+    "权限对应的菜单"
+    menus:[Int]
+    "权限对应的页面组件"
+    widgets:[Int]
+    "权限所属模块"
+    module_id:Int
+}
+type OperationResponse{
+    code:Int
+    msg:String
+    data:[Operation]
+    pagenation:Pagenation
+}

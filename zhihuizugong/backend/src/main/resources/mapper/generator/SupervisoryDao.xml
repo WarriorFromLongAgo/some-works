@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.orhonit.modules.generator.dao.SupervisoryDao">
+   
+   
+   <!-- 干部职工信息列表 -->
+   <select id="getSuperviList" resultType="com.orhonit.modules.generator.entity.SupervisoryEntity">
+      select  
+      a.id,a.user_id,a.create_time,a.update_time,a.id_number,a.contact_number,a.post,a.compilation,a.level,a.part_time_situation,a.late,
+      a.early_retirement,a.miner,a.sick_leave,a.compassionate_leave,a.vacation,a.sick_url,a.compassionate_url,a.vacation_url,a.go_out,
+      a.go_out_url,a.train,a.on_business,a.exit,a.safekeeping,a.spouse_exit,a.spouse_safekeeping,a.main_work,a.project,a.punishment,
+      a.Influence,a.handle,a.punish,a.law,a.content,a.problem,a.problem_xl,a.Illegality_time,a.handle_time,a.unit_id,a.create_time,a.update_time,
+      a.is_del,ser.user_true_name as userName
+      from
+      se_supervisory_information a
+      left join sys_user ser on a.user_id=ser.user_id
+      WHERE
+      1=1
+      <if test="params.userName !='' and params.userName !=null">
+       and ser.user_true_name like concat('%',#{params.userName},'%')
+      </if>
+       and a.is_del = '0'
+      ORDER BY a.update_time desc
+      LIMIT #{params.beginLimit},#{params.limit}
+   </select>
+   <!-- 详情 -->
+   <select id="getOneSup" resultType="com.orhonit.modules.generator.entity.SupervisoryEntity">
+      select  
+      a.id,a.user_id,a.create_time,a.update_time,a.id_number,a.contact_number,a.post,a.compilation,a.level,a.part_time_situation,a.late,
+      a.early_retirement,a.miner,a.sick_leave,a.compassionate_leave,a.vacation,a.sick_url,a.compassionate_url,a.vacation_url,a.go_out,
+      a.go_out_url,a.train,a.on_business,a.exit,a.safekeeping,a.spouse_exit,a.spouse_safekeeping,a.main_work,a.project,a.punishment,
+      a.Influence,a.handle,a.punish,a.law,a.content,a.problem,a.problem_xl,a.Illegality_time,a.handle_time,a.unit_id,a.create_time,a.update_time,
+      a.is_del,ser.user_true_name as userName
+      from
+      se_supervisory_information a
+      left join sys_user ser on a.user_id=ser.user_id
+      WHERE
+      a.id=#{id}
+   </select>
+   
+   
+     <!-- 某单位下的所有干部职工-->
+   <select id="getSupList" resultType="com.orhonit.modules.generator.entity.SupervisoryEntity">
+      select  
+      a.id,a.user_id,a.create_time,a.update_time,a.id_number,a.contact_number,a.post,a.compilation,a.level,a.part_time_situation,a.late,
+      a.early_retirement,a.miner,a.sick_leave,a.compassionate_leave,a.vacation,a.sick_url,a.compassionate_url,a.vacation_url,a.go_out,
+      a.go_out_url,a.train,a.on_business,a.exit,a.safekeeping,a.spouse_exit,a.spouse_safekeeping,a.main_work,a.project,a.punishment,
+      a.Influence,a.handle,a.punish,a.law,a.content,a.problem,a.problem_xl,a.Illegality_time,a.handle_time,a.unit_id,a.create_time,a.update_time,
+      a.is_del,ser.user_true_name as userName
+      from
+      se_supervisory_information a
+      left join sys_user ser on a.user_id=ser.user_id
+      WHERE
+      a.unit_id=#{id}
+   </select>
+   
+   <!-- 监督 查询违纪违法 -->
+   <select id="getWjwfList" resultType="com.orhonit.modules.generator.app.vo.AppWjwfVO">
+	   SELECT
+		punishment,
+		Influence,
+		handle,
+		punish,
+		update_time,
+		ceng_mian,
+		content 
+	FROM
+		se_supervisory_information 
+	WHERE
+	    is_del = '0' 
+		AND user_id =#{params.userId}
+		ORDER BY update_time DESC
+		LIMIT #{params.page},#{params.limit}
+   </select>
+   
+   
+   </mapper>

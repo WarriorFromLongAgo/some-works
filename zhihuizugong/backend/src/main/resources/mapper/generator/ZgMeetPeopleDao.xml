@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgMeetPeopleDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgMeetPeopleEntity" id="zgMeetPeopleMap">
+        <result property="id" column="id"/>
+        <result property="meetId" column="meet_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="readType" column="read_type"/>
+    </resultMap>
+
+<insert id="save" parameterType= "com.orhonit.modules.generator.entity.ZgMeetPeopleEntity">
+		INSERT INTO zg_meet_people(id,meet_id,user_id,user_name,type,create_time)
+		VALUES(#{id},#{meetId},#{userId},(SELECT user_true_name FROM sys_user WHERE user_id = #{userId}),#{type},#{createTime}
+		)
+</insert>
+
+<select id="findPeo" resultType = "com.orhonit.modules.generator.entity.ZgMeetPeopleEntity">
+		SELECT
+		*
+		FROM
+		zg_meet_people
+		WHERE 
+		user_id = #{userId} AND meet_id = #{meetId}
+</select>
+
+	<select id="findJoinMeetList" resultType="java.util.Map">
+		SELECT
+		meet_id AS meetId
+		FROM
+		zg_meet_people
+		WHERE
+		user_id = #{userId}
+	</select>
+</mapper>

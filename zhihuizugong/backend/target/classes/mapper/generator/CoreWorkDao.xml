@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.CoreWorkDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.CoreWorkEntity" id="coreWorkMap">
+        <result property="serveId" column="serve_id"/>
+        <result property="workId" column="work_id"/>
+        <result property="workVideo" column="work_video"/>
+        <result property="workName" column="work_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="creatTime" column="creat_time"/>
+        <result property="serveSite" column="serve_site"/>
+    </resultMap>
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.CoreWorkEntity">
+        insert into core_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serveId != null">
+                serve_id,
+            </if>
+            <if test="workId != null">
+                work_id,
+            </if>
+            <if test="workVideo != null">
+                work_video,
+            </if>
+            <if test="workName != null">
+                work_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="creatTime != null">
+                creat_time,
+            </if>
+            <if test="serveSite != null">
+                serve_site,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serveId != null">
+                #{serveId},
+            </if>
+            <if test="workId != null">
+                #{workId},
+            </if>
+            <if test="workVideo != null">
+                #{workVideo},
+            </if>
+            <if test="workName != null">
+                #{workName},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="userName != null">
+                #{userName},
+            </if>
+            <if test="creatTime != null">
+                #{creatTime},
+            </if>
+            <if test="serveSite != null">
+                #{serveSite},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

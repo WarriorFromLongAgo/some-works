@@ -1,0 +1,508 @@
+
+"""
+学校配置
+"""
+type SchoolSettings{
+    "学校id"
+    school_id: Int
+    "智校平台名称"
+    platform_name: Lang
+    "年级"
+    grades: [Grades]
+    "学段"
+    periods: [Period]
+    "学科"
+    subjects: [Subject]
+    "职务"
+    duties: [Duty]
+    "网站logo"
+    logo: String
+    "网站facicon图标"
+    favicon: String
+    "主题设置"
+    theme_settings: String
+    "学校扩展配置"
+    meta: String
+}
+"""
+学校设置数据输入
+"""
+input SchoolSettingsInput{
+    id:ID
+    "学校id"
+    school_id: Int
+    "智校平台名称"
+    platform_name: LangInput
+    "年级"
+    grades: [Int]
+    "学段"
+    periods: [Int]
+    "学科"
+    subjects: [Int]
+    "职务"
+    duties: [Int]
+    "网站logo"
+    logo: String
+    "网站facicon图标"
+    favicon: String
+    "主题设置"
+    theme_settings: String
+    "学校扩展配置"
+    meta: String
+}
+input SchoolSettingsCondition{
+    id:ID
+    "学校id"
+    school_id: Int
+}
+"""
+学校设置数据输入返回
+"""
+type SchoolSettingsResponse{
+    code:Int
+    msg:String
+    data:[SchoolSettings]
+    pagenation:Pagenation
+}
+
+
+"部门类型"
+enum DepartmentType {
+    teacher
+    student
+    parent
+}
+"""
+部门
+"""
+type Department {
+    "部门id"
+    id:Int
+    "部门名称"
+    department_name:Lang
+    "上级部门"
+    parent:Department
+    "显示顺序"
+    department_order:Int
+    "学校"
+    school:School
+    "用户类型组织teacher:教师用户，student：学生用户,parent:家长，默认为教师"
+    type:DepartmentType
+    "部门类型(other：常规部门,grade:年级组，subject：学科组，preparation:备课组)"
+    group_type:String
+    "部门状态"
+    status:Int
+    "关联年级"
+    grade:Grades
+    "关联学科"
+    subject:Subject
+    "关联职务"
+    duties:Duty
+    "部门用户"
+    users: departmentUsers
+}
+
+"""
+部门信息维护数据
+"""
+input DepartmentInput {
+    "部门id"
+    id:Int
+    "部门名称"
+    department_name:LangInput
+    "上级部门"
+    parent_id:Int
+    "显示顺序"
+    department_order:Int
+    "学校"
+    school_id:Int
+    "用户类型组织teacher:教师用户，student：学生用户,parent:家长，默认为教师"
+    type:String
+    "部门类型(other：常规部门,grade:年级组，subject：学科组，preparation:备课组)"
+    group_type:String
+    "部门状态"
+    status:Int
+    "关联年级"
+        grade:[Int]
+    "关联学科"
+        subject:[Int]
+    "关联职务"
+        duties:[Int]
+}
+type DepartmentResponse{
+    code:Int
+    msg:String
+    data:[Department]
+}
+
+"""
+所有职务职务
+"""
+type Duty {
+    "职务id"
+    id: ID
+    "职务名称"
+    duties_name:Lang
+    "职务显示顺序"
+    duties_order:Int
+    "上级职务"
+    parent:Duty
+    "职务等级"
+    level:String
+    "用户"
+    users: departmentUsers
+}
+input DutyInput {
+    "职务id"
+    id: ID
+    "职务名称"
+    duties_name:LangInput
+    "职务显示顺序"
+    duties_order:Int
+    "上级职务"
+    parent_id: Int
+    "职务等级"
+    level:String
+}
+input DutyCondition{
+    id: ID
+    "上级职务"
+    parent_id: Int
+    "职务名称"
+    duties_name:String
+}
+type DutyResponse{
+    code:Int
+    msg:String
+    data:[Duty]
+}
+
+
+"""
+部门类型
+"""
+enum groupType{
+    "常规部门"
+    other
+    "年级组"
+    grade
+    "学科组"
+    subject
+    "备课组"
+    preparation
+}
+
+"""
+部门下的职务及对应的人员
+"""
+type departmentUsers{
+    "用户id"
+    user_id: ID
+    "用户邮箱"
+    email: String
+    "性别"
+    gender: Dictionary
+    "身份证号码(需要加密的)"
+    idcard: String
+    "手机号"
+    mobile: String
+    "照片"
+    imgphotos: String
+    "参加工作时间"
+    workdate:String
+    "是否部门领导"
+    is_leaders: Int
+    "调离岗位的时间"
+    leave_at: Date
+    "部门"
+    department: Department
+    "职务"
+    duty: Duty
+}
+
+
+
+"""
+学年类
+"""
+type SchoolYear {
+    id:ID
+    "学年编号"
+    school_year_code:String
+    "学年开始日期"
+    start_date: Date
+    "学年开始日期"
+    end_date: Date
+    "学年状态"
+    school_year_status: Int
+    "创建日期"
+    created_at:Date
+    "创建人"
+    created_by: User
+    "删除标识"
+    deleted_at:Date
+    "什么标记？"
+    mark:String
+    "JSON 字符串"
+    school_year_name: Lang
+}
+
+
+"""
+学期
+"""
+type Semester {
+    id:ID
+    "学期编号"
+    semester_code:String
+    "名称"
+    name:Lang
+    "学年年度编号"
+    yearly_code:String
+    "是否当前学期"
+    is_current:Int
+    "学校"
+    school:School
+    "学年"
+    school_year:SchoolYear
+    "学期开始时间"
+    start_date:Date
+    "学期结束时间"
+    end_date:Date
+    "教学开始时间"
+    teaching_start_date:Date
+    "教学截止时间"
+    teaching_end_date:Date
+    "总教学周数"
+    total_teaching_weeks:Int
+    "学期状态"
+    semester_status:Int
+    "第一周周一日期"
+    first_week_monday:Date
+    "第一周周日日期"
+    first_week_sunday:Date
+}
+input SemesterInput {
+    id:ID
+    "学期编号"
+    semester_code:String
+    "名称"
+    name:LangInput
+    "学年年度编号"
+    yearly_code:String
+    "是否当前学期"
+    is_current:Int
+    "学校"
+    school_id:Int
+    "学年"
+    school_year_id: Int
+    "学期开始时间"
+    start_date:Date
+    "学期结束时间"
+    end_date:Date
+    "教学开始时间"
+    teaching_start_date:Date
+    "教学截止时间"
+    teaching_end_date:Date
+    "总教学周数"
+    total_teaching_weeks:Int
+    "学期状态"
+    semester_status:Int
+    "第一周周一日期"
+    first_week_monday:Date
+    "第一周周日日期"
+    first_week_sunday:Date
+}
+type SemesterResponse{
+    code:Int
+    msg:String
+    data:[Semester]
+}
+"""
+作息表
+"""
+type timetable{
+    "作息id"
+    id:ID
+    "作息名称"
+    name: Lang
+    "学校"
+    school:School
+    "是否当前作息"
+    is_current: Int
+    "学期"
+    semester_id:Int
+    "作息项 关联的timetableItem"
+    item: timetableItem
+}
+input timetableInput{
+    "作息id"
+    id:ID
+    "作息名称"
+    name: LangInput
+    "学校"
+    school_id: Int
+    "是否当前作息"
+    is_current: Int
+}
+type timetableResponse{
+    code:Int
+    msg:String
+    data:[timetable]
+}
+
+"""
+作息项
+"""
+type timetableItem{
+    "作息项id"
+    id:ID
+    "作息开始时间"
+    stat_time: String
+    "作息开始时间"
+    end_time: String
+    "作息项名称"
+    name: Lang
+    "作息项类型"
+    type: Dictionary
+    "是否课时"
+    is_classtime: Int
+}
+
+input timetableItemInput{
+    "作息项id"
+    id:ID
+    "作息开始时间"
+    stat_time: String
+    "作息开始时间"
+    end_time: String
+    "作息项名称"
+    name: LangInput
+    "作息项类型"
+    type: String
+    "是否课时"
+    is_classtime: Int
+}
+type timetableItemRespose{
+    code:Int
+    msg:String
+    data:[timetableItem]
+}
+
+
+"""
+校历
+"""
+type schoolCalendar{
+    "周数"
+    week_total: Int
+    "学期开始时间"
+    semester_start_date: Date
+    "学期结束时间"
+    semester_end_date: Date
+    "学年年度编号"
+    yearly_code:String
+    "是否当前学期"
+    is_current:Int
+    "学校"
+    school:School
+    "周列表"
+    weeks: schoolCalendarWeeks
+}
+input schoolCalendarInput{
+    "周数"
+    week_total: Int
+    "学期开始时间"
+    semester_start_date: Date
+    "学期结束时间"
+    semester_end_date: Date
+    "学年年度编号"
+    yearly_code:String
+    "是否当前学期"
+    is_current:Int
+    "学校"
+    school_id:Int
+}
+
+"""
+校历周次
+"""
+type schoolCalendarWeeks{
+    "月"
+    month: String
+    "学年"
+    year_code: String
+    "周"
+    weekSort: Int
+
+    days: WeeksDays
+
+}
+
+type WeeksDays{
+    "日id"
+    id: Int
+    "学校id"
+    school_id: Int
+    "学期id"
+    semester:Semester
+    "学年编码"
+    year_code: String
+    "年"
+    year: String
+    "月"
+    month: String
+    "日"
+    day: String
+    "日类型"
+    type: WeekDayType
+    "日排序"
+    day_sort: Int
+    "周几1-7"
+    week_number: Int
+    "第几周"
+    week_sort: Int
+    "备注名称"
+    name:Lang
+}
+input WeeksDaysInput{
+    "日id"
+    id: Int
+    "学校id"
+    school_id: Int
+    "学期id"
+    semester_id:Int
+    "学年编码"
+    year_code: String
+    "年"
+    year: String
+    "月"
+    month: String
+    "日"
+    day: String
+    "日类型"
+    type: WeekDayType
+    "日排序"
+    day_sort: Int
+    "周几1-7"
+    week_number: Int
+    "第几周"
+    week_sort: Int
+    "备注名称"
+    name:LangInput
+}
+type WeekResponse{
+    code:Int
+    msg:String
+    data:[WeeksDays]
+}
+enum WeekDayType{
+    "工作日"
+    workday
+    "周末"
+    weekend
+    "假期"
+    holidays
+    "其他活动日"
+    other
+}

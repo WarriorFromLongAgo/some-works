@@ -1,0 +1,12 @@
+2017-09-23 11:15:35,026 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2017-09-23 11:59:56,717 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2017-09-23 12:04:05,777 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2017-09-23 12:04:08,104 [http-nio-8080-exec-8] DEBUG -[MyShiroRealm.java:67]- 权限配置
+2017-09-23 12:10:09,302 [http-nio-8080-exec-2] DEBUG -[MyShiroRealm.java:67]- 权限配置
+2017-09-23 12:12:43,037 [http-nio-8080-exec-3] DEBUG -[MyShiroRealm.java:67]- 权限配置
+2017-09-23 12:13:07,011 [http-nio-8080-exec-8] DEBUG -[TemplateUtil.java:48]- 生成java model：Aaaa模板
+2017-09-23 12:13:07,041 [http-nio-8080-exec-8] DEBUG -[TemplateUtil.java:107]- 生成java dao：Aaaa模板
+2017-09-23 12:13:07,065 [http-nio-8080-exec-8] DEBUG -[TemplateUtil.java:201]- 生成controller：Aaaa模板
+2017-09-23 12:13:07,091 [http-nio-8080-exec-8] DEBUG -[TemplateUtil.java:217]- 生成查询页面：Aaaa模板
+2017-09-23 12:44:58,824 [ContainerBackgroundProcessor[StandardEngine[Tomcat]]] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:f8dd68b9-28b5-4ff9-8107-2732db283697
+2017-09-23 12:44:58,826 [ContainerBackgroundProcessor[StandardEngine[Tomcat]]] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员

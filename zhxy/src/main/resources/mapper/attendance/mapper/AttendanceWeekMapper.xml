@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.attendance.mapper.AttendanceWeekMapper">
+    <insert id="insertAttendanceGroupWeek">
+		INSERT INTO attendance_week(attendance_group_id,week,created_by) VALUES (#{attendance_group_id},#{week},#{user_id})
+    </insert>
+    <delete id="deleteAttendanceGroupWeek">
+        delete from attendance_week where attendance_group_id = #{maps.attendance_group_id}
+    </delete>
+</mapper>

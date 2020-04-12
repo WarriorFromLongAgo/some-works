@@ -1,0 +1,6 @@
+2017-09-16 00:21:19,338 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2017-09-16 00:22:34,235 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2017-09-16 00:23:23,808 [http-nio-8080-exec-1] DEBUG -[MyShiroRealm.java:67]- 权限配置
+2017-09-16 00:49:32,437 [http-nio-8080-exec-10] DEBUG -[MyShiroRealm.java:67]- 权限配置
+2017-09-16 01:21:20,405 [ContainerBackgroundProcessor[StandardEngine[Tomcat]]] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:7a2e71ab-f327-400f-a352-bdaf729cb5a2
+2017-09-16 01:21:20,406 [ContainerBackgroundProcessor[StandardEngine[Tomcat]]] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员

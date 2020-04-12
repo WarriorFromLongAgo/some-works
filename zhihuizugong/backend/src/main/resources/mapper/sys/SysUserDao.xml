@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.sys.dao.SysUserDao">
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="long">
+		select distinct rm.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+		where ur.user_id = #{userId}
+		and menu_id in (select menu_id from sys_menu where menu_type = #{menuType})
+	</select>
+	
+	<select id="queryByUserName" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+		select * from sys_user where username = #{username}
+	</select>
+	
+	<select id="userIdByUserName" resultType="java.lang.Long">
+		select user_id from sys_user where username = #{username}
+	</select>
+	<!--手机号登录-->
+	<select id="queryByMobile" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+		select * from sys_user where mobile = #{mobile}
+	</select>
+	<!--身份证号登录-->
+	<select id="queryByIdCard" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+		select * from sys_user where user_nickname = #{userNickname}
+	</select>
+	<!-- 	模糊搜索用户列表总条数 -->
+	<select id="searchListCount" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+		select 
+		u.user_id userId,
+		u.username,
+		u.user_work userWork,
+		u.user_head_picture userHeadPicture,
+		u.user_true_name userTrueName,
+		u.user_nickname userNickname,
+		u.mobile
+		from sys_user u
+		where 1=1
+		<!-- 用户人员类型(e家：1-党员 2-干部) -->
+		<if test="params.type == 1 or params.type == '1' ">
+		and u.is_party_member = 1
+		</if>
+		<if test="params.type == '2' or params.type == 2 ">
+		and u.is_cadres = 1
+		</if>
+		<!-- 用户支部 -->
+		<if test="params.userDept != null and params.userDept != ''">
+			and u.user_dept = #{params.userDept}
+		</if>
+		<!-- 用户单位 -->
+		<if test="params.userOrg != null and params.userOrg != ''">
+			and u.user_org = #{params.userOrg}
+		</if>
+		<!-- 用户名称或者身份证号 -->
+		<if test="params.name != null and params.name != '' ">
+			and (u.user_true_name like concat('%',#{params.name},'%') or u.user_nickname like concat('%',#{params.name},'%'))
+		</if>
+		<!-- 按照组工人员或者e家人员查询 1 组工用户 2 e家用户 3 共用用户 -->
+		<if test="params.isPublic != null">
+			and (u.is_public = #{params.isPublic} or u.is_public = 3)
+		</if>
+	</select>
+	<!-- 	模糊搜索用户列表 -->
+	<select id="searchList" resultType="java.util.HashMap">
+		select 
+		u.user_id userId,
+		u.username,
+		IFNULL(u.user_work,'') userWork,
+		IFNULL(u.user_head_picture,'') userHeadPicture,
+		u.user_true_name userTrueName,
+		u.user_nickname userNickname,
+		IFNULL(u.mobile,'') mobile
+		from sys_user u
+		where 1=1
+		<!-- 用户人员类型(e家：1-党员 2-干部) -->
+		<if test="params.type == 1 or params.type == '1' ">
+		and u.is_party_member = 1
+		</if>
+		<if test="params.type == '2' or params.type == 2 ">
+		and u.is_cadres = 1
+		</if>
+		<!-- 用户支部 -->
+		<if test="params.userDept != null and params.userDept != '' ">
+			and u.user_dept = #{params.userDept}
+		</if>
+		<!-- 用户单位 -->
+		<if test="params.userOrg != null and params.userOrg != '' ">
+			and u.user_org = #{params.userOrg}
+		</if>
+		<!-- 用户名称或者身份证号 -->
+		<if test="params.name != null and params.name != '' ">
+			and (u.user_true_name like concat('%',#{params.name},'%') or u.user_nickname like concat('%',#{params.name},'%'))
+		</if>
+		<!-- 按照组工人员或者e家人员查询 1 组工用户 2 e家用户 3 共用用户 -->
+		<if test="params.isPublic != null ">
+			and (u.is_public = #{params.isPublic} or u.is_public = 3)
+		</if>
+		<if test="params.page != null and params.limit != null and params.page != 0 and params.limit != 0">
+			limit #{params.page},#{params.limit}
+		</if>
+	</select>
+	<!-- 查询用户真实姓名，身份证号以及所在单位 -->
+	<select id="getUserSelectList" resultType="com.orhonit.modules.generator.vo.UserAndOrgVO">
+	    SELECT
+			ser.user_id,
+			ser.user_true_name,
+			ser.user_nickname,
+			ser.mobile,
+			ser.user_org,
+			ser.user_head_picture,
+			org.org_name 
+		FROM
+			sys_user ser
+		LEFT JOIN tb_user_org org ON org.org_id = ser.user_org
+	    WHERE 1=1
+	    <if test="params.userTrueName !='' and params.userTrueName !=null">
+	        AND ser.user_true_name like concat('%',#{params.userTrueName},'%')
+	    </if>
+	    <if test="params.userNickname !=null and params.userNickname !=''">
+	        AND ser.user_nickname=#{params.userNickname}
+	    </if>
+	  <!--   <if test="params.userId !=null and params.userId!=''">
+	        AND ser.user_id = #{params.userId}
+	    </if> -->
+	    <if test="params.mobile !=null and params.mobile !=''">
+	        AND ser.mobile=#{params.mobile}
+	    </if>
+	    limit #{params.page},#{params.limit}
+	</select>
+	
+</mapper>

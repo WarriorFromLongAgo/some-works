@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppHelpMeCommentDao">
+  <resultMap type="com.orhonit.modules.generator.app.vo.AppHelpMeCommentVO" id="AppHelpMeCommentMap">
+       <id column="com_id" property="comId"/>
+	   <result column="com_content" property="comContent"/>
+	   <result column="com_create_time" property="comCreateTime"/>
+	   <result column="com_update_time" property="comUpdateTime"/>
+	   <result column="com_help_me_id" property="comHelpMeId"/>
+	   <result column="com_user_id" property="comUserId"/>
+	   <result column="help_thumbs_up"/>
+	   <result column="commentUserTrueName" property="commentUserTrueName"/>
+	   <result column="replyTotal" property="replyTotal"/>
+  </resultMap>
+  
+  <select id="selectCommentList" resultMap="AppHelpMeCommentMap">
+     SELECT   
+		ment.com_id,
+		ment.com_content,
+		ment.com_help_me_id,
+		ment.com_create_time,
+		ment.com_update_time,
+		ment.com_user_id,
+		er.user_true_name AS 'commentUserTrueName'
+	FROM please_help_com_comment ment
+		LEFT JOIN sys_user er ON ment.com_user_id = er.user_id 
+	WHERE
+	    ment.com_help_me_id=#{comHelpMeId}
+	    ORDER BY ment.com_update_time
+	    LIMIT #{beginLimit},#{limit}
+  </select>
+  
+  
+  
+</mapper>

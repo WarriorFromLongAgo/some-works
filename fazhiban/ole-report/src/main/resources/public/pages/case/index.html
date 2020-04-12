@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>决策剧场</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/css.css">
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini"  >
+<div class="wrapper">
+    <section class="content">
+      <div class="row">
+        <div class="col-lg-2 col-xs-3">
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3 class="zfztValue">47</h3>
+              <p>执法主体</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-ios-home"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-xs-3">
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3 class="zfryValue">4200<sup style="font-size: 20px"></sup></h3>
+              <p>执法人员</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-xs-3">
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3 class="qzslValue">44</h3>
+              <p>权责数量</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-ios-plus"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-xs-3">
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3 class="fltsValue">65</h3>
+              <p>法律条数</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-ios-checkmark"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+           
+                    <div id="ajaytj" style="height: 415px;"></div>
+
+          </div>
+          <div class="col-md-6">
+
+	                    <div id="ajqytj" style="height: 415px;"></div>
+
+          </div>
+      </div>
+    </section>	
+</div>
+<script type="text/javascript">
+    window.onload=function(){
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: "/report/index/test",
+            success: function (data) {
+                $(".zfztValue").html(data.zfzt);
+                $(".zfryValue").html(data.zfry);
+                $(".qzslValue").html(data.qzsl);
+                $(".fltsValue").html(data.flts);
+            }
+        });
+
+    };
+
+
+</script>
+</body>
+  <script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../../js/echarts.min.js"></script>
+  <script type="text/javascript" src="../../js/echartstheme.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+</html>

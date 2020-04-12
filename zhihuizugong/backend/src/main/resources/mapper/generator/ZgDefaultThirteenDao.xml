@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgDefaultThirteenDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgDefaultThirteenEntity" id="zgDefaultThirteenMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="lowerId" column="lower_id"/>
+        <result property="lowerName" column="lower_name"/>
+        <result property="answer" column="answer"/>
+        <result property="workIdea" column="work_idea"/>
+        <result property="share" column="share"/>
+        <result property="orgLive" column="org_live"/>
+        <result property="help" column="help"/>
+        <result property="volunteer" column="volunteer"/>
+        <result property="donate" column="donate"/>
+        <result property="resumption" column="resumption"/>
+        <result property="lightspot" column="lightspot"/>
+        <result property="feature" column="feature"/>
+        <result property="study" column="study"/>
+        <result property="thinkNote" column="think_note"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgDefaultThirteenEntity">
+        INSERT INTO zg_default_thirteen (
+        id,
+        user_id,
+        user_name,
+        lower_id,
+        lower_name,
+        answer,
+        work_idea,
+        SHARE,
+        org_live,
+        HELP,
+        volunteer,
+        donate,
+        resumption,
+        lightspot,
+        feature,
+        study,
+        think_note,
+        update_time
+        )
+        VALUES
+	    (
+        #{id},#{userId},#{userName},#{lowerId},#{lowerName},#{answer},#{workIdea},#{share},#{orgLive},#{help},
+        #{volunteer},#{donate},#{resumption},#{lightspot},#{feature},#{study},#{thinkNote},#{updateTime})
+    </insert>
+
+    <select id="findThList" resultType="com.orhonit.modules.generator.entity.ZgDefaultThirteenEntity">
+        select * from zg_default_thirteen where user_id = #{userId}
+    </select>
+
+</mapper>

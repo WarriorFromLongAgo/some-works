@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+	</head>
+
+	<body>
+		<div class="centent">
+			<form class="form-horizontal" onsubmit="return false" id="form">
+				<fieldset>
+					<input type="hidden" id="dept_id" name="dept_id">
+					<input type="hidden" id="id" name="id">
+					<input type="hidden" id="dept_id_agents" name="dept_id_agent">
+					<input type="hidden" id="potence_ids" name="potence_id">
+					<div class="form-group" >
+						<label class="control-label ">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ  </label>
+						<input class="form-control " placeholder="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ   " type="text "
+							name="name " id="name " data-bv-notempty="true "
+							disabled="disabled ">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠬᠣᠯᠪᠣᠭᠳᠠᠬᠤ ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ</label>
+							<input class="easyui-combotree" id="potence_id" type="text" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠡᠭᠦᠷᠭᠡᠯᠡᠨ ᠰᠶᠢᠳᠪᠦᠷᠢᠯᠡᠬᠦ ᠪᠠᠶᠢᠭᠤᠯᠤᠮᠵᠢ </label>
+						<input class="easyui-combotree" id="dept_id_agent" type="text" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠬᠦᠴᠦᠨ ᠲᠡᠶ ᠪᠣᠯᠬᠤ ᠡᠰᠡᠬᠦ </label>
+						<select name="is_effect" class="form-control input-sm" id="is_effect">
+						</select>
+					</div>
+					
+					<div class="form-actions">
+						<div class="row" align="center">
+							<div class="col-md-12">
+								<button class="btn btn-primary" type="submit"style="margin-left:10px " onclick="update()">
+								<i class="fa fa-save"></i>ᠬᠤᠯᠪᠤᠭᠳᠠᠯ  ᠢ ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ 
+							</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+
+	<script type="text/javascript " src="../../js/libs/jquery-2.1.1.min.js "></script>
+	<script type="text/javascript " src="../../js/jq.js "></script>
+	<script type="text/javascript " src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js "></script>
+	<script type="text/javascript " src="../../js/common.js "></script>
+	<script type="text/javascript " src="../../js/constans.js "></script>	
+	<script type="text/javascript " src="../../js/my/ztree-menu.js "></script>
+	<script type="text/javascript " src="../../layui/layui.js "></script>
+	<script type="text/javascript " src="../../easyui/jquery.easyui.min.js "></script>
+	<script type="text/javascript ">
+		layui.use('layer', function() {
+			var layer = layui.layer;
+		});
+		
+		getDictList(dict.if_effect,"is_effect ");
+		
+		var id = getUrlParam("id ");
+		var connid = getUrlParam("connid ");
+		$("#id ").val(connid);
+		
+		$("#isdept ").click(function(){
+			if($('#isdept').is(':checked')) {
+			} else {
+			}
+		});
+		
+		initData();
+		initDatas();
+		function initData() {
+			if (id != " ") {
+				$.ajax({
+					type : 'get',
+					url : '/base/ltctions/' + id,
+					async : false,
+					success : function(data) {
+						$("#dept_id ").val(data.id);
+						$("#name ").val(data.name);
+					}
+				});
+
+			}
+		}
+		
+		function initDatas() {
+			if (connid != " ") {
+				$.ajax({
+					type : 'get',
+					url : '/base/ltctions/connss/' + connid,
+					async : false,
+					success : function(data) {
+					    var pots=data.potence_id;
+					    var dets=data.dept_id_agent;
+					    if(pots==null){
+					    	 $("#potence_id ").combotree({
+									method:'get',		//请求方式	
+									url : '/base/LarLists/lars',	//请求的URL
+									required: false,
+									onLoadSuccess: function (node, data) {
+								    }, 
+									onChange:function(newV,oldV){
+										$("#potence_ids ").val(newV);
+									}
+								});
+					    } else {
+					    	$("#is_effect ").val(data.is_effect);
+					    	 $("#potence_id ").combotree({
+									method:'get',		//请求方式	
+									url : '/base/LarLists/lars',	//请求的URL
+									required: false,
+									onLoadSuccess: function (node, data) {
+										$('#potence_id').combotree('setValue', {id:pots,text:pots});
+										$("#potence_ids ").val(pots);
+								    }, 
+									onChange:function(newV,oldV){
+										$("#potence_ids ").val(newV);
+									}
+								});
+					    	
+					    }
+						
+					    if(dets==null){
+					    	   $("#dept_id_agent ").combotree({
+									method:'get',		//请求方式	
+									url : '/base/LtcAtts/ltcs',	//请求的URL
+									required: false,
+									onLoadSuccess: function (node, data) {
+								    }, 
+									onChange:function(newV,oldV){
+										$("#dept_id_agents ").val(newV);
+									}
+								});
+					    } else {
+						    $("#dept_id_agent ").combotree({
+								method:'get',		//请求方式	
+								url : '/base/LtcAtts/ltcs',	//请求的URL
+								required: false,
+								onLoadSuccess: function (node, data) {
+									$('#dept_id_agent').combotree('setValue', {id:dets,text:dets});
+									$("#dept_id_agents ").val(dets);
+							    }, 
+								onChange:function(newV,oldV){
+									$("#dept_id_agents ").val(newV);
+								}
+							});
+					    }
+					}
+				});
+
+			}
+		}
+
+		function selectCss() {
+			layer.open({
+				type : 2,
+				title : "鏍峰紡 ",
+				area : [ '800px', '400px' ],
+				shadeClose : true,
+				content : [ 'icon.html' ]
+			});
+		}
+
+		function update() {
+			$('#form').bootstrapValidator();
+			var bootstrapValidator = $("#form ").data('bootstrapValidator');
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+
+			var formdata = $("#form ").serializeObject();
+			$.ajax({
+				type : 'put',
+				url : '/base/ltctions/conn/',
+				contentType : "application/json; charset=utf-8 ",
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("关联成功 ", {
+						shift : -1,
+						time : 1000
+					}, function() {
+						window.parent.location.reload();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					});
+				}
+			});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.moral.mapper.GroupMapper">
+    <insert id="inserts">
+		INSERT INTO moral_group_class(group_id,class_id) VALUES (#{group_id},#{class_id})
+	</insert>
+	<insert id="deletes">
+		DELETE from moral_group_class
+		where
+		group_id=#{group_id}
+	</insert>
+
+</mapper>

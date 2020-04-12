@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+</head>
+<style>
+	.textbox{border-radius:0;}
+</style>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset style="margin-top:5%">
+			<input type="hidden" id="id" name="id">
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">父级名称<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="easyui-combotree" id="parentId" type="text" style="width:100%;height:30px;" name="parentId"/>
+				</div>			
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">名称<span class="btx">*</span></label>			
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control" type="text"  name="name" id="name"
+						data-bv-notempty="true"/>
+				</div>
+				
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">英文名称<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control"  name="nameEn" id="nameEn"
+						data-bv-notempty="true" data-bv-notempty="true">
+				</div>
+				
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">排序</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<input class="form-control"  name="sort" id="sort"
+						data-bv-notempty="true" type="number" data-bv-notempty="true">
+				</div>
+						
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否启用<span class="btx">*</span></label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="ifEffect" class="form-control input-sm" id="ifEffect">
+					   
+					</select>
+				</div>				
+			</div>
+
+			<div class="form-actions col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:7%">
+				<div class="row" align="center">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<button class="btn btn-primary" type="submit" onclick="update()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>	
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+	 layui.use('layer', function(){
+	    var layer = layui.layer;
+	});
+	
+	getDictList("1709","ifEffect");
+	
+	$('#parentId').combotree({
+		method : 'get',
+		url : '/base/LawLevel/parents/',
+		required: false, 
+		onLoadSuccess: function (node, data) {
+			initData();
+	    },
+		onChange:function(newV,oldV){
+			
+		}
+	});  
+	
+	function initData(){	 
+		var id = getUrlParam("id");
+		if(id != ""){
+			$.ajax({
+				type : 'get',
+				url : '/base/LawLevel/getInfo/'+id,
+				success : function(data) {
+					$("#id").val(data.id);
+					$("#name").val(data.name);
+					$("#nameEn").val(data.nameEn);
+					$("#sort").val(data.sort);
+					$("#ifEffect").val(data.ifEffect);
+					$("#parentId").combotree("setValue",data.parentId); 
+				}
+			});
+		}
+	}
+		
+		$('#form').bootstrapValidator();
+		 function update() {
+			 if ($('#name').val() == '') {
+				 layer.msg("名称不可以为空", {
+				 	anim : 6
+				});
+				 return;
+			}
+				 	
+			if ($('#sort').val() == '') {
+				layer.msg("排序不可以为空", {
+				 	anim : 6
+				});
+				return;
+			 }
+				 	
+			if ($('#parentId').val() == '') {
+				 layer.msg("父级不可以为空", {
+				 	anim : 6
+				 });
+				 return;
+			 }
+				 	
+			if ($('#ifEffect').val() == '') {
+				 layer.msg("是否启用不可以为空", {
+				 	anim : 6
+				 });
+				return;
+			}
+			if ($('#nameEn').val() == '') {
+				 layer.msg("英文名不可以为空", {
+				 	anim : 6
+				 });
+				 return;
+			}
+			$('#submitBtn').removeAttr("disabled");
+		    $('#submitBtn').attr("disabled",true); 
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = $("#form").serializeObject();
+		    formdata.roleIds = getCheckedRoleIds();	    
+			$.ajax({
+				type : 'put',
+				url : '/base/LawLevel/update',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("修改成功", {shift: -1, time: 1000}, function(){
+                        //window.parent.location.reload();
+                        window.parent.example.draw(false);
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+                    });
+				}
+			});
+		} 
+		
+		 
+		
+	</script>
+</body>
+</html>

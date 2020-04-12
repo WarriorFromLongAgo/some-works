@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.basics.ReportBasicsDao">
+	
+	
+	<!-- 各个部门的检查转处罚的总数量分为日常检查和专项检查 -->
+	<select id="getCheckedDayItem" resultType="com.orhonit.ole.report.dto.basics.ReportBasicsDTO">
+	       SELECT
+				COUNT(*) value,
+			    b.name
+			FROM
+				ole_ef_case a
+			LEFT JOIN ole_base_dept b ON a.dept_id = b.id
+			WHERE
+				(
+					a.case_source = '5'
+					OR a.case_source = '6'
+				)
+			GROUP BY b.name
+	</select>
+</mapper>

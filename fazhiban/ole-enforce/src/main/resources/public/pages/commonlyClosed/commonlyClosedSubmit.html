@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		<div class="form-group" style="margin-top:20px;">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">是否公示</label>
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+			<select class="form-control" id="isps" name="isps">
+					<option value="1">是</option>
+					<option value="0"  selected>否</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group" style="margin-top:20px;">
+			<input class="form-control" type="hidden" name="id" disabled="disabled" id="id">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">处理方式</label>
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+			<input class="form-control" type="text" name="status" disabled="disabled" id="status" value="案件归档" disabled="true">
+			</div>
+		</div>
+		
+		<div class="form-group" style="margin-top:20px;">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">处罚类别<span class="btx">*</span></label>
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+				<select class="form-control not-null" id="punishType" name="punishType" onchange="changePunishType()" iname="处罚类别">
+					<option value="">请选择</option>
+				</select>
+			</div>
+		</div>
+		
+		<div  id="punishDiv" style="display:none;">
+		<div class="form-group" style="margin-top:20px;">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">处罚金额(单位：元)<span class="btx">*</span></label>
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+				<input type="text" class="form-control not-null num" id="punishCash" iname="处罚金额" name="punishCash" onkeyup="this.value=this.value.replace(/\D/g,'')"
+				onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+			</div>
+		</div>
+		<div class="form-group" style="margin-top:20px;">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">缴费凭证<span class="btx">*</span></label>
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+				<div class="form-group" style="margin-left:0%;float:left;">
+				 <button type="button" class="layui-btn" id="test1">
+	                <i class="layui-icon">&#xe67c;</i>上传缴费凭证
+	             </button>
+				</div>
+            <div id="punishImg" style="float:left;margin-left:40px">
+		    </div>
+		    <input type="hidden"   class="form-control not-null"   iname="缴费凭证"  name="punishBill" id="punishBill">
+			</div>
+		</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">处理意见<span class="btx">*</span></label>
+				<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					<textarea class="form-control not-null" rows="3" cols=""   iname="处理意见"   name="dealContent" id="dealContent" placeholder="请输入处理意见"></textarea>
+				</div>
+		</div>
+			<div class="form-actions">
+				<div class="row" align="center">
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="addInforming()">
+							<i class="fa fa-save"></i> 提交
+						</button>
+					</div>
+				</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<!-- 配置文件 -->
+	<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/select2/select2.full.min.js"></script>  
+	<script src="../../js/select2/zh-CN.js"></script>  
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+  <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+	      layui.use(['layer'], function(){
+		    var layer = layui.layer;
+		});
+       var userNickName;
+    	$.ajax({
+			type : 'get',
+			url : '/enforce/users/current',
+			userdata : $("#form").serialize(),
+			success : function(userdata) {
+				userNickName = userdata.id;
+			}
+		});
+    	
+    	//修改处罚类别
+    	   function  changePunishType(){
+    		   var punishType=$("#punishType").val();
+    		   if(punishType=='2'){
+    			   $("#punishDiv").show();
+    		   }else{
+    			   $("#punishDiv").hide();
+    		   }
+    	    }
+    	   //设置处罚类别字典列表
+    	   getDictList(dict.punishType, "punishType");
+        
+        function addInforming() {
+        	//数据格式校验
+        	if (!dataCheck()) {
+        		return;
+        	}
+        	$('#form').bootstrapValidator();
+        	
+        	
+        	
+        	
+        	var punishType=$("#punishType").val();
+        	var punishBill=$("#punishBill").val();
+    	   	 if(punishType=='2'){
+    	   		var punishCash=$("#punishCash").val();
+        	   	if(parseInt(punishCash)!=punishCash||parseInt(punishCash)<1)
+        	   	{
+        	   	    layer.msg("处罚金额只能输入大于0的整数", {
+        				anim : 6
+        			});
+        			return;
+        	   	}
+    	   		 if(punishBill==null||punishBill==""){
+    	   			 layer.msg("请上传缴费凭证", {
+    							anim : 6
+    						});
+    						return;
+    	   		 }
+    	 	  }
+        	
+        	caseId = getUrlParam("caseId");
+        	var formdata = new Object();
+        	formdata.id=caseId;
+        	formdata.isPs= $('#isps').val();
+        	 formdata.punishType= $('#punishType').val();
+             formdata.punishCash= $('#punishCash').val();
+             formdata.punishBill= $('#punishBill').val();
+        	$.ajax({
+        		type : 'post',
+        		url : '/enforce/case/updataisps',
+        		contentType : "application/json; charset=utf-8",
+        		data : JSON.stringify(formdata),
+    			success : function(ok) {
+    				    content = $("#dealContent").val();
+    		        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+    					bootstrapValidator.validate();
+    				    if(!bootstrapValidator.isValid()){
+    					   return;
+    				    }
+    				    
+    				    var formdata = new Object();
+    		            formdata.assignee = userNickName;
+    		            formdata.businessId = caseId;
+    		            formdata.nextAssignee = userNickName;
+    		            formdata.flowKey = 'case';
+    		            formdata.comment = content;
+    		        	formdata.singleMode = FLOW.TO_COMMONLY_FILE;
+    			    	$.ajax({
+    						type : 'post',
+    						url : '/enforce/flow/taskComplate',
+    						contentType: "application/json; charset=utf-8",  
+    						data : JSON.stringify(formdata),
+    						//data : JSON.stringify(flowDTO),
+    						success : function(data) {
+    		    				layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+    		   					window.parent.example.ajax.reload();
+    							var index = parent.layer.getFrameIndex(window.name);
+    							parent.layer.close(index);
+    		                  	 });
+    						}
+    					});
+    				    	
+    			}
+    		});
+        	
+		}
+        
+        layui.use(['upload'], function(){
+  		  var upload = layui.upload;
+  		  upload.render({
+  		    elem: '#test1',
+  		    accept: 'images',
+  		    url: '/enforce/closed/punishImg',
+  		    done: function(res, index, upload){
+  		    	var url = res.url;
+  		    	$("#punishBill").val(res.punishBill);
+  		    	layer.msg("上传成功");
+                var a = "<a target='_blank' href='" + url +"'><img src='" + url + "' width='160px' height='80px'></img></a>";
+                $("#punishImg").html(a);
+  		    }
+  		  });
+  	});
+
+    </script>
+</body>
+</html>

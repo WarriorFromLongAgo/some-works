@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.cases.ReportCaseHeadDao">
+
+	<!-- 查询每年某个案件节点的数量 -->
+	<select id="findCaseByCaseStatus" resultType="com.orhonit.ole.report.dto.cases.CaseHeadDTO">
+		SELECT YEAR(oec.case_time) YEAR ,COUNT(oec.`id`) COUNT
+		FROM ole_ef_case oec
+		<if test="status!= null and status != ''">
+		LEFT JOIN ole_ef_case_deal oecb ON  oec.id=oecb.case_id
+		</if>
+		where
+		<if test="status!= null and status != ''">
+			oecb.`case_status` in ( #{status}) AND 
+		</if>
+		YEAR(oec.case_time) != ''
+		GROUP BY YEAR(oec.case_time)
+
+	</select>
+	
+	<!-- 查询每年某个案件节点的数量 -->
+	<select id="findCaseByCaseStatus1" resultType="com.orhonit.ole.report.dto.cases.CaseHeadDTO">
+		SELECT YEAR(create_date) YEAR ,COUNT(DISTINCT case_num) COUNT 
+		FROM ole_ef_case_deal 
+		WHERE case_status IN (#{status}) 
+		GROUP BY YEAR(create_date)
+	</select>
+	
+	<!-- 查询某年某个案件节点的数量 -->
+	<select id="findCaseByCaseStatusAndYear" resultType="com.orhonit.ole.report.dto.cases.CaseHeadDTO">
+		SELECT MONTH(oec.`case_time`) month,COUNT(oec.case_status) count
+		FROM ole_ef_case oec
+		<where>
+			<if test="year != null and year != ''">
+				YEAR(oec.`case_time`) = #{year}
+			</if>
+			<if test="status != null and status != ''">
+				AND oec.`case_status`  in ( #{status})
+			</if>
+		</where>
+		GROUP BY MONTH(oec.`case_time`)
+	</select>
+	
+	<!-- 查询某年某个案件节点的数量 -->
+	<select id="findCaseByCaseStatusAndYear1" resultType="com.orhonit.ole.report.dto.cases.CaseHeadDTO">
+		SELECT MONTH(create_date) month ,COUNT(DISTINCT case_num) COUNT 
+		FROM ole_ef_case_deal 
+		WHERE case_status IN (#{status}) AND #{year}=YEAR(create_date)
+		GROUP BY MONTH(create_date)
+	</select>
+</mapper>

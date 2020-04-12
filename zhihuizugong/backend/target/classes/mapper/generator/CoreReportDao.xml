@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.CoreReportDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.CoreReportEntity" id="coreReportMap">
+        <result property="reportId" column="report_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="creatTime" column="creat_time"/>
+        <result property="reportType" column="report_type"/>
+    </resultMap>
+
+    <insert id="insertReport" parameterType="com.orhonit.modules.generator.entity.CoreReportEntity">
+        insert into core_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">
+                report_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="creatTime != null">
+                creat_time,
+            </if>
+            <if test="reportType != null">
+                report_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">
+                #{reportId},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="userName != null">
+                #{userName},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="creatTime != null">
+                #{creatTime},
+            </if>
+            <if test="reportType != null">
+                #{reportType},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

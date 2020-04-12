@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>案卷评查内容管理列表</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/ztree/zTree.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/ztree/zTreeStyle/zTreeStyle.css" >
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+</head>
+<style>
+	#dt-table td a{display:block;width:150px !important;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+    #dt-table td.ellipsis{max-width:85px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+</style>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:right;width:83%;padding:0;">
+            <div>
+                <header style="height: 100%">
+					 <div align="left">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											评查内容：
+											<input id="name" type="text" class="form-control" placeholder="评查内容">
+											<!-- 编码：
+											<input id="code" type="text" class="form-control" placeholder="编码"> -->
+											分类：
+											<input type="text" class="form-control" placeholder="分类" id="parent_id">					
+											<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+										</div>
+									</form>
+								</td>
+								
+								<td align="right">
+	                   				<button class="layui-btn layui-btn-small" onclick="addLrl()">
+                                      <i class="layui-icon">&#xe608;</i> 添加
+                                    </button>
+	                   			</td>
+                            </tr> 
+                        </table>
+                    </div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr>
+									<th width="1%" style="display:none">id</th>
+									<th width="20%">评查内容</th>
+									<th width="20%">评查方法及标准</th>
+									<th width="5%">分类</th>
+									<th width="5%">分值</th>
+									<th width="10%">创建日期</th>
+									<th width="5%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:left;width:17%;padding:0;margin:0;">        										
+			 <table style="width: 100%">
+                <tr>
+                	<td>
+						<p style="height:38px;line-height: 37px;padding-left:3%;">分类：</p>	
+					</td>			
+                </tr> 
+                <tr>
+                	<td>
+                		<ul id="tree" class="ztree" style="height:100%;width:100%;margin:0;overflow:auto;border-top:2px solid #ddd;"></ul>
+                	</td>
+                </tr>
+             </table>												
+        </div> 
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.core.js"></script>
+<script type="text/javascript">
+var pers = checkPermission();
+layui.use(['layer','laydate'], function(){
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+    laydate.render({
+       elem: '#beginTime'
+    });
+    laydate.render({
+       elem: '#endTime'
+    });
+});
+
+function addLrl(){
+	 layer.open({
+	            type: 2,
+	            title: '案卷评查内容添加',
+	            shade: [0],
+	            area: ['90%', '85%'],
+	            shift: 2,
+	            content: 'addReview.html' //iframe的url，no代表不显示滚动条
+	        });
+	}
+	
+var example;
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+    		"language":lang,
+    		"ordering":false,
+        	"searching": false,
+        	"processing": false,
+        	"serverSide" : true,
+        	"ajax": {
+        		"url" : "/auth/review/list",
+        		"type":"get",
+        		"data":function(d){
+        			d.name = $('#name').val();
+        			d.parentId = $('#parent_id').val();
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+            "columns": [
+				{"data" : "id", "defaultContent" : "","sClass":"hidden"},
+				{"data" : "name", "defaultContent" : ""},
+				{"data" : "content", "defaultContent" : ""},
+				{"data" : "parentName", "defaultContent" : ""},
+				{"data" : "score", "defaultContent" : ""},
+				{"data" : "createDate", "defaultContent" : ""},
+				{"data": "", "defaultContent": ""},
+            ],
+            "columnDefs": [
+				{"name" : "id", "targets" : 0,"sClass":"hidden","sClass": "ellipsis"},
+				{"name" : "name", "targets" : 1,"sClass": "ellipsis"},
+				{"name" : "content", "targets" : 2,"sClass": "ellipsis"},
+				{"name" : "parentName", "targets" : 3},
+				{"name" : "score", "targets" : 4},
+				{"name" : "createDate", "targets" : 5},
+				{ 
+                	"targets": 6,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                        var edit = $("<button class='layui-btn layui-btn-mini' title='编辑' onclick='update(\"" + id +"\")'><i class='layui-icon'>&#xe642;</i></button>").prop("outerHTML");
+                        var del = $("<button class='layui-btn layui-btn-danger layui-btn-mini' title='删除' onclick='del(\"" + id +"\")'><i class='layui-icon'>&#xe640;</i></button>").prop("outerHTML");            		
+                		return edit+del;
+                     }
+                }
+              ],
+           "order": [[ 5, "desc" ]]
+        } );
+}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+function update(id){
+	layer.open({
+        type: 2,
+        title: '案卷评查内容修改',
+        shade: [0],
+        area: ['90%', '60%'],
+        shift: 2,
+        content: "updateReview.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+	function del(id){
+		layer.confirm('确定要删除吗？', {
+	        btn : [ '确定', '取消' ]
+	    }, function() {
+	        $.ajax({
+	            type : 'delete',
+	            url : '/auth/review/'+id,
+	            success : function(data) {
+	                example.ajax.reload();
+	                layer.msg("删除成功");
+	            }
+	        });
+	        layer.close(1);
+	    });
+	}
+
+init();
+
+var setting = {
+		callback: {
+			onClick: zTreeOnClick
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+
+function zTreeOnClick(event, treeId, treeNode) {
+	$('#parent_id').val(treeNode.name)
+	example.ajax.reload();
+	
+};
+
+$(document).ready(function(){
+	$.ajax({
+    	type : 'get',
+   		url : '/auth/review/parentsTree',
+    	success : function(data) {
+    		$.fn.zTree.init($("#tree"), setting, data);
+    		var treeObj = $.fn.zTree.getZTreeObj("tree");
+            var nodes = treeObj.getNodes();//得到该tree  
+            for (var i = 0; i < nodes.length; i++) { //选中第一个节点  
+                treeObj.expandNode(nodes[i], true, true, true);//打开节点 ，第一个参数表示哪个节点，第二个参数表示展开还是关闭，第三个参数表示 是否打开全部子孙节点   
+            }
+    	}
+	});
+}); 
+</script>

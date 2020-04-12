@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.tts.dao.DeptDao">
+
+	<!-- 主体列表查询-->
+	<select id="getDeptList" resultType="com.orhonit.ole.tts.dto.ps.PsDeptListDTO">
+		SELECT  db.id as id,
+			db.name AS name, 
+			db.code AS code,
+			db.area_id AS areaId,
+			db.name_spell AS nameSpell,
+			db.dept_property AS deptProperty
+			FROM ole_base_dept db 
+		<where>
+			and db.del_flag=0
+			<if test="params.areaId != null and params.areaId != ''">
+				db.area_id = #{params.areaId}
+			</if>
+			<if test="params.name != null and params.name != ''">
+				and db.name = #{params.name}
+			</if>
+			<if test="params.deptProperty != null and params.deptProperty != ''">
+				and db.dept_property = #{params.deptProperty}
+			</if>		
+		</where>
+	</select>
+	
+	<!-- 执法人员总数-->
+	<select id="personCount" resultType="String">
+		SELECT  count(*) FROM ole_base_dept_person bdp 
+		<where>
+			<if test="params.deptId != null and params.deptId != ''">
+				db.dept_id = #{params.deptId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 各辖区主体数量统计-->
+	<select id="areaDeptList" resultType="com.orhonit.ole.tts.dto.ps.PsAreaDeptDTO">
+		SELECT
+			COUNT(bd.name) count,
+			ba.name areaName,
+			ba.id areaId
+		FROM
+			ole_base_area ba
+		LEFT JOIN ole_base_dept bd ON bd.area_id = ba.id and bd.is_ps="1" and bd.del_flag=0
+		WHERE LENGTH(ba.`code`)=6
+		GROUP BY
+			ba.`name`
+	</select>
+	
+	<!-- 各辖区主体数量统计-->
+	<select id="areaDeptProList" resultType="com.orhonit.ole.tts.dto.ps.PsAreaDeptDTO">
+		SELECT
+			COUNT(*) count,
+			ba.name areaName,
+			ba.id areaId,
+			bd.dept_property deptProperty
+		FROM
+			ole_base_area ba
+		LEFT JOIN ole_base_dept bd ON bd.area_id = ba.id and bd.is_ps="1" and bd.del_flag=0
+		<where>
+			
+			<if test="params.areaId != null and params.areaId != ''">
+			and	bd.area_id = #{params.areaId}
+			</if>
+			AND LENGTH(ba.`code`)=6
+		</where>
+		GROUP BY
+			bd.dept_property
+	</select>
+	
+	<!-- 主体详细查询-->
+	<select id="getDeptAllList" resultType="com.orhonit.ole.tts.dto.ps.PsAreaDeptDTO">
+			SELECT  db.id,
+				db.name deptName, 
+				db.code,
+				ba.name areaName,
+				ba.id AS areaId,
+				db.name_spell nameSpell,
+				db.short_name shortName,
+				db.address
+			FROM ole_base_dept db 
+			inner join ole_base_area ba ON db.area_id = ba.id
+		<where>
+			<if test="params.areaId != null and params.areaId != ''">
+				db.area_id = #{params.areaId}
+			</if>
+			<if test="params.id != null and params.id != ''">
+				and db.id = #{params.id}
+			</if>		
+		</where>
+	</select>
+	
+	<!-- 根据主体Id查询本主体及下级主体列表-->
+	<select id="getDeptListByDeptId" resultType="com.orhonit.ole.tts.dto.ps.PsDeptListDTO">
+			SELECT  bd.id,
+				bd.legal_person legalPerson,
+				bd.dept_property deptProperty,
+				bd.name, 
+				bd.code,
+				bd.name_spell nameSpell,
+				bd.address,
+				bd.parent_id parentId,
+				bd.legal_person legalPerson,
+				bd.tel
+			FROM ole_base_dept bd 
+			WHERE FIND_IN_SET(bd.id,getBaseDeptByParentId(#{params.deptId}))
+			and bd.del_flag=0
+			and bd.is_ps="1"
+	</select>
+	
+	<!-- 执法人员总数-->
+	<select id="getPersonCountByDeptId" resultType="String">
+			SELECT COUNT(obdp.name) 
+			FROM ole_base_area oba
+			left join ole_base_dept obd on oba.id=obd.area_id and obd.is_ps='1'	
+			left join ole_base_dept_person obdp on obdp.dept_id = obd.id and obdp.law_type=1
+		<where>
+			<if test="params.deptId != null and params.deptId != ''">
+				and obd.id = #{params.deptId}
+			</if>		
+		</where>
+	</select>
+	
+	<!-- 法律总数-->
+	<select id="getLawCountByDeptId" resultType="String">
+			SELECT COUNT(*) FROM ole_base_potence_law_map bplm
+			LEFT JOIN ole_base_potence_dept bpd ON bpd.potence_id = bplm.right_duty_id
+			LEFT JOIN ole_base_dept bd on bpd.dept_id=bd.id and bd.is_ps="1"
+			<where>
+				<if test="params.deptId != null and params.deptId != ''">
+					and bd.id = #{params.deptId}
+				</if>		
+			</where>
+	</select>
+	
+	<!-- 委托机构总数-->
+	<select id="getDeptAgentCountByDeptId" resultType="String">
+			SELECT COUNT(*) 
+			FROM ole_base_dept bd
+			WHERE bd.is_ps="1"
+			
+	</select>
+	
+	<!-- 权责数量-->
+	<select id="getPotenceCountByDeptId" resultType="String">
+			SELECT COUNT(p.name) 
+		FROM
+			ole_base_area a
+			left join ole_base_dept d on a.id=d.area_id and d.is_ps="1"
+			left join ole_base_potence_dept pd on d.id=pd.dept_id
+			left join ole_base_potence p on pd.potence_id=p.id
+		<where>
+			LENGTH(a.`code`)=6
+			<if test="params.deptId != null and params.deptId != ''">
+				and d.id = #{params.deptId}
+			</if>		
+		</where>
+	</select>
+	
+	<!-- 案件数量-->
+	<select id="getcaseCountByDeptId" resultType="String">			
+			SELECT COUNT(*) 
+			FROM ole_ef_case ec
+			LEFT JOIN ole_base_dept bd on ec.dept_id=bd.id and bd.is_ps="1"
+			<where>
+			ec.is_ps="1"
+			<if test="params.deptId != null and params.deptId != ''">
+				and bd.id = #{params.deptId}
+			</if>		
+		</where>
+	</select>
+	
+	<!-- 案件数量-->
+	<select id="findDeptByNameLikes" resultType="com.orhonit.ole.tts.dto.DeptDTO">			
+		select * from ole_base_dept 
+		where parent_id ='0' and name like #{name};
+	</select>
+	
+	<!-- 根据区域Id和区域类型查询主体-->
+	<select id="selDeptByDeptId" resultType="com.orhonit.ole.tts.dto.ps.PsDeptListDTO">
+		SELECT
+			bd.id,
+			bd.area_id areaId,
+			bd.short_name name,
+			bd.dept_property deptProperty
+		FROM
+			ole_base_area ba
+		LEFT JOIN ole_base_dept bd ON bd.area_id = ba.id and bd.is_ps="1" and bd.del_flag=0
+		<where>
+			
+			<if test="params.areaId != null and params.areaId != ''">
+			and	bd.area_id = #{params.areaId}
+			</if>
+			<if test="params.deptProperty != null and params.deptProperty != ''">
+				and bd.dept_property = #{params.deptProperty}
+			</if>		
+		</where>
+	</select>
+	<select id="findDeptInfoById" resultType="com.orhonit.ole.tts.dto.DeptDTO">
+		select * from ole_base_dept 
+		where id =#{deptId};
+	</select>
+	
+</mapper>

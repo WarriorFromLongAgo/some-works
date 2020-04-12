@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠬᠠᠤᠯᠢ ᠳᠥᠷᠢᠮ ᠦᠨ ᠬᠠᠮᠢᠶᠠᠷᠬᠤ ᠬᠦᠰᠦᠨᠦᠭ </title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/ztree/zTree.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/ztree/zTreeStyle/zTreeStyle.css" >
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+<script type="text/javascript">
+       orhonIMEinit = {
+           element: "",
+           ele_except: "",
+           editor: {
+               IME_Mount: true,
+               tinymce: "",
+               ueditor: "",
+           },
+           IME_cssurl: "",
+           IME_theme: "",
+           Output_Unicode: true,
+       };
+       Iframe_init = {
+           iframes: "",
+           ifr_except: "",
+           element: "",
+           ele_except: "",
+       };
+</script>
+<style>
+.ztree *{
+	font-family:OrhonChaganTig !important;
+}
+.ztree{
+	writing-mode:vertical-lr;
+}
+
+
+</style>
+</head>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:right;border-style: solid;width:81%;padding:0;writing-mode:vertical-lr;">
+            <div>
+                <header class="pages_header">
+					 <div align="left">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											
+											<label class="control-label" style="height:90px;">ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </label>
+											<input id="name" type="text" class="form-control" placeholder="ᠨᠡᠷᠡᠶᠢᠳᠦᠯ ">
+										</div>
+										<div class="form-group">
+											<label class="control-label" style="height:90px;">ᠨᠡᠷᠡᠶᠢᠳᠦᠯ  </label>
+											<input id="code" type="text" class="form-control" placeholder="ᠨᠡᠷᠡᠶᠢᠳᠦᠯ ">
+										</div>
+										<div class="form-group">
+											<label class="control-label" style="height:90px;">ᠬᠦᠴᠦᠨ ᠦ ᠳᠡᠰ  </label>
+											<input type="text" class="form-control" placeholder="ᠬᠦᠴᠦᠨ ᠦ ᠳᠡᠰ " id="effect_level">					
+										</div>
+										
+									</form>
+									<button id="searchBt" class="layui-btn layui-btn-small" permission="sys:log:query"><i class="layui-icon">&#xe615;</i>ᠬᠠᠶᠢᠬᠤ </button>
+										<button class="layui-btn layui-btn-small" permission="sys:law:add" onclick="addLrl()">
+		                                  <i class="layui-icon">&#xe608;</i> ᠨᠡᠮᠡᠬᠦ  
+		                                </button>
+										<button class="layui-btn layui-btn-small" onclick="downloadBaseListToExcel()">
+		                                  <i class="layui-icon">&#xe608;</i> ᠭᠠᠷᠭᠠᠬᠤ 
+		                                </button>
+								</td>
+								
+								<!--<td align="right">
+	                   				
+	                   			</td>
+	                   			
+	                   			<td align="right">
+	                   				
+	                   			</td>-->
+                            </tr> 
+                        </table>
+                    </div>
+                </header>
+                
+                <div class="list_mgl_right">
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr class="list_mgl">
+									<th style="display:none">id</th>
+									<th ><span>ᠺᠤᠳ᠋ᠺᠤᠳ᠋ </span></th>
+									<th style="height:100px;"><span>ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </span></th>
+									<th ><span>ᠬᠦᠴᠦᠨ ᠦ ᠳᠡᠰ</span></th>
+									<th style="height:100px;"> <span>ᠨᠡᠶᠢᠲᠡᠯᠡᠭᠰᠡᠨ  ᠰᠠᠯᠠᠭ᠎ᠠ ᠮᠥᠴᠢᠷ</span></th>
+									<th ><span>ᠨᠡᠶᠢᠳᠡᠯᠡᠭᠰᠡᠨ ᠴᠠᠭ ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ </span></th>
+									<th > <span>ᠠᠵᠢᠯᠯᠠᠬᠤ</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:left;width:18%;padding:0;margin:0;">        										
+			 <table style="width: 100%">
+                <tr>
+                	<td>
+						<span class="lilt_mgls" style="height:38px;line-height: 37px;padding-left:3%;">ᠬᠦᠴᠦᠨ  ᠦᠳᠡᠰ </span>	
+					</td>			
+                </tr> 
+                <tr>
+                	<td>
+                		<ul id="tree" class="ztree" style="width:100%;margin:0;overflow:auto;border-top:2px solid #ddd;"></ul>
+                	</td>
+                </tr>
+             </table>												
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.core.js"></script>
+<script type="text/javascript">
+var pers = checkPermission();
+layui.use(['layer','laydate'], function(){
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+    laydate.render({
+       elem: '#beginTime'
+    });
+    laydate.render({
+       elem: '#endTime'
+    });
+});
+
+function addLrl(){
+	 layer.open({
+	            type: 2,
+	            title: 'ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠳᠥᠷᠢᠮ ᠳᠣᠭᠲᠠᠭᠠᠯ ᠨᠡᠮᠡᠬᠦ',
+	            shade: [0],
+	            area: ['90%', '85%'],
+	            shift: 2,
+	            content: 'addLrl.html' //iframe的url，no代表不显示滚动条
+	        });
+	}
+	
+var example;
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+    		"language":lang_mg,
+        	"searching": false,
+        	"processing": false,
+        	"serverSide" : true,
+        	"ajax": {
+        		"url" : "/base/LrlAtts",
+        		"type":"get",
+        		"data":function(d){
+        			d.name = $('#name').val();
+        			d.code = $('#code').val();
+        			d.effect_level = $('#effect_level').val();
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+            "columns": [
+				{"data" : "id", "defaultContent" : "","sClass":"hidden"},
+				{"data" : "code", "defaultContent" : ""},
+				{"data" : "mgl_name", "defaultContent" : ""},
+				{"data" : "effect_level", "defaultContent" : ""},
+				{"data" : "pub_dept", "defaultContent" : ""},
+				{"data" : "publish_date", "defaultContent" : ""},
+				{ "data": "", "defaultContent": ""},
+            ],
+            "columnDefs": [
+				{"name" : "id", "targets" : 0,"sClass":"hidden"},
+				{"name" : "code", "targets" : 1},
+				//{"name" : "mgl_name", "targets" : 2},
+				{
+					"targets": 2,
+					"render": function (data, type, row) {
+                		var mgl_name = row['mgl_name'];
+                		if(mgl_name != null){
+                			return "<span id='mn_establish'>"+mgl_name+"</span>";
+                		}else{
+                			mgl_name = "";
+                		}
+                     }
+				},
+				//{"name" : "effect_level", "targets" : 3},
+				{
+					"targets": 3,
+					"render": function (data, type, row) {
+                		var effect_level = row['effect_level'];
+                		if(effect_level != null){
+                			return "<span id='mn_establish'>"+effect_level+"</span>";
+                		}else{
+                			effect_level = "";
+                		}
+                     }
+				},
+				//{"name" : "pub_dept", "targets" : 4},
+				{
+					"targets": 4,
+					"render": function (data, type, row) {
+                		var pub_dept = row['pub_dept'];
+                		if(pub_dept != null){
+                			return "<span id='mn_establish'>"+pub_dept+"</span>";
+                		}else{
+                			pub_dept = "";
+                		}
+                     }
+				},
+				{"name" : "publish_date", "targets" : 5},
+				{ 
+                	"targets": 6,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                        var edit = buttonEdit(id, "sys:law:update", pers);
+                		var del = buttonDel(id, "sys:law:del", pers);
+                		var config = buttonconfig(id, "sys:law:update", pers);
+                		var href=row['source_href'];
+                		if(href!=""&&href!=null){
+                			var btn = $("<a class='layui-btn layui-btn-normal layui-btn-mini' title='ᠨᠠᠷᠢᠨ ᠪᠠᠶᠢᠳᠠᠯ  ᠢ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠦᠵᠡᠬᠦ '  href='http://search.chinalaw.gov.cn/law/detail?LawID="+href+"'  target='_blank'><i class='layui-icon'>&#xe641;</i></a>");
+                    		var detail= btn.prop("outerHTML");
+                    		return edit+del+config+detail;
+                		}else{
+                			 return edit+del+config;
+                		}
+                     }
+                }
+              ],
+           "order": [[ 5, "desc" ]]
+        } );
+}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+function update(id){
+	layer.open({
+        type: 2,
+        title: 'ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠬᠠᠤᠯᠢ ᠳᠦᠷᠢᠮ  ᠢ ᠬᠠᠯᠠᠬᠤ ',
+        shade: [0],
+        area: ['90%', '90%'],
+        shift: 2,
+        content: "updateLrl.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+	function del(id){
+		$.ajax({
+			type : 'get',
+			url : '/base/lrltionws/ishave/'+id,
+			async : false,
+			success : function(data) {
+				if(data.name==null||data.name==""){
+					layer.confirm('ᠬᠠᠰᠤᠬᠤ ᠪᠠᠷ ᠰᠢᠢᠳᠦᠭᠰᠡᠨ ᠤᠤ', {title:'ᠵᠠᠩᠭᠢ ',btn : [ 'ᠵᠠ', 'ᠦᠬᠡᠢᠢᠰᠬᠡᠬᠦ' ]
+				    }, function() {
+				        $.ajax({
+				            type : 'delete',
+				            url : '/base/lrltionws/'+id,
+				            success : function(data) {
+				                example.ajax.reload();
+				                layer.msg("ᠬᠠᠰᠤᠪᠠ");
+				            }
+				        });
+				        
+				        layer.close(1);
+				    });
+				} else {
+					layer.msg(data.name);
+				}
+			}
+		});
+	}
+	
+	function addCon(id){
+		location.href='lrlDetailedList.html?id='+id
+	}
+
+init();
+
+
+function downloadBaseListToExcel(){
+	var name = $('#name').val();
+	var code = $('#code').val();
+	var beginTime = $('#beginTime').val();
+	var endTime = $('#endTime').val();
+	
+	var download = document.createElement("a");
+	download.href="/base/outputExcelFile/excel?type=Law&name="+name+"&code="+code+"&beginTime="+ beginTime+"&endTime="+endTime;
+	download.click();
+	
+	layer.msg("ᠪᠢᠴᠢᠭ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠪᠣᠯᠭᠠᠵᠤ ᠪᠤᠢ    ᠲᠦᠷ ᠬᠦᠯᠢᠶᠡᠵᠦ ᠪᠠᠶᠢᠭᠠᠷᠠᠢ", {anim:5});
+}
+
+var setting = {
+		callback: {
+			onClick: zTreeOnClick
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+
+function zTreeOnClick(event, treeId, treeNode) {
+	$('#effect_level').val(treeNode.name)
+	example.ajax.reload();
+	
+};
+
+$(document).ready(function(){
+	$.ajax({
+    	type : 'get',
+   		url : '/base/LawLevel/parentsTree/',
+    	success : function(data) {
+    		console.log(data);
+    		var data1 = [];
+    		for(var i = 0; i < data.length; i++){
+    			var obj = {};
+    			obj.id = data[i].id;
+    			obj.name = data[i].mglName;
+    			obj.pId = data[i].pId;
+    			data1.push(obj);
+    		}
+    		$.fn.zTree.init($("#tree"), setting, data1);
+    		var treeObj = $.fn.zTree.getZTreeObj("tree");
+            var nodes = treeObj.getNodes();//得到该tree  
+            for (var i = 0; i < nodes.length; i++) { //选中第一个节点  
+                treeObj.expandNode(nodes[i], true, true, true);//打开节点 ，第一个参数表示哪个节点，第二个参数表示展开还是关闭，第三个参数表示 是否打开全部子孙节点   
+            }
+    	}
+	});
+});
+</script>

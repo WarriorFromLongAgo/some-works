@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.DocumentDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.DocumentEntity" id="documentMap">
+        <result property="documentId" column="document_id"/>
+        <result property="fwjg" column="fwjg"/>
+        <result property="fwzh" column="fwzh"/>
+        <result property="jjcd" column="jjcd"/>
+        <result property="mj" column="mj"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="blqk" column="blqk"/>
+        <result property="type" column="type"/>
+        <result property="createby" column="createby"/>
+        <result property="createName" column="create_name"/>
+        <result property="createdate" column="createdate"/>
+        <result property="sh" column="sh"/>
+        <result property="auditTime" column="audit_time"/>
+        <result property="number" column="number"/>
+        <result property="remarks" column="remarks"/>
+        <result property="shyy" column="shyy"/>
+        <result property="userId" column="user_id"/>
+        <result property="addresseeName" column="addressee_name"/>
+        <result property="mainLower" column="main_lower"/>
+        <result property="copyLower" column="copy_lower"/>
+        <result property="workId" column="work_id"/>
+        <result property="workName" column="work_name"/>
+        <result property="leadId" column="lead_id"/>
+        <result property="leadName" column="lead_name"/>
+        <result property="ministerId" column="minister_id"/>
+        <result property="ministerName" column="minister_name"/>
+    </resultMap>
+
+    <insert id="insertDocument" parameterType="com.orhonit.modules.generator.entity.DocumentEntity">
+        insert into tb_document
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="documentId != null">
+                document_id,
+            </if>
+            <if test="fwjg != null">
+                fwjg,
+            </if>
+            <if test="fwzh != null">
+                fwzh,
+            </if>
+            <if test="jjcd != null">
+                jjcd,
+            </if>
+            <if test="mj != null">
+                mj,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="blqk != null">
+                blqk,
+            </if>
+            <if test="createby != null">
+                createby,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="createdate != null">
+                createdate,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="addresseeName != null">
+                addressee_name,
+            </if>
+            <if test="mainLower != null">
+                main_lower,
+            </if>
+            <if test="copyLower != null">
+                copy_lower,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="documentId != null">
+                #{documentId},
+            </if>
+            <if test="fwjg != null">
+                #{fwjg},
+            </if>
+            <if test="fwzh != null">
+                #{fwzh},
+            </if>
+            <if test="jjcd != null">
+                #{jjcd},
+            </if>
+            <if test="mj != null">
+                #{mj},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="blqk != null">
+                #{blqk},
+            </if>
+            <if test="createby != null">
+                #{createby},
+            </if>
+            <if test="createName != null">
+                #{createName},
+            </if>
+            <if test="createdate != null">
+                #{createdate},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="addresseeName != null">
+                #{addresseeName},
+            </if>
+            <if test="mainLower != null">
+                #{mainLower},
+            </if>
+            <if test="copyLower != null">
+                #{copyLower},
+            </if>
+            <if test="number != null">
+                #{number},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+        </trim>
+    </insert>
+
+
+</mapper>

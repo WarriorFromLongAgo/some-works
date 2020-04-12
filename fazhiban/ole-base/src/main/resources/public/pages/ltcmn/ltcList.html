@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠬᠠᠮᠢᠶᠠᠷᠤᠯᠲᠠ ᠶᠢᠨ ᠬᠦᠰᠦᠨᠦᠭ </title>
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+
+<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+<script type="text/javascript">
+       orhonIMEinit = {
+           element: "",
+           ele_except: "",
+           editor: {
+               IME_Mount: true,
+               tinymce: "",
+               ueditor: "",
+           },
+           IME_cssurl: "",
+           IME_theme: "",
+           Output_Unicode: true,
+       };
+       Iframe_init = {
+           iframes: "",
+           ifr_except: "",
+           element: "",
+           ele_except: "",
+       };
+</script>
+<style type="text/css">
+.list_mgl_right{
+	writing-mode:vertical-lr;
+}
+</style>
+</head>
+<body>
+	<div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div>
+				<header class="pages_header">
+					<div align="left">
+						<table style="width: 100%">
+							<tr>
+								<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											<label class="control">ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </label>
+											<input id="nickname" type="text" class="form-control"
+											placeholder="ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ ">
+										</div>
+										<div class="form-group">
+											<label class="control">ᠡᠭᠦᠳᠦᠨ ᠪᠠᠶᠢᠭᠤᠯᠤᠭᠰᠠᠨ ᠴᠠᠭ </label>
+											<input type="text"
+											class="form-control time" placeholder="ᠡᠭᠦᠳᠦᠨ ᠪᠠᠶᠢᠭᠤᠯᠤᠭᠰᠠᠨ ᠴᠠᠭ" id="beginTime">
+										</div>
+										
+										<div class="form-group">
+											<input type="text" class="form-control time" placeholder="ᠳᠠᠭᠤᠰᠬᠤ ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ"
+												id="endTime"> 
+										</div>
+										<div class="form-group" style="height: 267px">
+											<label class="control">ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ </label>
+											<select
+												class="input-sm" id="flag" name="flag">
+												<option value="">ᠪᠥᠬᠥᠳᠡ </option>
+											</select>
+										</div>
+										<button id="searchBt" class="layui-btn layui-btn-small"
+											permission="sys:log:query">
+											<i class="layui-icon">&#xe615;</i>ᠬᠠᠶᠢᠬᠤ 
+										</button>
+										<button class="layui-btn layui-btn-small" permission="sys:dept:add" onclick="addLtc()">
+											<i class="layui-icon">&#xe608;</i> ᠨᠡᠮᠡᠬᠦ  
+										</button>
+										<button class="layui-btn layui-btn-small" onclick="downloadBaseListToExcel()">
+	                                      <i class="layui-icon">&#xe608;</i> ᠭᠠᠷᠭᠠᠬᠤ 
+	                                    </button>
+									</form>
+								</td>
+
+								<!--<td align="right">
+									
+								</td>
+								
+								<td align="right">
+	                   				
+	                   			</td>-->
+							</tr>
+						</table>
+					</div>
+				</header>
+				<div class="list_mgl_right">
+					<div class="widget-body no-padding">
+						<table id="dt-table"
+							class="table table-striped table-bordered table-hover"
+							style="width: 100%">
+							<thead>
+								<tr>
+								</tr>
+								<tr class="list_mgl">
+									<th width="1%" style="display:none">id</th>
+									<th style="height:100px;"> <span>ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </span></th>
+									<th> <span>ᠬᠠᠤᠯᠢ ᠪᠠᠷ ᠲᠣᠭᠲᠠᠭᠠᠭᠰᠠᠨ ᠲᠥᠯᠥᠭᠡᠯᠡᠭᠴᠢ</span></th>
+									<th style="height:100px;"> <span>ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ</span></th>
+									<th><span>ᠪᠡᠶᠡᠴᠢ ᠴᠣᠭᠴᠠ ᠶᠢᠨ ᠬᠠᠶ᠋ᠢᠭ </span></th>
+									<th><span>ᠡᠭᠦᠳᠦᠨ ᠪᠠᠶᠢᠭᠤᠯᠤᠭᠰᠠᠨ ᠴᠠᠭ</span></th>
+									<th><span>ᠠᠵᠢᠯᠯᠠᠬᠤ </span></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript"
+	src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+	src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/constans.js"></script>	
+<script src="../../js/select2/js/select2.full.js"></script>
+<script type="text/javascript">
+$(function () {
+    console.log("ready");
+    console.log($("select"));
+    $('select').select2();
+    $(document)
+        .on('click', '.select2.select2-container', function () {
+            var self = $(this);
+            setTimeout(function () {
+                $('.select2-container--open').height(self.height()).width(self.width());
+                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+            }, 100);
+        })
+        // .on("DOMNodeInserted", function (e) {
+        //     $('select').select2();
+        //
+        // })
+
+})
+var pers = checkPermission();
+var example;
+layui.use(['layer','laydate'], function(){
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+    laydate.render({
+       elem: '#beginTime'
+    });
+    laydate.render({
+       elem: '#endTime'
+    });
+});
+
+getDictList("2065","flag");
+
+function update(id){
+	layer.open({
+        type: 2,
+        title: 'ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ ᠭᠤᠤᠯ ᠴᠤᠭᠴᠠ ᠶᠢ ᠥᠭᠡᠷᠡᠴᠢᠯᠡᠬᠦ ',
+        shade: [0],
+        area: ['90%', '80%'],
+        shift: 2,
+        content: "updateLtc.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+	function del(id){
+		$.ajax({
+			type : 'get',
+			url : '/base/ltctions/ishave/'+id,
+			async : false,
+			success : function(data) {
+				if(data.name==null||data.name==""){
+					layer.confirm('ᠬᠠᠰᠤᠬᠤ ᠪᠠᠷ ᠰᠢᠢᠳᠦᠭᠰᠡᠨ ᠤᠤ',{title:'ᠵᠠᠩᠭᠢ ',btn : [ 'ᠵᠠ', 'ᠦᠬᠡᠢᠢᠰᠬᠡᠬᠦ' ]
+				    }, function() {
+				        $.ajax({
+				            type : 'delete',
+				            url : '/base/ltctions/'+id,
+				            success : function(data) {
+				                example.ajax.reload();
+				                layer.msg("ᠬᠠᠰᠤᠪᠠ");
+				            }
+				        });
+				        
+				        layer.close(1);
+				    });
+				} else {
+					layer.msg(data.name);
+				}
+			}
+		});
+	}
+	
+function addLtc(){
+	 layer.open({
+	            type: 2,
+	            title: 'ᠵᠠᠭᠠᠯᠳᠤᠯᠭ᠎ᠠ ᠶᠢᠨ ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ',
+	            shade: [0],
+	            area: ['90%', '80%'],
+	            shift: 2,
+	            content: 'addLtc.html' //iframe的url，no代表不显示滚动条
+	        });
+	}
+	
+function updateLtc(){
+	 layer.open({
+	            type: 2,
+	            title: 'ᠵᠠᠭᠠᠯᠳᠤᠯᠭ᠎ᠠ ᠶᠢᠨ ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ',
+	            shade: [0],
+	            area: ['90%', '70%'],
+	            shift: 2,
+	            content: 'updateLtc.html' //iframe的url，no代表不显示滚动条
+	        });
+	}
+	
+function addCon(id){
+	layer.open({
+        type: 2,
+        title: 'ᠭᠤᠤᠯ ᠴᠤᠭᠴᠠ ᠶᠢᠨ ᠡᠷᠬᠡ ᠬᠠᠷᠢᠭᠤᠴᠠᠯᠭ᠎ᠠ ᠶᠢᠨ ᠬᠣᠯᠪᠣᠭᠳᠠᠯ',
+        shade: [0],
+        area: ['90%', '99%'],
+        shift: 2,
+        content: "ltcConnLarList.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+    		"language":lang_mg,
+        	"searching": false,
+        	"processing": false,
+        	"serverSide" : true,
+        	"ajax": {
+        		"url" : "/base/LtcAtts",
+        		"type":"get",
+        		"data":function(d){
+        			d.lawtype = $('#flag').val();
+        			d.name = $('#nickname').val();
+        			d.beginTime = $('#beginTime').val();
+    				d.endTime = $('#endTime').val();
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",
+            "columns": [
+				{"data" : "id", "defaultContent" : "","sClass":"hidden"},
+				{"data" : "mgl_name", "defaultContent" : ""},
+				{"data" : "mgl_legal_person", "defaultContent" : ""},
+				{"data" : "law_type", "defaultContent" : ""},
+				{"data" : "mgl_address", "defaultContent" : ""},
+				{"data" : "create_date", "defaultContent" : ""},
+				{ "data": "", "defaultContent": ""},
+
+                
+            ],
+            "columnDefs": [
+				{"name" : "id", "targets" : 0,"sClass":"hidden"},
+				//{"name" : "mgl_name", "targets" : 1},
+				{
+					"targets": 1,
+					"render": function (data, type, row) {
+                		var mgl_name = row['mgl_name'];
+                		if(mgl_name != null){
+                			return "<span id='mn_establish'>"+mgl_name+"</span>";
+                		}else{
+                			mgl_name = "";
+                		}
+                     }
+				},
+				//{"name" : "mgl_legal_person", "targets" : 2},
+				{
+					"targets": 2,
+					"render": function (data, type, row) {
+                		var mgl_legal_person = row['mgl_legal_person'];
+                		if(mgl_legal_person != null){
+                			return "<span id='mn_establish'>"+mgl_legal_person+"</span>";
+                		}else{
+                			mgl_legal_person = "";
+                		}
+                     }
+				},
+				{ 
+                	"targets": 3,
+                	"render": function (data, type, row) {
+                		var status = row['law_type'];
+                		var a = "";
+                		if(status =="2"){
+                			a = "<span id='mn_establish'>ᠬᠢᠨᠠᠯᠲᠠ </span>";
+                		} else if(status =="1"){
+                			a = "<span id='mn_establish'>ᠬᠠᠤᠯᠢ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠬᠦ </span>";
+                		}  else {
+                			a="";
+                		}
+                    	return a;
+                  	}
+                },
+              //{"name" : "mgl_address", "targets" : 4},
+                {
+					"targets": 4,
+					"render": function (data, type, row) {
+                		var mgl_address = row['mgl_address'];
+                		if(status != null){
+                			return "<span id='mn_establish'>"+mgl_address+"</span>";
+                		}else{
+                			mgl_address = "";
+                		}
+                     }
+				},
+				{"name" : "create_date", "targets" : 5},
+				{ 
+                	"targets": 6,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                        var edit = buttonEdit(id, "sys:dept:update", pers);
+                		var del = buttonDel(id, "sys:dept:del", pers);
+                		var config = buttonconfig(id, "sys:dept:update", pers);
+                        return edit+del+config;
+                     }
+                }
+
+              ],
+           "order": [[ 5, "desc" ]]
+        } );
+    }
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+init();
+
+function downloadBaseListToExcel(){
+	var lawType = $('#flag').val();
+	var name = $('#nickname').val();
+	var beginTime = $('#beginTime').val();
+	var endTime = $('#endTime').val();
+	
+	var download = document.createElement("a");
+	download.href="/base/outputExcelFile/excel?type=dept&name="+name+"&lawType="+lawType+"&beginTime="+beginTime+"&endTime="+endTime;
+	download.click();
+	
+	layer.msg("ᠪᠢᠴᠢᠭ ᠮᠠᠲ᠋ᠧᠷᠢᠶᠠᠯ ᠪᠣᠯᠭᠠᠵᠤ ᠪᠤᠢ。。。 ᠲᠦᠷ ᠬᠦᠯᠢᠶᠡᠵᠦ ᠪᠠᠶᠢᠭᠠᠷᠠᠢ。。。", {anim:5});
+}
+</script>

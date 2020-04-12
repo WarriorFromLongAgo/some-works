@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>权责清单列表</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/ztree/zTree.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/ztree/zTreeStyle/zTreeStyle.css" >
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+</head>
+<style>
+	.textbox{border-radius: 0;height:30px;}
+	#dt-table td a{display:block;width:100px !important;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+    #dt-table td.ellipsis{max-width:85px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+    .layui-layer-title {background-color: #5b8bff;color:#333 !important;}
+</style>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:right;width:70%;padding:0;>
+            <div>
+                <header style="height: 100%">
+					 <div align="left">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											权责名称：
+											<input id="name" type="text" class="form-control" placeholder="权责名称">
+											权责类别： <select
+												class="form-control input-sm" id="type">
+												    <option value="">全部</option>
+											</select>
+											
+											<input type="text" class="form-control" placeholder="部门id" id="deptId" style="display:none">
+											<!-- 发布日期：<input type="text" class="form-control" placeholder="结束时间" id="endTime"> -->
+											<button id="searchBt" class="layui-btn layui-btn-small" permission="sys:log:query"><i class="layui-icon">&#xe615;</i>搜索</button>
+										</div>
+									</form>
+								</td>
+								
+								<td align="right">
+	                   				<button class="layui-btn layui-btn-small" permission="sys:potence:add" onclick="addLar()">
+                                      <i class="layui-icon">&#xe608;</i> 添加
+                                    </button>
+	                   			</td>
+	                   			
+	                   			<td align="right">
+	                   				<button class="layui-btn layui-btn-small" onclick="downloadBaseListToExcel()">
+                                      <i class="layui-icon">&#xe609;</i> 导出
+                                    </button>
+	                   			</td>
+                            </tr> 
+                        </table>
+                    </div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr>
+									<th width="1%" style="display:none">id</th>
+									<th width="10%">权责代码</th>
+									<th width="40%">权责名称</th>
+									<th width="10%">创建人</th>
+									<th width="10%">创建日期</th>									
+									<th width="14%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div  style="float:left;width:30%;">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:left;width:100%;padding:0;margin:0;">        										
+			 <table style="width: 100%">
+                <tr>
+                	<td>
+						<p style="height:38px;line-height: 37px;padding-left:3%;border-right:2px solid #ddd;">区域：</p>	
+					</td>			
+                </tr> 
+                <tr>
+                	<td>
+                		<ul id="areaTree" class="ztree" style="height:100%;width:100%;margin:0;overflow:auto;border-top:2px solid #ddd;"></ul>
+                	</td>
+                </tr>
+             </table>												
+        </div>
+         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float:left;width:100%;padding:0;margin:0;overflow:hidden;">        										
+			 <table style="width: 100%">
+                <tr>
+                	<td>
+						<p style="height:38px;line-height: 37px;padding-left:3%;">执法主体：</p>	
+					</td>			
+                </tr> 
+                <tr>
+                	<td>
+                		<ul id="deptTree" class="ztree" style="height:514px;width:100%;margin:0;overflow:auto;border-top:2px solid #ddd;"></ul>
+                	</td>
+                </tr>
+             </table>												
+        </div>
+        </div>
+    </div>
+</body>
+</html>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../js/my/permission.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/jquery.ztree.core.js"></script>
+    <script type="text/javascript">
+var pers = checkPermission();
+layui.use(['layer','laydate'], function(){
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+    laydate.render({
+       elem: '#beginTime'
+    });
+    laydate.render({
+       elem: '#endTime'
+    });
+});
+
+getDictList(dict.pro_type,"type");
+
+function addLar(){
+	 layer.open({
+	            type: 2,
+	            title: ['权责清单添加','background-color:#5b8bff;'],
+	            shade: [0],
+	            area: ['90%', '80%'],
+	            shift: 2,
+	            content: 'addLar.html' //iframe的url，no代表不显示滚动条
+	        });
+	}
+	
+var example;
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+        	"searching": false,
+        	"processing": false,
+        	"serverSide" : true,
+            "ordering": false,
+        	"ajax": {
+        		"url" : "/base/LarLists",
+        		"type":"get",
+        		"data":function(d){
+        			d.name = $('#name').val();
+        			d.code = $('#type').val();    			
+        			d.deptId = $('#deptId').val();
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+            "columns": [
+				{"data" : "id", "defaultContent" : "","sClass":"hidden"},
+				{"data" : "code", "defaultContent" : ""},
+				{"data" : "name", "defaultContent" : ""},
+				{"data" : "create_name", "defaultContent" : ""},
+				{"data" : "create_date", "defaultContent" : ""},				
+				{"data": "", "defaultContent": ""},
+            ],
+            "columnDefs": [
+				{"name" : "id", "targets" : 0,"sClass":"hidden"},
+				{"name" : "code", "targets" : 1},
+				{"name" : "name", "targets" : 2,"sClass":"ellipsis"},
+				{"name" : "create_name", "targets" : 3},
+				{"name" : "create_date", "targets" : 4},
+				{ 
+                	"targets": 5,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                	    var name= row['name'];
+                        var edit = buttonEdit(id, "sys:potence:update", pers);
+                		var del = buttonDel(id, "sys:potence:del", pers);
+                		var config = buttonPotenceconfig(id,name,"sys:potence:update", pers);
+                        return edit+config+del;
+                     }
+                }
+              ],
+           "order": [[ 4, "desc" ]]
+        } );
+}
+
+function update(id){
+	layer.open({
+        type: 2,
+        title: ['权责清单修改','background-color:#5b8bff;'],
+        shade: [0],
+        area: ['90%', '80%'],
+        shift: 2,
+        content: "updateLar.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+	function del(id){
+		$.ajax({
+			type : 'get',
+			url : '/base/lartions/ishave/'+id,
+			async : false,
+			success : function(data) {
+				if(data.name==null||data.name==""){
+					layer.confirm('确定要删除吗？', {
+				        btn : [ '确定', '取消' ]
+				    }, function() {
+				        $.ajax({
+				            type : 'delete',
+				            url : '/base/lartions/'+id,
+				            success : function(data) {
+				                example.ajax.reload();
+				                layer.msg("删除成功");
+				            }
+				        });
+				        
+				        layer.close(1);
+				    });
+				} else {
+					layer.msg(data.name);
+				}
+			}
+		});
+	}
+	
+	function addCon(id,name){
+		 parent.layer.open({
+		            type: 2,
+		            title: ['权责关联添加','background-color:#5b8bff;'],
+		            shade: [0],
+		            area: ['90%', '88%'],
+		            shift: 2,
+		            content: 'pages/lar/LarConnLawList.html?id=' + id+'&name='+encodeURI(name) //iframe的url，no代表不显示滚动条
+		        });
+		}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+init();
+
+function downloadBaseListToExcel(){
+	var name = $('#name').val();
+	var code = $('#type').val();
+	var beginTime = $('#beginTime').val();
+	var endTime = $('#endTime').val();
+	
+	var download = document.createElement("a");
+	download.href="/base/outputExcelFile/excel?type=right&name="+name+"&code="+code+"&beginTime="+beginTime+"&endTime="+endTime;
+	download.click();
+	
+	layer.msg("生成文件中。。。请稍候。。。", {anim:5});
+}
+var setting = {
+		callback: {
+			onClick: areaTreeOnClick
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+var settings = {
+		callback: {
+			onClick: deptTreeOnClick
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+
+function areaTreeOnClick(event, treeId, treeNode) {
+	$.ajax({
+    	type : 'get',
+   		url : '/base/ltctions/deptTree/'+treeNode.id,
+    	success : function(data) {
+    		$.fn.zTree.init($("#deptTree"), settings, data);		
+    	}
+	});
+	
+};
+
+
+function deptTreeOnClick(event, treeId, treeNode) {
+	$('#deptId').val(treeNode.id)
+	example.ajax.reload();	
+};
+
+$(document).ready(function(){
+	$.ajax({
+    	type : 'get',
+   		url : '/base/LesLists/areaTree/',
+    	success : function(data) {
+    		$.fn.zTree.init($("#areaTree"), setting, data);
+    		var treeObj = $.fn.zTree.getZTreeObj('areaTree');
+            var nodes = treeObj.getNodes();//得到该tree  
+            for (var i = 0; i < nodes.length; i++) { //选中第一个节点  
+                treeObj.expandNode(nodes[i], true, true, true);//打开节点 ，第一个参数表示哪个节点，第二个参数表示展开还是关闭，第三个参数表示 是否打开全部子孙节点   
+            }
+    	}
+	});
+});
+
+</script>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.sys.dao.AppBannerDao">
+
+<!-- Banner图列表查询-->
+	<select id="list" resultType="com.orhonit.ole.sys.dto.AppBannerDTO">
+		SELECT ab.id  as id,
+			   ab.url as url, 
+			   ab.file_name as file_name,
+			   ab.content as content,
+			   ab.sort as sort,
+			   sd.enum_desc as if_show,
+			   ab.role_id as role_id,
+			   ab.create_date as create_date,
+			   sr.name as role_name
+		FROM ole_app_banner ab
+		LEFT JOIN ole_sys_role sr ON ab.role_id = sr.id
+		LEFT JOIN ole_sys_dict sd ON ab.if_show = sd.enum_value AND sd.type_value = '1709'
+		<where>
+			del_flag=1
+			<if test="params.content != null and params.content != ''">
+				and content like concat('%', #{params.content}, '%')
+			</if>
+			<if test="params.roleId != null and params.roleId != ''">
+				and role_id =#{params.roleId}
+			</if>
+			<if test="params.ifShow != null and params.ifShow != ''">
+				and if_show =#{params.ifShow}
+			</if>
+		</where>
+		order by create_date desc
+		<if test="start != null and length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<!--Banner图列表查询总数-->
+	<select id="count" resultType="int">
+		SELECT count(*) FROM ole_app_banner
+		<where>
+			del_flag=1
+			<if test="params.describe != null and params.describe != ''">
+				and describe like concat('%', #{params.describe}, '%')
+			</if>
+			<if test="params.roleId != null and params.roleId != ''">
+				and role_id =#{params.roleId}
+			</if>
+		</where>
+		;	
+	</select>
+	
+	<select id="findByRoleId" resultType="com.orhonit.ole.sys.dto.AppBannerDTO">
+		SELECT ab.id  as id,
+			   ab.url as url, 
+			   ab.file_name as file_name,
+			   ab.content as content,
+			   ab.sort as sort,
+			   sd.enum_desc as if_show,
+			   ab.role_id as role_id,
+			   ab.create_date as create_date,
+			   sr.name as role_name
+		FROM ole_app_banner ab
+		LEFT JOIN ole_sys_role sr ON ab.role_id = sr.id
+		LEFT JOIN ole_sys_dict sd ON ab.if_show = sd.enum_value AND sd.type_value = '1709'
+		WHERE
+			ab.del_flag=1
+			and if_show='1'
+			and ab.role_id =#{roleId}
+			order by sort asc
+	</select>
+
+</mapper>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../layui/css/layui.css" rel="stylesheet" media="all">
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<form class="form-horizontal" onsubmit="return false" enctype="multipart/form-data" style="padding: 10px;" id="form">
+			<fieldset>
+
+				<div class="form-group">
+
+					<label class="col-md-2 control-label">新版APK<span class="btx">*</span></label>
+					<div class="col-md-10">
+						<input class="form-control not-null" type="file" name="file" id="file" iname="APK文件" accept=".apk">
+					</div>
+					<div class="col-md-12" id="fileup" hidden="hidden">
+						<div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="fileprogress">
+							<div class="layui-progress-bar" lay-percent="0%"></div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">版本号<span class="btx">*</span></label>
+					<div class="col-md-4">
+						<input class="form-control not-null" placeholder="请输入版本号" type="text" id="versionCode" name="versionCode" iname="版本号">
+					</div>
+					 <label class="col-md-2 control-label">最低支持版本号<span class="btx">*</span></label>
+					<div class="col-md-4">
+						<input class="form-control not-null" placeholder="请输入最低支持版本号" type="text" id="minSupport" name="minSupport" iname="最低支持版本号" value="1">
+					</div> 
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">版本名称<span class="btx">*</span></label>
+					<div class="col-md-10">
+						<input class="form-control not-null" placeholder="请输入版本名称" type="text" id="versionName" name="versionName" iname="版本名称">
+					</div> 
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">更新日志<span class="btx">*</span></label>
+					<div class="col-md-10">
+						<textarea class="form-control not-null" rows="8" placeholder="请输入更新日志" type="text" id="content" name="content" iname="更新日志"></textarea>
+					</div>
+				</div>
+				<div class="form-actions">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="button" id="submitBtn"
+								onclick="add()">
+								<i class="fa fa-save"></i> 提交
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript"
+		src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script src="../../js/moment-with-locales.min.js"></script>
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- 实例化编辑器 -->
+	<script type="text/javascript">
+		var element;
+		layui.use([ 'layer', 'element' ], function() {
+			var layer = layui.layer;
+			element = layui.element;
+		});
+		function progressHandlingFunction(event) {
+		    if (event.lengthComputable) {  
+		      var value = (event.loaded / event.total * 100 | 0);  
+		      element.progress('fileprogress', value+'%');
+		    }  
+		  }  
+		function add() {
+			var versionCode = $("#versionCode").val();
+			var versionName = $("#versionName").val();
+			var content = $("#content").val();
+			var minSupport = $("#minSupport").val();
+			var formData = new FormData();
+			formData.append('versionCode', versionCode);
+			formData.append('versionName', versionName);
+			formData.append('content', content);
+			formData.append('minSupport', minSupport);
+			formData.append('file', $('#file')[0].files[0]);
+			if($('#file')[0].files[0] == null){
+				layer.msg("APK文件必须上传", {anim : 6});
+				return;
+			}
+			if(versionCode == ''){
+				layer.msg("版本号不能为空", {anim : 6});
+				return;
+			}
+			if(versionName == ''){
+				layer.msg("版本名称不能为空", {anim : 6});
+				return;
+			}
+			
+			$.ajax({
+				//url : '/auth/version/save?versionCode='+versionCode + '&versionName='+versionName + '&content='+content + '&minSupport='+minSupport,
+				url : '/auth/version/save',
+			    type: 'POST',
+			    cache: false,
+			    data : formData,
+			    processData: false,
+			    contentType: false,
+			    beforeSend :function (e) {
+			    	$("#fileup").removeAttr("hidden");
+			    },  
+		        xhr :function () {//这里我们先拿到jQuery产生的 XMLHttpRequest对象，为其增加 progress 事件绑定，然后再返回交给ajax使用  
+		        	var myXhr = $.ajaxSettings.xhr();
+		          	if(myXhr.upload){  
+		        	  /**
+		         	   *	progress事件会在浏览器接收新数据期间周期性地触发。
+		        	   *	而onprogress事件处理程序会接收到一个event对象，其target属性是XHR对象，但包含着三个额外的属性：lengthComputable、loaded和total。
+		        	   *	其中，lengthComputable是一个表示进度信息是否可用的布尔值，loaded表示已经接收的字节数，
+		        	   *	loaded表示根据Content-Length响应头部确定的预期字节数。
+		        	  */
+		           		myXhr.upload.addEventListener('progress',progressHandlingFunction, false)
+		          	}
+		          	return myXhr;
+		        },  
+			    success : function(data,a,e) {
+			    	if(data.code == 0){
+			    		layer.msg("发布成功", {shift : -1,time : 1000},function() {
+							window.parent.example.ajax.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+			    	}else{
+			    		layer.msg("发布失败！</br>版本号和版本名称不能使用已有的内容", {anim : 6});
+			    	}
+					
+				}
+			})
+		}
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.attendance.mapper.AttendanceGroupMapper">
+    <insert id="insertAttendanceGroup">
+        insert into attendance_group (school_id,title,created_by) values (#{school_id},#{title},#{user_id})
+    </insert>
+    <delete id="deleteAttendanceGroup">
+        delete from attendance_group where id = #{attendanceGroupId}
+    </delete>
+    <update id="updateAttendanceGroup">
+        update attendance_group set title = #{title},updated_by = #{user_id} where id = #{id}
+    </update>
+    <select id="selectAttendanceGroupId" resultType="String">
+        select * from attendance_group_time where attendance_group_id = #{attendanceGroupId} limit 1
+    </select>
+
+</mapper>

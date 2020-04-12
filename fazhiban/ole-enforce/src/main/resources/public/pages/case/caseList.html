@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>案件受理列表</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+</head>
+<style>
+#dt-table td a{display:block;width:100px !important;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+#dt-table td.ellipsis{max-width:65px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+</style>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 80%">
+                    <div align="left">
+	                    <table style="width: 100%">
+	                   		<tr>
+	                   			<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											案件编号：
+											<input id="id" type="text" class="form-control" placeholder="请输入案件编号">
+											案件名称：
+											<input id="caseName" type="text" class="form-control" placeholder="请输入案件名称">
+											主执法人员：
+											<input id="zzfryName" type="text" class="form-control" placeholder="请输入执法人员">
+											<div class="form-group">
+												案发时间：
+												<input id="caseTime" placeholder="请输入案发时间" class="form-control" type="text" >
+ 												<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+											</div>
+										</div>
+									</form>
+								</td>
+								<td align="right">
+	                   				<button class="layui-btn layui-btn-small" onclick="addCase()">
+                                      <i class="layui-icon">&#xe608;</i> 添加
+                                    </button>
+	                   			</td>
+	                   			<td align="right">
+	                   				<button class="layui-btn layui-btn-small" onclick="downloadCaseListToExcel()">
+                                      <i class="layui-icon">&#xe608;</i> 导出
+                                    </button>
+	                   			</td>
+	                   		</tr> 
+	                    </table>
+					</div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%;white-space: nowrap;">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr>
+                                    <th>案件名称</th>
+                                    <th>案件编号</th>
+                                    <th>执法主体</th>
+                                    <th>案源</th>
+                                    <th>案件状态</th>
+                                    <th>案发地址</th>
+                                    <th>案发时间</th>
+                                    <th>收件时间</th>
+                                    <th>指派时间</th>
+                                    <!-- <th>收件人</th> -->
+                                    <th>主执法人员</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+<script src="../../js/moment-with-locales.min.js"></script>  
+  
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/select2/select2.full.min.js"></script>  
+<script src="../../js/select2/zh-CN.js"></script>  
+<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+<script type="text/javascript">
+var pers = checkPermission();
+var userI,example,userKeyId;
+
+ $('#caseTime').datetimepicker({  
+    format: 'YYYY-MM-DD ',  
+    locale: moment.locale('zh-cn')  
+}); 
+        
+function init(){
+	example = 
+	$('#dt-table').DataTable({
+		"language":lang,
+    	"searching": false,
+    	"processing": false,
+    	 "ordering": false,
+    	"serverSide" : true,
+    	"bLengthChange": false,
+    	"ajax": {
+    		"url" : "/enforce/case/list",
+    		"type":"get",
+    		"data":function(d){
+				d.id = $('#id').val();
+				d.caseName = $('#caseName').val();
+				d.zzfryName = $('#zzfryName').val();
+				d.caseTime = $('#caseTime').val();
+				d.userId=userI;
+			}
+    	},
+    	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+        "columns": [
+            { "data": "caseName", "defaultContent": ""},
+            { "data": "caseNum", "defaultContent": ""},
+            { "data": "deptName", "defaultContent": ""},
+            { "data": "caseSource", "defaultContent": ""},
+            { "data": "caseStatus", "defaultContent": ""},
+            { "data": "caseAddress", "defaultContent": ""},
+            { "data": "caseTime", "defaultContent": ""},
+            { "data": "caseApplyDate", "defaultContent": ""},
+            { "data": "caseZpDate", "defaultContent": ""},
+            /*  { "data": "caseHandler", "defaultContent": ""}, */
+            { "data": "zzfryName", "defaultContent": ""},
+            { "data": "", "defaultContent": ""},
+        ],
+        "columnDefs": [
+            { "name": "caseName", "targets": 0 ,"sClass": "ellipsis",},
+            { 
+            	"targets": 1,
+            	"render": function (data, type, row) {
+            		var caseNum = row['caseNum'];
+            		var href = '<a  style="color:#009688" href="javascript:;" onclick="showDetailCase(\''+row['id']+'\' )">' + caseNum + '</a>';
+            		return href;
+                }
+            },
+            // { "name": "caseNum", "targets": 1 },
+            { "name": "deptName", "targets": 2,"sClass": "ellipsis",},
+            { "name": "caseSource", "targets": 3 },
+            { "name": "caseStatus", "targets": 4 },
+            { "name": "caseAddress", "targets": 5 ,"sClass": "ellipsis",},
+            { "name": "caseTime", "targets": 6 },
+            { "name": "caseApplyDate", "targets": 7 },
+            { "name": "caseZpDate", "targets": 8 },
+            /* { "name": "caseHandler", "targets": 9 }, */
+            { "name": "zzfryName", "targets": 9 },
+            { 
+            	"targets": 10,
+            	"render": function (data, type, row) {
+            		var id = row['id'];
+            		var href = "addCase.html?caseId=" + id;
+            		var edit = btnUpdateCase(href, "enforce:case:add", pers, 'toUpdatePage', row['zprId'], userKeyId, row['caseStatus']);
+                    return edit;
+                }
+             }
+          ],
+        "order": [[ 0, "desc" ],[1, "asc"]]
+    });	
+}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+	
+function addCase(){
+	layer.open({
+		type: 2,
+        title: '添加案件受理',
+        shade: [0],
+        area: ['85%', '85%'],
+        shift: 2,
+        content: 'addCase.html'
+    });
+}
+
+function toUpdatePage(href){
+	layer.open({
+		type: 2,
+        title: '编辑案件受理',
+        shade: [0],
+        area: ['85%', '85%'],
+        shift: 2,
+        content: href
+    });
+}
+	
+$.ajax({
+	type : 'get',
+	url : '/enforce/users/current',
+	userdata : $("#form").serialize(),	
+	success : function(userdata) {
+	userI=userdata.username;
+	userKeyId=userdata.id;
+	init();
+	}
+});
+	
+function showDetailCase(caseId) {
+	layer.open({
+		type: 2,
+        title: '案件详情页面',
+        maxmin: true,
+        shade: [0.8, '#393D49'],
+        area: ['90%', '90%'],
+        shift: 2,
+        content: 'caseDetailInfo.html?caseId=' + caseId
+    });
+}
+
+function downloadCaseListToExcel(){
+	var id = $('#id').val();
+	var caseName = $('#caseName').val();
+	var zzfryName = $('#zzfryName').val();
+	var caseTime = $('#caseTime').val();
+	if(typeof(caseTime) == "undefined"){
+		caseTime="";
+	}
+	var userId=userI;
+	
+	var download = document.createElement("a");
+	download.href="/enforce/outputFile/excel?type=list&id="+id+"&caseName="+caseName+"&zzfryName="+zzfryName+"&caseTime="+caseTime+"&userId="+userId;
+	download.click();
+	
+	layer.msg("生成文件中。。。请稍候。。。", {anim:5});
+}
+</script>

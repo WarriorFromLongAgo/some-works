@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>决策剧场</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+ <script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="../../js/echarts.min.js"></script>
+  <script type="text/javascript" src="../../js/echartstheme.js"></script>
+ 
+  <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/css.css">
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>决策剧场</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+ <script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+ <script type="text/javascript" src="../../js/echarts.min.js"></script>
+ <script type="text/javascript" src="../../js/echartstheme.js"></script>
+ <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+ 
+</head>
+<body class="hold-transition skin-blue sidebar-mini"  >
+	<div class="wrapper">
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+	        <div class="box box-success">
+	                    <div id="container" style="height: 600px;"></div>
+	          </div>
+          </div>
+    </section>
+</div>
+<script type="text/javascript">
+		var dom = document.getElementById("container");
+		var myChart = echarts.init(dom);
+		var app = {};
+		option = null;
+		option = {
+		 	title: {
+		        text: '法律变动情况统计',
+		        textStyle: {
+		            fontSize: 18,
+		            fontWeight: 'bolder',
+		            color: '#fff'
+		        },
+		     },
+		    legend: {textStyle: {
+	            color: '#fff'
+	        }},
+		    tooltip: {},
+		    dataset: {
+		        source:[]
+		    },
+		    xAxis: [
+		        {type: 'category', gridIndex: 0,axisLine:{lineStyle:{color:"#fff",width:1,}}},
+		        {type: 'category', gridIndex: 1,axisLine:{lineStyle:{color:"#fff",width:1,}}},
+		    ],
+		    yAxis: [
+		        {gridIndex: 0,axisLine:{lineStyle:{color:"#fff",width:1,}}},
+		        {gridIndex: 1,axisLine:{lineStyle:{color:"#fff",width:1,}}}
+		    ],
+		    grid: [
+		        {bottom: '55%'},
+		        {top: '55%'}
+		    ],
+		    series: [
+		        // These series are in the first grid.
+		        {type: 'bar', seriesLayoutBy: 'row'},
+		        {type: 'bar', seriesLayoutBy: 'row'},
+		        {type: 'bar', seriesLayoutBy: 'row'},
+		        {type: 'bar', seriesLayoutBy: 'row'},
+		        {type: 'bar', seriesLayoutBy: 'row'},
+		        // These series are in the second grid.
+		        {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+		        {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+		        {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+		        {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+		        {type: 'bar', xAxisIndex: 1, yAxisIndex: 1}
+		    ]
+		};
+		
+		$.ajax({
+			method: 'get',
+			url: "/report/lawYear/getLawAddByEveryYear",
+			dataTypt: 'json',
+			success: function(data) {
+				map(data);
+			}
+		});
+		
+		function map(data){
+			//条形图的使用
+			var source=new Array();
+			var year =new Array('年份','2014','2015','2016','2017','2018');
+		    var law1=new Array('法律',0,0,0,0,0);
+		    var law2=new Array('行政法规',0,0,0,0,0);
+		    var law3=new Array('国务院部门规章',0,0,0,0,0);
+		    var law4=new Array('地方性法规',0,0,0,0,0);
+		    var law5=new Array('社会法',0,0,0,0,0);
+		
+			for(var i = 0; i < data.length;i++){
+				var lawData = data[i];
+				//获得法律类型
+				var effectLevel = lawData.effectLevel;
+				for(var  j=0;j<5;j++){
+					//获取法律字段
+					if(lawData.publishDate<=year[j+1]){
+						if(lawData.effectLevel=='法律'){
+							 law1[j+1]=parseInt(law1[j+1])+parseInt(lawData.lawCount);
+						}
+						//获取行政法规字段
+						if(lawData.effectLevel=='行政法规'){
+							 law2[j+1]=parseInt(law2[j+1])+parseInt(lawData.lawCount);
+						}
+						//获取部门规章
+						if(lawData.effectLevel=='国务院部门规章'){
+							 law3[j+1]=parseInt(law3[j+1])+parseInt(lawData.lawCount);
+						}
+						//获取地方性法规
+							if(lawData.effectLevel=='地方性法规'){
+						   law4[j+1]=parseInt(law4[j+1])+parseInt(lawData.lawCount);
+						}
+						//获得地方政府规章
+						if(lawData.effectLevel=='社会法'){
+							 law5[j+1]=parseInt(law5[j+1])+parseInt(lawData.lawCount);
+						}
+					}
+				}
+			}
+			source.push(year,law1,law2,law3,law4,law5);
+			option.dataset.source=source;
+			if (option && typeof option === "object") {
+			    myChart.setOption(option, true);
+			}
+		}
+</script>
+</body>
+</html>

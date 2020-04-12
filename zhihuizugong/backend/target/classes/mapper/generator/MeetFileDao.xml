@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.MeetFileDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.MeetFileEntity" id="meetFileMap">
+        <result property="id" column="id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="newFileName" column="new_file_name"/>
+        <result property="filePath" column="file_path"/>
+        <result property="fileType" column="file_type"/>
+        <result property="fileSuffix" column="file_suffix"/>
+        <result property="meetId" column="meet_id"/>
+    </resultMap>
+
+	<insert id="insertFile" parameterType="com.orhonit.modules.generator.entity.MeetFileEntity">
+		INSERT INTO
+		tb_meet_file
+		VALUES
+		<!-- <foreach collection ="list" item="item" index= "index" separator =",">
+	        (
+				#{item.id}, 
+				#{item.fileName},
+				#{item.newFileName},
+				#{item.filePath},
+				#{item.fileType}, 
+				#{item.fileSuffix},
+				#{item.meetId}
+			)
+		</foreach > -->
+		(#{id},#{fileName},#{newFileName},#{filePath},#{fileType},#{fileSuffix},#{meetId})
+	</insert>
+
+	<update id="updateByMeetFile">
+		UPDATE tb_meet_file 
+		SET file_name = #{fileName} , new_file_name = #{newFileName} , file_path = #{filePath} , file_type = #{fileType} , file_suffix = #{fileSuffix} 
+		WHERE meet_id = #{meetId}
+	</update>
+
+</mapper>

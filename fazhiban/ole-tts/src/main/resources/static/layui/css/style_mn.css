@@ -1,0 +1,82 @@
+
+.aransformation{
+	color: #fff;
+	width:20px;
+	cursor: pointer;
+}
+.aransformation:hover{
+	color: black;
+}
+.overall-inversion{
+	writing-mode:vertical-lr;
+}
+.establish_mn{
+	display: table-cell !important;
+	height:200px;
+}
+button{
+	display: table-cell !important;
+	margin-top: 25px;
+}
+.form-inline{
+	padding-right: 20px;
+}
+.form-group{
+	margin-top: 20px;
+	padding-right: 5px;
+}
+.layui-btn-small {
+    padding: 0 3px;
+}
+label,th{
+	font-family: "OrhonChaganTig";
+  		font-size: 20px;
+}
+div.dataTables_wrapper div.dataTables_info {
+    margin-left: 15px;
+}
+.chinese{
+    writing-mode: vertical-lr;
+    -webkit-writing-mode: vertical-lr;
+    -o-writing-mode: vertical-lr;
+    -ms-writing-mode: tb-lr;
+    -moz-writing-mode: vertical-lr;
+    font-family: "OrhonChaganTig";
+    unicode-bidi: embed;
+    text-orientation: sideways-right;
+    -webkit-text-orientation: sideways-right;
+    -mz-text-orientation: sideways-right;
+    -o-text-orientation: sideways-right;
+    -ms-text-orientation: sideways-right;
+    text-align: left;
+    font-size: 20px;
+    height: 110px;
+}
+.chinese button{
+    height: 110px;
+}
+.control{
+    height: 105px;   
+}
+table.dataTable thead>tr>th.sorting,
+table.dataTable thead>tr>th.sorting_asc{
+    line-height: 20px;
+    vertical-align: top;
+}
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset>
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">模板名称</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="code" class="form-control input-sm" id="code">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">流程类型</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="flowType" class="form-control input-sm" id="flowType" onchange="flowTypeChange(this.options[this.options.selectedIndex].value)">
+						<option value="">请选择</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">流程节点</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="flowNode" class="form-control input-sm" id="caseStatus" onmouseover="flowNodeChange(this.options)">
+						<option value="">请选择</option> 
+					</select>
+				</div>
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">文书是否必填</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="needAdd" class="form-control input-sm" id="needAdd" >
+						<option value="">请选择</option> 
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否生效</label>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<select name="isEffect" class="form-control input-sm" id="isEffect">
+						<option value="">请选择</option> 
+					</select>
+				</div>
+			</div>
+		
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" onclick="custom_close()">重置</button>
+						<button class="btn btn-primary" type="submit" onclick="add()" style="margin-left:10px">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use('layer', function(){
+		    var layer = layui.layer;
+		});
+		
+		getDictList(dict.flowType,"flowType");
+		
+		//流程类型,流程节点二级联动
+		function flowTypeChange(flowTypeValue){
+			
+			if(flowTypeValue==flowType.SPECIAL_CHECK){
+				
+				$("#caseStatus option:first").siblings().remove();
+				getDictList('1501',"caseStatus");
+				
+			}else if(flowTypeValue==flowType.DAILY_CHECK){
+				
+				$("#caseStatus option:first").siblings().remove();
+				getDictList('1502',"caseStatus");
+				
+			}else if(flowTypeValue==""){
+				
+				$("#caseStatus option:first").siblings().remove();
+			
+			}else{
+				
+				$("#caseStatus option:first").siblings().remove();
+				console.log("1111"+dict);
+				getDictList(dict.caseStatus,"caseStatus");
+			}
+		}
+		
+		//选择流程节点,先选择流程类型提醒
+		function flowNodeChange(temp){
+			if(temp.length == '1'){
+				layer.msg("请先选择流程类型", {anim:6});
+				return;
+			}
+			console.log(temp);
+		}
+		
+		getDictList(dict.dealType,"dealType");
+		getDictList(dict.needAdd,"needAdd");
+		getDictList(dict.isEffect,"isEffect");
+		getTemplate();
+		
+		//获取模板
+		function getTemplate(){
+			 $.ajax({
+					type : 'get',
+					url : '/enforce/docFlow/listTemplate',
+					success : function(data) {
+						var template = "";
+						for( var i = 0 ; i < data.length ; i ++ ) {
+							template += '<option value = "' + data[i].code + '">' + data[i].name + '</option>';
+						}
+						$("#code").append(template);
+						
+					}
+			});
+		}
+		
+		function add() {
+			if ($('#code').val() == '') {
+        		layer.msg("请选择模板名称", {anim:6});
+        		return;
+        	}
+        	
+        	if ($('#flowType').val() == '') {
+        		layer.msg("请选择流程类型", {anim:6});
+        		return;
+        	}
+        	
+        	if ($('#caseStatus').val() == '') {
+        		layer.msg("请选择流程节点", {anim:6});
+        		return;
+        	}
+        	
+        	if ($('#needAdd').val() == '') {
+        		layer.msg("请选择文书是否必填", {anim:6});
+        		return;
+        	}
+        	if ($('#isEffect').val() == '') {
+        		layer.msg("请选择文书是否生效", {anim:6});
+        		return;
+        	}
+        	var formdata = $("#form").serializeObject();
+        	var bootstrapValidator = $("#form").data('bootstrapValidator');
+			//bootstrapValidator.validate();
+		    //if(!bootstrapValidator.isValid()){
+			//   return;
+		    //}
+			$.ajax({
+				type : 'post',
+				url : '/enforce/docFlow/save',
+				data : formdata,
+				success : function(data) {
+					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+						window.parent.example.ajax.reload();
+						 var index = parent.layer.getFrameIndex(window.name);
+						 parent.layer.close(index);
+                	});
+				}
+			});
+		}
+		
+		
+		function custom_close(){
+			$('#code').val("");
+			$('#flowType').val("");
+			$('#caseStatus').val("");
+			$('#needAdd').val("");
+			$('#isEffect').val("");
+		}
+	</script>
+</body>
+</html>

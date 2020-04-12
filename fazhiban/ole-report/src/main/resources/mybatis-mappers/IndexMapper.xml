@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.IndexDao">
+	<select id="getYearCaseCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS 'count'
+		FROM ole_ef_case oec
+		WHERE YEAR(oec.`case_time`) = YEAR(NOW());
+	</select>
+	
+	<select id="getNowCaseAccept" resultType="java.lang.Integer">
+		SELECT
+			COUNT( * ) AS 'count' 
+		FROM
+			ole_ef_case oec 
+		WHERE
+			DATE_FORMAT( oec.create_date, '%Y-%m-%d' ) = DATE_FORMAT( NOW( ), '%Y-%m-%d' )
+	</select>
+	
+	<select id="getNowCaseClose" resultType="java.lang.Integer">
+		SELECT
+			count(*) as 'count'
+		FROM
+			ole_ef_case oec
+		WHERE
+			DATE_FORMAT( oec.create_date, '%Y-%m-%d' ) = DATE_FORMAT( NOW( ), '%Y-%m-%d' ) 
+			AND oec.`case_status` = '90' 
+	</select>
+	
+	<select id="getYearWarnInfoCount" resultType="java.lang.Integer">
+		SELECT
+			count(id)  as 'count'
+		FROM
+			ole_warn_info owi 
+		WHERE
+			YEAR(owi.create_date) = YEAR(NOW());
+	</select>
+	
+	<select id="getNowWarnInfoCount" resultType="java.lang.Integer">
+		SELECT
+			count(id)  as 'count'
+		FROM
+			ole_warn_info owi 
+		WHERE
+			DATE_FORMAT( owi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( NOW( ), '%Y-%m-%d' )
+	</select>
+	
+</mapper>

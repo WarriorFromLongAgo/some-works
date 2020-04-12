@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.cases.ReportReCaseDao">
+
+	<!-- 行政执法单位 -->
+	<select id="findAdminLawDeptList" resultType="com.orhonit.ole.report.dto.cases.ReCaseCountDTO">
+		SELECT obd.`name`
+		FROM ole_base_dept obd
+		<where>
+			<if test="areaId != null and areaId != ''">
+				obd.`area_id` = #{areaId}
+			</if>
+		</where>
+<!-- 		WHERE obd.`dept_property` = '3' AND obd.`law_type` = '1' -->
+	</select>
+
+	<!--查询各区域复议案件数量-->
+	<select id="findReCaseWithDept" resultType="com.orhonit.ole.report.dto.cases.ReCaseCountDTO">
+		SELECT obd.`name`,COUNT(oec.`case_name`) AS 'value'
+		FROM ole_base_dept obd
+		LEFT JOIN ole_ef_case oec ON obd.`id` = oec.`dept_id`
+		<where>
+			oec.`case_status` = '42' 
+			<if test="areaId != null and areaId != ''">
+				AND obd.`area_id` = #{areaId}
+			</if>
+			
+		</where>
+		GROUP BY obd.`name`
+	</select>
+
+	<!--//复议案件量分析  查询某年复议案件某个状态的数量-->
+	<select id="findReCaseNumByYearAndStatus" resultType="com.orhonit.ole.report.dto.cases.ReCaseNumCountDTO">
+		SELECT MONTH
+			( oecd.create_date ) AS 'name',
+			COUNT( oecd.id ) AS 'value' 
+		FROM
+			ole_ef_case_deal oecd
+			LEFT JOIN ole_sys_dict osd ON oecd.`case_status` = osd.`enum_value` 
+		WHERE
+			<if test="status!=null and status!=''">
+				oecd.`case_status` = #{status}
+			</if>
+			<if test="year!=null and year!=''">
+				AND YEAR(oecd.`create_date`) = #{year}
+			</if>
+			AND osd.`type_value` = '1500' 
+		GROUP BY
+			MONTH ( oecd.create_date )
+	</select>
+
+
+	<!--//复议申请人类别占比分析-->
+	<select id="findApplyPerson" resultType="com.orhonit.ole.report.dto.cases.ReCaseNumCountDTO">
+		SELECT osd.`enum_desc` AS  NAME ,COUNT(oepi.`id`) AS VALUE
+		FROM ole_ef_case oec
+		LEFT JOIN ole_ef_party_info oepi ON oec.`id` = oepi.`case_id`
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value` = oepi.`type`
+		WHERE oepi.`type` IN ('1','2') AND osd.`type_value` = '1600' AND oec.`case_status` = '42'
+		GROUP BY oepi.`type`
+	</select>
+
+	<!--//受理案件占比-->
+	<select id="findAccCase" resultType="com.orhonit.ole.report.dto.cases.ReCaseNumCountDTO">
+		SELECT osd.`enum_desc` AS  'name',COUNT(oec.`id`) as 'value'
+		FROM ole_ef_case oec
+		LEFT JOIN ole_sys_dict osd ON oec.`case_status` = osd.`enum_value`
+		WHERE oec.`case_status` = '44' AND osd.`type_value` = '1500'
+		<if test="year!=null and year!=''">
+			AND YEAR(oec.`case_apply_date`) = #{year}
+		</if>
+	</select>
+
+	<!--//申请受理案件占比-->
+	<select id="findAllAccCase" resultType="com.orhonit.ole.report.dto.cases.ReCaseNumCountDTO">
+		SELECT osd.`enum_desc` AS  'name',COUNT(oec.`id`) as 'value'
+		FROM ole_ef_case oec
+		LEFT JOIN ole_sys_dict osd ON oec.`case_status` = osd.`enum_value`
+		WHERE oec.`case_status` = '42' AND osd.`type_value` = '1500'
+		<if test="year!=null and year!=''">
+			AND YEAR(oec.`case_apply_date`) = #{year}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<form class="form-horizontal" onsubmit="return false" enctype="multipart/form-data" style="padding-top:5%;" id="form">
+			<fieldset>
+				<input type="hidden" id="id" name="id">
+				<div class="form-group">
+					<label class="col-md-2 control-label">角色<span class="btx">*</span></label>			
+					<div class="col-md-4">
+						<select class="form-control input-sm" id="role_id">
+							<option value="">请选择</option>
+						</select>
+					</div>
+					<label class="col-md-2 control-label">描述</label>
+					<div class="col-md-4">
+						<input class="form-control not-null" placeholder="请输入描述" type="text" id="content" name="content" iname="描述">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">显示顺序</label>
+					<div class="col-md-4">
+						<input class="form-control" name="sort" id="sort" type="number" value="0"
+                        	data-bv-notempty="true"
+                        	data-bv-notempty-message="排显示顺序 不能为空">
+					</div> 
+					<label class="col-md-2 control-label">是否启用<span class="btx">*</span></label>
+					<div class="col-md-4">
+						<select name="if_show" class="form-control input-sm" id="if_show">
+						 	  <option value="">请选择</option>
+						</select>
+					</div> 
+				</div>
+
+				<div class="form-actions" style="margin-top:50px;">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="button" id="submitBtn"
+								onclick="update()">
+								<i class="fa fa-save"></i> 保存
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script src="../../js/moment-with-locales.min.js"></script>
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- 实例化编辑器 -->
+	<script type="text/javascript">
+		layui.use([ 'layer', 'laydate' ], function() {
+			var layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem : '#birthday'
+			});
+		});	
+		var id = getUrlParam("id");
+		
+		$.ajax({
+			type : 'get',
+			url : '/auth/roles/all',
+			async : false,
+			success : function(data) {
+				var content='';
+				for (var i = 0; i < data.length; i++) {
+					content +="<option value=\""+ data[i].id + "\">"+ data[i].name + "</option>";
+				}
+				$('#role_id').append(content)
+				$.ajax({
+					type : 'get',
+					url : '/auth/dict/list/1709',
+					contentType: "application/json; charset=utf-8", 
+					async: false,
+					success : function(data) {
+						if ( data.code == 0 ) {
+							var dicts= '';
+							for( var i = 0 ; i < data.data.length ; i ++ ) {
+								dicts += '<option value = "' + data.data[i].enumValue + '">' + data.data[i].enumDesc + '</option>';
+							}
+							$('#if_show').append(dicts);
+						}	
+						
+						$.ajax({
+							type : 'post',
+							url : '/auth/appBanner/findOne/'+id,
+							success : function(data) {
+								$("#id").val(data.data.id);
+								$("#role_id").val(data.data.role_id);
+								$("#content").val(data.data.content);
+								$("#sort").val(data.data.sort);
+								$("#if_show").val(data.data.if_show);
+							}
+						});
+					}
+				});
+			}
+		});
+		
+		$('#form').bootstrapValidator();
+		 function update() {
+			 if ($('#role_id').val() == '') {
+				 layer.msg("角色不可以为空", {
+				 	anim : 6
+				});
+				 return;
+			}
+				 	
+			if ($('#sort').val() == '') {
+				layer.msg("排序不可以为空", {
+				 	anim : 6
+				});
+				return;
+			 }
+				 	
+			if ($('#content').val() == '') {
+				 layer.msg("描述不可以为空", {
+				 	anim : 6
+				 });
+				 return;
+			 }
+				 	
+			if ($('#if_show').val() == '') {
+				 layer.msg("是否启用不可以为空", {
+				 	anim : 6
+				 });
+				return;
+			}
+			
+			$('#submitBtn').removeAttr("disabled");
+		    $('#submitBtn').attr("disabled",true); 
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = $("#form").serializeObject();
+		    formdata.role_id=$("#role_id").val();
+			$.ajax({
+				type : 'post',
+				url : '/auth/appBanner/update/',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("修改成功", {shift: -1, time: 1000}, function(){
+                      // window.parent.location.reload();
+                      window.parent.example.draw(false);
+                       /* window.parent.example.ajax.reload(); */
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+                   });
+				}
+			}); 
+		} 
+		
+		
+		
+			
+	
+	</script>
+</body>
+</html>

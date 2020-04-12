@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<link rel="stylesheet" href="../../css/font-awesome/css1/font-awesome.css" media="all">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		<div class="form-group">
+			<label class="col-md-2 control-label">检查内部编号</label>
+			<div class="col-md-4">
+			    <input class="form-control" readonly="readonly" type="text" name="checkId" id="checkId">
+			</div>
+			<label class="col-md-2 control-label">检查编号</label>
+			<div class="col-md-4">
+			    <input class="form-control" readonly="readonly" type="text" name="checkNum" id="checkNum">
+			</div>
+		</div>
+		
+	    <div class="form-group">
+				<label class="col-md-2 control-label">主执法人员姓名</label>
+				<div class="col-md-4">
+				<input class="form-control" readonly="readonly" type="text" name="checkZzfryname" id="checkZzfryname">
+				</div>
+				<label class="col-md-2 control-label">协办人员姓名</label>
+				<div class="col-md-4">
+				   <input class="form-control" readonly="readonly" type="text" name="checkFzfryname" id="checkFzfryname">
+				</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">检查标题</label>
+			<div class="col-md-4">
+			    <input class="form-control" readonly="readonly" type="text" name="checkTitle" id="checkTitle">
+			</div>
+			<label class="col-md-2 control-label">检查类型</label>
+			<div class="col-md-4">
+			   <input class="form-control" readonly="readonly" type="text" name="checkMode" id="checkMode">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">检查街道名称</label>
+			<div class="col-md-4">
+			   <input class="form-control" readonly="readonly" type="text" name="roadName" id="roadName">
+			</div>
+			<label class="col-md-2 control-label">检查时间</label>
+			<div class="col-md-4">
+			   <input class="form-control" readonly="readonly" type="text" name="checkedDate" id="checkedDate">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">检查状态</label>
+			<div class="col-md-4">
+			   <input class="form-control" readonly="readonly" type="text" name="status" id="status">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">检查情况</label>
+			<div class="col-md-10">
+			    <textarea class="form-control" readonly="readonly" type="text" name="checkSituation" id="checkSituation"></textarea>
+			</div>
+		</div>
+		
+		</fieldset>
+		<hr />
+		
+			<div class="form-group">
+				<label class="col-md-2 control-label">检查对象类型</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="checkObjectType" name="checkObjectType">
+				</div>
+			</div>
+			<fieldset style="display: none" id="person">
+			<div class="form-group">
+				<label class="col-md-2 control-label">被检查人</label>
+				<div class="col-md-4">
+				   <input class="form-control" readonly="readonly" type="text" id="checkedUserName" name="checkedUserName">
+				</div>
+				<label class="col-md-2 control-label">被检查人身份证号</label>
+				<div class="col-md-4">
+				  <input class="form-control" readonly="readonly" type="text" id="checkedUserId" name="checkedUserId">
+				</div>
+			</div>
+		</fieldset>
+		<fieldset id="company" style="display: none">
+			<div class="form-group">
+				<label class="col-md-2 control-label">被检查单位名称</label>
+				<div class="col-md-4">
+				  <input class="form-control" readonly="readonly" type="text" id="unitName" name="unitName">
+				</div>
+				<label class="col-md-2 control-label">法定代表人</label>
+				<div class="col-md-4">
+				  <input class="form-control" readonly="readonly" type="text" id="legalPerson" name="legalPerson">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">注册号</label>
+				<div class="col-md-4">
+				  <input class="form-control" readonly="readonly" type="text" id="registNum" name="registNum">
+				</div>
+			</div>
+			
+		</fieldset>
+		<hr/>
+		<fieldset id="noPartyType" style="display: none">
+			<div class="form-group">
+				<label class="col-md-2 control-label">还未填写当事人信息</label>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<div class="form-group">
+				<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('docDom',this)">文书列表<i class="fa fa-angle-double-up"></i></label>
+				<div class="col-md-10" id="docDom">
+					
+				</div>
+			</div>
+		</fieldset>
+		
+		<hr/>
+		<fieldset>
+			<div class="form-group">
+				<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('fileDom',this)">文件列表<i class="fa fa-angle-double-up"></i></label>
+				<div class="col-md-10" id="fileDom">
+					
+				</div>
+			</div>
+		</fieldset>
+		<hr/>
+		<fieldset>
+			<div class="form-group">
+				<label class="col-md-2 control-label" style="cursor:pointer" onclick="showHide('flowDom',this)">流程审批记录<i class="fa fa-angle-double-up"></i></label>
+				<div class="col-md-10" id="flowDom">
+					
+				</div>
+			</div>
+		</fieldset>
+			
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" type="submit" onclick="backToList();">
+							<i class="fa fa-save"></i> 返回
+						</button>
+					</div>
+				</div>
+			</div>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	<script type="text/javascript" src="../../layui/layui.all.js"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+    var checkNum = '';
+    
+    var id = getQuery('checkId');
+    var type = getQuery('type');
+    var url = '/tts/checkDaily/query/' + id;
+    if(type == '1'){
+    	url = '/tts/checkDaily/queryCheckId/' + id;
+    }
+    if ( id == null || id == '' ) {
+    	alert('参数异常.');
+    	window.location.href = 'checkDailyList.html';
+    }
+    $.ajax({
+		type : 'get',
+		url : url,
+		contentType: "application/json; charset=utf-8",  
+		async : false,
+		success : function(data) {
+			if ( data.code == '0') {
+				var checkInfo = data.data;
+				$('#checkId').val(checkInfo.checkId);
+				$('#checkNum').val(checkInfo.checkNum);
+				checkNum = checkInfo.checkNum;
+				$('#checkTitle').val(checkInfo.checkTitle);
+				$('#checkMode').val(checkInfo.checkMode);
+				$('#roadName').val(checkInfo.roadName);
+				$('#checkedDate').val(checkInfo.checkedDate);
+				$('#checkSituation').html(checkInfo.checkSituation);
+				$('#checkZzfryname').val(checkInfo.checkZzfryname);
+				$('#checkFzfryname').val(checkInfo.checkFzfryname);
+				$('#status').val(checkInfo.status);
+				
+				if ( checkInfo.checkObjectType == '个人' ) {
+					$("#person").css('display','block');
+				} else if (checkInfo.checkObjectType == '公司') {
+					$("#company").css('display','block');
+				} else {
+					$('#noPartyType').css('display','block');
+				}
+				$('#checkObjectType').val(checkInfo.checkObjectType);
+				$('#checkedUserName').val(checkInfo.checkedUserName);
+				$('#checkedUserId').val(checkInfo.checkedUserId);
+				$('#unitName').val(checkInfo.unitName);
+				$('#legalPerson').val(checkInfo.legalPerson);
+				$('#registNum').val(checkInfo.registNum);
+			}
+		}
+	});
+    
+       $.ajax({
+			type : 'get',
+			url : '/tts/checkDaily/query/docContent/' + id,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if (data.code == '0') {
+					var docs = data.data;
+					var docDomContent = '';
+					var hasDoc = "0";
+					if ( docs != null && docs.length > 0 ) {
+						hasDoc = "1";
+						for ( var i = 0 ; i < docs.length ; i++) {
+							if( !(docs[i].templateName == null)) {
+								docDomContent = '<table class="table"><tr><th>案件状态</th><th>文书模板</th></tr>';
+								for ( var i = 0 ; i < docs.length ; i++) {
+		        					docDomContent += '<tr>';
+									var href = 'docContentDetail.html?templateId='+docs[i].templateId+'&checkId='+id;
+									docDomContent += '<td>'+docs[i].checkStatus+'</td><td><a href="javascript:;" onclick="window.open(\''+href+'\')">'+ docs[i].templateName +'</a></td>';
+		        					docDomContent += '</tr>';
+								}
+								docDomContent += '</table>';
+							}
+						}
+					}
+					if ( hasDoc == "0" ) {
+						$('#docDom').html('该案件还没添加任何文书');
+					} else {
+						$('#docDom').html(docDomContent);
+					}
+				}
+			}
+		});
+       $.ajax({
+			type : 'get',
+			url : "/tts/attachFile/caseFileList/"+id,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if (data.code == '0') {
+					var fileComments = data.data;
+					var fileDomContent = '';
+					if ( fileComments != null && fileComments.length > 0 ) {
+						fileDomContent = '<table class="table"><tr><th>文件名</th><th>文件类型</th><th>上传人</th><th>上传时间</th><th>操作</th></tr>';
+						for ( var i = 0 ; i < fileComments.length ; i++) {
+							var download = btnattachFileDownload("tts:attachFile:add", ["tts:attachFile:add"],fileComments[i].id);
+       						var show = btnattachFileShow("tts:attachFile:add", ["tts:attachFile:add"],fileComments[i].id,fileComments[i].fileType);
+							fileDomContent += '<tr>';
+							fileDomContent += '<td>' +fileComments[i].fileName+ '</td><td>'+fileComments[i].fileType+'</td><td>'+fileComments[i].createName+'</td><td>'+fileComments[i].createDate+'</td><td>'+show+download+'</td>';
+							fileDomContent += '</tr>';
+						}
+						fileDomContent += '</table>';
+						$('#fileDom').html(fileDomContent);
+					}else{
+						$('#fileDom').html('该案件没有上传任何文件');
+					}
+					
+				}else{
+					$('#fileDom').html("查询文件信息失败！");
+				}
+			}
+		});
+       if ( $('#status').val() != '暂存') {
+	    $.ajax({
+			type : 'get',
+			url : '/tts/checkDaily/flow/comment/' + checkNum + '/' + 'dayCheck',
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(data) {
+				if (data.code == '0') {
+					var flowComments = data.data;
+					var flowDomContent = '';
+					if ( flowComments != null && flowComments.length > 0 ) {
+						flowDomContent = '<table class="table"><tr><th>用户</th><th>任务名称</th><th>时间</th><th>批注</th></tr>';
+						for ( var i = 0 ; i < flowComments.length ; i++) {
+							flowDomContent += '<tr>';
+							flowDomContent += '<td>' +flowComments[i].user+ '</td><td>'+flowComments[i].taskName+'</td><td>'+flowComments[i].time+'</td><td>'+flowComments[i].msg+'</td>';
+							flowDomContent += '</tr>';
+						}
+						flowDomContent += '</table>';
+					}
+					$('#flowDom').html(flowDomContent);
+				}
+			}
+		});
+       }
+	    function backToList() {
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+	    }
+	    
+	    var toggleFlowFlag=0;
+	    var toggleFileFlag=0;
+	    var toggleDocFlag=0;
+	    function showHide(id,dom){
+	    	var $dom = $(dom);//转换成dom对象
+	    	$("#"+id).toggle(1000);
+	    	
+	    	if(id=="flowDom"){
+	    		if(!toggleFlowFlag){
+	    			$dom.find("i").attr({class:"fa fa-angle-double-down"});
+	    			toggleFlowFlag=1;
+	    		}else{
+	    			$dom.find("i").attr({class:"fa fa-angle-double-up"});
+	    			toggleFlowFlag=0;
+	    		}
+	    	}else if(id=="fileDom"){
+	    		if(!toggleFileFlag){
+	    			$dom.find("i").attr({class:"fa fa-angle-double-down"});
+	    			toggleFileFlag=1;
+	    		}else{
+	    			$dom.find("i").attr({class:"fa fa-angle-double-up"});
+	    			toggleFileFlag=0;
+	    		}
+	    	}else if(id=="docDom"){
+	    		if(!toggleDocFlag){
+	    			$dom.find("i").attr({class:"fa fa-angle-double-down"});
+	    			toggleDocFlag=1;
+	    		}else{
+	    			$dom.find("i").attr({class:"fa fa-angle-double-up"});
+	    			toggleDocFlag=0;
+	    		}
+	    	}
+	    }
+        function showFile(id,fileType){
+			layer.open({
+				type: 2,
+		        title: '在线预览',
+		        shade: [0],
+		        area: ['90%', '80%'],
+		        shift: 2,
+		        content: '../realTime/fileShow.html?id=' + id + '&fileType=' + fileType,
+		    });
+		}
+		
+		function downloadFile(id){
+			var download = document.createElement("a");
+			download.href='/tts/attachFile/download?id='+id;
+			download.click();
+		}
+    </script>
+</body>
+</html>

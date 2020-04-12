@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="format-detection" content="telephone=no">
+		<title>权限管理系统</title>
+		 <link rel="stylesheet" href="layui/css/layui.css" media="all">
+	    <link rel="stylesheet" href="layui/css/global.css" media="all">
+	    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.css" media="all">
+	    <link id="layuicss-layer" rel="stylesheet" href="layui/css/modules/layer/default/layer.css?v=3.0.3" media="all">
+	    <link rel="stylesheet" href="css_custom/style.css" />
+	    <link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<style>
+			.layui-nav-tree .layui-nav-item a:hover i{
+				color: #ffffff!important;
+			}
+			.layui-nav-tree a i{
+				color: #0f4cb7!important;
+			}
+			.layui-nav-tree .layui-this a i{
+				background: #5b8bff!important;
+				color: #ffffff!important;
+			}
+			.header-demo .layui-nav .layui-nav-item .layui-show{
+				border: 0px;
+				color: #ffffff!important;
+				background: #5b8bff!important;
+
+			}
+			.header-demo .layui-nav .layui-nav-item .layui-show a{
+				color: #ffffff!important;
+			}
+			.header-demo .layui-nav .layui-nav-item .layui-show a:hover{
+				color: #ffffff!important;
+				background: #0f4cb7!important;
+			}
+			.header-demo .layui-nav-bar{
+				background: #0f4cb7!important;
+			}
+			.admin-side-toggle .fa{
+				color: #ffffff;
+			}
+			ul.layui-tab-title li:first-child i{display: none !important;}
+			
+			.layui-layout-admin .footer-demo {height: 50px;width:100%;padding:0 !important;}
+			.layui-layout-admin .layui-footer {position: fixed;width:100%;left:0;z-index:999;right: 0;bottom: 0;height: 44px;line-height: 44px;
+			    padding: 0 15px;background-color: #eee;}
+			.footer {padding: 30px 0;line-height: 30px;text-align: center;color: #666;font-weight: 300;}
+			.layui-layout-admin .layui-main {width: auto; margin: 0 15px;}
+			.layui-main {width: 1140px;margin: 0 auto;}
+			.footer-demo p {display: inline-block;vertical-align: middle;padding-right: 10px;}
+			.footer a {padding: 0 5px;color: #fff;font-size:12px;}
+			.layui-layout-admin .footer-demo{background: #0f4cb7 !important;}
+			.layui-layout-admin .layui-side{bottom:30px;}
+			.admin-header-user .layui-nav-more{display:none;}
+			.header-demo .layui-nav .layui-this{background-color:#0f4cb7 !important}
+			/*.layui-icon .layui-unselect .layui-tab-close:first-of-type{display:none;}*/
+			.layui-layer-title{color:#fff !important;}
+			/* iframe{height:470px !important;} */
+			.layui-layer-content {  overflow: hidden;}
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-layout layui-layout-admin">
+		    <!-- 标题栏 -->
+			<div class="layui-header header header-demo">
+                <div class="layui-main">
+					<div class="admin-login-box">
+						<a class="logo" style="left: 0;">
+						    <img src="img/logo/logo.png">
+							<span style="font-size: 22px;">权限管理系统</span>
+						</a>
+						<div class="admin-side-toggle">
+							<i class="fa fa-bars" aria-hidden="true"></i>
+						</div>
+					</div>
+				    <ul class="layui-nav" pc>
+					    
+	                    <li style="float:left;line-height:60px;">
+	                    	<a href="javascript:;" lay-id="-997" data-url="pages/user/changePassword.html"  style="color:#fff;padding:0 15px;"><i class="fa fa-unlock-alt" aria-hidden="true"></i> 修改密码</a>
+	                    </li>
+	                    <li style="float:left;line-height:60px;">
+	                    	<a href="#"  onclick="CloseWebPage();"  style="color:#fff;padding:0 15px;"><i class="fa fa-sign-out" aria-hidden="true"></i>关闭</a>
+	                    </li>
+	                    <li id="user" pc=""  style="float:left;line-height:60px;">
+					    	
+					    	<a href="javascript:;" lay-id="-999"  style="float:right;color:#fff;">管理员
+	                    		<span></span>
+	                   		 </a >
+	                   		 <img id="picture" src="img/avatars/sunny.png" style="display:block !important;margin-top:10px;width:40px;height:40px;float:right; vertical-align: middle;">            
+	                    </li>
+				    </ul>   
+			   </div>
+            </div>
+            <!-- 菜单 -->
+			<div class="layui-side layui-bg-black" id="admin-side">
+				<div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side">
+				    <ul id="menu" class="layui-nav layui-nav-tree" lay-filter="demo">
+				    
+		            </ul>
+				</div>
+			</div>
+			<div class="layui-body" style="border-left:5px solid #eeeeee!important;bottom: 0;" id="admin-body">
+				<div class="layui-tab admin-nav-card layui-tab-brief" lay-allowClose="true" lay-filter="admin-tab">
+					<ul class="layui-tab-title">
+						<li class="layui-this">
+							<i class="fa fa-dashboard" aria-hidden="true"></i>
+							<cite>工作台</cite>
+						</li>
+					</ul>
+					<div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">
+						<div class="layui-tab-item layui-show">
+							<iframe src="pages/dashboard.html"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="layui-footer footer footer-demo">
+			    <div class="layui-main">
+				    <p>
+				      <a  target="_blank">主办单位：呼和浩特市人民政府法制办公室</a>
+				      <a  target="_blank">地址：呼和浩特市赛罕区新华东街1号</a>| 
+				      <a  target="_blank">电话：(0471)4606562</a>|
+				      <a href="http://www.orhonit.com/home" target="_blank" rel="nofollow">技术支持：内蒙古奥尔弘科技有限公司</a>
+				      <!-- <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">蒙ICP备13006272号</a> -->
+				    </p>
+			    </div>   
+			</div>
+			<script type="text/javascript" src="layui/layui.js"></script>
+			<script type="text/javascript" src="js/libs/jquery-2.1.1.min.js"></script>
+		<!-- 	<script type="text/javascript" src="js/jq.js"></script> -->
+			<script type="text/javascript" src="js/main.js"></script>
+			<script type="text/javascript" src="js/my/ws/login-listener.js"></script>
+	</div>
+</body>
+<script type="text/javascript">
+/*  个人信息 */
+$('#user').on('click', function(){
+	 layer.open({
+	        type: 2,
+	        //skin: 'layui-layer-lan',
+	        title: ['个人信息', 'background-color:#5b8bff;','color:#fff !important;'],
+	        fix: false,
+	        shadeClose: true,
+	        maxmin: true,
+	        area: ['70%', '80%'],
+	        
+	        content: 'http://111.235.156.244:8084/auth/pages/user/updateMyself.html',
+	       
+	    });
+	});
+$.ajax({  
+    url:"/auth/users/current/person",  
+    type:"get",  
+    async:false,
+    success:function(data){
+   	 if(data.picture != null && data.picture != ''){
+   		 $("#picture").attr('src','files'+data.picture);
+   	 }
+    }
+});
+
+ function CloseWebPage(){  
+    var browserName=navigator.appName;  
+    if (browserName=="Netscape") {  
+    	 window.opener=null;
+        window.open('','_self',''); 
+        window.close();   
+    } else {  
+        window.close();  
+    }
+} 
+</script>
+</html>

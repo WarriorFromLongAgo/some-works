@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.teacher.mapper.OfficeArrangeUserMapper">
+    <select id="getOfficeArrangeTeacher"
+            resultType="java.util.HashMap"
+            parameterType="java.util.HashMap">
+
+        SELECT
+        a.*,
+        b.teacher_name,
+        b.telnumber
+        FROM
+        teacher_office_arrange_user a
+        LEFT JOIN teacher_information as b ON b.user_id = a.user_id
+        <where>
+            <if test="maps.room_id!=null and maps.room_id!=''">
+                and a.room_id = #{maps.room_id}
+            </if>
+            and a.deleted_at is NULL
+        </where>
+    </select>
+    <select id="getOfficeArrangeTeacherpage"
+            resultType="java.util.HashMap"
+            parameterType="java.util.HashMap">
+
+        SELECT
+        a.*,
+        b.teacher_name,
+        b.telnumber
+        FROM
+        teacher_office_arrange_user a
+        LEFT JOIN teacher_information as b ON b.user_id = a.user_id
+        <where>
+            <if test="maps.room_id!=null and maps.room_id!=''">
+                and a.room_id = #{maps.room_id}
+            </if>
+            and a.deleted_at is NULL
+        </where>
+        LIMIT #{dto.start},#{dto.limit}
+    </select>
+
+    <insert id="inserts">
+		INSERT INTO teacher_office_arrange_user(room_id,user_id)
+		SELECT #{room_id},#{user_id} FROM DUAL
+		WHERE NOT EXISTS (SELECT room_id,user_id FROM teacher_office_arrange_user
+		WHERE room_id = #{room_id} AND user_id = #{user_id});
+	</insert>
+    <select id="selects">
+		SELECT * FROM teacher_office_arrange_user as a
+        <where>
+            a.room_id = #{room_id} and a.user_id = #{user_id}
+        </where>
+	</select>
+</mapper>

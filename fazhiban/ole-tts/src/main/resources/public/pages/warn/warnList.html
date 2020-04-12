@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>预警列表</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div id="moreTemplate">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <header style="height: 100%">
+            <div align="left">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <form class="form-inline" onsubmit="return false">
+                                <div class="form-group">
+                                    发送人：
+                                    <input id="createName" type="text" class="form-control" placeholder="请输入发送人">
+                                    星级：
+                                    <select name="star" class="form-control"  id="star">
+                                        <option class="form-control" value="">全部</option>
+                                        <option class="form-control" value="1">一星</option>
+                                        <option class="form-control" value="2">二星</option>
+                                        <option class="form-control" value="3">三星</option>
+                                        <option class="form-control" value="4">四星</option>
+                                        <option class="form-control" value="5">五星</option>
+                                    </select>
+                                    案件名称：
+                                    <input id="recordTitle" type="text" class="form-control" placeholder="请输入案件名称">
+
+                                    <button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                </div>
+                            </form>
+                        </td>
+
+
+                    </tr>
+                </table>
+            </div>
+        </header>
+
+        <div>
+            <div class="widget-body no-padding">
+                <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <th>发送人</th>
+                        <th>预警时间</th>
+                        <th>级别</th>
+                        <th>星级</th>
+                        <th width="15%">预警内容</th> 
+                        <th width="15%">案件/检查名称</th>
+                        <th>处理情况</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+<script type="text/javascript" src="../../js/constans.js"></script>
+<script type="text/javascript">
+
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+    });
+
+    var warnType = getQuery('warnType');
+
+    function init(){
+        example =
+            $('#dt-table').DataTable({
+                "language":lang,
+                "searching": false,
+                "processing": false,
+                "serverSide" : true,
+                "bLengthChange": false,
+                "ajax": {
+                    "url" : "/tts/warn/list",
+                    "type":"get",
+                    "data":function(d){
+                        d.recordTitle = $('#recordTitle').val();
+                        d.star = $('#star').val();
+                        d.createName = $('#createName').val();
+                        d.warnType = warnType;
+                    }
+                },
+                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",
+                "columns": [
+                    { "data": "createName", "defaultContent": ""},
+                    { "data": "createDate", "defaultContent": ""},
+                    { "data": "level", "defaultContent": ""},
+                    { "data": "star", "defaultContent": ""},
+                    { "data": "content", "defaultContent": ""},
+                    { "data": "recordTitle", "defaultContent": ""},
+                    { "data": "", "defaultContent": ""},
+                ],
+                "columnDefs": [
+                    //{ "name": "createName", "targets": 0 },
+                    {
+                        "targets": 0,
+                        "render": function (data, type, row) {
+                        	if(row['flag'] != '0'){
+                        		return '<span class="layui-badge-dot"></span>'+row['createName'];
+                        	}
+                            return row['createName'];
+                        }
+                    },
+                    { "name": "createDate", "targets": 1 },
+                    {
+                        "targets": 2,
+                        "render": function (data, type, row) {
+                        	var color = '';
+                        	if(row['level'] == '红'){
+                        		color = 'red';
+                        	}else if(row['level'] == '黄'){
+                        		color = 'yellow';
+                        	}else if(row['level'] == '蓝'){
+                        		color = 'blue';
+                        	}
+                        	var a = '<a style="color:'+color+';">';
+                        	a += row['level'];
+                        	a+='</a>';
+                            return a;
+                        }
+                    },
+                  	{
+                        "targets": 3,
+                        "render": function (data, type, row) {
+                        	var color = '';
+                        	switch(parseInt(row['star'])){
+                        	case 1:
+                        		color = '#FFE4B5';
+                        		break;
+                        	case 2:
+                        		color = '#FFB90F';
+                        		break;
+                        	case 3:
+                        		color = '#FF8C69';
+                        		break;
+                        	case 4:
+                        		color = '#FF6347';
+                        		break;
+                        	case 5:
+                        		color = '#FF0000';
+                        		break;
+                        	}
+                        	var a = '<a style="color:'+color+';">';
+                        	a += new Array( parseInt(row['star']) + 1 ).join( '★' );
+                        	a+='</a>';
+                            return a;
+                        }
+                    },
+                    {
+                        "targets": 4,
+                        "render": function (data, type, row) {
+                            var content = row['content'];
+                            var yujcontent = content.substring(0,10) + "...";
+                            var href = '<a  style="color:#009688" href="javascript:;" onclick="showDetailCase(\''+row['id']+'\')">' + yujcontent + '</a>';
+                            return href;
+                        }
+                    },
+                    //{ "name": "recordTitle", "targets": 5 },
+                    {
+                        "targets": 5,
+                        "render": function (data, type, row) {
+                        	var content = row['recordTitle'];
+                            var yujcontent = content.substring(0,10) + "...";
+                        	var href = yujcontent;
+                        	switch(row['recordCode'].split('-')[0]){
+                        	case 'CF':
+                        		href = '<a  style="color:#009688" href="javascript:;" onclick="showCaseDetail(\''+row['recordId']+'\')">' + yujcontent + '</a>';
+                        	break;
+                        	case 'RC':
+                        		href = '<a  style="color:#009688" href="javascript:;" onclick="showSearchCheckDailyInfo(\''+row['recordId']+'\')">' + yujcontent + '</a>';
+                        		break;
+                        	case 'ZXJC':
+                        		href = '<a  style="color:#009688" href="javascript:;" onclick="showCheckDetailCase(\''+row['recordId']+'\')">' + yujcontent + '</a>';
+                        	}
+                            return href;
+                        }
+                    },
+                    {
+                        "targets": 6,
+                        "render": function (data, type, row) {
+                            var fz = (parseInt(row['count'])*2-parseInt(row['deal']));
+                            var fm = (parseInt(row['count']));
+                            var pr = (parseInt(row['count'])*2-parseInt(row['deal']))/(parseInt(row['count']))*100;
+                            return '<div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" style="width:'+pr+'%;color:black;">'+fz+'/'+fm+'</div></div>';
+                        }
+                    },
+                ],
+                "order": [[ 0, "desc" ],[1, "asc"]]
+            });
+    }
+    $("#searchBt").click(function(){
+        example.ajax.reload();
+    });
+    init();
+    function showDetailCase(warnId) {
+        parent.layer.open({
+            type: 2,
+            title: '预警详情页面',
+            shade: [0],
+            area: ['73%', '60%'],
+            shift: 2,
+            content: 'pages/warn/warnDetailInfo.html?warnId=' + warnId
+        });
+    }
+    
+    function showCaseDetail(caseId) {
+    	parent.layer.open({
+    		type: 2,
+            title: '案件详情页面',
+            shade: [0],
+            area: ['90%', '70%'],
+            shift: 2,
+            content: 'pages/realTime/caseDetailInfo.html?caseId=' + caseId
+        });
+    }
+    
+    function showSearchCheckDailyInfo(checkId) {
+    	layer.open({
+    		type: 2,
+            title: '日常检查详情页面',
+            shade: [0],
+            area: ['90%', '99%'],
+            shift: 2,
+            content: '/tts/pages/checkDaily/checkDailyInfo.html?checkId=' + checkId + '&type=1'
+        });
+    }
+    
+    function showCheckDetailCase(checkId) {
+    	layer.open({
+    		type: 2,
+            title: '专项检查详情页面',
+            shade: [0],
+            area: ['90%', '70%'],
+            shift: 2,
+            content: '/tts/pages/check/checkInfo.html?checkId=' + checkId
+        });
+    }
+</script>

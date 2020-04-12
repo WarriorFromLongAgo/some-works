@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>案件受理</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../../layui/css/layui.css">
+<link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+</head>
+<style>
+	#dt-table td a{display:block;width:100px !important;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+    #dt-table td.ellipsis{max-width:75px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+</style>
+<body>
+    <div id="moreTemplate">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 100%">
+                    <div align="left">
+	                    <table style="width: 100%">
+	                   		<tr>
+	                   			<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											检查编号：<input id="id" type="text" class="form-control" placeholder="请输入案件编号">
+											检查标题：<input id="check_title" type="text" class="form-control" placeholder="请输入检查标题">
+											检查对象：<input id="check_object" type="text" class="form-control" placeholder="请输入检查对象">
+											<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+										</div>
+									</form>
+								</td>
+								<td align="right" id="docflow">
+	                   				<button class="layui-btn layui-btn-small" onclick="addLssued()">
+                                      <i class="layui-icon">&#xe608;</i> 提交
+                                    </button>
+	                   			</td>
+	                   		</tr> 
+	                    </table>
+					</div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%;white-space: nowrap;">
+                            <thead>                     
+                                <tr>
+                              	    <th>选择</th>
+                              	    <th>检查编号</th>
+                                    <th>检查标题</th>
+                                    <th>检查对象</th>
+                                    <th>状态</th>
+                                    <th>检查开始时间</th>
+                                    <th>检查结束时间</th>
+                                    <th>检查依据</th>
+                                    <th>检查部门</th>
+                                    <th>执法人员</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../../js/jq.js"></script>
+<script type="text/javascript" src="../../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../../layui/layui.all.js"></script>
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="../../../js/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="../../../js/ueditor.all.min.js"></script>
+<script src="../../../js/moment-with-locales.min.js"></script>  
+  
+<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../../js/select2/select2.full.min.js"></script>  
+<script src="../../../js/select2/zh-CN.js"></script>  
+<script src="../../../js/jquery-confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="../../../js/constans.js"></script> 
+
+<script type="text/javascript">
+var pers = checkPermission();
+var userI,example,userKeyId;
+
+ $('#caseTime').datetimepicker({  
+    format: 'YYYY-MM-DD ',  
+    locale: moment.locale('zh-cn')  
+}); 
+ var businessId = getQuery('businessId');
+ if ( businessId ) {
+ 	$('#id').val(businessId);
+ }      
+function init(){
+	
+	//获取流程节点
+	var flowNode =checkStatus.CASE_ADMISS;
+    //获取流程类型
+    var flowtype=flowType.SPECIAL_CHECK;
+    //获取流程文书
+	getDocFlow(flowNode,flowtype);
+    //添加附件管理
+    addFileManageBtn(flowNode);
+	example = 
+	$('#dt-table').DataTable({
+		"language":lang,
+		"searching": false,
+		"processing": false,"ordering": false,
+		"serverSide" : true,
+		"bLengthChange": false,
+		"ajax": {
+			"url" : "/enforce/acceptance/list",
+    		"type":"get",
+    		"data":function(d){
+				d.checkTitle = $('#check_title').val();
+				d.checkObject = $('#check_object').val();
+				d.checkNum = $('#id').val();
+				d.personId=userKeyId;
+			}
+    	},
+    	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+        "columns": [
+      	  	{ "data": "id", "defaultContent": ""},
+      	  	{ "data": "checkNum", "defaultContent": ""},
+            { "data": "checkTitle", "defaultContent": ""},
+            { "data": "checkObject", "defaultContent": ""},
+            { "data": "status", "defaultContent": ""},
+            { "data": "startDate", "defaultContent": ""},
+            { "data": "endDate", "defaultContent": ""},
+            { "data": "checkBasis", "defaultContent": ""},
+            { "data": "deptName", "defaultContent": ""},
+            { "data": "personName", "defaultContent": ""},
+        ],
+        "columnDefs": [
+            {
+				"targets": 0 ,
+				"sClass": "text-center",
+				"data": "id",//行单选框
+				"render": function (data, type, row) {
+					return '<input class="checkchild" type="checkbox"  value="' + row.checkNum + ','+row.id+'" />';
+				},
+				"bSortable": false
+			},
+			{ 
+            	"targets": 1,
+            	"render": function (data, type, row) {
+            		var checkNum = row['checkNum'];
+          	     	var href = '<a  style="color:#009688" href="javascript:;" onclick="showDetailCase(\''+row['id']+'\' )">' + checkNum + '</a>';
+           		return href;
+              }
+            },
+			//{ "data": "checkNum", "targets": 1},
+            { "name": "checkTitle", "targets": 2 ,"sClass": "ellipsis",},
+            { "name": "checkObject", "targets": 3 },
+            { "data": "status","targets": 4},
+            { "name": "startDate", "targets": 5 },
+            { "name": "endDate", "targets": 6 },
+            { "name": "checkBasis", "targets": 7 },
+            { "name": "deptName", "targets": 8 },
+            { "name": "personName", "targets": 9 },
+          ],
+         "order": [[ 0, "desc" ],[1, "asc"]]
+    });	
+}
+
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+	
+function addLssued(){
+if ($(".checkchild:checked").length == 0) {
+		layer.msg("请先勾选需要提交的记录.", {anim:6});
+		return;           
+	}
+	
+	if ($(".checkchild:checked").length > 1) {
+		layer.msg("一次只能提交一条记录.", {anim:6});
+		return;           
+	}
+	 var caseId = $(".checkchild:checked").val();
+	caseId=caseId.split(",")[0];
+	
+	 //文书是否必填判断
+    if(docNeedAdd()==-1){
+    	return;
+    }
+	
+	layer.open({
+		type: 2,
+        title: '提交',
+        shade: [0],
+        area: ['500px', '300px'],
+        shift: 2,
+        content: 'acceptanceSubmit.html?caseId='+caseId
+    });
+}
+
+function toUpdatePage(href){
+	layer.open({
+		type: 2,
+        title: '编辑案件受理',
+        shade: [0],
+        area: ['80%', '90%'],
+        shift: 2,
+        content: href
+    });
+}
+	
+$.ajax({
+	type : 'get',
+	url : '/enforce/users/current',
+	userdata : $("#form").serialize(),	
+	success : function(userdata) {
+	userI=userdata.username;
+	userKeyId=userdata.person_id;
+	init();
+	}
+});
+
+function showDetailCase(checkId) {
+	layer.open({
+		type: 2,
+        title: '专项检查详情页面',
+        maxmin: true,
+        shade: [0.8, '#393D49'],
+        area: ['90%', '90%'],
+        shift: 2,
+        content: '../lssuedInfo.html?checkId=' + checkId
+    });
+}
+
+</script>

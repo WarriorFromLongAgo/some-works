@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.baseinfo.mapper.SemesterMapper">
+
+
+    <select id="getSemesterViaStartAndEnd" resultType="java.util.HashMap">
+        select * from baseinfo_semester where (start_at &lt; #{startAt}) and (end_at &gt; #{endAt}) limit 1;
+    </select>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.FinanceManagementDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.FinanceManagementEntity" id="financeManagementMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="content" column="content"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="type" column="type"/>
+        <result property="createName" column="create_name"/>
+        <result property="lowerId" column="lower_id"/>
+        <result property="deptId" column="dept_id"/>
+    </resultMap>
+
+	<select id="selectFinanceById" resultMap="financeManagementMap">
+		select
+		  *
+		from tb_finance_management where id = #{id}
+	</select>
+	
+	<insert id="save">
+		insert INTO tb_finance_management (id,title,content,type,create_time,create_by,update_time,create_name,lower_id,dept_id)
+		      values(#{id},#{title},#{content},#{type},#{createTime},#{createBy},#{updateTime},#{createName},#{lowerId},#{deptId})
+	</insert>
+
+</mapper>

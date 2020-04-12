@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.tts.dao.WarnDao">
+    <!-- 预警列表查询-->
+	<select id="list" resultType="java.util.HashMap">
+		SELECT
+			SUM(CASE WHEN owp.is_read = 0 AND owp.is_deal = 1 AND owi.warn_type = 3 AND owi.CREATE_BY = #{params.createBy} THEN 1
+			ELSE 0
+			END) AS flag, 
+			count(owi.id) AS count,
+			sum(owp.is_deal) as deal,
+			owi.id AS id,
+			owp.person_id AS personId,
+			owi.create_name AS createName,
+			owi.create_date AS createDate,
+			osd1.enum_desc AS level,
+			owi.star AS star,
+			owi.content AS content,
+			owi.record_title AS recordTitle,
+			owi.record_id AS recordId,
+			owi.record_code AS recordCode,
+			osd2.enum_desc AS isDeal
+		FROM ole_warn_info owi
+			LEFT JOIN ole_warn_person owp ON owp.warn_id = owi.id
+			LEFT JOIN ole_sys_dict osd1 ON osd1.type_value = '1900' AND owi.level = osd1.enum_value
+			LEFT JOIN ole_sys_dict osd2 ON osd2.type_value = '2056' AND owp.is_deal = osd2.enum_value
+		<where>
+			owi.warn_type = #{params.warnType}
+			<if test="params.recordTitle != null and params.recordTitle != ''">
+				and owi.record_title like concat('%', #{params.recordTitle}, '%')
+			</if>
+			<if test="params.star != null and params.star != ''">
+				and owi.star = #{params.star}
+			</if>
+			<if test="params.createName != null and params.createName != ''">
+				and owi.create_name like concat('%', #{params.createName}, '%')
+			</if>
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET(owp.dept_id,#{params.deptIds})
+			</if>
+		</where>
+		GROUP BY owi.id
+		ORDER BY owi.create_date DESC
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+
+	<!-- 列表查询总数-->
+	<select id="listCount" resultType="int">
+		SELECT
+			count(DISTINCT owi.id)
+		FROM ole_warn_info owi
+			LEFT JOIN ole_warn_person owp ON owp.warn_id = owi.id
+		<where>
+			owi.warn_type = #{params.warnType}
+			<if test="params.recordTitle != null and params.recordTitle != ''">
+				and owi.record_title like concat('%', #{params.recordTitle}, '%')
+			</if>
+			<if test="params.star != null and params.star != ''">
+				and owi.star = #{params.star}
+			</if>
+			<if test="params.createName != null and params.createName != ''">
+				and owi.create_name like concat('%', #{params.createName}, '%')
+			</if>
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET(owp.dept_id,#{params.deptIds})
+			</if>
+		</where>
+		;
+	</select>
+	
+	<select id="getWarnByIdAndPersonId" resultType="java.util.HashMap">
+		SELECT
+			owi.id AS id,
+			owp.person_id AS personId,
+			owi.create_name AS createName,
+			owi.create_date AS createDate,
+			obdp.name AS personName,
+			owi.star AS star,
+			owi.content AS content,
+			obd.name AS deptName,
+			owi.record_title AS recordTitle,
+			owi.record_code AS recordCode,
+			owp.deal_result AS dealResult,
+			owi.task_id AS taskId,
+			osd1.enum_desc AS level,
+			osd2.enum_desc AS isDeal,
+			osd3.enum_desc AS warnType,
+			osd4.enum_desc AS type
+		FROM ole_warn_info  owi
+			LEFT JOIN ole_warn_person owp ON owp.warn_id = owi.id
+			LEFT JOIN ole_base_dept_person obdp ON obdp.id = owp.person_id
+			LEFT JOIN ole_sys_dict osd1 ON osd1.type_value = '1900' AND owi.level = osd1.enum_value
+			LEFT JOIN ole_sys_dict osd2 ON osd2.type_value = '2056' AND owp.is_deal = osd2.enum_value
+			LEFT JOIN ole_sys_dict osd3 ON osd3.type_value = '2051' AND owi.warn_type = osd3.enum_value
+			LEFT JOIN ole_sys_dict osd4 ON osd4.type_value = '2020' AND owi.type = osd4.enum_value
+			LEFT JOIN ole_base_dept obd ON obd.id = owp.dept_id
+		<where>
+			owi.id = #{warnId} and owp.person_id = #{personId}
+		</where>
+	</select>
+	
+	<select id="getPersonByWarnId" resultType="java.util.HashMap">
+		SELECT	
+			obdp.name AS personName,
+			obd.name AS deptName,
+			owp.deal_result AS dealResult,
+			osd.enum_desc AS isDeal,
+			CASE WHEN owp.is_read = 0 AND owp.is_deal = 1 AND owp.CREATE_BY = #{params.username} THEN 1
+			ELSE 0
+			END AS isRead,
+			owp.person_id as personId
+		FROM ole_warn_person owp 
+		LEFT JOIN ole_base_dept obd ON obd.id = owp.dept_id
+		LEFT JOIN ole_base_dept_person obdp ON obdp.id = owp.person_id
+		LEFT JOIN ole_sys_dict osd ON osd.type_value = '2056' AND osd.enum_value = owp.is_deal
+		<where>
+			owp.warn_id = #{params.warnId}
+		</where>
+	</select>
+	
+	<select id="getWarnInfo" resultType="com.orhonit.ole.tts.dto.WarnDTO">
+		SELECT
+		  wi.id AS id,
+		  sd1.enum_desc AS level,
+		  wi.content AS content,
+		  wi.create_date AS createDate,
+		  wi.record_title AS recordTitle,
+		  wi.record_id AS recordId,
+		  wi.record_code AS recordCode,
+		  wi.record_status AS recordStatus,
+		  wi.flow_type AS flowType,
+		  sd2.enum_desc AS type,
+		  wi.task_id AS taskId,
+		  sd3.enum_desc AS warnType,
+		  wi.star AS star,
+		  wi.create_name as createName,
+		  wi.create_by as createBy,
+		  wi.update_name as updateName,
+		  wi.update_by as updateBy,
+		  wi.update_date as updateDate
+		FROM ole_warn_info wi
+		LEFT JOIN ole_sys_dict sd1 ON sd1.type_value = '1900' AND sd1.enum_value = wi.level
+		LEFT JOIN ole_sys_dict sd2 ON sd2.type_value = '2020' AND sd2.enum_value = wi.type
+		LEFT JOIN ole_sys_dict sd3 ON sd3.type_value = '2051' AND sd3.enum_value = wi.warn_type
+		<where>
+			wi.id = #{id}
+		</where>
+	</select>
+	
+	<!-- 预警列表查询-->
+	<select id="baseList" resultType="com.orhonit.ole.tts.dto.WarnDTO">
+		SELECT
+		  wi.id AS id,
+		  sd1.enum_desc AS level,
+		  bdp.name AS personId,
+		  wi.content AS content,
+		  wi.create_date AS createDate,
+		  bd.name AS deptId,
+		  sd2.enum_desc AS type,
+		  wi.task_id AS taskId,
+		  sd3.enum_desc AS warnType,
+		  owp.is_deal AS deal
+		FROM ole_warn_info wi
+		left join ole_warn_person owp on wi.id=owp.warn_id
+		LEFT JOIN ole_sys_dict sd1 ON sd1.type_value = '1900' AND sd1.enum_value = wi.level
+		LEFT JOIN ole_base_dept_person bdp ON bdp.ID = owp.person_id
+		LEFT JOIN ole_base_dept bd ON bd.id = owp.dept_id
+		LEFT JOIN ole_sys_dict sd2 ON sd2.type_value = '2020' AND sd2.enum_value = wi.type
+		LEFT JOIN ole_sys_dict sd3 ON sd3.type_value = '2051' AND sd3.enum_value = wi.warn_type
+		<where>
+			<if test="params.deptIds != null">
+				wi.dept_id = #{params.deptIds}
+			</if>
+			AND wi.warn_type = #{params.warnType}
+			<if test="params.content != null">
+				and wi.content like concat('%', #{params.content} , '%')
+			</if>
+			<if test="params.deal != null and params.deal != ''">
+				and owp.is_deal = #{params.deal}
+			</if>
+		</where>
+		order by wi.create_date desc
+		<if test="params.start != null and params.length !=null">
+			limit #{start}, #{length};
+		</if>
+	</select>
+	
+	<!-- 列表查询总数-->
+	<select id="baseListCount" resultType="int">
+		SELECT count(*)
+		FROM ole_warn_info wi 
+		<where>
+		  	<if test="params.deptIds != null">
+				wi.dept_id = #{params.deptIds}
+			</if>
+			AND wi.warn_type = #{params.warnType}
+			<if test="params.content != null">
+				and wi.content like concat('%', #{params.content} , '%')
+			</if>
+			<if test="params.deal != null and params.deal != ''">
+				and wi.deal = #{params.deal}
+			</if>
+		</where>
+		;
+	</select>
+</mapper>

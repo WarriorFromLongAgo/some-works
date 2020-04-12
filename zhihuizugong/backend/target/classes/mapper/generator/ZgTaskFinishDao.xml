@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgTaskFinishDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgTaskFinishEntity" id="ZgTaskFinishMap">
+        <result property="id" column="id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="content" column="content"/>
+        <result property="contentType" column="content_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createName" column="create_name"/>
+    </resultMap>
+<!--     查询最新的工作任务的完成情况 -->
+    <select id="selectCompletion" resultMap="ZgTaskFinishMap">
+    (select * from zg_task_finish where task_id = #{id} and content_type = '1' and schedule = 1 order by create_time desc limit 1)
+	union
+	(select * from zg_task_finish where task_id = #{id} and content_type = '1' and schedule = 2 order by create_time desc limit 1)
+	union
+	(select * from zg_task_finish where task_id = #{id} and content_type = '1' and schedule = 3 order by create_time desc limit 1)
+	union
+	(select * from zg_task_finish where task_id = #{id} and content_type = '1' and schedule = 4 order by create_time desc limit 1)
+	union
+	(select * from zg_task_finish where task_id = #{id} and content_type = '1' and schedule = 5 order by create_time desc limit 1)
+    </select>
+<!--     查询工作任务的督办情况 -->
+    <select id="selectRigorous" resultMap="ZgTaskFinishMap">
+    select * from zg_task_finish where task_id = #{id} and content_type = '2' order by create_time desc
+    </select>
+
+</mapper>

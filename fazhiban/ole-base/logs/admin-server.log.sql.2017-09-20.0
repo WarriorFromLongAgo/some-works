@@ -1,0 +1,21 @@
+2017-09-20 18:24:58,878 [http-nio-8080-exec-1] ==>  Preparing: select * from sys_user t where t.username = ? 
+2017-09-20 18:24:59,025 [http-nio-8080-exec-1] ==> Parameters: admin(String)
+2017-09-20 18:24:59,049 [http-nio-8080-exec-1] <==      Total: 1
+2017-09-20 18:24:59,144 [taskExecutor-1] ==>  Preparing: insert into sys_logs(userId, module, flag, remark, createTime) values(?, ?, ?, ?, now()) 
+2017-09-20 18:24:59,246 [taskExecutor-1] ==> Parameters: 1(Long), web端登陆(String), true(Boolean), null
+2017-09-20 18:24:59,262 [taskExecutor-1] <==    Updates: 1
+2017-09-20 18:24:59,507 [http-nio-8080-exec-3] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-09-20 18:24:59,515 [http-nio-8080-exec-3] ==> Parameters: 1(Long)
+2017-09-20 18:24:59,539 [http-nio-8080-exec-3] <==      Total: 26
+2017-09-20 18:25:01,355 [http-nio-8080-exec-1] ==>  Preparing: select * from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.userId = ? 
+2017-09-20 18:25:01,358 [http-nio-8080-exec-1] ==> Parameters: 1(Long)
+2017-09-20 18:25:01,370 [http-nio-8080-exec-1] <==      Total: 1
+2017-09-20 18:25:01,373 [http-nio-8080-exec-1] ==>  Preparing: select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId inner join sys_role_user ru on ru.roleId = rp.roleId where ru.userId = ? order by p.sort 
+2017-09-20 18:25:01,374 [http-nio-8080-exec-1] ==> Parameters: 1(Long)
+2017-09-20 18:25:01,390 [http-nio-8080-exec-1] <==      Total: 26
+2017-09-20 18:25:01,524 [http-nio-8080-exec-1] ==>  Preparing: select count(1) from sys_logs t left join sys_user u on u.id = t.userId 
+2017-09-20 18:25:01,535 [http-nio-8080-exec-1] ==> Parameters: 
+2017-09-20 18:25:01,539 [http-nio-8080-exec-1] <==      Total: 1
+2017-09-20 18:25:01,544 [http-nio-8080-exec-1] ==>  Preparing: select t.*, u.username, u.nickname from sys_logs t left join sys_user u on u.id = t.userId order by createTime desc limit ?, ? 
+2017-09-20 18:25:01,552 [http-nio-8080-exec-1] ==> Parameters: 0(Integer), 10(Integer)
+2017-09-20 18:25:01,826 [http-nio-8080-exec-1] <==      Total: 7

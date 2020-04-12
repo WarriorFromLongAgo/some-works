@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+		
+			<div class="form-group">
+				<label class="col-md-2 control-label">案件编号</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" readonly="readonly" id="caseNum" />
+				</div>
+				
+				<label class="col-md-2 control-label">案件名称</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" id="caseName" readonly="readonly" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">案源</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" id="caseSource" readonly="readonly" />
+				</div>
+				
+				<label class="col-md-2 control-label">收件时间</label>
+				<div class="col-md-4">
+					<input class="form-control" type="text" id="caseApplyDate" readonly="readonly"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">案发地址</label>
+				<div class="col-md-10">
+					<input class="form-control" type="text" id="caseAddress" readonly="readonly" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">简要案件内容</label>
+				<div class="col-md-10">
+					<textarea class="form-control" rows="" cols="" id="briefCaseContent" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">经办人</label>
+				<div class="col-md-4">
+					<input class="form-control" readonly="readonly" type="text" id="caseHandler" />
+				</div>
+			</div>
+		</fieldset>
+		<div class="form-group">
+		    <label class="col-md-2 control-label"></label>
+			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="margin-top:20px;">
+				<div class="panel panel-warning">
+				    <div class="panel-heading">
+				        <h3 class="panel-title">注意事项</h3>
+				    </div>
+				    <div class="panel-body">
+				        	<p class="text-warning" style="margin-left:20px">执法人员进行案件现场核实情况时需要出示相关执法证件。</p>
+				    </div>
+				</div>
+			</div>
+		</div>
+		<fieldset>
+			<div class="form-group">
+				<label class="col-md-2 control-label">当事人类型<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<select class="form-control" id="type" name="type" onchange="changeFieldSet()">
+						<option value="">请选择</option>
+					</select>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset style="display: none" id="person">
+		
+			<div class="form-group">
+				
+				<label class="col-md-2 control-label">当事人姓名<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname='当事人姓名' placeholder="请输入当事人姓名" type="text" name="name" id="name"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">当事人单位名称<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname="当事人单位名称" placeholder="请输入单位名称" type="text" name="unitName" id="unitName"/>
+				</div>
+				<label class="col-md-2 control-label">当事人工作单位地址<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname="当事人工作单位地址" placeholder="请输入当事人工作单位地址" type="text" name="unitAddress" id="unitAddress"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">当事人年龄<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null num " iname='当事人年龄' placeholder="请输入当事人年龄" type="text" name="age" id="age"/>
+				</div>
+				
+				<label class="col-md-2 control-label">当事人性别<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<select class="form-control not-null" iname="当事人性别" id="sex" name="sex">
+						<option value="">请选择</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">当事人电话<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null tel" iname='当事人电话' placeholder="请输入当事人电话" type="text" name="tel" id="tel"/>
+				</div>
+				
+				<label class="col-md-2 control-label">当事人身份证号<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null id-num"  iname='当事人身份证号' placeholder="请输入当事人身份证号" type="text" name="idCard" id="idCard"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">当事人邮编<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null zip-code" iname="当事人邮编" placeholder="请输入当事人邮编" type="text" name="postCode" id="postCode"/>
+				</div>
+				
+				<label class="col-md-2 control-label">当事人住址<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null" iname="当事人住址"  placeholder="请输入当事人住址" type="text" name="address" id="address"/>
+				</div>
+			</div>
+			
+
+		</fieldset>
+		
+		<fieldset id="company" style="display: none">
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">组织机构代码证<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null"  iname='组织机构代码证' placeholder="请输入组织机构代码证" type="text" name="orgCode" id="orgCode"/>
+				</div>
+				<label class="col-md-2 control-label">单位名称<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null " iname='单位名称' placeholder="请输入单位名称" type="text" name="companyName" id="companyName"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">单位地址<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null " iname='单位地址' placeholder="请输入单位地址" type="text" name="companyAddress" id="companyAddress"/>
+				</div>
+				<label class="col-md-2 control-label">法定代表人<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null cn" iname="法定代表人" placeholder="请输入法定代表人" type="text" name="legalName" id="legalName"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">法定代表人电话<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null tel" iname='法定代表人电话' placeholder="请输入法定代表人电话" type="text" name="gstel" id="gstel"/>
+				</div>
+				<label class="col-md-2 control-label">法人代表身份证号<span class="btx">*</span></label>
+				<div class="col-md-4">
+					<input class="form-control not-null id-num" iname="法人代表身份证号" 
+					placeholder="请输入法人代表身份证号" type="text" name="orgIdCard" id="orgIdCard"/>
+				</div>
+			</div>
+			
+		</fieldset>
+		
+		<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" type="submit"  id="tempBtn" onclick="savePerVerify(0)">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" id="caseId" name="caseId" />
+			<input type="hidden" id="comment" name="comment" />
+			<input type="hidden" id="perVerifyStatus" name="perVerifyStatus" />
+			<input type="hidden" id="dealType" name="dealType" />
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+	
+    <script src="../../js/moment-with-locales.min.js"></script>  
+	<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+	    layui.use(['layer','laydate'], function(){
+		    var layer = layui.layer;
+		    var laydate = layui.laydate;
+		    laydate.render({
+	           elem: '#birthday'
+	        });
+		});
+	    
+	    var caseId = getQuery('caseId');
+	    
+	    if ( caseId == null || caseId == '' ) {
+	    	alert('参数异常.');
+	    	window.location.href = '/enforce/pages/preVerify/perVerifyList.html';
+	    }
+	    
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/dict/list/1600',
+			contentType: "application/json; charset=utf-8", 
+			async: false,
+			success : function(data) {
+				if ( data.code == 0 ) {
+					var caseType = '';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						caseType += '<option value = "' + data.data[i].enumValue + '">' + data.data[i].enumDesc + '</option>';
+					}
+					$('#type').append(caseType);
+				}	
+			}
+		});
+	    
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/dict/list/1700',
+			contentType: "application/json; charset=utf-8", 
+			async: false,
+			success : function(data) {
+				if ( data.code == 0 ) {
+					var caseType = '';
+					for( var i = 0 ; i < data.data.length ; i ++ ) {
+						caseType += '<option value = "' + data.data[i].enumValue + '">' + data.data[i].enumDesc + '</option>';
+					}
+					$('#sex').append(caseType);
+				}	
+			}
+		});
+	    
+	    $.ajax({
+			type : 'get',
+			url : '/enforce/perVerify/query/' + caseId,
+			contentType: "application/json; charset=utf-8",  
+			async : false,
+			success : function(resp) {
+				if( resp.code == 0 ) {
+					var data = resp.data;
+					$('#caseId').val(data.caseId);
+					$('#caseNum').val(data.caseNum);
+					$('#caseName').val(data.caseName);
+					$('#caseSource').val(data.caseSource);
+					$('#caseAddress').val(data.caseAddress);
+					$('#caseApplyDate').val(data.caseApplyDate);
+					$('#briefCaseContent').val(data.briefCaseContent);
+					$('#caseHandler').val(data.caseHandler);
+					$('#caseType').val(data.caseType);
+					$('#caseZpr').val(data.caseZpr);
+					$('#caseTime').val(data.caseTime);
+					$('#caseZzfryid').val(data.caseZzfryid);
+					$('#caseFzfryid').val(data.caseFzfryid);
+					// 当事人
+					if ( data.type ) {
+						$('#type').val(data.type);
+						if ( data.type == "1") {
+							// 个人
+							$("#person").css('display','block');
+							$("#unitName").val(data.unitName);
+							$("#unitAddress").val(data.unitAddress);
+						} else if ( data.type == "2") {
+							$("#company").css('display','block');
+							$("#companyName").val(data.unitName);
+							$("#companyAddress").val(data.unitAddress);
+						} else {
+							alert('当事人类型错误,无法初始化数据.');
+							window.location.href = '/enforce/pages/preVerify/perVerifyList.html';
+							return;
+						}
+						$('#name').val(data.name);
+						$('#age').val(data.age);
+						$('#sex').val(data.sex);
+						$('#tel').val(data.tel);
+						$('#idCard').val(data.idCard);
+						$('#sex').val(data.sex);
+						$('#address').val(data.address);
+						$('#postCode').val(data.postCode);
+						$('#legalName').val(data.legalName);
+						$('#orgIdCard').val(data.orgIdCard);
+						$('#orgCode').val(data.orgCode);
+					}
+					
+				} else {
+					alert('服务器内部发生错误.');
+				}
+			}
+		});
+	    $('#caseApplyDate').datetimepicker({  
+            format: 'YYYY-MM-DD HH:mm:ss',  
+            locale: moment.locale('zh-cn')  
+        }); 
+	    
+	    function changeFieldSet(){
+	    	var type = $('#type').val();
+	    	if ( type == ''){
+	    		$('#person').css('display','none');
+	    		$('#company').css('display','none');
+	    	} else if ( type == '1'){
+	    		$('#person').css('display','block');
+	    		$('#company').css('display','none');
+	    		
+	    	} else if ( type == '2'){
+	    		$('#person').css('display','none');
+	    		$('#company').css('display','block');
+	    	}
+	    }
+	    
+	    //$('#form').bootstrapValidator();
+	    
+	    function savePerVerify(perVerifyStatus) {
+	    	
+	    	$('#tempBtn').removeAttr("disabled");
+			$('#tempBtn').attr("disabled", false);
+			
+	    	//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+        	
+	    	var type = $('#type').val();
+	    	if (type == '') {
+	    		alert('当事人类型不能为空.');
+	    		return;
+	    	}
+	    	
+	    	$('#perVerifyStatus').val(perVerifyStatus);
+	    	var formdata = $("#form").serializeObject();
+	    	if(type=='2'){
+	    		formdata.unitName=$('#companyName').val();
+	    		formdata.unitAddress=$('#companyAddress').val();
+	    		formdata.tel=$('#gstel').val();
+	    	}
+	    	if ( $('#perVerifyStatus').val() == 0) {
+	    		$('#tempBtn').attr("disabled", true);
+		    	$.ajax({
+    				type : 'post',
+    				url : '/enforce/perVerify/save',
+    				contentType: "application/json; charset=utf-8",  
+    				data : JSON.stringify(formdata),
+    				success : function(data) {
+	    				layer.msg("提交成功", {shift: -1, time: 1000}, function(){
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+	                    });
+    				}
+    			});
+		    } else {
+		    	alert('错误');
+		    	// openInputCommentDialog();
+		    }
+	    	
+	    }
+	    
+    </script>
+</body>
+</html>

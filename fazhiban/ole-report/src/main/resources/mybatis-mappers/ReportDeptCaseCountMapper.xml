@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.cases.ReportCaseDeptDao">
+
+	<!-- 查询所有的行政部门 -->
+	<select id="findAllDept" resultType="com.orhonit.ole.report.dto.cases.DeptCaseCountDTO">
+		SELECT  DISTINCT obd.`name` name
+		FROM ole_base_dept obd
+		<where>
+			<if test="areaId != null and areaId != ''">
+				obd.`area_id` = #{areaId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询各行政部门处理行政案件 -->
+	<select id="findDeptAndCase" resultType="com.orhonit.ole.report.dto.cases.DeptCaseCountDTO">
+		SELECT obd.`name` AS 'name',  COUNT(oec.id) AS 'value'
+		FROM ole_ef_case oec
+		LEFT JOIN ole_base_dept obd ON oec.dept_id=obd.id
+		WHERE case_type='1'
+		AND obd.name != ''
+		<if test="year != null and year != ''">
+		AND YEAR(oec.`case_time`) = #{year}
+		</if>
+		<if test="areaId != null and areaId != ''">
+		AND obd.`area_id` = #{areaId}
+		</if>
+		GROUP BY obd.`name` 
+	</select>
+</mapper>

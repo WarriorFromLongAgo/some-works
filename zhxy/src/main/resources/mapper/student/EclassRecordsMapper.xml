@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.student.mapper.EclassRecordsMapper">
+
+    <select id="findStudentId" resultType="com.orhon.smartcampus.modules.student.entity.EclassRecords">
+        SELECT *                  
+        FROM student_eclass_records
+        WHERE student_id = #{id}
+    </select>
+
+    <insert id="eclassRecordsSave">
+	  insert into student_eclass_records (original_eclass , go_eclass , user_id , status , created_at , student_id) values (#{maps.original_eclass} , #{maps.go_eclass} , #{maps.user_id} , 'normal' , #{createTime} , #{id})
+    </insert>
+
+    <insert id="eclassRecordsSave2">
+	  insert into student_eclass_records (original_eclass , go_eclass , user_id , status , created_at , student_id) values (#{originalId} , #{maps.go_eclass} , #{maps.user_id} , 'normal' , #{createTime} , #{id})
+    </insert>
+
+    <update id="eclassRecordsUpdate">
+		UPDATE student_eclass_records set status = 'transferred' where student_id = #{id}
+    </update>
+
+</mapper>

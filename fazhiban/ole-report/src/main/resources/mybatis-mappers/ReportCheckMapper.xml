@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.orhonit.ole.report.dao.check.ReportOnlyCheckDao">
+	<select id="findOnlyCheck" parameterType="java.lang.String" resultType="com.orhonit.ole.report.dto.check.CheckDTO">
+		SELECT obd.`name`,COUNT(oec.`create_date`) AS value
+		FROM ole_base_dept obd
+		LEFT JOIN ole_ef_check_person oecp ON obd.`id` = oecp.`dept_id`
+		LEFT JOIN ole_ef_check oec ON oecp.`check_id` = oec.`id`
+		<where>
+			<if test="areaId != null and areaId != ''">
+				obd.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY obd.`name`
+		order BY value desc
+	</select>
+	
+	<!-- 日常检查的总数和专项检查的总数分为两个sql语句 
+		第一个是日常检查的总数，第二个是专项检查的总数
+	-->
+	<select id="findDayAndSpecialCount" parameterType="java.lang.String" resultType="com.orhonit.ole.report.dto.check.ReportMonthlyDTO">
+		SELECT 
+			a.name name,COUNT(b.dept_id) count
+		FROM 
+			ole_base_dept a
+		LEFT JOIN 
+			ole_ef_check_daily b 
+		ON 
+			a.id = b.dept_id
+		 <where>
+			<if test="areaId != null and areaId != ''">
+				a.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY 
+			a.name
+	</select>
+	
+	<select id="findCheckAndSpecialcount" resultType="com.orhonit.ole.report.dto.check.ReportMonthlyDTO">
+		SELECT 
+			obd.name name,COUNT(oec.create_date) count
+		FROM 
+			ole_base_dept obd
+		LEFT JOIN 
+			ole_ef_check_person oecp 
+		ON 
+			obd.id = oecp.dept_id
+		LEFT JOIN 
+			ole_ef_check oec 
+		ON 
+			oecp.check_id = oec.id
+		 <where>
+			<if test="areaId != null and areaId != ''">
+				obd.`area_id` = #{areaId}
+			</if>
+		</where>
+		GROUP BY 
+			obd.name
+	</select>
+	<!-- 
+		部门每月的检查总量
+		分为两个sql语句
+		第一个是日常检查的sql第二个是专项检查的sql
+	 -->
+	<select id="findDayAndMonthly" resultType="com.orhonit.ole.report.dto.check.ReportMonthlyDTO">
+		SELECT 
+			COUNT(MONTH(a.checked_date)) count,c.name name,COALESCE(b.date_value,0) dataValue
+		FROM 
+			ole_ef_check_daily a
+		LEFT JOIN 
+			ole_report_date b 
+		ON 
+			MONTH(a.checked_date) = b.date_value
+		LEFT JOIN 
+			ole_base_dept c 
+		ON 
+			c.id = a.dept_id
+		<where>
+			<if test="params.AreaName != '' and params.AreaName != null">
+				c.name = #{params.AreaName} 
+			</if>
+			<if test="params.year != '' and params.year != null">
+				AND 
+				YEAR(a.checked_date) = #{params.year}
+			</if>
+		</where>
+		GROUP BY 
+			MONTH(a.checked_date)
+	</select>
+	
+	<select id="findSpecialAndMonthly" resultType="com.orhonit.ole.report.dto.check.ReportMonthlyDTO">
+		SELECT 
+			COUNT(MONTH(a.create_date)) count,b.date_value dataValue,d.name name
+		FROM 
+			ole_ef_check a 
+		LEFT JOIN 
+			ole_report_date b 
+		ON 
+			MONTH(a.create_date) = b.date_value
+		LEFT JOIN 
+			ole_ef_check_person c 
+		ON 
+			a.id = c.check_id
+		LEFT JOIN 
+			ole_base_dept d 
+		ON 
+			c.dept_id = d.id
+		<where>
+			<if test="params.AreaName != '' and params.AreaName != null">
+				d.name = #{params.AreaName}
+			</if>
+			<if test="params.year != '' and params.year != null">
+				AND 
+				YEAR(a.create_date) = #{params.year}
+			</if>
+		</where>
+		GROUP BY 
+			MONTH(a.create_date)
+	</select>
+</mapper>

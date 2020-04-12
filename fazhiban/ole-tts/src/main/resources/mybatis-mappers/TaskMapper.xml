@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.tts.dao.TaskDao">
+    <select id="getTaskList" resultType="com.orhonit.ole.tts.dto.TaskDTO">
+        select job_id AS jobId, bean_name AS beanName,method_name as methodName,
+        params AS params, CRON_EXPRESSION cronExpression,
+        STATUS AS status, remark AS remark,
+        create_time AS createTime from ole_tts_schedule_job
+        <where>
+            <if test="params.beanName != null and params.beanName.trim() != ''">
+                bean_name like concat('%', #{params.beanName}, '%')
+            </if>
+        </where>
+        <if test="start != null and length != null ">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <select id="getTaskCount" resultType="int">
+        select count(1) from ole_tts_schedule_job
+        <where>
+            <if test="params.beanName != null and params.beanName.trim() != ''">
+                bean_name like concat('%', #{params.beanName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.orhonit.ole.tts.dto.TaskDTO" useGeneratedKeys="true" keyProperty="jobId">
+        insert into ole_tts_schedule_job
+        (
+        `bean_name`,
+        `method_name`,
+        `params`,
+        `cron_expression`,
+        `status`,
+        `remark`,
+        `create_time`
+        )
+        values
+        (
+        #{beanName},
+        #{methodName},
+        #{params},
+        #{cronExpression},
+        #{status},
+        #{remark},
+        #{createTime}
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.orhonit.ole.tts.dto.TaskDTO">
+    	UPDATE ole_tts_schedule_job SET 
+    		`bean_name`=#{beanName},
+    		`method_name`=#{methodName},
+    		`params`=#{params},
+    		`cron_expression`=#{cronExpression},
+    		`status`=#{status},
+    		`remark`=#{remark}
+	    	<where>
+	    		`job_id`=#{jobId};
+	    	</where>
+    </update>
+
+    <select id="queryObject" resultType="com.orhonit.ole.tts.dto.TaskDTO">
+        select job_id AS jobId, bean_name AS beanName,method_name as methodName,
+        params AS params, CRON_EXPRESSION cronExpression,
+        STATUS AS status, remark AS remark,create_time AS createTime
+        from ole_tts_schedule_job where job_id = #{jobId}
+    </select>
+    
+    <delete id="delete">
+    	delete from ole_tts_schedule_job where job_id in
+    	<foreach item="jobId" collection="jobId" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </delete>
+
+    <select id="execSql" resultType="java.util.HashMap">
+        ${sql}
+    </select>
+    
+    <select id="getOldPersonByPersonId" resultType="java.util.HashMap">
+        	SELECT code
+				,name
+				,sex
+				,nation
+				,tel
+				,political
+				,birthday
+				,edu
+				,card_num
+				,duty
+				,dept_id
+				,cert_num
+				,lawarea
+				,cert_type
+				,cert_auth
+				,cert_time
+				,cert_term
+				,law_type
+				,if_effect
+				,update_name
+				,update_date
+				,mgl_name FROM ole_base_dept_person_hi WHERE is_deal = '1' AND person_id = #{personId} ORDER BY id DESC LIMIT 0,1
+    </select>
+    
+    <select id="getOldDeptByDeptId" resultType="java.util.HashMap">
+        	SELECT code
+				,name_spell
+				,address
+				,legal_person
+				,level
+				,dept_property
+				,parent_id
+				,law_type
+				,tel
+				,area_id
+				,lawarea
+				,if_effect
+				,update_name
+				,update_date
+				,short_name
+				,name
+				,is_ps
+				,mgl_name
+				,mgl_short_name
+				,mgl_address
+				,mgl_legal_person FROM ole_base_dept_hi WHERE is_deal = '1' AND dept_id = #{deptId} ORDER BY id DESC LIMIT 0,1
+    </select>
+    
+    <select id="getOldPotenceByPotenceId" resultType="java.util.HashMap">
+        	SELECT potence_id,
+				code,
+				name,
+				parent_id,
+				process_id,
+				level,
+				duty,
+				pro_type,
+				duty_ref,
+				approval_req,
+				acc_basis,
+				limit_time,
+				remarks,
+				is_effect,
+				mgl_name,
+				mgl_remarks,
+				mgl_duty,
+				mgl_duty_ref,
+				mgl_approval_req,
+				mgl_acc_basis FROM ole_base_potence_hi WHERE is_deal = '1' AND potence_id = #{potenceId} ORDER BY id DESC LIMIT 0,1
+    </select>
+
+    <!-- 批量更新状态 -->
+    <update id="updateBatch">
+        update ole_tts_schedule_job set status = #{status} where job_id in
+        <foreach item="jobId" collection="list" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </update>
+    
+    <select id="getTaskByJobId" parameterType="int" resultType="com.orhonit.ole.tts.dto.TaskDTO">
+        SELECT * FROM ole_tts_schedule_job
+        <where>
+            job_id = #{jobId}
+        </where>
+    </select>
+    
+    <select id="getPersonListByDeptId" resultType="com.orhonit.ole.tts.entity.WarnPersonEntity">
+        SELECT 
+        	bdp.dept_id as deptId,
+        	bdp.id as personId
+		FROM ole_base_dept_person bdp
+			  LEFT JOIN ole_sys_user su
+			    ON su.person_id = bdp.ID
+			  LEFT JOIN ole_sys_role_user sru
+			    ON su.id = sru.userId
+		<where>
+			bdp.dept_id = #{deptId} AND FIND_IN_SET(sru.roleId,#{roleIds})
+		</where>
+    </select>
+    
+    <select id="getPersonListByCaseNum" resultType="com.orhonit.ole.tts.entity.WarnPersonEntity">
+        SELECT 
+			ec.dept_id AS deptId,
+			ec.id AS recordId,
+			ec.case_name recordTitle,
+			ec.case_status recordStatus,
+			ec.flow_type flowType,
+			(CASE 
+				WHEN sru.roleId = '26' AND (bdp.id = ec.case_zzfryid OR bdp.id = ec.case_fzfryid) THEN bdp.id 
+				WHEN sru.roleId != '26' THEN bdp.id
+				ELSE '' END) AS personId
+		FROM ole_ef_case ec 
+			LEFT JOIN ole_base_dept_person bdp ON bdp.dept_id = ec.dept_id
+			LEFT JOIN ole_sys_user su ON su.person_id = bdp.ID
+			LEFT JOIN ole_sys_role_user sru ON su.id = sru.userId
+		<where>
+			ec.case_num =#{caseNum} AND FIND_IN_SET(sru.roleId,#{roleIds})
+		</where>
+    </select>
+    
+    <select id="getPersonListByCheckDailyNum" resultType="com.orhonit.ole.tts.entity.WarnPersonEntity">
+        SELECT
+		  ecd.dept_id  AS deptId,
+		  ecd.check_id AS recordId,
+		  ecd.check_title AS recordTitle,
+		  ecd.status AS  recordStatus,
+		  (CASE WHEN sru.roleId = '26' AND (bdp.id = ecd.person_id OR bdp.id = ecd.assist_person_id) THEN bdp.id WHEN sru.roleId != '26' THEN bdp.id ELSE '' END) AS personId
+		FROM ole_ef_check_daily ecd
+		  LEFT JOIN ole_base_dept_person bdp
+		    ON bdp.dept_id = ecd.dept_id
+		  LEFT JOIN ole_sys_user su
+		    ON su.person_id = bdp.ID
+		  LEFT JOIN ole_sys_role_user sru
+		    ON su.id = sru.userId
+		<where>
+			ecd.check_num = #{checkNum} AND FIND_IN_SET(sru.roleId,#{roleIds})
+		</where>
+    </select>
+    
+    <select id="getPersonListByCheckNum" resultType="com.orhonit.ole.tts.entity.WarnPersonEntity">
+        SELECT
+		  ecp.dept_id AS deptId,
+		  ec.id       AS recordId,
+		  ec.check_title AS recordTitle,
+		  ec.status AS  recordStatus,
+		  (CASE WHEN sru.roleId = '26' AND (bdp.id = ecp.person_id) THEN bdp.id WHEN sru.roleId != '26' THEN bdp.id ELSE '' END) AS personId
+		FROM ole_ef_check ec
+		  LEFT JOIN ole_ef_check_person ecp
+		    ON ecp.check_id = ec.id
+		  LEFT JOIN ole_base_dept_person bdp
+		    ON bdp.dept_id = ecp.dept_id
+		  LEFT JOIN ole_sys_user su
+		    ON su.person_id = bdp.ID
+		  LEFT JOIN ole_sys_role_user sru
+		    ON su.id = sru.userId
+		<where>
+			WHERE ec.check_num = #{checkNum} AND FIND_IN_SET(sru.roleId,#{roleIds})
+		</where>
+    </select>
+</mapper>

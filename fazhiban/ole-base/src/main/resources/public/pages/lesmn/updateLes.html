@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="mn">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>ᠣᠷᠣᠨ ᠪᠦᠰᠡ ᠶᠢᠨ ᠵᠠᠰᠠᠯᠲᠠ</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+		<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+		<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+		<link rel="stylesheet" href="../../js/select2/css/select2.min.css" media="all" />
+		<link rel="stylesheet" href="../../js/select2/css/select2mgl.css" media="all" />
+		<script type="text/javascript">
+		       orhonIMEinit = {
+		           element: "",
+		           ele_except: "",
+		           editor: {
+		               IME_Mount: true,
+		               tinymce: "",
+		               ueditor: "",
+		           },
+		           IME_cssurl: "",
+		           IME_theme: "",
+		           Output_Unicode: true,
+		       };
+		       Iframe_init = {
+		           iframes: "",
+		           ifr_except: "",
+		           element: "",
+		           ele_except: "",
+		       };
+		</script>
+	</head>
+
+	<body>
+		<div class="centent">
+			<form class="form-horizontal" onsubmit="return false" id="form">
+				<fieldset>
+
+					<input type="hidden" id="id" name="id">
+					<div class="form-group">
+						<label class="control-label">ᠳᠡᠭᠡᠷ᠎ᠡ ᠱᠠᠲᠤᠨ ᠤ ᠭᠠᠵᠠᠷ ᠣᠷᠣᠨ</label>
+						<input class="easyui-combotree" id="parent_id" type="text" name="parent_id"/>
+
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠭᠠᠵᠠᠷ ᠣᠷᠣᠨ ᠤ ᠳ᠋ᠤᠭᠠᠷᠯᠠᠯ</label>
+						<input class="form-control" type="text" name="code" id="code" readonly="readonly" data-bv-notempty="true" data-bv-notempty-message="人员编号">
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠨᠡᠷᠡᠶᠢᠳᠦᠯ</label>
+						<input class="form-control not-null" inmae="ᠨᠡᠷᠡᠶᠢᠳᠦᠯ " type="text" name="name" id="name" data-bv-notempty="true" data-bv-notempty-message="name">
+
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠠᠩᠭ᠍ᠯᠢ ᠨᠡᠷᠡᠶᠢᠳᠦᠯ</label>
+						<input class="form-control" name="name_en" id="name_en" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠡᠬᠢᠯᠡᠵᠦ ᠬᠡᠷᠡᠭᠯᠡᠬᠦ ᠡᠰᠡᠬᠦ</label>
+						<select name="is_effect" class="form-control input-sm" id="is_effect">
+						</select>
+					</div>
+					<div class="form-group">
+						<label class="control-label">ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ</label>
+						<input class="form-control" placeholder="ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ" name="sort" id="sort" type="number" data-bv-notempty="true" data-bv-notempty-message="ᠵᠢᠭᠰᠠᠭᠠᠯᠲᠠ">
+					</div>
+
+					<div class="form-actions">
+						<div class="row" align="center">
+							<div class="col-md-12">
+								<button class="btn btn-primary" type="submit" id="submitBtn" onclick="update()" style="margin-left:10px">
+									<i class="fa fa-save"></i>ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ
+								</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+		<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../../js/jq.js"></script>
+		<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+		<script type="text/javascript" src="../../js/common.js"></script>
+		<script type="text/javascript" src="../../js/constans.js"></script>
+		<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+		<script src="../../js/select2/js/select2.full.js"></script>
+			<script type="text/javascript">
+			$(function () {
+			    console.log("ready");
+			    console.log($("select"));
+			    $('select').select2();
+			    $(document)
+			        .on('click', '.select2.select2-container', function () {
+			            var self = $(this);
+			            setTimeout(function () {
+			                $('.select2-container--open').height(self.height()).width(self.width());
+			                // $('.select2-dropdown').css({top: $('.main-sidebar').height() + self.position().top});
+			            }, 100);
+			        })
+			        // .on("DOMNodeInserted", function (e) {
+			        //     $('select').select2();
+			        //
+			        // })
+			
+			})
+			layui.use('layer', function() {
+				var layer = layui.layer;
+			});
+
+			getDictList("2066", "is_effect");
+
+			$("#parent_id").combotree({
+				method: 'get', //请求方式	
+				url: '/base/sections/area', //请求的URL
+				required: false,
+				cascadeCheck: false,
+				onLoadSuccess: function(node, data) {
+					initData();
+				},
+				onChange: function(newV, oldV) {}
+			});
+
+			function initData() {
+				var id = getUrlParam("id");
+				if(id != "") {
+					$.ajax({
+						type: 'get',
+						url: '/base/sections/' + id,
+						async: false,
+						success: function(data) {
+							$('#parent_id').combotree('setValue', {
+								id: data.parent_id,
+								text: data.parent_id
+							});
+							$("#id").val(data.id);
+							$("#code").val(data.code);
+							$("#name").val(data.name);
+							$("#name_en").val(data.name_en);
+							$("#is_effect").val(data.is_effect);
+							$("#sort").val(data.sort);
+						}
+					});
+
+				}
+			}
+
+			function selectCss() {
+				layer.open({
+					type: 2,
+					title: "鏍峰紡",
+					area: ['800px', '400px'],
+					shadeClose: true,
+					content: ['icon.html']
+				});
+			}
+
+			function update() {
+				if($('#parent_id').val() == null || $('#parent_id').val() == '') {
+					alert("ᠳᠡᠭᠡᠳᠦ ᠱᠠᠲᠤᠨ ᠤ ᠭᠠᠵᠠᠷ ᠣᠷᠣᠨ ᠨᠢ ᠬᠣᠭᠤᠰᠤᠨ");
+					return;
+				}
+				//数据格式校验
+				if(!dataCheck_mn()) {
+					return;
+				}
+
+				$('#submitBtn').removeAttr("disabled");
+				$('#submitBtn').attr("disabled", false);
+
+				var formdata = $("#form").serializeObject();
+
+				$.ajax({
+					type: 'put',
+					url: '/base/sections/',
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(formdata),
+					success: function(data) {
+						layer.msg("ᠰᠢᠨᠡᠳᠭᠡᠪᠡ", {
+							shift: -1,
+							time: 1000
+						}, function() {
+							window.parent.location.reload();
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.ole.tts.dao.ScheduleJobLogDao">
+    <select id="queryObject" resultType="com.orhonit.ole.tts.entity.ScheduleJobLogEntity">
+        select * from ole_tts_schedule_job_log where log_id = #{value}
+    </select>
+
+    <select id="queryList" resultType="com.orhonit.ole.tts.entity.ScheduleJobLogEntity">
+        select log_id as logId,job_id as jobId,bean_name as beanName,method_name as methodName,params as params,status as status,error as error,times as times,create_time as createTime from ole_tts_schedule_job_log log
+        <where>
+            <if test="params.beanName != null and params.beanName != ''">
+                and log.bean_name like concat('%', #{params.beanName}, '%')
+            </if>
+            <if test="params.methodName != null and params.methodName != ''">
+                and log.method_name like concat('%', #{params.methodName}, '%')
+            </if>
+            <if test="params.status != null and params.status != ''">
+                and log.status = #{params.status}
+            </if>
+        </where>
+        order by log_id desc
+        <if test="params.start != null and params.length != null ">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from ole_tts_schedule_job_log log
+        <where>
+            <if test="params.beanName != null and params.beanName != ''">
+                and log.bean_name like concat('%', #{params.beanName}, '%')
+            </if>
+            <if test="params.methodName != null and params.methodName != ''">
+                and log.method_name like concat('%', #{params.methodName}, '%')
+            </if>
+            <if test="params.status != null and params.status != ''">
+                and log.status = #{params.status}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.orhonit.ole.tts.entity.ScheduleJobLogEntity">
+        insert into ole_tts_schedule_job_log
+        (
+        `job_id`,
+        `bean_name`,
+        `method_name`,
+        `params`,
+        `status`,
+        `error`,
+        `times`,
+        `create_time`
+        )
+        values
+        (
+        #{jobId},
+        #{beanName},
+        #{methodName},
+        #{params},
+        #{status},
+        #{error},
+        #{times},
+        #{createTime}
+        )
+    </insert>
+
+</mapper>

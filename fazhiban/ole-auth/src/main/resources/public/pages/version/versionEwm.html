@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="../../layui/css/layui.css" rel="stylesheet" media="all">
+</head>
+<body>
+	<!-- <input id="durl" type="text"  style="width:300px" value=""><br> -->
+	<img id="qrcode" width="300px" height="300px" src="">
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript"
+		src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+
+	<!-- 实例化编辑器 -->
+	<script type="text/javascript">
+	var id = getQuery('id');
+	$.ajax({  
+	     url:"/auth/version/getDownLoadUrl?id="+id,  
+	     type:"get",  
+	     async:false,
+	     success:function(data){
+	    	if(data.code == 0){
+	    		$("#durl").val(data.data);
+	    		$("#qrcode").attr("src","/auth/version/getQrCode?id="+id);
+	    	}else{
+	    	}
+       }
+   });
+	</script>
+</body>
+</html>

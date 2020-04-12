@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.modules.generator.app.dao.AppWywNoteDao">
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.app.entity.AppWywNoteEntity" id="AppwywNoteMap">
+        <result property="noteId" column="note_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="content" column="content"/>
+        <result property="noteTitle" column="note_title"/>
+        <result property="createUserid" column="create_userid"/>
+        <result property="isFiletype" column="is_filetype"/>
+        <result property="storagePath" column="storage_path"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="userTrueName" column="userTrueName"/>
+    </resultMap>
+    
+    <insert id="AppInsertNote">
+        INSERT INTO wyw_note 
+			(
+			note_title,
+			create_time,
+			content,
+			create_userid,
+			storage_path,
+			is_filetype,
+			update_time,
+			lower_id,
+			lower_name
+			)VALUES(
+			#{noteTitle},
+			#{createTime},
+			#{content},
+			#{createUserid},
+			#{storagePath},
+			#{isFiletype},
+			#{updateTime},
+			(SELECT lower_id FROM sys_user WHERE user_id=#{createUserid}),
+			(SELECT lower_name FROM sys_user WHERE user_id=#{createUserid})
+			)
+    </insert>
+    
+  <!--   <select id="allUserPh"  parameterType="List" resultType="com.orhonit.modules.generator.app.vo.AppWywNoteVO">
+        SELECT 
+           count(note.note_id) AS numberOfReleases,
+           user.user_true_name AS userName  
+        FROM wyw_note note
+        LEFT JOIN sys_user user ON note.create_userid=user.user_id
+        WHERE  create_userid in
+           <foreach item="item" collection="createUserids" separator="," open="(" close=")" index="">  
+               #{item}  
+            </foreach>
+            GROUP BY user.user_true_name  
+        ORDER BY numberOfReleases desc
+        LIMIT #{beginLimit},#{limit}
+    </select> -->
+    <sql id="selectListAll">
+         SELECT
+			note.note_id,
+			note.create_time,
+			note.storage_path,
+			note.storage_path,
+			note.is_filetype,
+			note.content,
+			note.create_userid,
+			note.note_title AS noteTitle,
+			note.update_time AS updateTime,
+			er.user_true_name AS userTrueName
+		FROM
+			wyw_note note
+		LEFT JOIN sys_user er ON note.create_userid = er.user_id
+    </sql>
+    
+    <select id="selectListUserTruName" resultType="com.orhonit.modules.generator.app.entity.AppWywNoteEntity">
+        <include refid="selectListAll"/>
+        ORDER BY note.create_time DESC
+		LIMIT #{beginLimit},#{limit}
+    </select>
+    
+    <select id="mySelectList" resultType="com.orhonit.modules.generator.app.entity.AppWywNoteEntity">
+         <include refid="selectListAll"/>
+          WHERE
+          note.create_userid=#{createUserid}
+          LIMIT #{beginLimit},#{limit}
+    </select>
+    <select id="selectWywNoteInfo" resultType="com.orhonit.modules.generator.app.entity.AppWywNoteEntity">
+      SELECT
+		note.note_id AS noteId,
+		note.note_title AS noteTitle,
+		note.create_time AS createTime,
+		note.content AS content,
+		note.create_userid AS createUserid,
+		note.is_filetype AS isFileType,
+		note.storage_path AS storagePath,
+		note.update_time AS updateTime,
+		user.user_true_name AS userTrueName
+	 FROM wyw_note note
+		LEFT JOIN sys_user user ON note.create_userid = user.user_id
+        WHERE note.note_id=#{noteId}
+    </select>
+    
+</mapper>

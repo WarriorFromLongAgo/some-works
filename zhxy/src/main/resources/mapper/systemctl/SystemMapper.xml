@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.orhon.smartcampus.modules.systemctl.mapper.SystemMapper">
+
+	<select id="getList" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_org_department_user_relation
+		<where>
+			1=1
+			<if test="user_id !=null and user_id !=''">
+				and user_id=#{user_id}
+			</if>
+			<if test="duty_id !=null and duty_id !=''">
+				and duty_id=#{duty_id}
+			</if>
+			<if test="department_id !=null and department_id !=''">
+				and department_id=#{department_id}
+			</if>
+			and leave_at is null
+		</where>
+	</select>
+
+	<select id="getDepartmentsIds" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_org_department_user_relation
+		<where>
+			1=1
+			<if test="user_id !=null and user_id !=''">
+				and user_id=#{user_id}
+			</if>
+			and leave_at is null GROUP BY department_id
+		</where>
+	</select>
+
+	<select id="getDutiesIds" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_org_department_user_relation
+		<where>
+			1=1
+			<if test="user_id !=null and user_id !=''">
+				and user_id=#{user_id}
+			</if>
+
+			and leave_at is null GROUP BY duty_id
+		</where>
+	</select>
+
+	<insert id="inserts">
+		INSERT INTO systemctl_org_department_user_relation(
+		user_id,duty_id,department_id
+		) VALUES (
+		#{user_id},#{duty_id},#{department_id}
+		)
+	</insert>
+
+	<!-- <delete id="Delete"> delete from systemctl_org_department_user_relation 
+		<where> 1=1 <if test="user_id !=null and user_id !=''"> and user_id=#{user_id} 
+		</if> <if test="duty_id !=null and duty_id !=''"> and duty_id=#{duty_id} 
+		</if> <if test="department_id !=null and department_id !=''"> and department_id=#{department_id} 
+		</if> </where> </delete> -->
+
+	<update id="Delete">
+		UPDATE systemctl_org_department_user_relation
+		<trim prefix="set" suffixOverrides=",">
+			<if test="leave_at != null and leave_at != ''">leave_at = #{leave_at},</if>
+		</trim>
+		<where>
+			user_id=#{user_id} and duty_id=#{duty_id} and
+			department_id=#{department_id} and leave_at is null
+		</where>
+	</update>
+
+	<update id="isLeaders">
+		UPDATE systemctl_org_department_user_relation
+		<trim prefix="set" suffixOverrides=",">
+			<if test="is_leaders != null and is_leaders != ''">is_leaders = #{is_leaders},</if>
+		</trim>
+		<where>
+			user_id=#{user_id} and duty_id=#{duty_id} and
+			department_id=#{department_id}
+		</where>
+	</update>
+
+	<insert id="insertsSoddr" parameterType="java.util.List">
+		INSERT INTO systemctl_org_department_duty_relation(
+		duty_id,department_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.duty_id,jdbcType=INTEGER},#{item.department_id,jdbcType=INTEGER})
+		</foreach>
+	</insert>
+
+	<insert id="insertsSoddr1">
+		INSERT INTO systemctl_org_department_duty_relation(
+		duty_id,department_id
+		) VALUES
+		(#{duty_id},#{department_id}
+		)
+	</insert>
+
+	<select id="getSoddrList" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_org_department_duty_relation
+		<where>
+			1=1
+			<if test="duty_id !=null and duty_id !=''">
+				and duty_id=#{duty_id}
+			</if>
+			<if test="department_id !=null and department_id !=''">
+				and department_id=#{department_id}
+			</if>
+		</where>
+	</select>
+
+	<delete id="delSoddr">
+		delete from systemctl_org_department_duty_relation
+		where
+		department_id=#{department_id} and duty_id=#{duty_id}
+	</delete>
+	
+	
+	
+	<select id="getSourList" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_operation_user_relation
+		<where>
+			1=1
+			<if test="user_id !=null and user_id !=''">
+				and user_id=#{user_id}
+			</if>
+			<if test="operation_id !=null and operation_id !=''">
+				and operation_id=#{operation_id}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertsSour">
+		INSERT INTO systemctl_operation_user_relation(
+		user_id,operation_id
+		) VALUES
+		(#{user_id},#{operation_id}
+		)
+	</insert>
+	
+	<delete id="delSour">
+		delete from systemctl_operation_user_relation
+		where
+		user_id=#{user_id} and operation_id=#{operation_id}
+	</delete>
+	
+	
+	<select id="getOperationIds" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_operation_user_relation
+		<where>
+			1=1
+			<if test="user_id !=null and user_id !=''">
+				and user_id=#{user_id}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="getUserModulesIds" resultType="java.util.HashMap">
+		SELECT * FROM systemctl_modules_school_relations
+		<where>
+			school_id=#{school_id}
+		</where>
+	</select>
+
+	<select id="getUserModules" resultType="java.util.HashMap">
+			SELECT
+			module.*,
+			menus.path as home_path
+			FROM
+			systemctl_modules as module
+			LEFT JOIN
+			systemctl_menus as menus
+			ON
+			module.home_id = menus.id
+	</select>
+
+	<select id="getUserMenus" resultType="java.util.HashMap">
+			SELECT
+			menus.*
+			FROM
+			systemctl_menus as menus
+-- 			LEFT JOIN
+-- 			systemctl_menus as menus
+-- 			ON
+-- 			module.home_id = menus.id
+			ORDER BY ordered ASC
+	</select>
+
+
+	<select id="getUserRenderedMenu" resultType="java.util.HashMap">
+		select menus.* from systemctl_menus as menus
+		where menus.module_id = #{module_id}
+	</select>
+
+	<select id="getUsersDepartmentOprations" resultType="java.util.HashMap">
+			SELECT
+			*
+			FROM
+			systemctl_department_duitie_oprations as ddo
+			WHERE
+			(duty_id,department_id) IN (SELECT DISTINCT dur.duty_id,dur.department_id FROM systemctl_org_department_user_relation as dur WHERE dur.user_id=#{user_id})
+	</select>
+
+
+</mapper>

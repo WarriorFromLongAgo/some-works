@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>执法人员添加</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/jquery.searchableSelect.css">
+
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<form class="form-horizontal" onsubmit="return false" id="form"
+			style="margin-top: 20px;">
+			<fieldset>
+				<input type="hidden" id="picture" name="picture">
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法主体<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="easyui-combotree not-null" id="dept_id" iname="执法主体"
+							type="text" style="width: 100%" name="dept_id" />
+					</div>
+
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">人员编号</label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" placeholder="人员编号"
+							iname="人员编号" type="text" name="code" id="code"
+							data-bv-notempty="true" data-bv-notempty-message="人员编号"
+							readonly="readonly">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">人员姓名<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" placeholder="人员姓名"
+							iname="人员姓名" type="text" name="name" id="name"
+							data-bv-notempty="true" data-bv-notempty-message="人员姓名">
+					</div>
+
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">电话号码<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control " placeholder="电话号码" iname="电话号码"
+							type="text" name="tel" id="tel" data-bv-notempty="true"
+							data-bv-notempty-message="电话号码">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">出生日期<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input type="text" class="form-control not-null" iname="出生日期"
+							placeholder="出生日期" id="birthday" name="birthday">
+					</div>
+
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">政治面貌<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="political" class="form-control input-sm not-null"
+							iname="政治面貌" id="political">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">性别<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="sex" class="form-control input-sm not-null"
+							iname="性别" id="sex">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">文化程度</label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="edu" class="form-control input-sm " iname="文化程度"
+							id="edu">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">民族<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="nation" class="form-control input-sm not-null"
+							iname="民族" id="nation">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">身份证号<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null id-num" iname="身份证号"
+							placeholder="身份证号码 " name="card_num" id="card_num"
+							data-bv-notempty="true" data-bv-notempty-message="身份证号码">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法证号<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" iname="执法证号"
+							placeholder="执法证号" type="text" name="cert_num" id="cert_num"
+							data-bv-notempty="true" data-bv-notempty-message="执法证号">
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法范围<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" iname="执法范围"
+							placeholder="执法范围" type="text" name="lawarea" id="lawarea"
+							data-bv-notempty="true" data-bv-notempty-message="执法范围">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">是否有效</label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="if_effect" class="form-control input-sm"
+							id="if_effect">
+						</select>
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法证发证机关<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" iname="执法证发证机关"
+							placeholder="执法证发证机关" type="text" name="cert_auth" id="cert_auth">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">发证时间<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" iname="发证时间"
+							placeholder="发证时间" type="text" name="cert_time" id="cert_time">
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">证件结束时间<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<input class="form-control not-null" iname="证件结束时间"
+							placeholder="证件结束时间" type="text" name="cert_term" id="cert_term">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法性质<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="law_type" class="form-control input-sm not-null"
+							iname="执法性质" id="law_type">
+							<option value="0">请选择</option>
+						</select>
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">职务类型<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="duty" class="form-control input-sm not-null"
+							iname="职务类型" id="duty">
+							<option value="">请选择</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法(监督)类型<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="cert_type" class="form-control input-sm not-null"
+							iname="执法(监督)类型" id="cert_type">
+							<option value="-">请选择</option>
+						</select>
+						<!--
+					<input class="form-control not-null" iname="执法(监督)类型" placeholder="执法(监督)类型" type="text" name="cert_type" id="cert_type"
+						data-bv-notempty="true"
+						data-bv-notempty-message="执法(监督)类型">
+					-->
+					</div>
+					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执法类别<span
+						class="btx">*</span></label>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<select name="cert_category"
+							class="form-control input-sm not-null" iname="执法类别"
+							id="cert_category" placeholder="请选择或输入">
+							<option value="">请选择</option>
+						</select>
+						<!-- 
+					<input class="form-control not-null" iname="执法类别" placeholder="执法类别" type="text" name="cert_category" id="cert_category" 
+						data-bv-notempty="true"
+						data-bv-notempty-message="执法类别">
+					-->
+					</div>
+				</div>
+
+				<div class="form-group"
+					style="margin-left: 9%; float: left; margin-top: 10px;">
+					<button type="button" class="layui-btn" id="test1">
+						<i class="layui-icon">&#xe67c;</i>上传头像
+					</button>
+				</div>
+				<div id="headImgDiv" style="float: left; margin-left: 40px"></div>
+
+				<div class="form-actions">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" onclick="custom_close()">重置</button>
+							<button class="btn btn-primary" type="submit" onclick="add()"
+								id="submitBtn">
+								<i class="fa fa-save"></i>保存
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../js/libs/jquery.searchableSelect.js"></script>
+	<script type="text/javascript">
+		var pro = window.location.protocol;
+		var host = window.location.host;
+		var domain = pro + "//" + host;
+
+		layui.use([ 'upload', 'layer' ],function() {
+			var layer = layui.layer;
+			var upload = layui.upload;
+			upload.render({
+				elem : '#test1',
+				accept : 'images',
+				url : '/base/files',
+				done : function(res, index, upload) {
+					var url = res.url;
+					$("#picture").val(url);
+					layer.msg("上传成功");
+					//var src = domain + "/base/files" + url;
+					var src = domain + "/file/person/"
+							+ url;
+					var a = "<a target='_blank' href='" + src +"'><img src='" + src + "' width='60px' height='60px'></img></a>";
+					$("#headImgDiv").html(a);
+				}
+			});
+		});
+
+		layui.use([ 'layer', 'laydate' ], function() {
+			var layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem : '#birthday'
+			});
+			laydate.render({
+				elem : '#cert_time'
+			});
+			laydate.render({
+				elem : '#cert_term'
+			});
+		});
+
+		setCode();
+		function setCode() {
+
+			$.ajax({
+				url : "/base/leptions/getSerialNum",
+				type : "GET",
+				success : function(data) {
+					$('#code').val(data);
+				}
+			});
+			/* var timestamp = (new Date()).getTime(); */
+
+		}
+
+		//alert("sex: " + dict.sex);
+		//alert("cert_type: " + dict.cert_type);
+		//alert("cert_category: " + dict.cert_category);
+		getDictList(dict.sex, "sex");
+		getDictList(dict.nation, "nation");
+		getDictList(dict.edu, "edu");
+		getDictList(dict.law_type, "law_type");
+		getDictList(dict.if_effect, "if_effect");
+		getDictList(dict.duty, "duty");
+		getDictList(dict.cert_type, "cert_type");
+		getDictList(dict.cert_category, "cert_category");
+		getDictList(dict.political, "political");
+
+		$(function() {
+			$("#cert_category").searchableSelect();
+		});
+		getDictList(dict.cert_category, "cert_category");
+		//$("#cert_category").editableSelect({ 
+		//   effects: 'slide'
+		//effects: 'fade'
+		//});
+		///////////////// 新添加的代码 开始
+		//var selectedPro = $("#cert_type").val();
+		//$('#cert_type').change(function() {  
+		//alert("test");
+		//alert(dict.cert_category);
+		//getDictList(dict.cert_category,"cert_category");
+		//});
+		///////////////// 新添加的代码  结束 
+
+		$("#dept_id").combotree({
+			method : 'get', //请求方式	
+			url : '/base/LtcAtts/ltcs', //请求的URL
+			required : false,
+			cascadeCheck : false,
+			onLoadSuccess : function(node, data) {
+				if (null != data && data.length > 0) {
+					//$("#dept_id").combotree('setValue',data[0].text)
+				}
+			},
+			onChange : function(newV, oldV) {
+			}
+		});
+
+		function custom_close() {
+			$('#parentId').val("");
+			$('#name').val("");
+			$('#political').val("");
+			$('#sex').val("");
+			$('#edu').val("");
+			$('#card_num').val("");
+		}
+
+		initParentListSelect();
+		function initParentListSelect() {
+			$.ajax({
+				type : 'get',
+				url : '/base/LtcAtts/parents',
+				async : false,
+				success : function(data) {
+					var select = $("#dept_id");
+					for (var i = 0; i < data.length; i++) {
+						var d = data[i];
+						var id = d['id'];
+						var name = d['name'];
+						select.append("<option value='"+ id +"'>" + name
+								+ "</option>");
+					}
+				}
+			});
+		}
+		function add() {
+			if ($('#dept_id').val() == '') {
+				layer.msg("执法主体不能为空", {
+					anim : 6
+				});
+				return;
+			}
+
+			//数据格式校验
+			if (!dataCheck()) {
+				return;
+			}
+			$('#submitBtn').removeAttr("disabled");
+			$('#submitBtn').attr("disabled", false);
+
+			var formdata = $("#form").serializeObject();
+			$.ajax({
+				type : 'post',
+				url : '/base/leptions',
+				contentType : "application/json; charset=utf-8",
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("添加成功", {
+						shift : -1,
+						time : 1000
+					}, function() {
+						window.parent.location.reload();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					});
+				}
+			});
+		}
+	</script>
+</body>
+</html>

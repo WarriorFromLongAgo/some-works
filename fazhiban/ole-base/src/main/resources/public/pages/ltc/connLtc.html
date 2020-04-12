@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<form class="form-horizontal" onsubmit="return false" id="form">
+			<fieldset>
+				<input type="hidden" id="dept_id" name="dept_id">
+				<input type="hidden" id="id" name="id">
+				<input type="hidden" id="dept_id_agents" name="dept_id_agent">
+				<input type="hidden" id="potence_ids" name="potence_id">
+				
+				<div class="form-group" style=margin-top:10px;">
+					<label class="col-md-2 control-label">主体名称</label>
+					<div class="col-md-10">
+						<input class="form-control" placeholder="主体名称" type="text"
+							name="name" id="name" data-bv-notempty="true"
+							disabled="disabled">
+					</div>
+				</div>
+				
+				<div class="form-group" >
+					<label class="col-md-2 control-label">关联权责</label>
+					<div class="col-md-10">
+						<input class="easyui-combotree" id="potence_id"     type="text" style="width:100%"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-md-2 control-label">承办机构</label>
+					<!--<input name="isdept" id="isdept" type="checkbox" value="" style="width:18px;height:18px"/>-->
+					<div class="col-md-10">
+						<input class="easyui-combotree" id="dept_id_agent" type="text" style="width:100%"/>
+					</div>
+					
+				</div>
+				
+				<div class="form-group">
+				<label class="col-md-2 control-label">是否生效</label>
+				<div class="col-md-10">
+					<select name="is_effect" class="form-control input-sm" id="is_effect">
+					</select>
+				</div>
+			</div>
+
+				<div class="form-actions" >
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="submit" onclick="update()">
+								<i class="fa fa-save"></i>保存关联
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use('layer', function() {
+			var layer = layui.layer;
+		});
+		
+		getDictList(dict.if_effect,"is_effect");
+		
+		var id = getUrlParam("id");
+		var name= decodeURI(getUrlParam("potenceName"));
+		var connid = getUrlParam("connid");
+		$("#id").val(connid);
+		
+		$("#isdept").click(function(){
+			if($('#isdept').is(':checked')) {
+			} else {
+			}
+		});
+		
+		initData();
+		initDatas(name);
+		function initData() {
+			if (id != "") {
+				$.ajax({
+					type : 'get',
+					url : '/base/ltctions/' + id,
+					async : false,
+					success : function(data) {
+						$("#dept_id").val(data.id);
+						$("#name").val(data.name);
+					}
+				});
+
+			}
+		}
+		
+		//判断是否包含汉字
+		function isConChinese(str){
+			var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+	　　if(reg.test(str)){     
+				return true;
+			 }else{
+				 return false;
+			 }
+        }
+		
+		function initDatas(name) {
+			if(name=='undefined'){
+				name="";
+			}
+			if (connid != "") {
+				$.ajax({
+					type : 'get',
+					url : '/base/ltctions/connss/' + connid,
+					async : false,
+					success : function(data) {
+					    var pots=data.potence_id;
+					    var dets=data.dept_id_agent;
+					    if(pots==null){
+					    	 $("#potence_id").combotree({
+									method:'get',		//请求方式	
+									url : '/base/LarLists/lars?name='+name,	//请求的URL
+									required: false,
+									onLoadSuccess: function (node, data) {
+										$("#potence_id").combotree('setText', name);
+								    }, 
+									onChange:function(newV,oldV){
+										$("#potence_ids").val(newV);
+									},
+									keyHandler : {
+										query : function(qName) {
+											  if(isConChinese(qName)){
+												  name=qName;
+									        		$.ajax({
+									        			type : 'get',
+									        			url : '/base/LarLists/lars?name='+qName,	//请求的URL
+									        			async : false,
+									        			success : function(data){
+									        				$("#potence_id").combotree('loadData', data);
+									        				$("#potence_id").combotree('setText', name);
+									        			}
+									        		});
+											 	 }
+								       		 } 
+					    	 		}
+								});
+					    } else {
+					    	$("#is_effect").val(data.is_effect);
+					    	 $("#potence_id").combotree({
+									method:'get',		//请求方式	
+									url : '/base/LarLists/lars',	//请求的URL
+									required: false,
+									onLoadSuccess: function (node, data) {
+										$('#potence_id').combotree('setValue', {id:pots,text:name});
+										$("#potence_ids").val(pots);
+								    }, 
+									onChange:function(newV,oldV){
+										$("#potence_ids").val(newV);
+									}
+								});
+					    	
+					    }
+						
+					    if(dets==null){
+					    	   $("#dept_id_agent").combotree({
+									method:'get',		//请求方式	
+									url : '/base/LtcAtts/ltcs',	//请求的URL
+									required: false,
+									onLoadSuccess: function (node, data) {
+								    }, 
+									onChange:function(newV,oldV){
+										$("#dept_id_agents").val(newV);
+									}
+								});
+					    } else {
+						    $("#dept_id_agent").combotree({
+								method:'get',		//请求方式	
+								url : '/base/LtcAtts/ltcs',	//请求的URL
+								required: false,
+								onLoadSuccess: function (node, data) {
+									$('#dept_id_agent').combotree('setValue', {id:dets,text:dets});
+									$("#dept_id_agents").val(dets);
+							    }, 
+								onChange:function(newV,oldV){
+									$("#dept_id_agents").val(newV);
+								}
+							});
+					    }
+					}
+				});
+
+			}
+		}
+
+
+		function update() {
+			$('#form').bootstrapValidator();
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+
+			var formdata = $("#form").serializeObject();
+			$.ajax({
+				type : 'put',
+				url : '/base/ltctions/conn/',
+				contentType : "application/json; charset=utf-8",
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("关联成功", {
+						shift : -1,
+						time : 1000
+					}, function() {
+						window.parent.location.reload();
+						var index = parent.layer.getFrameIndex(window.name);
+						parent.layer.close(index);
+					});
+				}
+			});
+		}
+	</script>
+</body>
+</html>

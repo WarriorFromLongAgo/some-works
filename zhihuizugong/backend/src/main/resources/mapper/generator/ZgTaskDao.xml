@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgTaskDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgTaskEntity" id="ZgTaskMap">
+        <result property="id" column="id"/>
+        <result property="workTask" column="work_task"/>
+        <result property="userId" column="user_id"/>
+        <result property="taskType" column="task_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="completionTime" column="completion_time"/>
+    </resultMap>
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgTaskEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into zg_task 
+    (work_task,user_id,task_type,create_time,user_name,user_id_card,people_id,create_user,status)
+    value(#{workTask},#{userId},#{taskType},#{createTime},#{userName},#{userIdCard},#{peopleId},#{createUser},#{status})
+    </insert>
+    <select id="selectTask" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+    select 
+    id,
+    work_task workTask,
+    user_id userId,
+    task_type taskType,
+    create_time createTime,
+    completion_time completionTime,
+    claim_time claimTime,
+    status,
+    user_name userName,
+    user_id_card userIdCard,
+    people_id peopleId,
+    create_user createUser
+    from zg_task where id = #{id}
+    </select>
+<!--     查询工作任务总数 -->
+    <select id="selectCount" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+    select 
+	id,
+	work_task workTask,
+	user_id userId,
+	task_type taskType,
+	create_time createTime
+	from zg_task where 1=1
+	<if test="params.taskType != null and params.taskType != '' ">
+		and task_type = #{params.taskType}
+	</if>
+	<if test="params.userId != null">
+		and user_id = #{params.userId}
+	</if>
+	<if test="params.createUser != null">
+		and create_user = #{params.createUser}
+	</if>
+    </select>
+<!--     查询工作任务列表 -->
+    <select id="selectAllList" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+    select 
+	t.id,
+	t.work_task workTask,
+	t.user_id userId,
+	t.task_type taskType,
+	t.create_time createTime,
+	t.status status,
+	t.completion_time completionTime,
+	IFNULL((select schedule from zg_task_finish where task_id = t.id and content_type = '1' order by schedule desc limit 1),0) schedule,
+	IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1),'') completion,
+	(select create_time from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1) completionDate,
+	IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1),'') rigorous,
+	(select create_time from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1) rigorousDate
+	 from zg_task t where 1=1
+	 <if test="params.taskType != null and params.taskType != '' ">
+		and t.task_type = #{params.taskType}
+	</if>
+	<if test="params.userId != null and params.userId != '' ">
+		and t.user_id = #{params.userId}
+	</if>
+	<if test="params.createUser != null and params.createUser != '' ">
+		and t.create_user = #{params.createUser}
+	</if>
+	 <if test="params.page != null and params.limit != null">
+		LIMIT #{params.page},#{params.limit}
+	 </if>
+    </select>
+    
+    <!--  工作任务统计列表 -->
+    <select id="statistiList" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+	    select 
+			count(t.id) taskCount,
+			IFNULL(sum(CASE
+            WHEN  t.status = 2 or t.status = 1 THEN
+					1
+				ELSE
+					0
+			END
+			),0) unfinished,
+			IFNULL(sum(CASE t.status
+				WHEN 3 THEN
+					1
+				ELSE
+					0
+			END
+			),0) complete
+		from zg_task t where 1=1
+<!-- 		用户类型 -->
+		<if test="params.type != null and params.type != '' ">
+		    <if test="params.type == '1' or params.type == 1 ">
+                and t.user_id in (select user_id from sys_user where is_party_member = 1)
+            </if>
+            <if test="params.type == '2' or params.type == 2 ">
+                and t.user_id in (select user_id from sys_user where is_cadres = 1)
+            </if>
+		</if>
+<!-- 		用户支部 -->
+		<if test="params.userDept != null and params.userDept !='' ">
+            and
+            (
+            t.user_id in (select user_id from sys_user where FIND_IN_SET(user_dept,getChildrenList(#{params.userDept})))
+            or (t.create_user in (select user_id from sys_user where FIND_IN_SET(user_dept,getChildrenList(#{params.userDept}))) and (t.task_type = '1' or t.task_type = '2'))
+            or t.people_id in (select id from ej_scheduling_people where user_id in (select user_id from sys_user where FIND_IN_SET(user_dept,getChildrenList(#{params.userDept}))))
+            )
+		</if>
+<!-- 		用户ID -->
+		<if test="params.userId != null and params.userId !='' ">
+            and
+            (t.user_id = #{params.userId}
+            or (t.create_user = #{params.userId} and (t.task_type = '1' or t.task_type = '2'))
+            or t.people_id in (select id from ej_scheduling_people where user_id = #{params.userId})
+            )
+		</if>
+<!-- 		用户单位 -->
+		<if test="params.userOrg != null and params.userOrg !='' ">
+            and
+            (
+            t.user_id in (select user_id from sys_user where user_org = #{params.userOrg})
+            or (t.create_user in (select user_id from sys_user where user_org = #{params.userOrg}) and (t.task_type = '1' or t.task_type = '2'))
+            or t.people_id in (select id from ej_scheduling_people where user_id in (select user_id from sys_user where user_org = #{params.userOrg}))
+            )
+		</if>
+		<!-- 		用户单位类型 -->
+		<if test="params.orgType != null and params.orgType !='' ">
+			and
+			(
+			t.user_id in (select user_id from sys_user where user_org in (select org_id from tb_user_org where org_type = #{params.orgType}))
+			or (t.create_user in (select user_id from sys_user where user_org in (select org_id from tb_user_org where org_type = #{params.orgType})) and (t.task_type = '1' or t.task_type = '2'))
+			or t.people_id in (select id from ej_scheduling_people where user_id in (select user_id from sys_user where user_org in (select org_id from tb_user_org where org_type = #{params.orgType})))
+			)
+		</if>
+		<!-- 用户名称 -->
+		<if test="params.name != null and params.name != '' ">
+		and t.user_id in (select user_id from sys_user where user_true_name like concat('%',#{params.name},'%'))
+		</if>
+    </select>
+    <!--  工作任务饼图统计 -->
+    <select id="selectPieChart" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+	    (select 
+		count(0) value,
+		'未完成任务'  name
+		from zg_task t where t.status = 0
+		<!-- 		用户类型 -->
+		<if test="params.type != null and params.type != '' ">
+			and t.task_type = #{params.type}
+		</if>
+<!-- 		用户支部 -->
+		<if test="params.userDept != null and params.userDept !='' ">
+		and t.user_id in (select user_id from sys_user where user_dept = #{params.userDept})
+		</if>
+<!-- 		用户ID -->
+		<if test="params.userId != null and params.userId !='' ">
+		and t.user_id = #{params.userId}
+		</if>
+<!-- 		用户单位 -->
+		<if test="params.userOrg != null and params.userOrg !='' ">
+		and t.user_id in (select user_id from sys_user where user_org = #{params.userOrg})
+		</if>
+		<!-- 用户名称 -->
+		<if test="params.name != null and params.name != '' ">
+		and t.user_id in (select user_id from sys_user where user_true_name like concat('%',#{params.name},'%'))
+		</if>
+		)
+		union
+		(select 
+		count(0) value,
+		'已完成任务'  name
+		from zg_task t where t.status = 1
+		<!-- 		用户类型 -->
+		<if test="params.type != null and params.type != '' ">
+			and t.task_type = #{params.type}
+		</if>
+<!-- 		用户支部 -->
+		<if test="params.userDept != null and params.userDept !='' ">
+		and t.user_id in (select user_id from sys_user where user_dept = #{params.userDept})
+		</if>
+<!-- 		用户ID -->
+		<if test="params.userId != null and params.userId !='' ">
+		and t.user_id = #{params.userId}
+		</if>
+<!-- 		用户单位 -->
+		<if test="params.userOrg != null and params.userOrg !='' ">
+		and t.user_id in (select user_id from sys_user where user_org = #{params.userOrg})
+		</if>
+		<!-- 用户名称 -->
+		<if test="params.name != null and params.name != '' ">
+		and t.user_id in (select user_id from sys_user where user_true_name like concat('%',#{params.name},'%'))
+		</if>
+		)
+    </select>
+
+	<!--     查询用户工作任务总数(工作任务的查看报告单) -->
+	<select id="selectReportCount" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+		select
+		id,
+		work_task workTask,
+		user_id userId,
+		task_type taskType,
+		create_time createTime
+		from zg_task t where 1=1
+		<if test="params.userId != null and params.userId != '' ">
+			and
+			(t.user_id = #{params.userId}
+			or (t.create_user = #{params.userId} and (t.task_type = '1' or t.task_type = '2'))
+			or t.people_id in (select id from ej_scheduling_people where user_id = #{params.userId})
+			)
+		</if>
+	</select>
+	<!--     查询用户工作任务列表(工作任务的查看报告单) -->
+	<select id="selectReportList" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+		select
+		t.id,
+		t.work_task workTask,
+		t.user_id userId,
+		t.task_type taskType,
+		t.create_time createTime,
+		t.status status,
+		t.completion_time completionTime,
+		IFNULL((select schedule from zg_task_finish where task_id = t.id and content_type = '1' order by schedule desc limit 1),0) schedule,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1),'') completion,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1) completionDate,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1),'') rigorous,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1) rigorousDate
+		from zg_task t where 1=1
+		<if test="params.userId != null and params.userId != '' ">
+			and
+			(t.user_id = #{params.userId}
+			or (t.create_user = #{params.userId} and (t.task_type = '1' or t.task_type = '2'))
+			or t.people_id in (select id from ej_scheduling_people where user_id = #{params.userId})
+			)
+		</if>
+		<if test="params.page != null and params.limit != null">
+			LIMIT #{params.page},#{params.limit}
+		</if>
+	</select>
+
+	<!--    APP端督办任务列表 -->
+	<select id="selectOversee" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+		select
+		t.id,
+		t.work_task workTask,
+		t.user_id userId,
+		t.task_type taskType,
+		t.create_time createTime,
+		t.status status,
+		t.completion_time completionTime,
+		IFNULL((select schedule from zg_task_finish where task_id = t.id and content_type = '1' order by schedule desc limit 1),0) schedule,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1),'') completion,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1) completionDate,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1),'') rigorous,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1) rigorousDate
+		from zg_task t where t.task_type = '4' and is_read = 2
+		<if test="params.userId != null and params.userId != '' ">
+			and	t.user_id = #{params.userId}
+		</if>
+	</select>
+
+	<!--    APP端督办任务列表 -->
+	<select id="selectScheduling" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+		select
+		t.id,
+		t.work_task workTask,
+		t.user_id userId,
+		t.task_type taskType,
+		t.create_time createTime,
+		t.status status,
+		t.completion_time completionTime,
+		IFNULL((select schedule from zg_task_finish where task_id = t.id and content_type = '1' order by schedule desc limit 1),0) schedule,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1),'') completion,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1) completionDate,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1),'') rigorous,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1) rigorousDate
+		from zg_task t where is_read = 2
+		<if test="params.userId != null and params.userId != '' ">
+			and	t.people_id in (select id from ej_scheduling_people where user_id = #{params.userId})
+		</if>
+	</select>
+
+	<!--     查询用户已完成的工作任务列表-->
+	<select id="selectCompleteList" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+		select
+		t.id,
+		t.work_task workTask,
+		t.user_id userId,
+		t.task_type taskType,
+		t.create_time createTime,
+		t.status status,
+		t.completion_time completionTime,
+		IFNULL((select schedule from zg_task_finish where task_id = t.id and content_type = '1' order by schedule desc limit 1),0) schedule,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1),'') completion,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '1' order by create_time desc limit 1) completionDate,
+		IFNULL((select content from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1),'') rigorous,
+		(select create_time from zg_task_finish where task_id = t.id and content_type = '2' order by create_time desc limit 1) rigorousDate
+		from zg_task t where status = 3
+		<if test="userId != null and userId != '' ">
+			and
+			(t.user_id = #{userId}
+			or (t.create_user = #{userId} and (t.task_type = '1' or t.task_type = '2'))
+			or t.people_id in (select id from ej_scheduling_people where user_id = #{userId})
+			)
+		</if>
+	</select>
+
+</mapper>

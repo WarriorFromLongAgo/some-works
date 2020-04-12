@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.smartcampus.modules.user.mapper.UsersMapper">
+
+
+    <select id="getByID" resultType="java.util.HashMap">
+        select * from user_users where id = #{id}
+    </select>
+
+    
+    <select id="gqlUsersQuery" resultType="java.util.Map">
+        select * from user_users as user
+
+        <choose>
+            <when test="withSchool">
+                left join base_schools as school on user.school_id = school.id
+            </when>
+        </choose>
+
+
+        LIMIT #{page},#{limit}
+
+    </select>
+
+
+</mapper>

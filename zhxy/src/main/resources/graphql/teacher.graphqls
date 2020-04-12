@@ -1,0 +1,543 @@
+type Teacher{
+    id: ID
+    "用户表信息"
+    user:User
+    "身份证号"
+    idcard:String
+    "性别"
+    gender:Dictionary
+    "生日"
+    birthday:String
+    "籍贯-省"
+    native_province:Region
+    "籍贯-市"
+    native_city:Region
+    "籍贯-县"
+    native_county:Region
+    "出生-省"
+    birth_province:Region
+    "出生-市"
+    birth_city:Region
+    "出生-县"
+    birth_county:Region
+    "人才类型"
+    type:String
+    "邮箱"
+    email:String
+    "手机号"
+    telnumber:String
+    "国际"
+    nationality:String
+    "政治面貌"
+    political_type:String
+    "在岗状态"
+    work_status:String
+    "参加工作时间"
+    work_date:String
+    "最高职称"
+    job_title:String
+    "最高学历"
+    education:String
+    "最高学位"
+    degree:String
+    "是否硕导"
+    master_supervisor:String
+    "是否博导"
+    teach:String
+    "人才类别(按六支队伍分)"
+    talent_category_six:[String]
+    "人才类别(按九支队伍分)"
+    talent_category_nine:[String]
+    "现住址-省"
+    cmbprovince3:Region
+    "现住址-市"
+    cmbcity3:Region
+    "现住址-县"
+    cmbcounty3:Region
+    "户籍所在地-省"
+    cmbprovince2:Region
+    "户籍所在地-市"
+    cmbcity2:Region
+    "户籍所在地-县"
+    cmbcounty2:Region
+    "学校信息"
+    school:School
+    "民族"
+    nation:Dictionary
+    "公安身份证备案照片"
+    imgphotos:String
+    "本人签字图片"
+    signimg:String
+    "教师姓名"
+    name:Lang
+    "简介"
+    introduction:Lang
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+    "办公室"
+    office: TeacherOffice
+}
+
+input TeacherInput {
+    id:ID
+    "用户表信息"
+    user_id:Int
+    "身份证号"
+    idcard:String
+    "性别"
+    gender:String
+    "生日"
+    birthday:String
+    "籍贯-省"
+    native_province_id:Int
+    "籍贯-市"
+    native_city_id:Int
+    "籍贯-县"
+    native_county_id:Int
+    "出生-省"
+    birth_province_id:Int
+    "出生-市"
+    birth_city_id:Int
+    "出生-县"
+    birth_county_id:Int
+    "人才类型"
+    type:String
+    "邮箱"
+    email:String
+    "手机号"
+    telnumber:String
+    "国际"
+    nationality:String
+    "政治面貌"
+    political_type:String
+    "在岗状态"
+    work_status:String
+    "参加工作时间"
+    work_date:String
+    "最高职称"
+    job_title:String
+    "最高学历"
+    education:String
+    "最高学位"
+    degree:String
+    "是否硕导"
+    master_supervisor:String
+    "是否博导"
+    teach:String
+    "人才类别(按六支队伍分)"
+    talent_category_six:[String]
+    "人才类别(按九支队伍分)"
+    talent_category_nine:[String]
+    "现住址-省"
+    cmbprovince3_id:Int
+    "现住址-市"
+    cmbcity3_id:Int
+    "现住址-县"
+    cmbcounty3_id:Int
+    "户籍所在地-省"
+    cmbprovince2_id:Int
+    "户籍所在地-市"
+    cmbcity2_id:Int
+    "户籍所在地-县"
+    cmbcounty2_id:Int
+    "学校信息"
+    school_id:Int
+    "民族"
+    nation:String
+    "公安身份证备案照片"
+    imgphotos:String
+    "本人签字图片"
+    signimg:String
+    "教师姓名"
+    name:LangInput
+    "简介"
+    introduction:LangInput
+}
+
+"老师信息 返回类型"
+type TeacherResponse {
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[Teacher]
+    "分页信息"
+    pagenation:Pagenation
+}
+
+"""
+教师的办公室 对应的表"teacher_office_arrange"
+"""
+type TeacherOffice{
+    id: ID
+    "办公室名称"
+    name: Lang
+    "楼宇id"
+    buildings:Building
+    "单元id"
+    unit_id:Unit
+    "楼层"
+    floor:Floor
+    "房间"
+    room:Room
+    "部门"
+    department: Department
+    "负责人"
+    headUser: Teacher
+    "办公室成员 通过teacher_office_arrange_user获取用户信息"
+    teachers: [Teacher]
+}
+
+"""
+教师的办公室
+"""
+input TeacherOfficeInput{
+    id: ID
+    "办公室名称"
+    name: LangInput
+    "楼宇id"
+    buildings_id:Int
+    "单元id"
+    unit_id:Int
+    "楼层"
+    floor_id:Int
+    "房间"
+    room_id:Int
+    "部门"
+    department_id:Int
+    "负责人"
+    head_user:Int
+}
+"教师办公室 返回类型"
+type TeacherOfficeResponse {
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[TeacherOffice]
+    "分页信息"
+    pagenation:Pagenation
+}
+
+type arrangeTeacherOffice{
+    room_id: Int
+    "用户id"
+    user_id: Int
+}
+"办公室分配用户"
+input arrangeTeacherOfficeInput{
+    "办公室id"
+    room_id: Int
+    "用户id"
+    user_id: [Int]
+}
+"办公室分配用户"
+type arrangeTeacherOfficeResponse{
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[arrangeTeacherOffice]
+}
+
+"""
+工作经历
+"""
+type workExperience{
+    id:Int
+    "教师id"
+    teacher: Teacher
+    "学校"
+    school: School
+    "开始时间"
+    startdate: Date
+    "结束时间"
+    enddate: Date
+    "是否审核"
+    shenhe:Int
+    "单位名称"
+    name:Lang
+    "职称"
+    postname: Lang
+    "创建人"
+    created_by:Int
+    "最后修改人"
+    updated_by:Int
+    "创建时间"
+    created_at:Date
+    "最后更新时间"
+    updated_at:Date
+    "删除时间"
+    deleted_at:Date
+}
+input workExperienceInput{
+    id:Int
+    "教师id"
+    teacher_id: Int
+    "学校"
+    school_id: Int
+    "开始时间"
+    startdate: Date
+    "结束时间"
+    enddate: Date
+    "是否审核"
+    shenhe:Int
+    "单位名称"
+    name:LangInput
+    "职称"
+    postname: LangInput
+}
+type workExperienceResponse{
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[workExperience]
+}
+
+
+"""
+承担课题项目
+"""
+type undertakeProject{
+    id:ID
+    "教职工信息"
+    teacher:Teacher
+    "学校"
+    school:School
+    "承担时间"
+    time:Date
+    "完成时间"
+    entime:Date
+    "经费"
+    fund:String
+    "立项编号"
+    num:String
+    "证书扫描件"
+    image:String
+    "审核(单选1、未审核2、审核通过)"
+    shenhe:Int
+    "创建时间"
+    created_at:Date
+    "创建人"
+    created_by:Int
+    "修改时间"
+    updated_at:Date
+    "修改人"
+    updated_by:Int
+    "删除时间"
+    deleted_at:Date
+    "项目名称"
+    name:Lang
+    "项目课题主管单位"
+    unit:Lang
+    "项目性质及来源"
+    source:Lang
+    "等级"
+    inputstyle:Lang
+    "担任角色"
+    roal:Lang
+}
+input undertakeProjectInput{
+    id:ID
+    "教职工信息"
+    teacher_id:Int
+    "学校"
+    school_id:Int
+    "承担时间"
+    time:Date
+    "完成时间"
+    entime:Date
+    "经费"
+    fund:String
+    "立项编号"
+    num:String
+    "证书扫描件"
+    image:String
+    "审核(单选1、未审核2、审核通过)"
+    shenhe:Int
+    "创建时间"
+    created_at:Date
+    "创建人"
+    created_by:Int
+    "修改时间"
+    updated_at:Date
+    "修改人"
+    updated_by:Int
+    "删除时间"
+    deleted_at:Date
+    "项目名称"
+    name:LangInput
+    "项目课题主管单位"
+    unit:LangInput
+    "项目性质及来源"
+    source:LangInput
+    "等级"
+    inputstyle:LangInput
+    "担任角色"
+    roal:LangInput
+}
+type undertakeProjectResponse{
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[undertakeProject]
+}
+"""
+论著和译著
+"""
+type translatedWorks{
+    "论著和译著"
+    id:ID
+    "'教职工"
+    teacher_id:Int
+    "学校"
+    school_id:Int
+    "第几作者"
+    authornumber:Int
+    "出版时间"
+    impowerdate:Date
+    "著作字数"
+    wordsnumber:String
+    "证书扫描件"
+    image:String
+    "审核(单选1、未审核2、审核通过)"
+    shenhe:Int
+    "创建时间"
+    created_at:Date
+    "创建人"
+    created_by:Int
+    "修改时间"
+    updated_at:Date
+    "修改人"
+    updated_by:Int
+    "删除时间"
+    deleted_at:Date
+    booktitle:Lang
+    pressname:Lang
+}
+input translatedWorksInput{
+    "论著和译著"
+    id:ID
+    "'教职工"
+    teacher_id:Int
+    "学校"
+    school_id:Int
+    "第几作者"
+    authornumber:Int
+    "出版时间"
+    impowerdate:Date
+    "著作字数"
+    wordsnumber:String
+    "证书扫描件"
+    image:String
+    "审核(单选1、未审核2、审核通过)"
+    shenhe:Int
+    "论著名称"
+    booktitle:LangInput
+    "出版社名称"
+    pressname:LangInput
+    "创建人"
+    created_by:Int
+    "修改人"
+    updated_by:Int
+    "创建时间"
+    created_at:Date
+    "修改时间"
+    updated_at:Date
+    "删除时间"
+    deleted_at:Date
+}
+type translatedWorksResponse{
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[translatedWorks]
+}
+"""
+培训情况
+"""
+type trainings{
+    id:Int
+    "教职工信息"
+    teacher:Teacher
+    "学校"
+    school:School
+    "培训开始时间"
+    startdate:Date
+    "培训结束时间"
+    enddate:Date
+    "证书扫描件"
+    image:String
+    "审核(单选1、未审核2、审核通过)"
+    shenhe:Int
+    "'创建时间"
+    created_at:Date
+    "创建人"
+    created_by:Int
+    "修改时间"
+    updated_at:Date
+    "修改人"
+    updated_by:Int
+    "删除标识"
+    deleted_at:Date
+    "培训名称'"
+    name:Lang
+    "举办机构"
+    organizer:Lang
+    "时限"
+    duration:Lang
+    "授予部门"
+    content:Lang
+}
+
+input trainingsInput{
+    id:Int
+    "教职工信息"
+    teacher_id:Int
+    "学校"
+    school_id:Int
+    "培训开始时间"
+    startdate:Date
+    "培训结束时间"
+    enddate:Date
+    "证书扫描件"
+    image:String
+    "审核(单选1、未审核2、审核通过)"
+    shenhe:Int
+    "'创建时间"
+    created_at:Date
+    "创建人"
+    created_by:Int
+    "修改时间"
+    updated_at:Date
+    "修改人"
+    updated_by:Int
+    "删除标识"
+    deleted_at:Date
+    "培训名称'"
+    name:LangInput
+    "举办机构"
+    organizer:LangInput
+    "时限"
+    duration:LangInput
+    "授予部门"
+    content:LangInput
+}
+type trainingsResponse{
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[trainings]
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="../../css/select2.min.css" rel="stylesheet">
+    <link href="../../css/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form class="form-horizontal" onsubmit="return false" id="form">
+        <fieldset>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <input class="form-control" type="hidden" name="ruleId"   id = "ruleId">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">规则名称</label>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <input class="form-control" placeholder="请输入规则名称" type="text" name="ruleName"
+                           id = "ruleName"
+                           data-bv-notempty="true"
+                           data-bv-notempty-message="规则名称为空">
+                </div>
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">警告级别</label>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <select name="level" class="form-control input-sm" id="level">
+                        <option value="0">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">预警类型</label>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <select name="caseWarnType" class="form-control input-sm" id="caseWarnType">
+                        <option value="0">请选择</option>
+                    </select>
+                </div>
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">预警指标</label>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <select name="type" class="form-control input-sm" id="type">
+                        <option value="0">请选择</option>
+                    </select>
+                	</div>
+            </div>
+            <div class="form-group">
+            	<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">角色</label>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" >
+                    <input class="easyui-combotree" id="roles" type="text" style="width:100%" name="roleIds"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">预警提示</label>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <input class="form-control" placeholder="请输入预警提示" type="text" name="content"
+                           data-bv-notempty="true"
+                           data-bv-notempty-message="预警提示为空">
+                </div>
+            </div>
+            <div class="form-group">
+            	<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">执行语句</label>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <textarea class="form-control"   rows="10"   placeholder="请输入执行语句" type="text" name="execSql"
+                           data-bv-notempty="true"
+                           data-bv-notempty-message="执行语句为空">
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="row" align="center">
+                    <div class="col-md-12">
+                        <button class="btn btn-primary" type="submit" id="submitBtn">
+                            <i class="fa fa-save"></i>修改
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+<!-- 配置文件 -->
+<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+<script type="text/javascript" src="../../js/constans.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+<script src="../../js/moment-with-locales.min.js"></script>
+
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/select2/select2.full.min.js"></script>
+<script src="../../js/select2/zh-CN.js"></script>
+<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>
+
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    layui.use(['layer', 'laydate'], function () {
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#birthday'
+        });
+    });
+    var ruleId = getUrlParam("ruleId");
+
+    initRoles();
+    function initData(){
+        if(ruleId != ""){
+            $.ajax({
+                type : 'get',
+                url : '/tts/rule/getRuleById?ruleId='+ruleId,
+                async : false,
+                success : function(data) {
+                    var attr;
+                    attr = data.roleId.split(",");
+                    $("#ruleId").val(data.ruleId);
+                    $('input[name="ruleName"]').val(data.ruleName);
+                    $('textarea[name="execSql"]').val(data.execSql);
+                    $("#level").val(data.level);
+                    $("#caseWarnType").val(data.caseWarnType);
+                    $('input[name="content"]').val(data.content);
+                    $("#type").val(data.type);
+                    $('#roles').combotree('setValue', {id:attr,text:attr});
+                }
+            });
+
+        }
+    }
+
+    getDictList(dict.level,"level");
+    getDictList(dict.caseWarnType,"caseWarnType");
+    getDictList(dict.type,"type");
+
+    initData();
+    $('#form').bootstrapValidator();
+    $("#submitBtn").click(
+
+    function add() {
+
+        $('#tempBtn').removeAttr("disabled");
+        $('#submitBtn').removeAttr("disabled");
+        $('#submitBtn').attr("disabled", false);
+
+        var formdata = $("#form").serializeObject();
+        var bootstrapValidator = $("#form").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if (!bootstrapValidator.isValid()) {
+            return;
+        }
+
+        if($("#roles").length > 1){
+            $.ajax({
+                type: 'post',
+                url: '/tts/rule/update',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(formdata),
+                success: function (data) {
+                    layer.msg("修改成功", {shift: -1, time: 1000}, function () {
+                        window.parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    });
+                }
+            });
+        } else{
+            formdata.roleIds = new Array();
+            formdata.roleIds[0] = $("#roles").val();
+            $.ajax({
+                type: 'post',
+                url: '/tts/rule/update',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(formdata),
+                success: function (data) {
+                    layer.msg("修改成功", {shift: -1, time: 1000}, function () {
+                        window.parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    });
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

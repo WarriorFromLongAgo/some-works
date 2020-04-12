@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>ᠬᠣᠯᠪᠣᠭᠳᠠᠬᠤ ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠬᠠᠤᠯᠢ ᠳᠥᠷᠢᠮ ᠦᠨ ᠬᠦᠰᠦᠨᠦᠭ </title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" href="../../layui/css/layui_orhon_mn.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<script src="http://ime.orhonit.org/orhonjsime2/js/orhonjsime.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ime.orhonit.org/orhonjsime2/css/style.css" />
+<script type="text/javascript">
+       orhonIMEinit = {
+           element: "",
+           ele_except: "",
+           editor: {
+               IME_Mount: true,
+               tinymce: "",
+               ueditor: "",
+           },
+           IME_cssurl: "",
+           IME_theme: "",
+           Output_Unicode: true,
+       };
+       Iframe_init = {
+           iframes: "",
+           ifr_except: "",
+           element: "",
+           ele_except: "",
+       };
+</script>
+</head>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div style="width:100%">
+			    <header class="pages_header">
+					 <div align="left">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠶᠢᠨ ᠭᠠᠷᠴᠠᠭ 
+											<input class="easyui-combotree" id="area" type="text" style="height:250px;width:70%" name="area_id"/>
+										</div>
+									</form>
+									<button class="layui-btn layui-btn-small" onclick="back()">
+                                      <i></i> ᠪᠤᠴᠠᠬᠤ 
+                                    </button>
+	                   				<button class="layui-btn layui-btn-small" onclick="addDetLrl()">
+                                      <i class="layui-icon">&#xe608;</i> ᠨᠡᠮᠡᠬᠦ  
+                                    </button>
+								</td>
+                            </tr> 
+                        </table>
+                    </div>
+                </header>
+                
+                <div class="list_mgl_right">
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr class="list_mgl">
+									<th width="1%" style="display:none">id</th>
+									<th width="15%"><span>ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠶᠢᠨ ᠺᠣᠳ᠋</span></th>
+									<th width="20%"><span>ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠶᠢᠨ ᠭᠠᠷᠴᠠᠭ </span></th>
+									<th width="15%"><span>ᠨᠡᠷᠡᠶᠢᠳᠦᠯ </span></th>
+									<th width="15%"><span>ᠬᠦᠴᠦᠨ ᠲᠡᠶ ᠬᠤᠭᠤᠴᠠᠭ᠎ᠠ</span></th>
+									<th width="15%"><span>ᠠᠵᠢᠯᠯᠠᠬᠤ </span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+var id = getUrlParam("id");
+var pers = checkPermission();
+layui.use(['layer','laydate'], function(){
+    var layer = layui.layer;
+    var laydate = layui.laydate;
+    laydate.render({
+       elem: '#beginTime'
+    });
+    laydate.render({
+       elem: '#endTime'
+    });
+});
+
+function back(){
+	window.history.back();
+}
+
+function addDetLrl(){
+	 layer.open({
+	            type: 2,
+	            title: 'ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠳᠥᠷᠢᠮ ᠳᠣᠭᠲᠠᠭᠠᠯ ᠨᠡᠮᠡᠬᠦ',
+	            shade: [0],
+	            area: ['90%', '85%'],
+	            shift: 2,
+	            content: 'addDetailedLrl.html?id='+id //iframe的url，no代表不显示滚动条
+	        });
+}
+
+var example;
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+    		"language":lang_mg,
+        	"searching": false,
+        	"processing": false,
+        	"serverSide" : true,
+        	"ajax": {
+        		"url" : "/base/lrlDettionws",
+        		"type":"get",
+        		"data":function(d){
+        			d.id = id;
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+            "columns": [
+				{"data" : "id", "defaultContent" : "","sClass":"hidden"},
+				{"data" : "item_code", "defaultContent" : ""},
+				{"data" : "law_id", "defaultContent" : ""},
+				{"data" : "item_name", "defaultContent" : ""},
+				{"data" : "effect_date", "defaultContent" : ""},
+				{"data": "", "defaultContent": ""},
+            ],
+            "columnDefs": [
+				{"name" : "id", "targets" : 0,"sClass":"hidden"},
+				{"name" : "item_code", "targets" : 1},
+				{ 
+                	"targets": 2,
+                	"render": function (data, type, row) {
+                		var lrlAtt = row['lrlAtt'];
+                        return lrlAtt['name'];
+                  	}
+                },
+				{"name" : "item_name", "targets" : 3},
+				{"name" : "effect_date", "targets" : 4},
+				{ 
+                	"targets": 5,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                        var edit = buttonEdit(id, "sys:user:add", pers);
+                		var del = buttonDel(id, "sys:user:del", pers);
+                        return edit+del;
+                     }
+                }
+              ],
+           "order": [[ 4, "desc" ]]
+        } );
+}
+
+/**
+ * 行政区划数据请求
+ */
+$("#area").combotree({
+	method:'get',		//请求方式	
+	url : '/base/lrltionws/lrlss',	//请求的URL
+	required: false, 
+	onLoadSuccess: function (node, data) {
+		$('#area').combotree('setValue', { id:id,text:id});
+    }, 
+	onChange:function(newV,oldV){
+		id=newV;
+		example.ajax.reload();
+	}
+});
+
+function update(id){
+	layer.open({
+        type: 2,
+        title: 'ᠬᠠᠤᠯᠢ ᠴᠠᠭᠠᠵᠠ ᠬᠠᠤᠯᠢ ᠳᠦᠷᠢᠮ  ᠢ ᠬᠠᠯᠠᠬᠤ',
+        shade: [0],
+        area: ['90%', '85%'],
+        shift: 2,
+        content: "updateDetailedLrl.html?id=" + id //iframe的url，no代表不显示滚动条
+    });
+}
+
+	function del(id){
+		layer.confirm(' ᠬᠠᠰᠤᠬᠤ ᠪᠠᠷ ᠰᠢᠢᠳᠦᠭᠰᠡᠨ ᠤᠤ', {title:'ᠵᠠᠩᠭᠢ ',btn : [ 'ᠵᠠ', 'ᠦᠬᠡᠢᠢᠰᠬᠡᠬᠦ' ]
+	    }, function() {
+	        $.ajax({
+	            type : 'delete',
+	            url : '/base/lrlDettionws/'+id,
+	            success : function(data) {
+	                example.ajax.reload();
+	                layer.msg("ᠬᠠᠰᠤᠪᠠ");
+	            }
+	        });
+	        
+	        layer.close(1);
+	    });
+	}
+	
+	function addCon(id){
+		location.href='addMenu.html'
+	}
+
+	
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+init();
+</script>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhon.pa.modules.opa.dao.OpaSchemeDao">
+    
+	<sql id="opaSchemeColumns">
+		a.id AS "id",
+		a.item_parent_id AS "itemParent.id",
+		a.code AS "code",
+		a.name AS "name",
+		a.level AS "level",
+		a.date_from AS "dateFrom",
+		a.date_to AS "dateTo",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.auditor_id AS "auditor.id",
+		a.status AS "status",
+		a.remarks AS "remarks",
+		u.nickname AS "auditor.name",
+		i.name AS "itemParent.name"
+	</sql>
+	
+	<sql id="opaSchemeJoins">
+		LEFT JOIN ole_base_dept o ON o.id = a.item_parent_id
+		LEFT JOIN ole_sys_user u ON u.id = a.auditor_id
+		LEFT JOIN ole_pa_item i ON i.id = a.item_parent_id
+	</sql>
+    
+	<select id="get" resultType="OpaScheme">
+		SELECT 
+			<include refid="opaSchemeColumns"/>
+		FROM ole_pa_scheme a
+		<include refid="opaSchemeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="OpaScheme">
+		SELECT 
+			<include refid="opaSchemeColumns"/>
+		FROM ole_pa_scheme a
+		<include refid="opaSchemeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="dateFrom != null and dateFrom != ''">
+				AND a.date_from &gt;= #{dateFrom}
+			</if>
+			<if test="dateTo != null and dateTo != ''">
+				AND a.date_to &lt;= #{dateTo}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="auditor != null and auditor != ''">
+				AND a.auditor_id = #{auditor.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OpaScheme">
+		SELECT 
+			<include refid="opaSchemeColumns"/>
+		FROM ole_pa_scheme a
+		<include refid="opaSchemeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" >
+		INSERT INTO ole_pa_scheme(
+			id,
+			item_parent_id,
+			code,
+			name,
+			level,
+			date_from,
+			date_to,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			auditor_id,
+			status,
+			remarks
+		) VALUES (
+			#{id},
+			#{itemParent.id},
+			#{code},
+			#{name},
+			#{level},
+			#{dateFrom},
+			#{dateTo},
+			#{delFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{auditor.id},
+			#{status},
+			#{remarks}
+		)
+	</insert>
+	
+	
+	
+	<update id="update">
+		UPDATE ole_pa_scheme SET 	
+			item_parent_id = #{itemParent.id},
+			code = #{code},
+			name = #{name},
+			level = #{level},
+			date_from = #{dateFrom},
+			date_to = #{dateTo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			auditor_id = #{auditor.id},
+			status = #{status},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ole_pa_scheme SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findListByStatus" resultType="com.orhon.pa.common.utils.Status">
+		SELECT 
+			a.id AS value,
+			a.name AS label
+		FROM ole_pa_scheme a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND
+			a.status IN
+			<foreach item="status" index="index" collection="statusList" open="(" separator="," close=")">  
+				#{status}  
+			</foreach> 
+		</where>
+			ORDER BY a.update_date DESC
+			
+	</select>
+</mapper>

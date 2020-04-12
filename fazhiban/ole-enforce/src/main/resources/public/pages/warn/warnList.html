@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>预警列表</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<style>
+	#dt-table td a{display:block;width:140px !important;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+    #dt-table td.ellipsis{max-width:85px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+   .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{line-height:1.3 !important;}
+</style>
+<body>
+<div id="moreTemplate">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <header style="height: 100%">
+            <div align="left">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="line-height:1.3px !important";>
+                            <form class="form-inline" onsubmit="return false">
+                                <div class="form-group">
+                                   <!--  记录编号：
+                                    <input id="id" type="text" class="form-control" placeholder="请输入案件编号"> -->
+                                    预警内容：
+                                    <input id="content" type="text" class="form-control" placeholder="请输入预警内容">
+                                    是否处理：
+                                    <select name="deal" class="form-control"  id="deal">
+                                        <option class="form-control" value="">全部</option>
+                                        <option class="form-control" value="1">已处理</option>
+                                        <option class="form-control" value="2">未处理</option>
+                                    </select>
+
+                                    <button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                </div>
+                            </form>
+                        </td>
+
+
+                    </tr>
+                </table>
+            </div>
+        </header>
+
+        <div> 
+            <div class="widget-body no-padding" > 
+                <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                    </tr>
+                    <tr>           
+                        <th>发送人</th>
+                        <th>预警时间</th>
+                        <th>接收人</th>
+                        <th>级别</th>
+                        <th>星级</th>
+                        <th width="15%">预警内容</th> 
+                        <th width="10%">案件/检查名称</th>
+                        <th>部门</th>
+                        <th>类型</th>
+                        <th>是否处理</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+<script type="text/javascript" src="../../js/constans.js"></script>
+<script type="text/javascript">
+
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+    });
+    var pers = checkPermission();
+    var userI;
+    var example;
+
+    var businessId = getQuery('businessId');
+    if ( businessId ) {
+        $('#id').val(businessId);
+    }
+
+    function init(){
+
+        var flowNode =caseStatus.AJLA;
+        //获取流程文书
+        var flowtype=flowType.NORMAL_CASE;
+        //获取流程文书
+        //getDocFlow(flowNode,flowtype);
+        //添加附件管理
+        //addFileManageBtn(flowNode);
+        example =
+            $('#dt-table').DataTable({
+                "language":lang,
+                "searching": false,
+                "processing": false,"ordering": false,
+                "serverSide" : true,
+                "bLengthChange": false,
+                "ajax": {
+                    "url" : "/enforce/yuj/list",
+                    "type":"get",
+                    "data":function(d){
+                        d.id = $('#id').val();
+                        d.content = $('#content').val();
+                        d.deal = $('#deal').val();
+                        d.userId=userI;
+                    }
+                },
+                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",
+                "columns": [  
+                    { "data": "createName", "defaultContent": ""},
+                    { "data": "createDate", "defaultContent": ""},
+                    { "data": "personName", "defaultContent": ""},
+                    { "data": "level", "defaultContent": ""},
+                    { "data": "star", "defaultContent": ""},
+                    { "data": "content", "defaultContent": ""},
+                    { "data": "recordTitle", "defaultContent": ""},
+                    { "data": "deptName", "defaultContent": ""},
+                    { "data": "warnType", "defaultContent": ""},
+                    { "data": "isDeal", "defaultContent": ""},
+                ],
+                "columnDefs": [
+                    { "name": "createName", "targets": 0 },
+                    { "name": "createDate", "targets": 1 },
+                    { "name": "personName", "targets": 2},
+                    { "name": "level", "targets": 3},
+                    {
+                        "targets": 4,
+                        "render": function (data, type, row) {
+                        	var color = 'red';
+                        	/* switch(parseInt(row['star'])){
+                        	case 1:
+                        		color = '#FFE4B5';
+                        		break;
+                        	case 2:
+                        		color = '#FFB90F';
+                        		break;
+                        	case 3:
+                        		color = '#FF8C69';
+                        		break;
+                        	case 4:
+                        		color = '#FF6347';
+                        		break;
+                        	case 5:
+                        		color = '#FF0000';
+                        		break;
+                        	} */
+                        	var a = '<a style="color:'+color+';">';
+                        	a += new Array( parseInt(row['star']) + 1 ).join( '★' );
+                        	a+='</a>';
+                            return a;
+                        }
+                    },
+                    {
+                        "targets": 5,
+                        "render": function (data, type, row) {
+                            var caseNum = row['content'];
+                            var yujcontent ;
+                            if(caseNum.length>10){
+                            	yujcontent = caseNum.substring(0,10) + "...";
+                            }else{
+                            	yujcontent = caseNum;
+                            }
+                            
+                            var href = '<a  style="color:#009688" href="javascript:;" onclick="showDetailCase(\''+row['id']+'\' )">' + yujcontent + '</a>';
+                            return href;
+                        }
+                    },   
+                    
+                    { "name": "recordTitle", "targets": 6,"sClass": "ellipsis"},
+                    { "name": "deptName", "targets": 7,"sClass": "ellipsis",},
+                    { "name": "warnType", "targets": 8,"sClass": "ellipsis",},
+                   /*  { "name": "isDeal", "targets": 9 }, */
+                    {
+                        "targets": 9,
+                        "render": function (data, type, row) {
+                            var deal = row['isDeal'];
+                           if(deal=='已处理'){
+                        	   var color = 'green';
+                           }else{
+                        	   var color = 'red';
+                           }
+                           var a = '<a style="color:'+color+';">';
+                       	   a += deal
+                       	   a +='</a>';
+                           return a;
+                        }
+                    },                ],
+            });
+    }
+    $("#searchBt").click(function(){
+        example.ajax.reload();
+    });
+
+    function showDetailCase(yujId) {
+    	window.layer.open({
+            type: 2,
+            title:['预警详情页面','background-color:#5b8bff;'],
+            shade: [0],
+            area: ['90%', '90%'],
+            shift: 2,
+            content: 'warnDetailInfo.html?yujId=' + yujId
+        });
+    }
+    init();
+</script>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.cases.ReportCasePersonTypeDao">
+
+	<select id="findCasePersonTypeCount" resultType="com.orhonit.ole.report.dto.cases.CasePersonTypeDTO">
+		SELECT osd.`enum_desc` AS  name ,COUNT(oepi.`id`) AS value
+		FROM ole_ef_party_info oepi
+		LEFT JOIN ole_sys_dict osd ON osd.`enum_value` = oepi.`type`
+		WHERE oepi.`type` IN ('1','2') AND osd.`type_value` = '1600'
+		GROUP BY oepi.`type`
+	</select>
+
+	
+</mapper>

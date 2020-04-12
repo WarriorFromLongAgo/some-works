@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.ZgMeetFlowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.ZgMeetFlowEntity" id="zgMeetFlowMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="meetId" column="meet_id"/>
+        <result property="meetTitle" column="meet_title"/>
+        <result property="makePlan" column="make_plan"/>
+        <result property="makeInform" column="make_inform"/>
+        <result property="readyMaterial" column="ready_material"/>
+        <result property="meetRoomDecorate" column="meet_room_decorate"/>
+        <result property="meetReports" column="meet_reports"/>
+        <result property="meetServe" column="meet_serve"/>
+        <result property="meetRecord" column="meet_record"/>
+        <result property="logistics" column="logistics"/>
+        <result property="sortingData" column="sorting_data"/>
+        <result property="meetMinutes" column="meet_minutes"/>
+        <result property="inspectorWorkable" column="inspector_workable"/>
+        <result property="meetFeedback" column="meet_feedback"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.orhonit.modules.generator.entity.ZgMeetFlowEntity">
+        INSERT INTO zg_meet_flow (
+        id,
+        create_user_id,
+        create_user_name,
+        create_time,
+        meet_id,
+        meet_title,
+        make_plan,
+        make_inform,
+        ready_material,
+        meet_room_decorate,
+        meet_reports,
+        meet_serve,
+        meet_record,
+        logistics,
+        sorting_data,
+        meet_minutes,
+        inspector_workable,
+        meet_feedback,
+        make_plan_name,
+        make_inform_name,
+        ready_material_name,
+        meet_room_decorate_name,
+        meet_reports_name,
+        meet_serve_name,
+        meet_record_name,
+        logistics_name,
+        sorting_data_name,
+        meet_minutes_name,
+        inspector_workable_name,
+        meet_feedback_name
+        )
+        VALUES
+	    (
+        #{id},#{createUserId},#{createUserName},#{createTime},#{meetId},#{meetTitle},#{makePlan},#{makeInform},#{readyMaterial},#{meetRoomDecorate},#{meetReports},#{meetServe},#{meetRecord},#{logistics},#{sortingData},#{meetMinutes},#{inspectorWorkable},#{meetFeedback},
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{makePlan}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{makeInform}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{readyMaterial}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{meetRoomDecorate}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{meetReports}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{meetServe}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{meetRecord}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{logistics}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{sortingData}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{meetMinutes}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{inspectorWorkable}),
+        (SELECT user_true_name FROM sys_user WHERE user_id = #{meetFeedback}))
+    </insert>
+
+    <select id="findFlow" resultType="com.orhonit.modules.generator.entity.ZgMeetFlowEntity">
+        select * from zg_meet_flow where meet_id = #{meetId}
+    </select>
+</mapper>

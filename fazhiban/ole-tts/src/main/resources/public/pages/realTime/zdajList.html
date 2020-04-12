@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>实时预警列表</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+</head>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 100%">
+                    <div align="left">
+	                    <table style="width: 100%">
+	                   		<tr>
+	                   			<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											<div class="form-group">
+											主体：
+											<input class="easyui-combotree" id="deptId" type="text" name="dept_id"/></div>
+											<div class="form-group">
+											案件编号：
+											<input id="id" type="text" class="form-control" placeholder="请输入案件编号"></div>
+											<div class="form-group">
+											案件名称：
+											<input id="caseName" type="text" class="form-control" placeholder="请输入案件名称"></div>
+											<div class="form-group">
+											主执法人员：
+											<input id="zzfryName" type="text" class="form-control" placeholder="请输入执法人员"></div>
+											<div class="form-group">
+											案件状态：
+											<select id="caseStatus"  class="form-control">
+												<option value="" selected="selected">所有状态</option>
+											</select></div>
+											<div class="form-group">
+												案发时间：
+												<input id="caseTime" placeholder="请输入案发时间" class="form-control" type="text" >
+												<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+											</div>
+										</div>
+									</form>
+								</td>
+	                   		</tr> 
+	                    </table>
+					</div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%;white-space: nowrap;">
+                            <thead>
+                                <tr>
+                                </tr>                       
+                                <tr>
+                                	 <th>预警</th>
+                                	 <th>流程图</th>
+                                    <th>案件名称</th>
+                                    <th>案件编号</th>
+                                    <th>案源</th>
+                                    <th>案件状态</th>
+                                    <th>案发地址</th>
+                                    <th>案发时间</th>
+                                    <th>收件时间</th>
+                                    <th>指派时间</th>
+                                    <th>收件人</th>
+                                    <th>主执法人员</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.all.js"></script>
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="../../js/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="../../js/ueditor.all.min.js"></script>
+<script src="../../js/moment-with-locales.min.js"></script>  
+  
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/select2/select2.full.min.js"></script>  
+<script src="../../js/select2/zh-CN.js"></script>  
+<script src="../../js/jquery-confirm/jquery-confirm.min.js"></script>  
+<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+var pers = checkPermission();
+var userI,example,userKeyId;
+
+ $('#caseTime').datetimepicker({  
+    format: 'YYYY-MM-DD ',  
+    locale: moment.locale('zh-cn')  
+}); 
+
+getDictList('1500','caseStatus');
+
+$.ajax({
+	type : 'get',
+	url : '/tts/sys/login',
+	userdata : $("#form").serialize(),	
+	success : function(userdata) {
+		userI=userdata.username;
+		userKeyId=userdata.id;
+		/**
+		 * 主体数据请求
+		 */
+		$("#deptId").combotree({
+			method:'get',		//请求方式	
+			url : '/tts/sysDept/tree',	//请求的URL
+			required: false,
+			onLoadSuccess:function(node,data){
+				$("#deptId").combotree('setValue','');
+				init();
+			}
+		});
+	}
+});
+
+
+function init(){
+	example = 
+	$('#dt-table').DataTable({
+		"language":lang,
+    	"searching": false,
+    	"processing": false,
+    	"serverSide" : true,
+    	"bLengthChange": false,
+    	"ajax": {
+    		"url" : "/tts/realTime/list",
+    		"type":"get",
+    		"data":function(d){
+				d.id = $('#id').val();
+				d.caseName = $('#caseName').val();
+				d.zzfryName = $('#zzfryName').val();
+				d.caseTime = $('#caseTime').val();
+				d.userId=userI;
+				d.deptId = $('#deptId').val();
+				if($('#caseStatus').val()!=''){
+					d.caseStatus = $('#caseStatus').val();
+				}
+				d.flowType = "3";
+			}
+    	},
+    	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+        "columns": [
+            { "data": "", "defaultContent": ""},
+		    { "data": "", "defaultContent": ""},
+            { "data": "caseName", "defaultContent": ""},
+            { "data": "caseNum", "defaultContent": ""},
+            { "data": "caseSource", "defaultContent": ""},
+            { "data": "caseStatus", "defaultContent": ""},
+            { "data": "caseAddress", "defaultContent": ""},
+            { "data": "caseTime", "defaultContent": ""},
+            { "data": "caseApplyDate", "defaultContent": ""},
+            { "data": "caseZpDate", "defaultContent": ""},
+            { "data": "caseHandler", "defaultContent": ""},
+            { "data": "zzfryName", "defaultContent": ""},
+            { "data": "", "defaultContent": ""},
+        ],
+        "columnDefs": [
+			{ 
+				"targets": 0,
+				"render": function (data, type, row) {
+					var caseNum = row["caseNum"];
+					var edit = btnRealTimeWarn(caseNum);
+			       return edit;
+			    }
+			 },
+              { 
+              	"targets": 1,
+              	"render": function (data, type, row) {
+              		var caseNum = row['caseNum'];
+              		var edit = btnCaseTask(caseNum);
+                      return edit;
+                  }
+               },
+                        
+            { "name": "caseName", "targets": 2 },
+            { 
+            	"targets": 3,
+            	"render": function (data, type, row) {
+            		var caseNum = row['caseNum'];
+            		var href = '<a href="javascript:;" style="color:#74D2D9" onclick="showDetailCase(\''+row['id']+'\' )">' + caseNum + '</a>';
+            		return href;
+                }
+            },
+            { "name": "caseSource", "targets": 4 },
+            { "name": "caseStatus", "targets": 5 },
+            { "name": "caseAddress", "targets":6 },
+            { "name": "caseTime", "targets": 7 },
+            { "name": "caseApplyDate", "targets": 8 },
+            { "name": "caseZpDate", "targets": 9 },
+            { "name": "caseHandler", "targets": 10 },
+            { "name": "zzfryName", "targets": 11 }
+          ],
+        "order": [[ 0, "desc" ],[1, "asc"]]
+    });	
+}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+function addRealTimeWarn(caseNum){
+	layer.open({
+		type: 2,
+        title: '实时预警添加',
+        shade: [0],
+        area: ['90%', '70%'],
+        shift: 2,
+        content: 'realTimeWarnAdd.html?caseNum=' + caseNum +'&type=9004'
+    });
+}
+
+function showDetailCase(caseId) {
+	parent.layer.open({
+		type: 2,
+        title: '案件详情页面',
+        shade: [0],
+        area: ['90%', '70%'],
+        shift: 2,
+        content: 'pages/realTime/caseDetailInfo.html?caseId=' + caseId
+    });
+}
+
+function viewFlowImage(caseNum){
+	$.ajax({
+		type : 'get',
+		url : '/tts/activity/getTaskId/'+caseNum,
+		success : function(data) {
+			if(data.code == 0){
+				var taskId = data.data;
+				parent.layer.open({
+					type: 2,
+				    title: '查看流程图',
+				    shade: [0],
+				    fix: false,
+				    area: ['95%', '96%'],
+				    scrollbar : false,
+				    shift: 2,
+				    content: 'pages/index/flowImage.html?taskId=' + taskId + '&caseNum=' + caseNum + '&key=case'
+				});
+			}else{
+				layer.msg("获取流程图失败", {anim:5});
+			}
+		}
+	});
+
+}
+</script>

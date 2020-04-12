@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.tts.dao.DashboardDao">
+
+	<!-- 统计未读的反馈信息数量 -->
+	<select id="haveWarnRead" resultType="int">
+		SELECT COUNT(1) FROM ole_warn_info owi 
+		LEFT JOIN ole_warn_person owp ON owp.warn_id = owi.id
+		WHERE owp.is_read = 0 AND owp.is_deal = 1 AND owi.warn_type = 3 AND owi.CREATE_BY = #{createBy};
+	</select>
+	
+	<!-- 统计预警数量 -->
+	<select id="getCountByWarnType" resultType="int">
+		SELECT COUNT(DISTINCT owi.id) FROM ole_warn_info owi
+		LEFT JOIN ole_warn_person owp ON owp.warn_id = owi.id 
+		<where>
+			owi.warn_type=#{params.warnType}
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET(owp.dept_id,#{params.deptIds})
+			</if>
+		</where>
+	</select>
+	
+	<select id="getDeptsByParentDeptId" resultType="java.lang.String">
+		SELECT superviseGetBaseDeptByParentId(#{deptId})
+	</select>
+	
+	<!-- 统计各类异常案件的总数量 -->
+	<select id="findCaseWranCount" resultType="com.orhonit.ole.tts.dto.CaseWranDTO">
+		SELECT 
+			b.enum_desc  AS 'name',
+			COUNT(DISTINCT owi.id) AS 'value'
+		FROM ole_warn_info owi
+		LEFT JOIN ole_warn_person owp ON owp.warn_id = owi.id
+		LEFT JOIN ole_sys_dict b ON owi.type = b.enum_value AND b.type_value = '2020'
+		<where>
+			b.enum_desc != "" 
+			<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET(owp.dept_id,#{params.deptIds})
+			</if>
+		</where>
+		GROUP BY owi.type
+	</select>
+
+</mapper>

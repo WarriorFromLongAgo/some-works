@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.YujDao">
+	
+	<!-- 预警列表查询app-->
+	<select id="appList" resultType="com.orhonit.ole.enforce.dto.YujDTO">
+		SELECT  ec.id as id,
+				ec.star AS star,
+				ec.create_date createDate,
+				ec.create_name createName,
+				ec.content AS content,
+				ec.record_title AS recordTitle,
+				wp.dept_id AS deptId,
+				sd.enum_desc AS isDeal,
+				dp.name AS deptName,
+				sd1.enum_desc AS level,
+				sd3.enum_desc AS warnType,
+				sd4.enum_desc AS flowType,
+				sd5.enum_desc AS recordStatus,
+				sd2.enum_desc AS type
+		FROM ole_warn_info ec
+		LEFT JOIN ole_warn_person wp ON wp.warn_id=ec.id
+		LEFT JOIN ole_base_dept dp ON wp.dept_id=dp.id
+		LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.level AND sd1.type_value = '1900'
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = ec.type AND sd2.type_value = '2020'
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = ec.warn_type AND sd3.type_value ='2051'
+		LEFT JOIN ole_sys_dict sd4 ON sd4.enum_value = ec.flow_type AND sd4.type_value = '1802'
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = wp.is_deal AND sd.type_value ='2056'
+		LEFT JOIN ole_sys_dict sd5 ON sd5.enum_value = ec.record_status AND 
+		(sd5.type_value ='1500' or sd5.type_value ='1501')
+		<where>
+			1=1
+			<if test="params.star != null and params.star != ''">
+				and ec.star = #{params.star}
+			</if>
+			<if test="params.id != null and params.id != ''">
+				and ec.id like concat('%', #{params.id}, '%')
+			</if>
+			<if test="params.content != null and params.content != ''">
+				and ec.content like concat('%', #{params.content}, '%')
+			</if>
+			<if test="params.pid != null and params.pid !=''">
+				and wp.person_id = #{params.pid}
+			</if>
+			<if test="params.deptIds != null and params.deptIds != ''">
+				and FIND_IN_SET (wp.dept_id ,#{params.deptIds})
+			</if>
+			<if test="params.deptId != null and params.deptId !=''">
+				and wp.dept_id = #{params.deptId}
+			</if>
+			<if test="params.deal != null and params.deal !=''">
+				and wp.is_deal = #{params.deal}
+			</if>
+			<if test="params.level != null and params.level !=''">
+				and ec.level = #{params.level}
+			</if>	
+			<if test="params.warnType != null and params.warnType !=''">
+				and ec.warn_type = #{params.warnType}
+			</if>			
+			<if test="params.queryDate == 1 ">
+				AND  date(ec.create_date) = curdate()
+			</if>
+			<if test="params.queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ec.create_date)		
+			</if>
+			<if test="params.queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ec.create_date)			
+			</if>
+			<if test="params.queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ec.create_date)			
+			</if>
+			<if test="params.queryDate == 5 ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ec.create_date)	
+			</if>
+			<if test="params.caseName != null and params.caseName !=''">
+				AND  ec.record_title like concat('%', #{params.caseName}, '%')
+			</if>
+			group by ec.id
+			order by ec.create_date desc
+			<if test="start != null and length !=null">
+				limit #{start}, #{length};
+			</if>
+		</where>
+	</select>
+	
+	<!-- 预警列表查询app-->
+	<select id="appListMap" resultType="com.orhonit.ole.enforce.dto.YujDTO">
+		SELECT  distinct ec.id as id,
+				ec.star AS star,
+				ec.create_date createDate,
+				ec.create_name createName,
+				ec.content AS content,
+				ec.record_title AS recordTitle,
+				wp.dept_id AS deptId,
+				sd.enum_desc AS isDeal,
+				dp.name AS deptName,
+				sd1.enum_desc AS level,
+				sd3.enum_desc AS warnType,
+				sd4.enum_desc AS flowType,
+				sd5.enum_desc AS recordStatus,
+				sd2.enum_desc AS type
+		FROM ole_warn_info ec
+		LEFT JOIN ole_warn_person wp ON wp.warn_id=ec.id
+		LEFT JOIN ole_base_dept dp ON wp.dept_id=dp.id
+		LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.level AND sd1.type_value = '1900' <!-- 警告级别 -->
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = ec.type AND sd2.type_value = '2020' <!-- 指标类型 -->
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = ec.warn_type AND sd3.type_value ='2051' <!-- 预警类型 -->
+		LEFT JOIN ole_sys_dict sd4 ON sd4.enum_value = ec.flow_type AND sd4.type_value = '1802'<!-- 流程类型 -->
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = wp.is_deal AND sd.type_value ='2056'<!-- 预警是否处理 -->
+		LEFT JOIN ole_sys_dict sd5 ON sd5.enum_value = ec.record_status AND 
+		(sd5.type_value ='1500' or sd5.type_value ='1501')
+		<where>
+			1=1
+			<if test="star != null and star != ''">
+				and ec.star = #{star}
+			</if>
+			<if test="id != null and id != ''">
+				and ec.id like concat('%', #{id}, '%')
+			</if>
+			<if test="content != null and content != ''">
+				and ec.content like concat('%', #{content}, '%')
+			</if>
+			<if test="pid != null and pid !=''">
+				and wp.person_id = #{pid}
+			</if>
+			<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (wp.dept_id ,#{deptIds})
+			</if>
+			<!--<if test="deptId != null and deptId !=''">
+				and wp.dept_id = #{deptId}
+			</if>-->
+			<if test="deal != null and deal !=''">
+				and wp.is_deal = #{deal}
+			</if>
+			<if test="level != null and level !=''">
+				and ec.level = #{level}
+			</if>	
+			<if test="warnType != null and warnType !=''">
+				and ec.warn_type = #{warnType}
+			</if>			
+			<if test="queryDate == 1 ">
+				AND  date(ec.create_date) = curdate()
+			</if>
+			<if test="queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(ec.create_date)		
+			</if>
+			<if test="queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(ec.create_date)			
+			</if>
+			<if test="queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(ec.create_date)			
+			</if>
+			<if test="queryDate == 5 ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(ec.create_date)	
+			</if>
+			<if test="caseName != null and caseName !=''">
+				AND  ec.record_title like concat('%', #{caseName}, '%')
+			</if>
+			group by ec.id
+			order by ec.create_date desc
+			<if test="start != null and length !=null">
+				limit #{start}, #{length};
+			</if>
+		</where>
+	</select>
+	
+	<!-- 预警级别总数-->
+	<select id="levelCount" resultType="com.orhonit.ole.enforce.dto.api.ApiCountDTO">
+		SELECT
+			sd.enum_desc as status,
+			count(DISTINCT ec.id) as count
+		FROM
+		(
+			SELECT
+				*
+			FROM
+				ole_sys_dict
+			WHERE
+				type_value = '1900'
+		) sd
+		LEFT OUTER JOIN (
+		select ec.id, wp.person_id as person_id,ec.LEVEL as LEVEL from ole_warn_info ec 
+		left join ole_warn_person wp on wp.warn_id = ec.id
+			<where>	 
+    			<if test="params.personId != null and params.personId !=''">
+					and wp.person_id = #{params.personId}
+				</if>
+				<if test="params.deptId != null and params.deptId !=''">
+					and wp.dept_id = #{params.deptId}
+				</if>
+				<if test="params.deal != null and params.deal !=''">
+					and wp.is_deal = #{params.deal}
+				</if>
+				<if test="params.type != null and params.type !=''">
+					and ec.warn_type !=3
+				</if>
+    		</where> 
+		) ec  ON sd.enum_value = ec.LEVEL group by sd.enum_desc				
+	</select>
+	
+	<select id="starCount" resultType="com.orhonit.ole.enforce.dto.api.ApiCountDTO">
+		SELECT 
+			wi.star as status,
+			count(wi.id) as count
+		FROM
+			ole_warn_info wi
+		WHERE wi.id in (select wp.warn_id from ole_warn_person wp 
+		
+		WHERE 1=1
+			<if test="params.personId != null and params.personId !=''">
+					and wp.person_id = #{params.personId}
+			</if>
+			
+			<if test="params.deptId != null and params.deptId !=''">
+					and wp.dept_id = #{params.deptId}
+			</if>
+		)
+			<if test="params.type != null and params.type !=''">
+						and wi.warn_type !='3'
+			</if>
+			GROUP BY wi.star		
+	</select>
+	
+	<select id="YuJcount" resultType="int">
+		SELECT 
+			count(ec.id)
+		FROM
+			ole_warn_info ec
+		WHERE ec.id in (select wp.warn_id from ole_warn_person wp 
+
+    		<where>
+    			1=1
+	    		<if test="params.id != null and params.id != ''">
+					and ec.id like concat('%', #{params.id}, '%')
+				</if>
+    			<if test="params.pid != null and params.pid !=''">
+					and wp.person_id = #{params.pid}
+				</if>	    		
+	    		<if test="params.deal != null and params.deal !=''">
+					and wp.is_deal = #{params.deal}
+				</if>
+				<if test="params.content != null and params.content != ''">
+					and ec.content like concat('%', #{params.content}, '%')
+				</if>
+				<if test="params.deptId != null and params.deptId !=''">
+					and wp.dept_id = #{params.deptId}
+				</if>
+			)
+    		</where> 
+    							
+	</select>
+	
+	<select id="YuJcountApp" resultType="int">
+		SELECT 
+			count(ec.id)
+		FROM
+			ole_warn_info ec
+		WHERE ec.id in (select wp.warn_id from ole_warn_person wp 
+
+    		<where>
+    			1=1
+	    		<if test="params.id != null and params.id != ''">
+					and ec.id like concat('%', #{params.id}, '%')
+				</if>
+    			<if test="params.pid != null and params.pid !=''">
+					and wp.person_id = #{params.pid}
+				</if>	    		
+	    		<if test="params.deal != null and params.deal !=''">
+					and wp.is_deal = #{params.deal}
+				</if>
+				<if test="params.content != null and params.content != ''">
+					and ec.content like concat('%', #{params.content}, '%')
+				</if>
+				<if test="params.deptIds != null and params.deptIds !=''">
+					and wp.dept_id = #{params.deptId}
+				</if>
+			)
+    		</where> 
+    							
+	</select>
+	
+	<!-- 获取预警情 -->
+	<select id="getWarnInfoByWarnId" resultType="com.orhonit.ole.enforce.dto.YujDTO">
+		SELECT  ec.id as id,
+				sd1.enum_desc AS level,
+				ec.content AS content,	
+				ec.record_id AS recordId,
+				ec.record_code AS recordCode,
+				ec.record_title AS recordTitle,
+				sd2.enum_desc AS recordStatus,
+				sd4.enum_desc AS type,
+				ec.task_id AS task_id,
+				sd.enum_desc AS warnType,
+				ec.star AS star,
+				ec.create_date createDate,
+				ec.create_name AS createName,
+				ec.create_by AS createBy,
+				ec.update_name AS updateName,
+				ec.update_by AS updateBy,
+				ec.update_date AS updateDate,
+				sd3.enum_desc AS flowType
+			FROM ole_warn_info ec
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.level AND sd1.type_value = '1900'
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = ec.warn_type AND sd.type_value ='2051'
+			LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = ec.record_status AND 
+			(sd2.type_value ='1500' or sd2.type_value ='1501')
+			LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = ec.flow_type AND sd3.type_value ='1802'
+			LEFT JOIN ole_sys_dict sd4 ON sd4.enum_value = ec.type AND sd4.type_value = '2020'	
+		WHERE ec.id= #{warnId};
+	</select>
+
+
+	<select id="getWarnList" resultType="com.orhonit.ole.enforce.dto.YujDTO">
+		SELECT  ec.id as id,
+				ec.star AS star,
+				ec.create_date createDate,
+				ec.create_name createName,
+				ec.content AS content,
+				ec.record_title AS recordTitle,
+				wp.dept_id AS deptId,
+				sd.enum_desc AS isDeal,
+				dp.name AS deptName,
+				sd1.enum_desc AS level,
+				sd3.enum_desc AS warnType,
+				sd4.enum_desc AS flowType,
+				sd5.enum_desc AS recordStatus,
+				sd2.enum_desc AS type
+		FROM ole_warn_info ec
+		LEFT JOIN ole_warn_person wp ON wp.warn_id=ec.id
+		LEFT JOIN ole_base_dept dp ON wp.dept_id=dp.id
+		LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.level AND sd1.type_value = '1900'
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = ec.type AND sd2.type_value = '2020'
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = ec.warn_type AND sd3.type_value ='2051'
+		LEFT JOIN ole_sys_dict sd4 ON sd4.enum_value = ec.flow_type AND sd4.type_value = '1802'
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = wp.is_deal AND sd.type_value ='2056'
+		LEFT JOIN ole_sys_dict sd5 ON sd5.enum_value = ec.record_status AND 
+		(sd5.type_value ='1500' or sd5.type_value ='1501')	
+		WHERE ec.record_id= #{caseId}
+		GROUP By ec.id
+		order by ec.create_date desc
+	</select>
+
+	<update id="warnDeal"  >
+		UPDATE ole_warn_person 
+		SET is_deal = #{isDeal} ,
+			deal_result=#{dealResult},
+			update_by=#{updateBy},
+			update_name=#{updateName},
+			update_date=#{updateDate}
+		WHERE warn_id = #{warnId}
+		AND person_id = #{personId} 
+	</update>
+	
+	<update id="warnUpdate"  >
+		UPDATE ole_warn_info 
+		SET update_by=#{updateBy},
+			update_name=#{updateName},
+			update_date=#{updateDate}
+		WHERE id = #{id}
+		
+	</update>
+	
+	<select id="getWarnListByCaseNum" resultType="com.orhonit.ole.enforce.dto.YujDTO">
+		SELECT 
+			 ec.id as id
+		FROM ole_warn_info ec
+   		<where>
+   				ec.record_code=#{caseNum}
+   				and  ec.warn_type='3'
+   				order by  ec.create_date desc 
+   		</where>
+	</select>
+
+	<select id="getWarnPerson" resultType="com.orhonit.ole.enforce.dto.YujPersonDTO">
+		SELECT
+			 wp.id,
+	 		 wp.person_id as personId,
+	    	 dp.name as personName,
+			 wp.warn_id as warnId,
+			 wp.deal_result as dealResult,
+			 sd.enum_desc as isDeal,
+			 wp.is_deal as deal, 
+		 	 wp.is_major as isMajor,
+			 wp.dept_id as deptId,
+			 bd.name as deptName,
+			 wp.create_date as createDate,
+	 		 wp.create_name as createName,
+			 wp.create_by as createBy, 
+			 wp.update_date as updateDate, 
+			 wp.update_name as updateName,
+			 wp.update_by as updateBy 
+		FROM ole_warn_person wp
+		LEFT JOIN ole_base_dept bd ON bd.id = wp.dept_id
+		LEFT JOIN ole_base_dept_person dp ON dp.id = wp.person_id
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = wp.is_deal AND sd.type_value ='2056'
+		<where>
+			1=1
+			<if test="params.warnId != null and params.warnId !=''">
+				and wp.warn_id=#{params.warnId}
+			</if>
+			<if test="params.personId != null and params.personId !=''">
+				and wp.person_id = #{params.personId}
+			</if>
+		</where> 
+	</select>
+	
+	<select id="getWarnPersonCount" resultType="com.orhonit.ole.enforce.dto.YujPersonCountDTO">
+		SELECT 
+			is_deal as deal,
+			count(*) as count
+		from ole_warn_person 
+		where warn_id=#{warnId}
+		GROUP BY is_deal
+	</select>
+	
+	<!-- 一般案件实时预警 -->
+	<select id="yujCaseList" resultType="com.orhonit.ole.enforce.dto.ps.PsCaseDTO">
+		
+		SELECT  ec.id as caseId,
+			ec.case_name AS caseName, 
+			ec.case_name AS name,
+			ec.case_num AS caseNum, 
+			sd.enum_desc AS caseSource,
+			ec.dept_id AS deptId,
+			bd.name AS deptName,
+			ec.case_address caseAddress,
+			ec.case_zzfryname As caseZzfryname,
+			ec.case_apply_date AS caseApplyDate,
+			ec.brief_case_content AS briefCaseContent,
+			ec.case_handler AS caseHandler,
+			ec.case_zpr AS caseZpr,
+			ec.case_zpdate AS caseZpdate,
+			ec.case_zzfryid AS caseZzfryid,
+			ec.case_zzfryname AS caseZzfryname,
+			ec.case_fzfryid AS caseFzfryid,
+			ec.case_fzfryname AS caseFzfryname,
+			<!--ec.flow_type AS flowType,-->
+			ec.case_type AS caseType,
+			ec.case_reason AS caseReason,
+			ec.case_time AS caseTime,
+			ec.check_id AS checkId,
+			sd1.enum_desc AS caseStatus
+			FROM ole_ef_case ec 
+			LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.case_status AND sd1.type_value = '1500' 
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = ec.case_source AND sd.type_value = '1002'
+			LEFT JOIN ole_base_dept bd ON bd.id = ec.dept_id
+			LEFT JOIN ole_base_area ba ON ba.id= bd.area_id
+		<where>
+			<if test="deptId != null and deptId != ''">
+				and ec.dept_id = #{deptId} 
+			</if>
+			<if test="areaId != null and areaId != ''">
+				AND ba.id = #{areaId}
+			</if>
+			<if test="caseName != null and caseName != ''">
+				and ec.case_name like concat('%', #{caseName}, '%')
+			</if>
+			<if test="flowType != null and flowType != ''">
+				and ec.flow_type = #{flowType} 
+			</if>
+			<!--<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (ec.dept_id ,#{deptIds})
+			</if>-->
+			<!--<if test="zzfryName != null and zzfryName != ''">
+				and ec.case_zzfryname like concat('%', #{zzfryName}, '%')
+			</if>
+			<if test="caseTime != null and caseTime != ''">
+				and DATEDIFF(DATE_FORMAT(ec.case_time,'%Y-%m-%d'),#{caseTime})=0
+			</if>
+			<if test="caseStatus != null">
+				and ec.case_status = #{caseStatus} 
+			</if>-->
+			<!--<if test="flowType == null or flowType == ''">
+				and ec.flow_type != '3' 
+			</if>-->
+		</where>
+		order by ec.create_date desc
+		limit #{startIndex}, #{endIndex};
+	</select>
+
+	<select id="yujCaseCount" resultType="int">
+	SELECT  count(*)FROM ole_ef_case ec 
+		LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = ec.case_status AND sd1.type_value = '1500' 
+			LEFT JOIN ole_sys_dict sd ON sd.enum_value = ec.case_source AND sd.type_value = '1002'
+			LEFT JOIN ole_base_dept bd ON bd.id = ec.dept_id
+			LEFT JOIN ole_base_area ba ON ba.id= bd.area_id
+		<where>
+			<if test="deptId != null and deptId != ''">
+				and ec.dept_id = #{deptId} 
+			</if>
+			<if test="areaId != null and areaId != ''">
+				AND ba.id = #{areaId}
+			</if>
+			<if test="caseName != null and caseName != ''">
+				and ec.case_name like concat('%', #{caseName}, '%')
+			</if>
+			<if test="flowType != null and flowType != ''">
+				and ec.flow_type = #{flowType} 
+			</if>
+			<!--<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (ec.dept_id ,#{deptIds})
+			</if>-->
+			<!--<if test="zzfryName != null and zzfryName != ''">
+				and ec.case_zzfryname like concat('%', #{zzfryName}, '%')
+			</if>
+			<if test="caseTime != null and caseTime != ''">
+				and DATEDIFF(DATE_FORMAT(ec.case_time,'%Y-%m-%d'),#{caseTime})=0
+			</if>
+			<if test="caseStatus != null">
+				and ec.case_status = #{caseStatus} 
+			</if>-->
+			<!--<if test="flowType == null or flowType == ''">
+				and ec.flow_type != '3' 
+			</if>-->
+		</where>
+		;	
+	</select>
+
+	<!-- 日常检查实时预警 -->
+	<select id="yujCheckDailyCount" resultType="int">
+		SELECT count(*)FROM ole_ef_check_daily cd
+		LEFT JOIN ole_base_dept_person per ON per.ID= cd.person_id
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = cd.check_object_type and sd2.type_value = '1600'
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = cd.`status` and sd3.type_value = '1502'
+		LEFT JOIN ole_base_dept bd ON bd.id = cd.dept_id
+		LEFT JOIN ole_base_area ba ON ba.id= bd.area_id
+		<where>
+			<if test="personId != null and personId != ''">
+				and per.id = #{personId}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and bd.id = #{deptId}
+			</if>
+			<if test="areaId != null and areaId != ''">
+				AND ba.id = #{areaId}
+			</if>
+			<!--<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (per.dept_id,#{deptIds})
+			</if>
+			<if test="checkStatus != null and checkStatus != ''">
+				and cd.`status` = #{checkStatus}
+			</if>
+			<if test="id != null and id != ''">
+				and cd.check_num like concat('%', #{id}, '%')
+			</if>
+			<if test="checkTitle != null and checkTitle != ''">
+				and cd.check_title like concat('%', #{checkTitle}, '%')
+			</if>
+			<if test="checkedDate != null and checkedDate != ''">
+				and
+				DATEDIFF(DATE_FORMAT(cd.checked_date,'%Y-%m-%d'),#{checkedDate})=0
+			</if>
+			<if test="checkZzfryname != null and checkZzfryname != ''">
+				and per.name like concat('%', #{checkZzfryname}, '%')
+			</if>-->
+		</where>
+	</select>
+	
+	<!-- 日常检查实时预警 -->
+	<select id="yujCheckDailyList" resultType="com.orhonit.ole.enforce.dto.CheckDailyDTO">
+		SELECT
+		cd.id AS id,
+		cd.person_id AS personId,
+		cd.check_title AS checkTitle,
+		cd.checked_date AS checkedDate,
+		cd.check_mode AS checkMode,
+		sd2.enum_desc AS checkObjectType,
+		per.name AS checkZzfryname,
+		per1.name AS checkFzfryname,
+		cd.check_num AS checkNum,
+		sd3.enum_desc AS status
+		FROM ole_ef_check_daily cd
+		LEFT JOIN ole_base_dept_person per ON per.ID= cd.person_id
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = cd.check_object_type and sd2.type_value = '1600'
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = cd.`status` and sd3.type_value = '1502'
+		LEFT JOIN ole_base_dept bd ON bd.id = cd.dept_id
+		LEFT JOIN ole_base_area ba ON ba.id= bd.area_id
+		<where>
+			<if test="personId != null and personId != ''">
+				and per.id = #{personId}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and bd.id = #{deptId}
+			</if>
+			<if test="areaId != null and areaId != ''">
+				AND ba.id = #{areaId}
+			</if>
+			<!--<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (per.dept_id,#{deptIds})
+			</if>
+			<if test="checkStatus != null and checkStatus != ''">
+				and cd.`status` = #{checkStatus}
+			</if>
+			<if test="id != null and id != ''">
+				and cd.check_num like concat('%', #{id}, '%')
+			</if>
+			<if test="checkTitle != null and checkTitle != ''">
+				and cd.check_title like concat('%', #{checkTitle}, '%')
+			</if>
+			<if test="checkedDate != null and checkedDate != ''">
+				and
+				DATEDIFF(DATE_FORMAT(cd.checked_date,'%Y-%m-%d'),#{checkedDate})=0
+			</if>
+			<if test="checkZzfryname != null and checkZzfryname != ''">
+				and per.name like concat('%', #{checkZzfryname}, '%')
+			</if>-->
+		</where>
+		order by cd.create_date desc
+		<if test="startIndex != null and startIndex !=null">
+			limit #{startIndex}, #{endIndex};
+		</if>
+	</select>
+
+	<!-- 专项检查实时预警 -->
+	<select id="yujCheckCount" resultType="int">
+		SELECT COUNT(DISTINCT ck.id) FROM ole_ef_check ck
+		LEFT JOIN
+		ole_sys_dict dic ON ck.status = dic.enum_value AND dic.type_value = '1501'
+		LEFT JOIN
+		(SELECT ECP.check_id,ECP.dept_id deptId,GROUP_CONCAT( BDP.name) PERSONNAME
+		FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON BDP
+		WHERE FIND_IN_SET(BDP.ID,ECP.person_id) GROUP BY CHECK_ID, ECP.dept_id )
+		CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+		LEFT JOIN ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+		LEFT JOIN ole_base_area ba ON ba.id= bd.area_id
+		<where>
+			1=1
+			<if test="deptId != null and deptId != ''">
+				and bd.id = #{deptId}
+			</if>
+			<if test="areaId != null and areaId != ''">
+				AND ba.id = #{areaId}
+			</if>
+			<!--<if test="checkTitle != null and checkTitle != ''">
+				and ck.check_title like concat('%', #{checkTitle}, '%')
+			</if>
+			<if test="checkObject != null and checkObject != ''">
+				and ck.check_object like concat('%', #{checkObject}, '%')
+			</if>
+			<if test="checkNum != null and checkNum != ''">
+				and ck.check_num like concat('%', #{checkNum}, '%')
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and ck.start_date >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and ck.start_date &lt;= #{params.endDate}
+			</if>-->
+			<!--<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (CHECK_PERSON.deptId ,#{deptIds})
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and CHECK_PERSON.deptId = #{deptId}
+			</if>-->
+		</where>
+	</select>
+
+	<select id="yujCheckList" resultType="com.orhonit.ole.enforce.dto.ps.PsCheckDTO">
+		SELECT
+		ck.id AS id,
+		ck.check_title AS checkTitle,
+		ck.check_object AS checkObject,
+		dic.enum_desc AS STATUS,
+		ck.start_date AS startDate,
+		ck.end_date AS endDate,
+		ck.check_num AS checkNum,
+		ck.check_basis AS checkBasis,
+		ck.check_content AS checkContent,
+		ck.check_way AS checkWay,
+		ck.create_by AS createBy,
+		ck.create_name AS createName,
+		CHECK_PERSON.deptId AS deptId,
+		bd.name AS deptName,
+		CHECK_PERSON.PERSONNAME AS personName
+		FROM ole_ef_check ck
+		LEFT JOIN ole_sys_dict dic ON ck.status = dic.enum_value AND
+		dic.type_value = '1501'
+		LEFT JOIN
+		(SELECT ECP.check_id,ECP.dept_id deptId,GROUP_CONCAT( BDP.name) PERSONNAME
+		FROM ole_ef_check_person ECP , OLE_BASE_DEPT_PERSON BDP
+		WHERE FIND_IN_SET(BDP.ID,ECP.person_id) GROUP BY CHECK_ID, ECP.dept_id )
+		CHECK_PERSON ON CK.id = CHECK_PERSON.CHECK_ID
+		LEFT JOIN ole_base_dept bd ON bd.id = CHECK_PERSON.deptId
+		LEFT JOIN ole_base_area ba ON ba.id= bd.area_id
+		<where>
+			1=1
+			<if test="deptId != null and deptId != ''">
+				and bd.id = #{deptId}
+			</if>
+			<if test="areaId != null and areaId != ''">
+				AND ba.id = #{areaId}
+			</if>
+			<!--<if test="checkTitle != null and checkTitle != ''">
+				and ck.check_title like concat('%', #{checkTitle}, '%')
+			</if>
+			<if test="checkObject != null and checkObject != ''">
+				and ck.check_object like concat('%', #{checkObject}, '%')
+			</if>
+			<if test="checkNum != null and checkNum != ''">
+				and ck.check_num like concat('%', #{checkNum}, '%')
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and ck.start_date >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and ck.start_date &lt;= #{params.endDate}
+			</if>-->
+			<!--<if test="deptIds != null and deptIds != ''">
+				and FIND_IN_SET (CHECK_PERSON.deptId ,#{deptIds})
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and CHECK_PERSON.deptId = #{deptId}
+			</if>-->
+		</where>
+		order by ck.create_date desc
+		limit #{startIndex}, #{endIndex}
+	</select>
+	
+	<!-- 预警列表查询app-->
+	<select id="appListWarnInfoCount" resultType="Integer">
+		SELECT  count(*) count
+		FROM ole_warn_info wa
+		LEFT JOIN ole_warn_person wp ON wp.warn_id=wa.id
+		LEFT JOIN ole_base_dept dp ON wp.dept_id=dp.id
+		LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = wa.level AND sd1.type_value = '1900'
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = wa.type AND sd2.type_value = '2020'
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = wa.warn_type AND sd3.type_value ='2051'
+		LEFT JOIN ole_sys_dict sd4 ON sd4.enum_value = wa.flow_type AND sd4.type_value = '1802'
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = wp.is_deal AND sd.type_value ='2056'
+		LEFT JOIN ole_sys_dict sd5 ON sd5.enum_value = wa.record_status AND (sd5.type_value ='1500' or sd5.type_value ='1501')
+		<where>
+			1=1
+			<if test="caseName != null and caseName !=''">
+				AND  wa.record_title like concat('%', #{caseName}, '%')
+			</if>
+			<if test="star != null and star != ''">
+				and wa.star = #{star}
+			</if>
+			<if test="personId != null and personId !=''">
+				and wp.person_id = #{personId}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and FIND_IN_SET (wp.dept_id ,#{deptId})
+			</if>
+			<if test="areaId != null and areaId != ''">
+				and dp.area_id = #{areaId}
+			</if>
+			<if test="isDeal != null and isDeal !=''">
+				and wp.is_deal = #{isDeal}
+			</if>
+			<if test="level != null and level !=''">
+				and wa.level = #{level}
+			</if>	
+			<if test="warnType != null and warnType !=''">
+				and wa.warn_type = #{warnType}
+			</if>
+			<if test="type != null and type !=''">
+				and wa.type = #{type}
+			</if>
+			<if test="createBy != null and createBy !=''">
+				and wa.create_by = #{createBy}
+			</if>		
+			<if test="queryDate == 1 ">
+				AND  date(wa.create_date) = curdate()
+			</if>
+			<if test="queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(wa.create_date)		
+			</if>
+			<if test="queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(wa.create_date)			
+			</if>
+			<if test="queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(wa.create_date)			
+			</if>
+			<if test="queryDate == 5 ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(wa.create_date)	
+			</if>
+			;
+		</where>
+	</select>
+	
+	<!-- 预警列表查询app-->
+	<select id="appListWarnInfoList" resultType="com.orhonit.ole.enforce.dto.YujDTO">
+		SELECT  wa.id as id,
+				wa.star AS star,
+				wa.create_date createDate,
+				wa.create_name createName,
+				wa.content AS content,
+				wa.record_title AS recordTitle,
+				wp.dept_id AS deptId,
+				sd.enum_desc AS isDeal,
+				dp.name AS deptName,
+				sd1.enum_desc AS level,
+				sd3.enum_desc AS warnType,
+				sd4.enum_desc AS flowType,
+				sd5.enum_desc AS recordStatus,
+				sd2.enum_desc AS type
+		FROM ole_warn_info wa
+		LEFT JOIN ole_warn_person wp ON wp.warn_id=wa.id
+		LEFT JOIN ole_base_dept dp ON wp.dept_id=dp.id
+		LEFT JOIN ole_sys_dict sd1 ON sd1.enum_value = wa.level AND sd1.type_value = '1900'
+		LEFT JOIN ole_sys_dict sd2 ON sd2.enum_value = wa.type AND sd2.type_value = '2020'
+		LEFT JOIN ole_sys_dict sd3 ON sd3.enum_value = wa.warn_type AND sd3.type_value ='2051'
+		LEFT JOIN ole_sys_dict sd4 ON sd4.enum_value = wa.flow_type AND sd4.type_value = '1802'
+		LEFT JOIN ole_sys_dict sd ON sd.enum_value = wp.is_deal AND sd.type_value ='2056'
+		LEFT JOIN ole_sys_dict sd5 ON sd5.enum_value = wa.record_status AND (sd5.type_value ='1500' or sd5.type_value ='1501')
+		<where>
+			1=1
+			<if test="caseName != null and caseName !=''">
+				AND  wa.record_title like concat('%', #{caseName}, '%')
+			</if>
+			<if test="star != null and star != ''">
+				and wa.star = #{star}
+			</if>
+			<if test="personId != null and personId !=''">
+				and wp.person_id = #{personId}
+			</if>
+			<if test="deptId != null and deptId != ''">
+				and FIND_IN_SET (wp.dept_id ,#{deptId})
+			</if>
+			<if test="areaId != null and areaId != ''">
+				and dp.area_id = #{areaId}
+			</if>
+			<if test="isDeal != null and isDeal !=''">
+				and wp.is_deal = #{isDeal}
+			</if>
+			<if test="level != null and level !=''">
+				and wa.level = #{level}
+			</if>	
+			<if test="warnType != null and warnType !=''">
+				and wa.warn_type = #{warnType}
+			</if>
+			<if test="type != null and type !=''">
+				and wa.type = #{type}
+			</if>
+			<if test="createBy != null and createBy !=''">
+				and wa.create_by = #{createBy}
+			</if>		
+			<if test="queryDate == 1 ">
+				AND  date(wa.create_date) = curdate()
+			</if>
+			<if test="queryDate == 2 ">
+				AND  date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(wa.create_date)		
+			</if>
+			<if test="queryDate == 3 ">
+				AND  date_sub(curdate(), INTERVAL 30 DAY) &lt;= date(wa.create_date)			
+			</if>
+			<if test="queryDate == 4 ">
+				AND  date_sub(curdate(), INTERVAL 180 DAY) &lt;= date(wa.create_date)			
+			</if>
+			<if test="queryDate == 5 ">
+				AND  date_sub(curdate(), INTERVAL 365 DAY) &lt;= date(wa.create_date)	
+			</if>
+			group by wa.id
+			order by wa.create_date desc
+			<if test="startIndex != null and endIndex !=null">
+				limit #{startIndex}, #{endIndex};
+			</if> 
+		</where>
+	</select>
+</mapper>

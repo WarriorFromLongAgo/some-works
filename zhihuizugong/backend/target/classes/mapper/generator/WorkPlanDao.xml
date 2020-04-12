@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace ="com.orhonit.modules.generator.dao.WorkPlanDao" >
+
+		<resultMap type="com.orhonit.modules.sys.entity.SysUserEntity" id="SysUserMap">
+			<result property="lowerId" column="lower_id"/>
+			<result property="lowerName" column="lower_name"/>
+		</resultMap>
+
+<insert id="savePlan" parameterType="com.orhonit.modules.generator.entity.WorkPlanEntity">
+		INSERT INTO zg_work_plan ( id, user_id,user_name, work_type, work_content, work_time_limit, work_status, create_time,dept_id,lower_id,exposure,lower_name)
+		VALUES(#{id},#{userId},(SELECT user_true_name FROM sys_user WHERE user_id = #{userId}),#{workType},#{workContent},#{workTimeLimit},#{workStatus},#{createTime},(SELECT user_dept FROM sys_user WHERE user_id = #{userId}),
+		(SELECT lower_id FROM sys_user WHERE user_id = #{userId}),0,(SELECT lower_name FROM sys_user WHERE user_id = #{userId}))
+</insert>
+
+<select id="findAllPlan" resultType ="com.orhonit.modules.generator.entity.WorkPlanEntity">
+		SELECT
+		* 
+		FROM
+		zg_work_plan
+		WHERE
+		1=1
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.userId != null and params.userId != '' ">
+		AND user_id = #{params.userId}
+		</if>		
+		<if test="params.workStatus != null and params.workStatus != '' ">
+		AND work_status = #{params.workStatus}
+		</if>
+		<if test="params.userName != null and params.userName != '' ">
+		AND  user_name like CONCAT('%','${params.userName}','%' )
+		</if>
+		<if test="params.createTime != null and params.createTime != '' ">
+		AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{params.createTime} 
+		</if>
+		<if test="params.workContent != null and params.workContent != '' ">
+		AND work_content like CONCAT('%','${params.workContent}','%' )
+		</if>
+		<if test="params.lowerId != null and params.lowerId != '' ">
+		AND lower_id = #{params.lowerId}
+		</if>
+		<if test="params.exposure != null and params.exposure != '' ">
+		AND exposure = #{params.exposure}
+		</if>
+		ORDER BY create_time DESC
+		<if test="params.page != null and params.page != '' and params.limit != null and params.limit != '' ">
+		LIMIT #{params.page},#{params.limit}
+		</if>		
+</select>
+<select id="findAllPlanCount" resultType ="com.orhonit.modules.generator.entity.WorkPlanEntity">
+		SELECT
+		* 
+		FROM
+		zg_work_plan
+		WHERE
+		1=1
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.userId != null and params.userId != '' ">
+		AND user_id = #{params.userId}
+		</if>		
+		<if test="params.workStatus != null and params.workStatus != '' ">
+		AND work_status = #{params.workStatus}
+		</if>
+		<if test="params.userName != null and params.userName != '' ">
+		AND  user_name like CONCAT('%','${params.userName}','%' )
+		</if>
+		<if test="params.createTime != null and params.createTime != '' ">
+		AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{params.createTime}
+		</if>
+		<if test="params.workContent != null and params.workContent != '' ">
+		AND work_content like CONCAT('%','${params.workContent}','%' )
+		</if>	
+		<if test="params.lowerId != null and params.lowerId != '' ">
+		AND lower_id = #{params.lowerId}
+		</if>
+		<if test="params.exposure != null and params.exposure != '' ">
+		AND exposure = #{params.exposure}
+		</if>
+</select>
+
+<update id="changePlan">
+		UPDATE zg_work_plan 
+		SET work_type = #{workType},
+		work_content = #{workContent},
+		work_time_limit = #{workTimeLimit},
+		work_status = #{workStatus},
+		exposure = #{exposure}
+		WHERE
+		id =#{id}
+</update>
+<delete id="delPlan">
+		DELETE FROM zg_work_plan
+		WHERE id = #{id}
+</delete>
+<select id="findFile" resultType = "com.orhonit.modules.generator.entity.ZgPlanFileEntity">
+		SELECT
+		id,
+		file_name AS fileName,
+		new_file_name AS newFileName,
+		file_path AS filePath,
+		file_suffix AS fileSuffix,
+		plan_id AS planId,
+		create_time AS createTime
+		FROM zg_plan_file
+		WHERE 
+		plan_id = #{params.planId}
+</select>
+<insert id="saveFile" parameterType = "com.orhonit.modules.generator.entity.ZgPlanFileEntity">
+		INSERT INTO
+		zg_plan_file(id,file_name,new_file_name,file_path,file_suffix,plan_id,create_time)
+		VALUES(#{id},#{fileName},#{newFileName},#{filePath},#{fileSuffix},#{planId},#{createTime})
+</insert>
+<!-- 修改完成状态 -->
+<update id="changeFinishStatus">
+		UPDATE zg_work_plan 
+		SET finish_time = #{finishTime},
+		exposure = #{exposure} 
+		WHERE
+		id = #{id}
+</update>
+<!-- 返回科室列表 -->
+<select id="findLowerList" resultType = "com.orhonit.modules.sys.entity.TaDepartmentMemberEntity">
+		SELECT
+		*
+		FROM
+		ta_department_member 
+		WHERE
+		dept_id = ( SELECT user_dept FROM sys_user WHERE user_id = #{userId} )
+</select>
+
+	<update id="changeExp">
+		UPDATE zg_work_plan
+		SET exposure = #{params.exposure}
+		WHERE
+		id = #{params.id}
+	</update>
+
+</mapper>

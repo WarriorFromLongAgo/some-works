@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>文件列表</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="../../css/zzsc.css">
+		<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../../js/zzsc.js"></script>
+	</head>
+
+	<body>
+
+		<div class="box-163css">
+			<div class="bigpic">
+				<img class="bpic" src="" />
+				<div class="intro">
+					<div class="bg"></div>
+					<b class="bclose">双击放大</b>
+					<div class="txt">
+						<h2></h2>
+						<p></p>
+					</div>
+				</div>
+			</div>
+			<div id="ztbox">
+				<div class="spic">
+					<div id="left"></div>
+					<div id="conter">
+						<ul>
+						</ul>
+					</div>
+					<div id="right"></div>
+				</div>
+				<div id="scroll"><span></span></div>
+			</div>
+		</div>
+		<a id="aClose" class="aClose" style="cursor:pointer;">[关闭]</a>
+		<iframe id="racePop" class="raceShow">
+	        
+	    </iframe>
+	</body>
+	<script type="text/javascript">
+		function getQuery( name ) {
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null) return  unescape(r[2]); return null;
+		}
+		var id = getQuery('id');
+		var caseId = getQuery('caseId');
+		var showType = ['txt', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'mp3', 'mp4'];
+		var showList = [];
+		$.ajax({
+			type: 'get',
+			url: '/enforce/attachFile/caseFileList/' + caseId,
+			async:false, 
+			success: function(data) {
+				if(data.code == 0) {
+					data = data.data;
+					for(var i = 0; i < data.length; i++) {
+						showList.push({
+							id:data[i].id,
+							fileName: data[i].fileName,
+							fileType: data[i].fileType,
+							caseStatus: data[i].caseStatus,
+							url: data[i].url
+						});
+					}
+				}
+			},
+			complete:function(){
+				init();
+			}
+		});
+		
+		function init(){
+			for(var i = 0 ; i< showList.length; i++){
+				var on="";
+				if(showList[i].id == id){
+					on=" class=\"on\"";
+				}
+				var ft = getFileType(showList[i].fileType);
+				var src,bsrc = showList[i].url;
+				if(ft == 'video' || ft == "file"){
+					src = "../../images/"+showList[i].fileType+".png";
+				}else if(ft == 'image'){
+					src = bsrc;
+				}
+				$("#conter ul").append("<li"+on+"><img class=\"smallpic\" src=\""+ src +"\" bsrc=\""+ bsrc +"\" /><span class=\"snum\"><b></b>/<strong></strong></span>"+
+							"<div class=\"txt\">"+
+							"<h2>"+showList[i].caseStatus+"</h2>"+
+							"<p>"+showList[i].fileName+"."+showList[i].fileType+"</p></div></li>");
+			}
+		}
+		//选中默认打开的项
+		$(document).ready(function(){
+			$("#conter ul .on .smallpic").click();
+		}); 
+		
+		$(".bigpic").dblclick(function(){
+			if(!($(".bpic").attr("src").indexOf("mp3") != -1 ||$(".bpic").attr("src").indexOf("mp4") != -1)){
+				$("#racePop").attr("src",$(".bpic").attr("src"));
+				$("#racePop").show(300);
+				$("#aClose").show();
+			}
+		});
+		$("#aClose").click(function (event) {
+            $("#racePop").hide(300);
+            $("#aClose").hide();
+        });
+	</script>
+
+</html>

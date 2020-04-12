@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.OsQuestionLibraryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.OsQuestionLibraryEntity" id="osQuestionLibraryMap">
+        <result property="libraryId" column="library_id"/>
+        <result property="libraryTitle" column="library_title"/>
+        <result property="libraryType" column="library_type"/>
+        <result property="questionScope" column="question_scope"/>
+    </resultMap>
+    <!-- 编辑查看 -->
+    <select id="SelectTypeList" resultType="com.orhonit.modules.generator.vo.OsQuestionVo">
+      select 
+		a.library_id AS libraryId,
+		a.question_scope AS questionScope,
+		a.library_type AS libraryType,
+		a.library_title AS libraryTitle,
+		e.type_name AS typeName
+	  from os_question_library a 
+	  left join os_question_type_variable e on e.type_variable = a.library_type
+	  <where>
+		<if test="libraryId != null and libraryId != ''">
+			a.library_id=#{libraryId}
+		</if>
+		</where>
+    </select>
+    <!-- 题库的修改 -->
+    <update id="updateOsQuestionlibrary">
+      update os_question_library set 
+          library_title=#{libraryTitle},
+          library_type=#{libraryType},
+          library_update_time=#{libraryUpdateTime},
+          question_scope=#{questionScope}
+      where 
+          library_id=#{libraryId}
+    </update>
+    
+    <!-- 删除题库以及试题 -->
+    <delete id="deleteAllOsQuestion">
+     delete os_question_library,os_question from os_question_library 
+     left join os_question on os_question.library_id = os_question_library.library_id 
+     where os_question_library.library_id = #{libraryId}
+    </delete>
+    
+    <select id="selectSingleCount" resultType="java.lang.Integer">
+		select count(*) from os_question q where q.library_id = #{libraryId} and q.question_type = '单选题' and q.is_del='0'
+	</select>
+	
+	<select id="selectMultiCount" resultType="java.lang.Integer">
+		select count(*) from os_question q where q.library_id = #{libraryId} and q.question_type = '多选题' and q.is_del='0'
+	</select>
+	
+	<select id="selectJudgeCount" resultType="java.lang.Integer">
+		select count(*) from os_question q where q.library_id = #{libraryId} and q.question_type = '选择题' and q.is_del='0'
+	</select>
+	
+	<select id="selectQuestionTotle" resultType="java.lang.Integer">
+		select count(*) from os_question q where q.library_id = #{libraryId} and q.is_del='0'
+	</select>
+    
+
+</mapper>

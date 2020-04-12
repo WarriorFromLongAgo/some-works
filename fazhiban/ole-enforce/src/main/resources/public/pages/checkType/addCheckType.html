@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form" style="margin-top:20px;">
+		<fieldset style="margin-top:5%">
+			
+		
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">检查类型<span class="btx">*</span></label>
+				<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					<input class="form-control not-null" placeholder="请输入检查类型" type="text"  name="title" id="title" iname="检查类型	">
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">部门名称<span class="btx">*</span></label>
+				<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					<input class="easyui-combotree not-null" style="width:100%" iname="部门名称" id="dept" type="text" name="deptId"/>
+				</div>
+				
+			</div>
+			
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">排序<span class="btx">*</span></label>
+				<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					<input class="form-control not-null" placeholder="排序" name="sort" id="sort" type="number" iname="排序">
+				</div>
+			</div>
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">	
+				<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">是否启用<span class="btx">*</span></label>
+				<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					<select name="isEffect" class="form-control input-sm not-null" id="isEffect" iname="是否启用">
+					
+					</select>
+				</div>				
+			</div>
+			
+
+			<div class="form-actions col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
+				<div class="row" align="center">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/my/roles/role.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+	layui.use('layer', function(){
+	    var layer = layui.layer;
+	});	
+	
+	getDictList("1709","isEffect");
+	function add() {
+		//数据格式校验
+		if (!dataCheck()) {
+			return;
+		}
+		$('#form').bootstrapValidator();
+	 	$('#submitBtn').removeAttr("disabled");
+       	$('#submitBtn').attr("disabled",true); 
+	    var formdata = $("#form").serializeObject();
+		$.ajax({
+			type : 'post',
+			url : '/enforce/checkType',
+			contentType: "application/json; charset=utf-8",  
+			data : JSON.stringify(formdata),
+			success : function(data) {
+				layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+                       window.parent.location.reload();
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+                   });
+			}
+		});
+	}
+		
+	 var deptId;
+        $.ajax({
+		type : 'get',
+		url : '/enforce/users/current',
+		data : $("#form").serialize(),
+		success : function(data) {
+			deptId=data.dept_id;	
+			/**
+			 * 当前主体以及下属主体数据请求
+			 */	
+			$("#dept").combotree({
+				type : 'get',
+				url : '/enforce/lssued/dept/'+deptId,
+				async : false,
+				onChange:function(newV,oldV){
+					
+				}
+			});
+		}
+	});
+</script>
+</body>
+</html>

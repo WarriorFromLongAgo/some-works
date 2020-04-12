@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>模板列表</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 100%">
+                    <div align="left">
+	                    <table style="width: 100%">
+	                   		<tr>
+	                   			<td>
+									<form class="form-inline" onsubmit="return false">
+										<div class="form-group">
+											模板名称：
+											<input id="codeName" type="text" class="form-control" placeholder="请输入模板名称">
+											 流程类型：
+											<input id="flowTypeName" type="text" class="form-control" placeholder="请输入流程类型">
+											 流程节点：
+											<input id="flowNodeName" type="text" class="form-control" placeholder="请输入流程节点">
+											<button id="searchBt" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i>搜索</button>
+										</div>
+									</form>
+								</td>
+								<td align="right">
+	                   				<button class="layui-btn layui-btn-small" onclick="addDocFlow()">
+                                      <i class="layui-icon">&#xe608;</i> 添加
+                                    </button>
+	                   			</td>
+	                   		</tr> 
+	                    </table>
+					</div>
+                </header>
+                
+                <div>
+                    <div class="widget-body no-padding">
+                        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>模板编号</th>
+                                    <th>模板名称</th>
+                                    <th>流程类型</th>
+                                    <th>流程节点</th>
+                                    <th>是否必填</th>
+                                    <th>是否生效</th>
+                                    <th>更新人</th>
+                                    <th>更新时间</th>
+                                    <th  width="70px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript">
+var pers = checkPermission();
+
+var example;
+function init(){
+	example = 
+    	$('#dt-table').DataTable({
+    		"language":lang,
+        	"searching": false,
+        	"processing": false,"ordering": false,
+        	"serverSide" : true,
+        	"bLengthChange": false,
+        	"ajax": {
+        		"url" : "/enforce/docFlow/list",
+        		"type":"get",
+        		"data":function(d){
+    				d.code = $('#codeName').val();
+    				d.flowType = $('#flowTypeName').val();
+    				d.flowNode = $('#flowNodeName').val();
+    			}
+        	},
+        	"dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-6 col-xs-6 hidden-xs'i><'col-xs-4 col-sm-6' p v>>",	
+            "columns": [
+                { "data": "code", "defaultContent": ""},
+                { "data": "codeName", "defaultContent": ""},
+                { "data": "flowType", "defaultContent": ""},
+                { "data": "flowNode", "defaultContent": ""},
+                { "data": "needAdd", "defaultContent": ""},
+                { "data": "isEffect", "defaultContent": ""},
+                { "data": "updateName", "defaultContent": ""},
+                { "data": "updateDate", "defaultContent": ""},
+            ],
+            "columnDefs": [
+                { "name": "code", "targets": 0 },
+                { "name": "codeName", "targets": 1 },
+                { "name": "flowType", "targets": 2 },
+                { "name": "flowNode", "targets": 3 },
+                { "name": "needAdd", "targets": 4 },
+                { "name": "isEffect", "targets": 5 },
+                { "name": "updateName", "targets": 6 },
+                { "name": "updateDate", "targets": 7 },
+                { 
+                	"targets": 8,
+                	"render": function (data, type, row) {
+                		var id = row['id'];
+                		//var href = "detailDocTemplate.html?docTemplateId=" + id;
+                		//var edit = buttonEdit(href, "enforce:template:add", pers);
+                		var edit = docFlowEdit(id);
+                		var del = docFlowDel(id);
+                        return edit+del;
+                  }
+                }
+              ],
+            "order": [[ 0, "desc" ],[1, "asc"]]
+        } );
+}
+
+$("#searchBt").click(function(){
+	example.ajax.reload();
+});
+
+init();
+
+function docFlowEdit(docFlowId){
+	var btn = $("<button class='layui-btn layui-btn-mini'  title='修改' onclick='update(\""+docFlowId+"\")'><i class='layui-icon'>&#xe642;</i></button>");
+	return btn.prop("outerHTML");
+}
+
+function docFlowDel(docFlowId){
+	var btn = $("<button class='layui-btn layui-btn-mini' title='删除' onclick='del(\""+docFlowId+"\")'><i class='layui-icon'>&#xe640;</i></button>");
+	return btn.prop("outerHTML");
+}
+
+layui.use(['layer'], function(){
+    var layer = layui.layer;
+});
+
+//打开添加文书配置窗口
+function addDocFlow(){
+	layer.open({
+		type: 2,
+        title: '文书配置添加',
+        shade: [0],
+        area: ['90%', '99%'],
+        shift: 2,
+        content: 'addDocFlow.html'
+    });
+}
+//打开修改文书配置窗口
+function update(docFlowId){
+	layer.open({
+        type: 2,
+        title: '文书配置修改',
+        shade: [0],
+        area: ['90%', '85%'],
+        shift: 2,
+        content: "updateDocFlow.html?docFlowId=" + docFlowId //iframe的url，no代表不显示滚动条
+    });
+}
+//删除文书配置
+function del(id){
+	layer.confirm('确定要删除吗？', {
+        btn : [ '确定', '取消' ]
+    }, function() {
+        $.ajax({
+            type : 'get',
+            url : '/enforce/docFlow/delDocFlow/'+id,
+            success : function(data) {
+                example.ajax.reload();
+                layer.msg("删除成功");
+            }
+        });
+        layer.close(1);
+    });
+}
+
+</script>

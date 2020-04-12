@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.SysUserExtendDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.SysUserExtendEntity" id="sysUserExtendMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="birthplace" column="birthplace"/>
+        <result property="partyTime" column="party_time"/>
+        <result property="healthStatus" column="health_status"/>
+        <result property="workTime" column="work_time"/>
+        <result property="majorDuty" column="major_duty"/>
+        <result property="education" column="education"/>
+        <result property="degree" column="degree"/>
+        <result property="schoolMajor" column="school_major"/>
+        <result property="nearlyThreeYears" column="nearly_three_years"/>
+        <result property="bothHelp" column="both_help"/>
+        <result property="log" column="log"/>
+        <result property="strongPoint" column="strong_point"/>
+        <result property="createTime" column="create_time"/>
+        <result property="workPost" column="work_post"/>
+        <result property="lecture" column="lecture"/>
+        <result property="books" column="books"/>
+        <result property="study" column="study"/>
+        <result property="lay" column="lay"/>
+    </resultMap>
+
+    <select id="findUser" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+        select * from sys_user where user_nickname = #{userNickname}
+        <!-- 按照组工人员或者e家人员查询 1 组工用户 2 e家用户 3 共用用户 -->
+		and (is_public = 2 or is_public = 3)
+    </select>
+
+    <select id="findExUser" resultType="com.orhonit.modules.generator.entity.SysUserExtendEntity">
+        select * from sys_user_extend where user_id = #{userId}
+    </select>
+
+    <select id="findOrgList" resultType="com.orhonit.modules.sys.entity.UserOrgEntity">
+        select * from tb_user_org where org_type = #{orgType}
+    </select>
+
+    <select id="findUserList" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+        select * from sys_user where user_org = #{orgId} and is_cadres = 1
+        <!-- 按照组工人员或者e家人员查询 1 组工用户 2 e家用户 3 共用用户 -->
+		<if test="isPublic != null">
+			and (is_public = #{isPublic} or is_public = 3)
+		</if>
+    </select>
+
+    <select id="findPartyList" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+        select * from sys_user where user_dept = #{deptId} and is_party_member = 1
+        <!-- 按照组工人员或者e家人员查询 1 组工用户 2 e家用户 3 共用用户 -->
+		<if test="isPublic != null">
+			and (is_public = #{isPublic} or is_public = 3)
+		</if>
+    </select>
+
+    <select id="findPartyList2" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+<!--        select * from sys_user where is_party_member = 1
+        and user_dept in
+        <foreach collection="deptId.split(',')" item="ids" open="(" separator="," close=")" >
+            #{ids}
+        </foreach>
+        &lt;!&ndash; 按照组工人员或者e家人员查询 1 组工用户 2 e家用户 3 共用用户 &ndash;&gt;
+        <if test="isPublic != null">
+            and (is_public = #{isPublic} or is_public = 3)
+        </if>-->
+        select * from sys_user where is_party_member = 1 and FIND_IN_SET(user_dept,getChildrenList(#{deptId}))
+    </select>
+
+    <select id="findDeptList" resultType="com.orhonit.modules.sys.entity.UserDeptEntity">
+        select * from tb_user_dept where dept_supper_id = #{deptOneId}
+    </select>
+
+    <select id="findOneDeptList" resultType="com.orhonit.modules.sys.entity.UserDeptEntity">
+        select * from tb_user_dept where dept_supper_id = -1
+    </select>
+
+    <select id="findUserInfo" resultType="com.orhonit.modules.sys.entity.SysUserEntity">
+        select * from sys_user where user_id = #{userId}
+    </select>
+
+    <select id="findNearThree" resultType="com.orhonit.modules.generator.entity.ZgNearlyThreeYearsEntity">
+        select  * from zg_nearly_three_years where user_nickname = #{params.userNickname}
+    </select>
+
+    <select id="findTask" resultType="com.orhonit.modules.generator.entity.ZgTaskEntity">
+        select * from zg_task where user_id = #{params.userId}
+        <if test="params.type != null and params.type != '' ">
+            and task_type = #{params.type}
+        </if>
+    </select>
+    <select id="findTaskFinish" resultType="com.orhonit.modules.generator.entity.ZgTaskFinishEntity">
+        select * from zg_task_finish where task_id = #{params.taskId} and content_type = #{params.contentType}
+    </select>
+
+    <select id="findExtend" resultType="com.orhonit.modules.generator.entity.SysUserExtendEntity">
+        select * from sys_user_extend where user_id = #{params.userId}
+    </select>
+
+    <select id="findFamilyEntity" resultType="com.orhonit.modules.generator.entity.ZgFamilyMemberEntity">
+        select * from zg_family_member where user_id = #{userIddd}
+    </select>
+
+    <select id="findSanMeet" resultType="map">
+       <!-- select * from ((select count(0) deptParty from tb_meeting WHERE meet_type = 1 and san_meet_type = 1 and user_id = #{userId}) a,
+        (select count(0) deptWei from tb_meeting WHERE meet_type = 1 and san_meet_type = 2 and user_id = #{userId}) b,
+        (select count(0) party from tb_meeting WHERE meet_type = 1 and san_meet_type = 3 and user_id = #{userId})c,
+        (select count(0) partyClass from tb_meeting WHERE meet_type = 1 and san_meet_type = 4 and user_id = #{userId})d); -->
+        SELECT
+	    *
+        FROM
+	    (
+	    (
+        SELECT
+	    count( 0 ) deptParty
+        FROM
+	    tb_meeting
+        WHERE
+        meet_type = 1
+        AND san_meet_type = 1
+        AND meet_id IN ( SELECT meet_id FROM tb_meet_people WHERE user_id = #{userId} )
+        ) a,
+        (
+        SELECT
+	    count( 0 ) deptWei
+        FROM
+	    tb_meeting
+        WHERE
+        meet_type = 1
+        AND san_meet_type = 2
+        AND meet_id IN ( SELECT meet_id FROM tb_meet_people WHERE user_id = #{userId} )
+        ) b,
+        (
+        SELECT
+	    count( 0 ) party
+        FROM
+	    tb_meeting
+        WHERE
+        meet_type = 1
+        AND san_meet_type = 3
+        AND meet_id IN ( SELECT meet_id FROM tb_meet_people WHERE user_id = #{userId} )
+        ) c,
+        (
+        SELECT
+	    count( 0 ) partyClass
+        FROM
+	    tb_meeting
+        WHERE
+        meet_type = 1
+        AND san_meet_type = 4
+        AND meet_id IN ( SELECT meet_id FROM tb_meet_people WHERE user_id = #{userId} )
+        ) d
+        );
+    </select>
+
+    <select id="findWorkData" resultType="map">
+        SELECT * FROM ((SELECT count(0) workCount FROM zg_task WHERE user_id = #{params.userId}
+        and task_type = #{params.type}) a,
+        (SELECT count(0) finishCount FROM zg_task WHERE user_id = #{params.userId}
+        and task_type = #{params.type} and status = 3) b)
+    </select>
+
+    <select id="findPunish" resultType="map">
+        SELECT
+	    situation,
+        user_id
+        FROM
+        se_joint_company
+        WHERE
+        user_id = #{userIddd}
+    </select>
+
+    <select id="findDeptData" resultType="map">
+        SELECT * FROM tb_user_dept WHERE dept_supper_id != -1
+    </select>
+
+    <select id="findOrgData" resultType="map">
+        SELECT * FROM tb_user_org
+    </select>
+
+    <select id="findCommonSelect" resultType="map">
+        SELECT * FROM tb_user_dept WHERE dept_supper_id = -1
+    </select>
+
+    <select id="findPartyUser" resultType="map">
+        SELECT * FROM sys_user WHERE is_party_member = 1 AND (is_public = 2 OR is_public = 3)
+        <if test="params.userName != null and params.userName != '' ">
+            AND user_true_name like CONCAT('%','${params.userName}','%' )
+        </if>
+    </select>
+
+    <select id="findOrgUser" resultType="map">
+        SELECT * FROM sys_user WHERE is_cadres = 1 AND (is_public = 2 OR is_public = 3)
+        <if test="params.userName != null and params.userName != '' ">
+            AND user_true_name like CONCAT('%','${params.userName}','%' )
+        </if>
+    </select>
+
+    <select id="findDeptOneUser" resultType="map">
+        SELECT * FROM sys_user WHERE is_party_member = 1 AND (is_public = 2 OR is_public = 3) AND user_dept IN (SELECT dept_id FROM tb_user_dept WHERE dept_supper_id = #{params.deptOneId})
+        <if test="params.userName != null and params.userName != '' ">
+            AND user_true_name like CONCAT('%','${params.userName}','%' )
+        </if>
+    </select>
+
+    <select id="findOrgOneUser" resultType="map">
+        SELECT * FROM sys_user WHERE is_cadres = 1 AND (is_public = 2 OR is_public = 3) AND user_org IN (SELECT org_id FROM tb_user_org WHERE org_type = #{params.orgOneId})
+        <if test="params.userName != null and params.userName != '' ">
+            AND user_true_name like CONCAT('%','${params.userName}','%' )
+        </if>
+    </select>
+
+    <select id="findDeptTwoUser" resultType="map">
+        SELECT * FROM sys_user WHERE is_party_member = 1 AND (is_public = 2 OR is_public = 3) AND user_dept = #{params.deptTwoId}
+        <if test="params.userName != null and params.userName != '' ">
+            AND user_true_name like CONCAT('%','${params.userName}','%' )
+        </if>
+    </select>
+
+    <select id="findOrgTwoUser" resultType="map">
+        SELECT * FROM sys_user WHERE is_cadres = 1 AND (is_public = 2 OR is_public = 3) AND user_org = #{params.orgTwoId}
+        <if test="params.userName != null and params.userName != '' ">
+            AND user_true_name like CONCAT('%','${params.userName}','%' )
+        </if>
+    </select>
+</mapper>

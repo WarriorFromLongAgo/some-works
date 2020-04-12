@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orhonit.modules.generator.dao.OsQuestionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.orhonit.modules.generator.entity.OsQuestionEntity" id="osQuestionMap">
+        <result property="questionNo" column="question_no"/>
+        <result property="libraryId" column="library_id"/>
+        <result property="questionTitle" column="question_title"/>
+        <result property="questionType" column="question_type"/>
+        <result property="questionA" column="question_a"/>
+        <result property="questionB" column="question_b"/>
+        <result property="questionC" column="question_c"/>
+        <result property="questionD" column="question_d"/>
+        <result property="answer" column="answer"/>
+        <result property="answerDesc" column="answer_desc"/>
+        <result property="level" column="level"/>
+    </resultMap>
+    
+    <!-- 查询题库下的例题 -->
+    <select id="selectByLibraryId" resultMap = "osQuestionMap">
+		SELECT question_title,question_type,question_a,question_b,question_c,question_d,answer,answer_desc,level FROM os_question WHERE library_id in (#{LibraryId}) AND is_del='0'
+	</select>
+    
+    <insert id="insertOsQuestion">
+        INSERT INTO os_question 
+        ( library_id, question_title, question_type, question_a, question_b, question_c, question_d, answer, level,question_no,create_time,update_time,is_del )
+         VALUES
+	    ( #{libraryId}, #{questionTitle}, #{questionType}, #{questionA}, #{questionB}, #{questionC}, #{questionD}, #{answer},#{level},#{questionNo},#{createTime},#{updateTime},#{isDel} )
+    </insert>
+    
+    <delete id="deleteOsQuetion">
+      delete from os_question where question_no = #{questionNo}
+    </delete>
+    
+</mapper>

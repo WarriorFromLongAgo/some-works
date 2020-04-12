@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../easyui/easyui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+            <input type="hidden" id="id" name="id">
+            <input type="hidden" id="right_duty_id" name="right_duty_id">
+            <input type="hidden" id="wz_catalog_id" name="wz_catalog_id">
+            <input type="hidden" id="fz_catalog_id" name="fz_catalog_id">
+            <input type="hidden" name="potence_id">
+            <div class="form-group" style="margin-top:10px">
+				<label class="col-md-2 control-label">权责名称<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<input class="form-control not-null" iname="权责名称" placeholder="权责名称" type="text" name="name" id="name" readonly="readonly">
+				</div>
+			</div>
+
+			<div class="form-group">
+                <label class="col-md-2 control-label">违则内容<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<textarea class="form-control not-null" inmae="违则内容" rows="5" placeholder="违则内容" name="wz_content"  id="wz_content"></textarea>
+				</div>
+			</div>
+				
+			<div class="form-group">
+				<label class="col-md-2 control-label">违则依据</label>
+				<div class="col-md-10">
+                   <input   class="easyui-combotree"    id="potence_id" type="text" style="width:100%"/>
+                </div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">违则依据目录</label>
+				<div class="col-md-10">
+                   <input  class="form-control not-null"   inmae="违则依据目录"  placeholder="违则依据目录,格式为：1-1-1-1-1-1-1"  name="wz_item"  id="wz_item" type="text" style="width:100%"/>
+                </div>
+			</div>
+			<div class="form-group">
+                <label class="col-md-2 control-label">罚则内容<span class="btx">*</span></label>
+				<div class="col-md-10">
+					<textarea class="form-control not-null" inmae="罚则内容" rows="5" placeholder="罚则内容" name="fz_content"  id="fz_content"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">罚则依据</label>
+				<div class="col-md-10">
+                   <input class="easyui-combotree" id="pot_fz_id" type="text" style="width:100%"/>
+                </div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">罚则依据目录</label>
+				<div class="col-md-10">
+                   <input class="form-control not-null"   inmae="罚则依据目录" placeholder="罚则依据目录,格式为：1-1-1-1-1-1-1" name="fz_item"  id="fz_item" type="text" style="width:100%"/>
+                </div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label">是否生效</label>
+				<div class="col-md-10">
+					<select name="is_effect" class="form-control input-sm" id="is_effect">
+					</select>
+				</div>
+			</div>
+			<div class="form-actions" style="margin-bottom:30px;">
+				<div class="row" align="center">
+					<div class="col-md-12">
+						<button class="btn btn-primary" type="submit" id="submitBtn" onclick="add()" style="margin-top:10px">
+							<i class="fa fa-save"></i> 保存关联
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../js/constans.js"></script>	
+	<script type="text/javascript" src="../../js/my/ztree-menu.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		layui.use('layer', function(){
+		    var layer = layui.layer;
+		});
+		
+		getDictList(dict.if_effect,"is_effect");
+		
+		var id = getUrlParam("id");
+
+		var connid = getUrlParam("connid");
+		$("#id").val(connid);
+		$("#right_duty_id").val(id);
+		
+		initData();
+		function initData(){
+			if(id != ""){
+				$.ajax({
+					type : 'get',
+					url : '/base/lartions/'+id,
+					async : false,
+					success : function(data) {
+						$("#name").val(data.name);
+					}
+				});
+				
+			}
+		}
+		
+		initConData();
+		function initConData(){
+			if(connid != ""){
+				$.ajax({
+					type : 'get',
+					url : '/base/lartions/getCon/'+connid,
+					async : false,
+					success : function(data) {
+						$("#is_effect").val(data.is_effect);
+						$("#wz_content").val(data.wz_content);
+						$("#wz_item").val(data.wz_item);
+						$("#fz_content").val(data.fz_content);
+						$("#fz_item").val(data.fz_item);
+						var wz_name="";
+						var wzs=data.wz_catalog_id;
+						var wzn=data.wz_catalog_name;
+						$("#potence_id").combotree({
+							method:'get',		//请求方式	
+							url : '/base/lrltionws/lrlss',	//请求的URL
+							required: false,
+							onLoadSuccess: function (node, data) {
+								$('#potence_id').combotree('setValue', {id:wzs,text:wzn});
+						    }, 
+							onChange:function(newV,oldV){
+								$("#wz_catalog_id").val(newV);
+							},
+							keyHandler : {
+								query : function(qName) {
+									  if(isConChinese(qName)){
+										  wz_name=qName;
+							        		$.ajax({
+							        			type : 'get',
+							        			url : '/base/lrltionws/lrlss?name='+wz_name,	//请求的URL
+							        			async : false,
+							        			success : function(data){
+							        				$("#potence_id").combotree('loadData', data);
+							        				$("#potence_id").combotree('setText', wz_name);
+							        			}
+							        		});
+									 	 }
+						       		 } 
+			    	 		}
+						});
+						var fz_name="";
+						var fzs=data.fz_catalog_id;
+						var fzn=data.fz_catalog_name;
+						$("#pot_fz_id").combotree({
+							method:'get',		//请求方式	
+							url : '/base/lrltionws/lrlss?name='+fz_name,	//请求的URL
+							required: false,
+							onLoadSuccess: function (node, data) {
+								$('#pot_fz_id').combotree('setValue', {id:fzs,text:fzn});
+						    }, 
+							onChange:function(newV,oldV){
+								$("#fz_catalog_id").val(newV);
+							},
+							keyHandler : {
+								query : function(qName) {
+									  if(isConChinese(qName)){
+										  fz_name=qName;
+							        		$.ajax({
+							        			type : 'get',
+							        			url : '/base/lrltionws/lrlss?name='+fz_name,	//请求的URL
+							        			async : false,
+							        			success : function(data){
+							        				$("#pot_fz_id").combotree('loadData', data);
+							        				$("#pot_fz_id").combotree('setText', fz_name);
+							        			}
+							        		});
+									 	 }
+						       		 } 
+			    	 		}
+						});
+					}
+				});
+				
+			}
+		}
+		
+		//判断是否包含汉字
+		function isConChinese(str){
+			var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+	　　if(reg.test(str)){     
+				return true;
+			 }else{
+				 return false;
+			 }
+        }
+		
+		function add() {
+			if($('#potence_id').val()==null||$('#potence_id').val()==''){
+				alert("违则依据为空");
+				return;
+			}
+			if($('#pot_fz_id').val()==null||$('#pot_fz_id').val()==''){
+				alert("罚则依据为空");
+				return;
+			}
+			//数据格式校验
+			if (!dataCheck()){
+				return;
+			}
+			
+			 $('#submitBtn').removeAttr("disabled");
+	         $('#submitBtn').attr("disabled",false); 
+		    var formdata = $("#form").serializeObject();
+		    formdata.wz_catalog_name=$("#potence_id").combotree('getText');
+		    formdata.fz_catalog_name=$("#pot_fz_id").combotree('getText');
+		    debugger;
+			$.ajax({
+				type : 'post',
+				url : '/base/lartions/saveCon',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("添加成功", {shift: -1, time: 1000}, function(){
+						 window.parent.location.reload();
+						 var index = parent.layer.getFrameIndex(window.name);
+						 parent.layer.close(index);
+                  });
+				}
+			});
+		}
+	</script>
+</body>
+</html>

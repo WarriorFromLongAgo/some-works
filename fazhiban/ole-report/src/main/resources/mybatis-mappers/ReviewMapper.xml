@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.report.dao.ReportReviewDao">
+
+	<select id="getReviewResultByScore" resultType="com.orhonit.ole.report.dto.ReviewResultDTO" >
+		  <![CDATA[select tt.*,bd.name from 
+  (select ec.dept_id,jg.type,count(*) num from 
+     (select (case when score>=90  then 'yx'	 when score>=60 and score<90 then 'hg'	 else 'yb' end) as type,t.case_id 
+         from  ole_ef_review_record t) jg LEFT JOIN ole_ef_case ec 
+                  on jg.case_id=ec.id group by ec.dept_id,jg.type) tt LEFT JOIN ole_base_dept bd 
+            on  tt.dept_id=bd.id ]]>
+           <where>
+		         <if test="params.areaId!= null and params.areaId != ''">
+				   and  tt.dept_id IN (SELECT id FROM ole_base_dept WHERE area_id =#{params.areaId}) 
+				</if>
+				<if test="params.deptId!= null and params.deptId != ''">
+					and tt.dept_id =#{params.deptId}
+				</if> 
+		</where>
+	</select>
+	
+</mapper>

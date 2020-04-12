@@ -1,0 +1,768 @@
+2018-01-03 15:28:38,632 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 15:30:42,463 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 15:44:55,432 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 15:46:24,954 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 15:52:11,637 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 15:53:38,720 [http-nio-8080-exec-10] DEBUG -[LogoutFilter.java:38]- admin退出成功
+2018-01-03 15:58:43,846 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 16:09:15,004 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:09:51,874 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:e1bfeb0f-0f5e-4400-ab0b-f09c0658a4b2
+2018-01-03 16:09:51,874 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:09:52,089 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:10:30,092 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:e84a5fe4-21a5-4e1d-bfba-481b24f9a602
+2018-01-03 16:10:33,613 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 16:15:43,463 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 16:16:01,441 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 16:17:53,612 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:17:58,124 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:df5e019f-6403-4ede-a164-0cf8e681ced3
+2018-01-03 16:17:58,124 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:17:58,276 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:18:00,574 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:07ecb0d9-a37b-4045-a5a0-3e508a279812
+2018-01-03 16:18:00,576 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:18:00,577 [http-nio-8080-exec-6] DEBUG -[LogoutFilter.java:38]- admin退出成功
+2018-01-03 16:18:05,376 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:18:16,413 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:c991a187-9014-48f0-bb90-dd5cf1cc370c
+2018-01-03 16:18:16,413 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:18:16,414 [http-nio-8080-exec-3] DEBUG -[LogoutFilter.java:38]- admin退出成功
+2018-01-03 16:18:20,776 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:18:27,803 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:7ac600f9-664d-4ba6-8408-e4c11729679d
+2018-01-03 16:18:27,804 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:18:27,805 [http-nio-8080-exec-7] DEBUG -[LogoutFilter.java:38]- admin退出成功
+2018-01-03 16:18:31,867 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:20:07,489 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:464d99b3-8e58-45d0-8211-bdc6bc3ddff3
+2018-01-03 16:20:10,062 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 16:20:26,170 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:20:28,988 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:8dac4a18-e68c-4f69-bd20-44a8645abf4f
+2018-01-03 16:20:28,989 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:20:28,990 [http-nio-8080-exec-4] DEBUG -[LogoutFilter.java:38]- admin退出成功
+2018-01-03 16:20:32,574 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:23:22,080 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:72630539-9e65-40d0-97fd-3627e3038419
+2018-01-03 16:23:22,081 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:23:22,209 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:23:25,367 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:6f592f09-d21b-4c81-916c-2f5495e05bca
+2018-01-03 16:23:25,368 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:23:25,370 [http-nio-8080-exec-3] DEBUG -[LogoutFilter.java:38]- admin退出成功
+2018-01-03 16:23:28,460 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:25:13,365 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:b66c2c10-ef1b-4233-aa96-9df3251cde7f
+2018-01-03 16:25:13,365 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:25:13,513 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:26:57,814 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 16:27:26,433 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:27:49,801 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:fe711e8b-cc3a-415d-9bce-f5ba8b9de8b1
+2018-01-03 16:27:49,802 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 16:27:50,075 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 16:28:51,714 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:f11a7b98-9beb-486b-b4ec-b6b30ebd8a50
+2018-01-03 17:12:46,969 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 17:13:21,649 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:14:18,240 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:0988174f-706e-4f32-8a64-1409f212f40e
+2018-01-03 17:14:18,241 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:14:19,097 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:15:05,546 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:1c0a3a44-51f8-4f9a-bdc7-7764675dc3f0
+2018-01-03 17:15:05,547 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:15:05,794 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:16:41,715 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:1f3cd9e6-3eb4-4551-b1f8-c98f7e874eee
+2018-01-03 17:16:41,716 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:16:41,903 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:17:23,099 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:07901831-f1d4-4cf7-ab18-a0541d4e01c5
+2018-01-03 17:17:23,101 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:17:23,350 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:18:55,143 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:8fe56c68-66d9-425f-b69e-d102b3ca9bfa
+2018-01-03 17:18:55,143 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:18:55,319 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:19:15,281 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:178e8c21-9bec-4132-b4eb-5162baa7a395
+2018-01-03 17:19:15,281 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:19:15,483 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:27:19,616 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:1ab45041-c3d5-4807-b7ea-6c2c9f610af9
+2018-01-03 17:27:19,617 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:27:19,786 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:27:59,147 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:0b53129b-adac-46ae-a370-ce62c748457a
+2018-01-03 17:27:59,148 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:27:59,413 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:29:51,439 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:f1315d1d-2b32-47fb-81ce-8442d0e402bc
+2018-01-03 17:29:51,440 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:29:51,622 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:30:25,704 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:b88eab5e-08a6-408f-8908-ee3f2053f22e
+2018-01-03 17:30:25,705 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:30:25,897 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:30:27,430 [http-nio-8080-exec-10] ERROR -[EnforceExceptionHandlerAdvice.java:121]- 系统异常
+org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'ole.schedule_job' doesn't exist
+### The error may exist in file [E:\workspace\ole\ole-tts\target\classes\mybatis-mappers\TaskMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select count(1) from schedule_job
+### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'ole.schedule_job' doesn't exist
+; bad SQL grammar []; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'ole.schedule_job' doesn't exist
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:231)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:446)
+	at com.sun.proxy.$Proxy113.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:82)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy123.getTaskCount(Unknown Source)
+	at com.orhonit.ole.tts.service.caseinfo.impl.TaskServiceImpl.getTaskCount(TaskServiceImpl.java:21)
+	at com.orhonit.ole.tts.controller.TaskController$1.count(TaskController.java:40)
+	at com.orhonit.ole.common.datatables.TableRequestHandler.handle(TableRequestHandler.java:23)
+	at com.orhonit.ole.tts.controller.TaskController.listCase(TaskController.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:97)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:967)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:861)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.web.filter.ApplicationContextHeaderFilter.doFilterInternal(ApplicationContextHeaderFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61)
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108)
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.trace.WebRequestTraceFilter.doFilterInternal(WebRequestTraceFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.autoconfigure.MetricsFilter.doFilterInternal(MetricsFilter.java:106)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1455)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'ole.schedule_job' doesn't exist
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:943)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3973)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3909)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2527)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2680)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2494)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1197)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:3005)
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_execute(FilterEventAdapter.java:440)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:3003)
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_execute(WallFilter.java:601)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:3003)
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_execute(FilterEventAdapter.java:440)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:3003)
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.execute(PreparedStatementProxyImpl.java:136)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:324)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:83)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	... 92 common frames omitted
+2018-01-03 17:31:20,824 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:578e1a23-f6c2-428c-8156-e8e60e486e12
+2018-01-03 17:31:25,103 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 17:31:46,439 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:31:48,501 [http-nio-8080-exec-8] ERROR -[EnforceExceptionHandlerAdvice.java:121]- 系统异常
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter 'beanName' not found. Available parameters are [arg2, arg1, arg0, param3, param1, param2]
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:77)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:446)
+	at com.sun.proxy.$Proxy113.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:137)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:75)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy175.getTaskList(Unknown Source)
+	at com.orhonit.ole.tts.service.caseinfo.impl.TaskServiceImpl.getTaskList(TaskServiceImpl.java:26)
+	at com.orhonit.ole.tts.controller.TaskController$2.list(TaskController.java:46)
+	at com.orhonit.ole.common.datatables.TableRequestHandler.handle(TableRequestHandler.java:25)
+	at com.orhonit.ole.tts.controller.TaskController.listCase(TaskController.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:97)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:967)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:861)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.web.filter.ApplicationContextHeaderFilter.doFilterInternal(ApplicationContextHeaderFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61)
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108)
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.trace.WebRequestTraceFilter.doFilterInternal(WebRequestTraceFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.autoconfigure.MetricsFilter.doFilterInternal(MetricsFilter.java:106)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1455)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.apache.ibatis.binding.BindingException: Parameter 'beanName' not found. Available parameters are [arg2, arg1, arg0, param3, param1, param2]
+	at org.apache.ibatis.binding.MapperMethod$ParamMap.get(MapperMethod.java:202)
+	at org.apache.ibatis.scripting.xmltags.DynamicContext$ContextAccessor.getProperty(DynamicContext.java:115)
+	at org.apache.ibatis.ognl.OgnlRuntime.getProperty(OgnlRuntime.java:2666)
+	at org.apache.ibatis.ognl.ASTProperty.getValueBody(ASTProperty.java:114)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.ASTNotEq.getValueBody(ASTNotEq.java:50)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.ASTAnd.getValueBody(ASTAnd.java:61)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.Ognl.getValue(Ognl.java:470)
+	at org.apache.ibatis.ognl.Ognl.getValue(Ognl.java:434)
+	at org.apache.ibatis.scripting.xmltags.OgnlCache.getValue(OgnlCache.java:44)
+	at org.apache.ibatis.scripting.xmltags.ExpressionEvaluator.evaluateBoolean(ExpressionEvaluator.java:32)
+	at org.apache.ibatis.scripting.xmltags.IfSqlNode.apply(IfSqlNode.java:34)
+	at org.apache.ibatis.scripting.xmltags.MixedSqlNode.apply(MixedSqlNode.java:33)
+	at org.apache.ibatis.scripting.xmltags.TrimSqlNode.apply(TrimSqlNode.java:55)
+	at org.apache.ibatis.scripting.xmltags.MixedSqlNode.apply(MixedSqlNode.java:33)
+	at org.apache.ibatis.scripting.xmltags.DynamicSqlSource.getBoundSql(DynamicSqlSource.java:41)
+	at org.apache.ibatis.mapping.MappedStatement.getBoundSql(MappedStatement.java:292)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:81)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	... 93 common frames omitted
+2018-01-03 17:34:03,939 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:2a123aa1-243a-4c9e-8dc3-68b44337dad1
+2018-01-03 17:34:06,690 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 17:34:25,730 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:34:27,343 [http-nio-8080-exec-5] ERROR -[EnforceExceptionHandlerAdvice.java:121]- 系统异常
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter 'offset' not found. Available parameters are [start, length, params, param3, param1, param2]
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:77)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:446)
+	at com.sun.proxy.$Proxy113.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:137)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:75)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy193.getTaskList(Unknown Source)
+	at com.orhonit.ole.tts.service.caseinfo.impl.TaskServiceImpl.getTaskList(TaskServiceImpl.java:26)
+	at com.orhonit.ole.tts.controller.TaskController$2.list(TaskController.java:46)
+	at com.orhonit.ole.common.datatables.TableRequestHandler.handle(TableRequestHandler.java:25)
+	at com.orhonit.ole.tts.controller.TaskController.listCase(TaskController.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:97)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:967)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:861)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.web.filter.ApplicationContextHeaderFilter.doFilterInternal(ApplicationContextHeaderFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61)
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108)
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.trace.WebRequestTraceFilter.doFilterInternal(WebRequestTraceFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.autoconfigure.MetricsFilter.doFilterInternal(MetricsFilter.java:106)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1455)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.apache.ibatis.binding.BindingException: Parameter 'offset' not found. Available parameters are [start, length, params, param3, param1, param2]
+	at org.apache.ibatis.binding.MapperMethod$ParamMap.get(MapperMethod.java:202)
+	at org.apache.ibatis.scripting.xmltags.DynamicContext$ContextAccessor.getProperty(DynamicContext.java:115)
+	at org.apache.ibatis.ognl.OgnlRuntime.getProperty(OgnlRuntime.java:2666)
+	at org.apache.ibatis.ognl.ASTProperty.getValueBody(ASTProperty.java:114)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.ASTNotEq.getValueBody(ASTNotEq.java:50)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.ASTAnd.getValueBody(ASTAnd.java:61)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.Ognl.getValue(Ognl.java:470)
+	at org.apache.ibatis.ognl.Ognl.getValue(Ognl.java:434)
+	at org.apache.ibatis.scripting.xmltags.OgnlCache.getValue(OgnlCache.java:44)
+	at org.apache.ibatis.scripting.xmltags.ExpressionEvaluator.evaluateBoolean(ExpressionEvaluator.java:32)
+	at org.apache.ibatis.scripting.xmltags.IfSqlNode.apply(IfSqlNode.java:34)
+	at org.apache.ibatis.scripting.xmltags.MixedSqlNode.apply(MixedSqlNode.java:33)
+	at org.apache.ibatis.scripting.xmltags.DynamicSqlSource.getBoundSql(DynamicSqlSource.java:41)
+	at org.apache.ibatis.mapping.MappedStatement.getBoundSql(MappedStatement.java:292)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:81)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	... 93 common frames omitted
+2018-01-03 17:35:16,619 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:d4fe3011-6c05-485c-95d4-322daecc87d9
+2018-01-03 17:35:19,216 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 17:41:22,204 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:41:37,818 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:bc34b4e8-95f6-46e3-b042-3198b7492ebc
+2018-01-03 17:41:37,819 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:41:37,965 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:46:52,550 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:81861bdb-3fbc-4e58-ba76-2753cdbadad7
+2018-01-03 17:46:55,069 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 17:47:23,201 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:49:26,276 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:68700f04-c979-4e73-a740-5146cb453823
+2018-01-03 17:49:26,277 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:49:26,421 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:50:02,008 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:36d3b1c0-d568-4f82-a227-40b9840dd919
+2018-01-03 17:50:04,508 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 17:50:18,042 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:50:43,393 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:ea3ddc81-f0b6-4e31-8d9b-5a0f459821c5
+2018-01-03 17:50:43,393 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:50:43,591 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:56:38,641 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:85aa5444-0522-4195-9498-dc67141f86e0
+2018-01-03 17:56:38,642 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:56:38,871 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:57:10,763 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:a8fae713-f601-4c93-a6e6-30f2d19e93a8
+2018-01-03 17:57:10,764 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:57:11,011 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 17:58:24,656 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:7b337377-e89f-45fa-af2e-6abd34b43ef4
+2018-01-03 17:58:24,659 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 17:58:25,074 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:02:55,811 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:6d8beda1-d438-44ba-968f-555d7f44779e
+2018-01-03 18:02:55,812 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:02:55,979 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:07:03,787 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 18:07:29,304 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:08:44,432 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:1b3a03cb-e9ce-4fa6-8e52-7596d9e635b0
+2018-01-03 18:08:44,433 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:08:44,685 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:09:46,640 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:1656f35a-0ced-4d3a-b6df-1194b9879527
+2018-01-03 18:09:46,641 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:09:46,859 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:11:11,349 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:aaeaf975-dd66-4716-8e21-312fd430ca41
+2018-01-03 18:11:11,350 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:11:11,554 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:14:16,944 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:b9b75b93-92ea-4e60-ae15-3ef5c95ba5a3
+2018-01-03 18:14:16,945 [http-nio-8080-exec-7] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:14:17,178 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:14:33,707 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:ddc1f36f-fb2e-484d-8482-4533b0a3ab1c
+2018-01-03 18:14:33,708 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:14:33,894 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:15:56,515 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:005ec08e-9a4d-4d3a-8758-850f97e2cd5a
+2018-01-03 18:17:15,074 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 18:17:48,519 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:18:30,228 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:719eb913-b55c-4017-8c12-38574b29a10c
+2018-01-03 18:18:30,229 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:18:30,514 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:18:55,755 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:fcbf0ee3-df20-4e33-92aa-20c091b3074e
+2018-01-03 18:18:55,756 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:18:55,878 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:19:07,950 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:8c88bca6-6d57-47c0-9e56-a8ef930ab09e
+2018-01-03 18:19:07,951 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:19:08,150 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:22:53,042 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:664e68d1-016f-4ca0-8f5d-2fb62ce9b6ba
+2018-01-03 18:22:53,042 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:22:53,222 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:23:22,991 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:cfe5bdee-5a82-4cec-a1ad-f7f986f6f52a
+2018-01-03 18:23:22,991 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:23:23,180 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 18:23:59,998 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:76cd0aba-ef4d-4413-9009-93dec1606384
+2018-01-03 18:23:59,998 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 18:24:00,207 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 20:56:52,411 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:03:05,462 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:04:49,511 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:09:20,558 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:11:39,459 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:12:07,608 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:217d66bf-4b28-48a6-a4d2-a5b16cd490dc
+2018-01-03 21:12:07,609 [http-nio-8080-exec-8] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 21:12:07,916 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:12:40,860 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:4e53c8af-4bdb-4ab3-ba56-b3f00d95795b
+2018-01-03 21:12:40,861 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 21:12:41,053 [http-nio-8080-exec-6] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:13:18,593 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:ec60bf31-1b1d-4d0e-8fc9-b62a27975d56
+2018-01-03 21:13:18,594 [http-nio-8080-exec-1] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 21:13:18,807 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:14:17,462 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:841f8a31-8c3e-4b79-9016-63b9ff107a6e
+2018-01-03 21:14:21,222 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:14:34,853 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:14:42,400 [http-nio-8080-exec-3] ERROR -[EnforceExceptionHandlerAdvice.java:121]- 系统异常
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:207)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:374)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:314)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:61)
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:352)
+	at org.springframework.web.servlet.DispatcherServlet.getHandler(DispatcherServlet.java:1160)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:940)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:872)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.web.filter.ApplicationContextHeaderFilter.doFilterInternal(ApplicationContextHeaderFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61)
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108)
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.trace.WebRequestTraceFilter.doFilterInternal(WebRequestTraceFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.autoconfigure.MetricsFilter.doFilterInternal(MetricsFilter.java:106)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1455)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+2018-01-03 21:14:49,272 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:094880be-f7f8-4edd-8a2f-4d9bad3513ed
+2018-01-03 21:14:49,273 [http-nio-8080-exec-9] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 21:14:49,464 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:15:31,359 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:dfea0091-6d48-474c-9453-691d24b76f6b
+2018-01-03 21:15:31,360 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:118]- 移除在线用户:管理员
+2018-01-03 21:15:31,577 [http-nio-8080-exec-10] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:15:34,713 [http-nio-8080-exec-3] ERROR -[EnforceExceptionHandlerAdvice.java:121]- 系统异常
+org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.orhonit.ole.tts.dao.TaskDao.queryObject
+	at org.apache.ibatis.binding.MapperMethod$SqlCommand.<init>(MapperMethod.java:225)
+	at org.apache.ibatis.binding.MapperMethod.<init>(MapperMethod.java:48)
+	at org.apache.ibatis.binding.MapperProxy.cachedMapperMethod(MapperProxy.java:65)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:58)
+	at com.sun.proxy.$Proxy178.queryObject(Unknown Source)
+	at com.orhonit.ole.tts.service.caseinfo.impl.TaskServiceImpl.queryObject(TaskServiceImpl.java:75)
+	at com.orhonit.ole.tts.service.caseinfo.impl.TaskServiceImpl.run(TaskServiceImpl.java:71)
+	at com.orhonit.ole.tts.controller.TaskController.run(TaskController.java:69)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:97)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:967)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:861)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.web.filter.ApplicationContextHeaderFilter.doFilterInternal(ApplicationContextHeaderFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61)
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108)
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.trace.WebRequestTraceFilter.doFilterInternal(WebRequestTraceFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.boot.actuate.autoconfigure.MetricsFilter.doFilterInternal(MetricsFilter.java:106)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1455)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+2018-01-03 21:18:46,574 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:19:53,712 [http-nio-8080-exec-3] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:21:52,786 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:22:25,745 [http-nio-8080-exec-5] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:23:30,289 [localhost-startStop-2] DEBUG -[UserLoginSocketHandler.java:112]- 移除连接管理员:admin:83abf30e-7cd4-4c2f-8904-c717e8511035
+2018-01-03 21:23:33,827 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:23:52,558 [http-nio-8080-exec-4] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:24:38,874 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 
+2018-01-03 21:25:23,022 [http-nio-8080-exec-2] DEBUG -[UserLoginSocketHandler.java:133]- 添加在线用户：admin
+2018-01-03 21:27:05,728 [localhost-startStop-1] INFO  -[DruidConfig.java:34]- init Druid Servlet Configuration 

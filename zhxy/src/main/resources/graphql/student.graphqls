@@ -1,0 +1,476 @@
+type StudentLearnInfo {
+    id:ID
+    user:User
+    student:Student
+    school:School
+    "对应届级"
+    arrive:Arrives
+    "在校状态(1、在校；0不在校)"
+    at_school:Int
+    "异动类型（数据字典:transaction_type）"
+    transaction_type:Dictionary
+    "学籍辅号"
+    membership_number:String
+    "班内学号"
+    class_code:String
+    "入学年份"
+    start_year:String
+    "结业年份"
+    finished_year:String
+    "招生入学方式(数据字典: admission_methods)"
+    admission_method:Dictionary
+    "就读方式(0走读1寄宿）就读方式(0走读1寄宿）"
+    way_to_study:Int
+    "就读方式附件"
+    way_to_annex:String
+    "学生来源(数据字典:student_from)"
+    student_from:Dictionary
+    "是否确认"
+    confirmed:Int
+    "确认人"
+    confirmed_by:String
+    "班级信息"
+    eclass:Eclass
+}
+input StudentLearnInfoInput {
+    id:ID
+    "用户id"
+    user_id: Int
+    "学生id"
+    student_id: Int
+    "学校id"
+    school_id: Int
+    "对应届级"
+    arrive_id: Int
+    "在校状态(1、在校；0不在校)"
+    at_school:Int
+    "异动类型（数据字典:transaction_type）"
+    transaction_type: String
+    "学籍辅号"
+    membership_number:String
+    "班内学号"
+    class_code:String
+    "入学年份"
+    start_year:String
+    "结业年份"
+    finished_year:String
+    "招生入学方式(数据字典: admission_methods)"
+    admission_method: String
+    "就读方式(0走读1寄宿）就读方式(0走读1寄宿）"
+    way_to_study:Int
+    "就读方式附件"
+    way_to_annex:String
+    "学生来源(数据字典:student_from)"
+    student_from:String
+    "是否确认"
+    confirmed:Int
+    "确认人"
+    confirmed_by:String
+}
+type StudentLearnInfoResponse{
+    code:Int
+    msg:String
+    data:[StudentLearnInfo]
+}
+
+type Student {
+
+    "ID编号"
+    id: ID
+
+    "关联用户"
+    user:User
+
+    "学籍号"
+    number:String
+
+    "学生学号"
+    learn_code:String
+
+    "姓名"
+    name:Lang
+
+    "曾用名"
+    used_name:Lang
+
+    "拼音名称"
+    pinyin_name:String
+
+    "国籍"
+    country:Dictionary
+
+    "身份证号码"
+    idcard:String
+
+    "生日"
+    birthday:String
+
+    "性别(数据字典: gender)"
+    gender:Dictionary
+
+    "所属学校信息"
+    school:School
+
+    "照片"
+    picture:String
+
+    "籍贯"
+    native_place:Lang
+
+    "民族"
+    nation:Dictionary
+
+    "是否港澳台侨"
+    hkmtb:Int
+
+    "政治面貌(数据字典: politicaltype)"
+    political:Dictionary
+
+    "特长"
+    speciality:Lang
+
+    "身份证有效期"
+    identity_ivalidity:String
+
+    "血型"
+    blood:String
+
+    "手机号"
+    tel_number:String
+
+    "电子邮件"
+    email:String
+
+    "邮编"
+    postal_code:String
+
+    "个人主页地址"
+    home_page:String
+
+    "户口性质(数据字典：household_register_type)"
+    household_register_type:Dictionary
+
+    "出生地"
+    birth_place:Lang
+
+    "现住址"
+    present_address:String
+
+    "通讯地址"
+    corresponding_address:String
+
+    "家庭住址"
+    family_address:String
+
+    "户籍所在地-省"
+    household_registed:Region
+
+    "户籍所在地-市"
+    household_registed_city:Region
+
+    "户籍所在地-旗县"
+    household_registed_county:Region
+
+    "证件类型"
+    card_type:Dictionary
+
+    "是否独生子女"
+    is_onlychild:Int
+
+    "是否经过学前教育"
+    is_pre_school_education:Int
+
+    "是否留守儿童"
+    is_left_behind_children:Int
+
+    "是否孤儿"
+    is_orphan:Int
+
+    "是否是烈士或优抚子女"
+    is_martyr:Int
+
+    "是否随班就读"
+    is_study_in_class:Int
+
+    "是否由政府购买学位"
+    is_government_degree:Int
+
+    "是否需要申请过资助"
+    is_funding:Int
+
+    "是否享受一补"
+    is_supplement:Int
+
+    "是否迁随子女"
+    is_move_with:Int
+
+    "残疾人类型"
+    disabled_status:Dictionary
+
+    "健康状态"
+    health:String
+
+    created_at:Date
+    updated_at:Date
+    deleted_at:Date
+}
+
+input StudentInput {
+    id:ID
+    "学籍号 必填"
+    number:String!
+
+    "学生学号 必填"
+    learn_code:String!
+
+    "姓名"
+    name:LangInput
+
+    "曾用名"
+    used_name:LangInput
+
+    "拼音名称"
+    pinyin_name:String
+
+    "国籍"
+    country:String
+
+    "身份证号码"
+    idcard:String
+
+    "生日"
+    birthday:String
+
+    "性别(数据字典: gender)"
+    gender:String
+
+    "所属学校信息"
+    school_id:Int
+
+    "照片"
+    picture:String
+
+    "籍贯"
+    native_place:LangInput
+
+    "民族"
+    nation:String
+
+    "是否港澳台侨"
+    hkmtb:Int
+
+    "政治面貌(数据字典: politicaltype)"
+    political:String
+
+    "特长"
+    speciality:LangInput
+
+    "身份证有效期"
+    identity_ivalidity:String
+
+    "血型"
+    blood:String
+
+    "手机号"
+    tel_number:String
+
+    "电子邮件"
+    email:String
+
+    "邮编"
+    postal_code:String
+
+    "个人主页地址"
+    home_page:String
+
+    "户口性质(数据字典：household_register_type)"
+    household_register_type:String
+
+    "出生地"
+    birth_place:String
+
+    "现住址"
+    present_address:String
+
+    "通讯地址"
+    corresponding_address:String
+
+    "家庭住址"
+    family_address:String
+
+    "户籍所在地-省"
+    household_registed_id:Int
+
+    "户籍所在地-市"
+    household_registed_city_id:Int
+
+    "户籍所在地-旗县"
+    household_registed_county_id:Int
+
+    "证件类型"
+    card_type:String
+
+    "是否独生子女"
+    is_onlychild:Int
+
+    "是否经过学前教育"
+    is_pre_school_education:Int
+
+    "是否留守儿童"
+    is_left_behind_children:Int
+
+    "是否孤儿"
+    is_orphan:Int
+
+    "是否是烈士或优抚子女"
+    is_martyr:Int
+
+    "是否随班就读"
+    is_study_in_class:Int
+
+    "是否由政府购买学位"
+    is_government_degree:Int
+
+    "是否需要申请过资助"
+    is_funding:Int
+
+    "是否享受一补"
+    is_supplement:Int
+
+    "是否迁随子女"
+    is_move_with:Int
+
+    "残疾人类型"
+    disabled_status:String
+
+    "健康状态"
+    health:String
+}
+input StudentsCondition{
+    id:ID
+    "学籍号"
+    number:String
+    "学生学号"
+    learn_code:String
+    "姓名"
+    name:String
+    "拼音名称"
+    pinyin_name:String
+    "身份证号码"
+    idcard:String
+    "性别(数据字典: gender)"
+    gender:String
+    "所属学校信息"
+    school_id:Int
+    "民族"
+    nation:String
+    "政治面貌(数据字典: politicaltype)"
+    political:String
+    "手机号"
+    tel_number:String
+    "户籍所在地-省"
+    household_registed_id:Int
+    "户籍所在地-市"
+    household_registed_city_id:Int
+    "户籍所在地-旗县"
+    household_registed_county_id:Int
+    "是否独生子女"
+    is_onlychild:Int
+}
+"学生返回类型"
+type StudentResponse {
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[Student]
+    "分页信息"
+    pagenation:Pagenation
+}
+"学生基础筛选条件枚举标量"
+enum StudentBasicCondition {
+    "毕业生"
+    GRADUATED
+    "在校生"
+    ATSHOOL
+    "走读"
+    DAYSTUDENT
+    "寄宿生"
+    RESIDENT
+}
+
+"学生家长"
+type StudentParent {
+    id:ID
+    user:User
+    name:Lang
+    "家长与学生关系"
+    relation:Lang
+    "民族"
+    nation:Dictionary
+    gender:Dictionary
+    idcard:String
+    "是否监护人"
+    is_guardian:Int
+    "通讯地址"
+    postal_address:String
+    picture:String
+    tel_number:String
+}
+input StudentParentInput {
+    id:ID
+    user_id: Int
+    name:LangInput
+    "家长与学生关系"
+    relation:LangInput
+    "民族"
+    nation:String
+    gender:String
+    idcard:String
+    "是否监护人"
+    is_guardian:Int
+    "通讯地址"
+    postal_address:String
+    picture:String
+    tel_number:String
+}
+type StudentParentResponse {
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[StudentParent]
+}
+"学生交通信息"
+type StudentTrafficInfo {
+    id:ID
+    user:User
+    student:Student
+    "上下学距离"
+    distance:Int
+    "上下学交通方式"
+    traffic_release_id:Int
+    "是否需要乘坐校车"
+    is_school_bus:Int
+}
+input StudentTrafficInfoInput {
+    id:ID
+    user_id:Int
+    student_id: Int
+    "上下学距离"
+    distance:Int
+    "上下学交通方式"
+    traffic_release_id:Int
+    "是否需要乘坐校车"
+    is_school_bus:Int
+}
+type StudentTrafficInfoResponse{
+    "状态码"
+    code:Int
+    "状态信息"
+    msg:String
+    "返回数据"
+    data:[StudentTrafficInfo]
+}

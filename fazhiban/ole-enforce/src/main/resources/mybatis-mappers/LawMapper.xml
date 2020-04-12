@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orhonit.ole.enforce.dao.LawDao">
+	<!-- 按照法律类型分类统计-->
+	<select id="lawCount" resultType="com.orhonit.ole.enforce.dto.ps.PsLawDTO">	
+		SELECT
+			COUNT(blc.item_type) lawCount,
+			blc.id lawId,
+			blc.item_type itemType,
+			blc.name lawName,
+			blc.pub_dept pubDept,
+			blc.effect_level effectLevel
+		FROM
+			ole_base_law_category blc
+		WHERE
+			blc.effect_level is not null
+			AND blc.effect_level !=''	
+		GROUP BY
+			blc.effect_level
+		ORDER BY
+			COUNT(blc.item_type) DESC
+		<!-- 关联字典表，暂时关联不上，先用上面的	 -->
+		<!-- SELECT
+			COUNT(blc.item_type) lawCount,
+			blc.id lawId,
+			blc.item_type itemType,
+			blc.name lawName,
+			bd.`name` pubDept
+		FROM
+			ole_base_law_category blc
+		LEFT JOIN
+			ole_base_potence_law_map bplm ON bplm.wz_catalog_id=blc.id
+		LEFT JOIN
+			ole_base_potence_dept bpd ON bplm.right_duty_id=bpd.potence_id
+		LEFT JOIN
+			ole_base_dept bd ON bd.id=bpd.dept_id
+		GROUP BY
+			blc.item_type
+		ORDER BY
+			COUNT(blc.item_type) DESC
+		LIMIT 
+			1,20 -->
+	</select>
+	<!-- 按照法律类型查询法律名-->
+	<select id="lawByItemType" resultType="com.orhonit.ole.enforce.dto.ps.PsLawDTO">	
+		SELECT
+			blc.id lawId,
+			blc.item_type itemType,
+			blc.name lawName,
+			blc.pub_dept pubDept,
+			blc.source_href sourceHref,
+			bpd.dept_id deptId
+		FROM
+			ole_base_law_category blc
+		LEFT JOIN
+			ole_base_potence_law_map bplm ON bplm.wz_catalog_id=blc.id
+		LEFT JOIN
+			ole_base_potence_dept bpd ON bplm.right_duty_id=bpd.potence_id
+		<where>
+			<if test="params.itemType != null and params.itemType != ''">
+				blc.effect_level = #{params.itemType}
+			</if>
+		</where>
+		GROUP BY
+			blc.pub_dept
+		LIMIT 
+			1,14
+		
+	</select>
+	<!-- 按照法律类型查询全部法律名-->
+	<select id="lawAllByItemType" resultType="com.orhonit.ole.enforce.dto.ps.PsLawDTO">	
+		SELECT
+			blc.id lawId,
+			blc.item_type itemType,
+			blc.name lawName,
+			blc.pub_dept pubDept,
+			blc.source_href sourceHref
+		FROM
+			ole_base_law_category blc
+		<where>
+			<if test="params.itemType != null and params.itemType != ''">
+				blc.effect_level = #{params.itemType}
+			</if>
+		</where>
+	</select>
+	<!-- 按照权责类型查询法律-->
+	<select id="lawAllByProType" resultType="com.orhonit.ole.enforce.dto.ps.PsLawDTO">	
+		SELECT
+			blc.id lawId,
+			blc.name lawName
+		FROM
+			ole_base_potence bp
+		LEFT JOIN
+			ole_base_potence_law_map bplm ON bplm.right_duty_id=bp.id
+		LEFT JOIN
+			ole_base_law_category blc ON blc.id=bplm.wz_catalog_id
+		<where>
+			<if test="params.itemType != null and params.itemType != ''">
+				blc.item_type = #{params.itemType}
+			</if>
+		</where>
+	</select>
+</mapper>
