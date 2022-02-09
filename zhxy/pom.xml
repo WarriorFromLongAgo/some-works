@@ -27,7 +27,7 @@
         <fastjson.version>1.2.46</fastjson.version>
         <mybatisplust.version>3.1.1</mybatisplust.version>
         <mybatisplus.generator.version>3.0.7.1</mybatisplus.generator.version>
-        <shiro.version>1.4.0</shiro.version>
+        <shiro.version>1.7.1</shiro.version>
         <jwt.version>0.7.0</jwt.version>
         <skipTests>true</skipTests>
     </properties>
